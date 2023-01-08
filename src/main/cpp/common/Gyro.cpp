@@ -2,7 +2,7 @@
 
 void Gyro::RobotInit() {
     //gyro.Calibrate();
-    gyro.ZeroYaw();
+    //gyro.ZeroYaw();
 }
 
 void Gyro::TeleopInit(GyroData &gyroData) {
@@ -13,7 +13,7 @@ void Gyro::TeleopInit(GyroData &gyroData) {
 }
 
 void Gyro::AutonomousInit(GyroData &gyroData) {
-    gyro.ZeroYaw();
+    //gyro.ZeroYaw();
     gyroData.rawYaw = 0;
     gyroData.rawPitch = 0;
     gyroData.rawRoll = 0;
@@ -22,11 +22,11 @@ void Gyro::AutonomousInit(GyroData &gyroData) {
 
 void Gyro::RobotPeriodic(GyroData &gyroData) {
 
-    gyroData.rawYaw = -gyro.GetAngle();
-    gyroData.rawPitch = gyro.GetPitch();
-    gyroData.rawRoll = gyro.GetRoll();
-    gyroData.angularMomentum = gyro.GetRawGyroY();
-    gyroData.rotationalRate = gyro.GetRawGyroZ();
+    gyroData.rawYaw = 0;
+    gyroData.rawPitch = 0;
+    gyroData.rawRoll = 0;
+    gyroData.angularMomentum = 0;
+    gyroData.rotationalRate = 0;
 
     // frc::SmartDashboard::PutNumber("angleMomentum",gyroData.rotationalRate);
     // frc::smartDashboard::PutNumber("yaw",gyro.GetYaw());
