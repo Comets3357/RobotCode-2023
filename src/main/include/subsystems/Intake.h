@@ -32,6 +32,12 @@ public:
 private:
 
     double AbsoluteToRelative(double currentAbsolutePosition);
+    void IntakeRollers(double rollerSpeed);
+    void IntakePivot(double pivotPosition);
+    void SemiAuto();
+    void Manual();
+    
+
 
     // Intake Roller Initialization
     rev::CANSparkMax intakeRollers = rev::CANSparkMax(intakeRollerID, rev::CANSparkMax::MotorType::kBrushless);
@@ -44,8 +50,8 @@ private:
     frc::DigitalInput m_input{intakeAbsoluteEncoderPort};
     frc::DutyCycle intakePivotAbsoluteEncoder = frc::DutyCycle{m_input}; // Absolute Encoder
 
-    // Encoder Min and Max Values
-    double intakePivotRelativeMaxPosition = 13;
+    // Encoder Min and Max Values 
+    double intakePivotRelativeMaxPosition = 13; // Not acutal values at the moment
     double intakePivotRelativeMinPosition = 0;
 
     double intakePivotAbsoluteMaxPosition = 0.93418697534;

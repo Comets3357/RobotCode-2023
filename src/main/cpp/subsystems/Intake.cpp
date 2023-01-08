@@ -29,7 +29,33 @@ void Intake::RobotInit()
 
 void Intake::RobotPeriodic(const RobotData &robotData, IntakeData &intakeData)
 {
-    if ()
+
+}
+
+void Intake::IntakeRollers(double rollerSpeed)
+{
+    intakeRollers.Set(rollerSpeed);
+}
+
+void Intake::IntakePivot(double pivotPosition)
+{
+    if (pivotPosition >= intakePivotAbosluteMinPosition && pivotPosition <= intakePivotAbsoluteMaxPosition)
+    {
+        intakePivotRelativeEncoder.SetPosition(pivotPosition);
+    }
+}
+
+void Intake::SemiAuto()
+{
+    if (intakePivotRelativeEncoder.GetVelocity() < 1)
+    {
+        intakePivotRelativeEncoder.SetPosition(AbsoluteToRelative(intakePivotAbsoluteEncoder.GetOutput()));
+    }
+}
+
+void Intake::Manual()
+{
+    // Filler
 }
 
 double Intake::AbsoluteToRelative(double currentAbsolutePosition) 
@@ -38,3 +64,4 @@ double Intake::AbsoluteToRelative(double currentAbsolutePosition)
     double b = intakePivotRelativeMinPosition - (slope * intakePivotAbosluteMinPosition);
     return ((slope * currentAbsolutePosition) + b);
 }
+
