@@ -4,7 +4,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/SPI.h>
-#include "AHRS.h"
+// #include "AHRS.h"
 
 struct GyroData
 {
@@ -25,6 +25,6 @@ public:
     void RobotPeriodic(GyroData &gyroData);
 
 private:
-    AHRS gyro{frc::SPI::Port::kMXP};
+    // AHRS gyro{frc::SPI::Port::kMXP};
 
 };

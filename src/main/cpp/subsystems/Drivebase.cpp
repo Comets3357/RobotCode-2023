@@ -152,9 +152,9 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
     drivebaseData.currentLDBPos = dbLEncoder.GetPosition();
     drivebaseData.currentRDBPos = dbREncoder.GetPosition();
 
-    drivebaseData.lDriveVel = -dbLEncoder.GetVelocity() / mpsToTpds;
+    drivebaseData.lDriveVel = -dbLEncoder.GetVelocity();
     // frc::SmartDashboard::PutNumber("lDriveVel", drivebaseData.lDriveVel);
-    drivebaseData.rDriveVel = -dbREncoder.GetVelocity() / mpsToTpds;
+    drivebaseData.rDriveVel = -dbREncoder.GetVelocity();
     // frc::SmartDashboard::PutNumber("rDriveVel", -drivebaseData.rDriveVel);
 
     // WARNING the average calcuation here subtracts for some reason. The values for left and right db velocity act as expected on their own...
@@ -318,8 +318,8 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     frc::Rotation2d currentRotation{currentRadians};
 
     // NEGATIVE because left motor/encoder should be inverted
-    units::meter_t leftDistance{-dbLEncoder.GetPosition() / metersToTicks};
-    units::meter_t rightDistance{dbREncoder.GetPosition() / metersToTicks};
+    units::meter_t leftDistance{-dbLEncoder.GetPosition() * rotationsToMeters}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
+    units::meter_t rightDistance{dbREncoder.GetPosition() * rotationsToMeters}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
 
     odometry.Update(currentRotation, leftDistance, rightDistance);
 
@@ -384,13 +384,11 @@ double Drivebase::getEncoderDistance(double encoderPosition)
 // sets the drive base velocity for auton
 void Drivebase::setVelocity(double leftVel, double rightVel)
 {
-    // TDPS: ticks per decisecond
+    double leftRPM = leftVel * mpsToRpm;
+    double rightRPM = rightVel * mpsToRpm;
 
-    double leftTPDS = leftVel * mpsToTpds;
-    double rightTPDS = rightVel * mpsToTpds;
-
-    dbLPIDController.SetReference(leftTPDS, rev::CANSparkMax::ControlType::kVelocity); // dbL.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, leftTPDS);
-    dbRPIDController.SetReference(rightTPDS, rev::CANSparkMax::ControlType::kVelocity); // dbR.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, rightTPDS);
+    dbLPIDController.SetReference(leftRPM, rev::CANSparkMax::ControlType::kVelocity); // dbL.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, leftTPDS);
+    dbRPIDController.SetReference(rightRPM, rev::CANSparkMax::ControlType::kVelocity); // dbR.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, rightTPDS);
 }
 
 void Drivebase::zeroEncoders() 
