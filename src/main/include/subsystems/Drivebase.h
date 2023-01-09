@@ -28,16 +28,16 @@
 struct RobotData;
 
 enum DriveMode {
-    driveMode_joystick,
-    driveMode_turnInPlace,
-    driveMode_break,
-    driveMode_trajectory,
-    driveMode_vector
+    DRIVEMODE_JOYSTICK,
+    DRIVEMODE_TURNINPLACE,
+    DRIVEMODE_BREAK,
+    DRIVEMODE_TRAJECTORY,
+    DRIVEMODE_VECTOR
 };
 
 struct DrivebaseData
 {
-    DriveMode driveMode = driveMode_break;
+    DriveMode driveMode = DRIVEMODE_BREAK;
 
      // in meters eventually
     double currentLDBPos = 0.0; // ticks
