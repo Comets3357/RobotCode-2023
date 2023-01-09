@@ -2,6 +2,7 @@
 
 #include "Constants.h"
 #include "auton/Auton.h"
+#include "common/Gyro.h"
 
 #include <frc/TimedRobot.h>
 #include <frc/Joystick.h>
@@ -32,7 +33,8 @@ enum DriveMode {
     DRIVEMODE_TURNINPLACE,
     DRIVEMODE_BREAK,
     DRIVEMODE_TRAJECTORY,
-    DRIVEMODE_VECTOR
+    DRIVEMODE_VECTOR,
+    DRIVEMODE_AUTO_BALANCE
 };
 
 struct DrivebaseData
@@ -65,15 +67,15 @@ public:
     void RobotInit();
     void TeleopInit(const RobotData &robotData);
     void AutonomousInit(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
-    void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
+    void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
     void TestPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData);
     void DisabledInit();
 
 private:
 
     void updateData(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
+    void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData);
+    void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
 
     // odometry
     void updateOdometry(const RobotData &robotData, DrivebaseData &drivebaseData);

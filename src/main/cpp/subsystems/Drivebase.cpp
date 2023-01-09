@@ -112,7 +112,7 @@ void Drivebase::AutonomousInit(const RobotData &robotData, DrivebaseData &driveb
     zeroEncoders();
 }
 
-void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData)
+void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData)
 {
     updateData(robotData, drivebaseData);
 
@@ -126,11 +126,11 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
 
     if (frc::DriverStation::IsTeleop()) 
     {
-        teleopControl(robotData, drivebaseData);
+        teleopControl(robotData, drivebaseData, gyroData);
     }
     else if (frc::DriverStation::IsAutonomous())
     {
-        autonControl(robotData, drivebaseData, autonData);
+        autonControl(robotData, drivebaseData, autonData, gyroData);
     }
 }
 
@@ -175,7 +175,7 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
 // driving functions:
 
 // adjusts for the deadzone and converts joystick input to velocity values for PID
-void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData)
+void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData)
 {
     // frc::SmartDashboard::PutNumber("DRIVE MODE", robotData.drivebaseData.driveMode);
     // frc::SmartDashboard::PutNumber("SHOOT MODE", robotData.controlData.shootMode);
@@ -195,6 +195,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
     if (drivebaseData.driveMode == DRIVEMODE_JOYSTICK) 
     {
+
         double tempLDrive = robotData.controlData.lDrive;
         double tempRDrive = robotData.controlData.rDrive;
 
@@ -221,6 +222,26 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             tempRDrive = 0;
         }
 
+        if (robotData.controlData.mode == MODE_AUTO_BALANCE)
+        {
+            if (gyroData.rawPitch > 2.5)
+            {
+                tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+                tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+
+            }
+            else if (gyroData.rawPitch < -2.5)
+            {
+                tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+                tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+            }
+            else
+            {
+                tempLDrive = 0;
+                tempRDrive = 0;
+            }
+        }
+
         //set as percent vbus
         setPercentOutput(tempLDrive, tempRDrive);
     }
@@ -232,11 +253,12 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
     {
         //setPercentOutput(robotData.jetsonData.leftSkew, robotData.jetsonData.rightSkew);
     }
+   
 
 
 }
 
-void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData) 
+void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData) 
 {
     // sample the desired pos based on time from trajectory object
     // get chassis speeds from ramsete controller, comparing current pos w/ desired pos

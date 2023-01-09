@@ -36,7 +36,7 @@ void Robot::RobotPeriodic() {
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
-  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData);
+  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData);
   
 }
 
@@ -80,7 +80,7 @@ void Robot::AutonomousPeriodic() {
   timer.EnabledPeriodic(robotData.timerData);
   gyro.RobotPeriodic(robotData.gyroData);
   auton.AutonomousPeriodic(robotData, robotData.autonData, robotData.controlData, robotData.controllerData);
-  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData);
+  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData);
   
 }
 
