@@ -34,8 +34,10 @@ private:
     double AbsoluteToRelative(double currentAbsolutePosition);
     void IntakeRollers(double rollerSpeed);
     void IntakePivot(double pivotPosition);
-    void SemiAuto();
-    void Manual();
+    void SemiAuto(const RobotData &robotData, IntakeData &intakeData);
+    void Manual(const RobotData &robotData, IntakeData &intakeData);
+    void ToggleSoftLimits();
+    void ZeroIntake();
     
 
 
@@ -51,9 +53,14 @@ private:
     frc::DutyCycle intakePivotAbsoluteEncoder = frc::DutyCycle{m_input}; // Absolute Encoder
 
     // Encoder Min and Max Values 
-    double intakePivotRelativeMaxPosition = 13; // Not acutal values at the moment
-    double intakePivotRelativeMinPosition = 0;
+    double intakePivotRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
+    double intakePivotRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
 
-    double intakePivotAbsoluteMaxPosition = 0.93418697534;
-    double intakePivotAbosluteMinPosition = 0.14207;
+    double intakePivotAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
+    double intakePivotAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
+
+    double intakeRollerOutwardSpeed = 0.4;
+    double intakeRollerInwardSpeed = -0.4;
+
+    bool softLimitsToggled = false;
 };

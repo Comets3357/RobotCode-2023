@@ -23,41 +23,111 @@ void Intake::RobotInit()
     intakePivot.BurnFlash();
 
     // Callibrating Relative Based On Absolute Position
-    intakePivotRelativeEncoder.SetPosition(AbsoluteToRelative(intakePivotAbsoluteEncoder.GetOutput()));
-
+    ZeroIntake();
 }
 
 void Intake::RobotPeriodic(const RobotData &robotData, IntakeData &intakeData)
 {
+    // changing controls based off the mode robot is in
+    switch (robotData.controlData.mode) 
+    {
+        case mode_teleop_manual:
+            Manual(robotData, intakeData);
+            break;
+        case mode_teleop_sa:
+            SemiAuto(robotData, intakeData);
+            break;
+        default:
+            SemiAuto(robotData, intakeData);
+            break;
+    }
+
+    // reseeding the position of relative if the motor isn't running
+    if (intakePivotRelativeEncoder.GetVelocity() < 1)
+    {
+        ZeroIntake();
+    }
 
 }
 
+void Intake::SemiAuto(const RobotData &robotData, IntakeData &intakeData)
+{
+    if (!softLimitsToggled) 
+    {
+        ToggleSoftLimits();
+    }
+
+    if (robotData.controlData.saIntaking) 
+    {
+        IntakeRollers(intakeRollerInwardSpeed);
+        IntakePivot(intakePivotRelativeMaxPosition);
+
+    }
+    else if (robotData.controlData.saIntakeBackwards) 
+    {
+        IntakeRollers(intakeRollerOutwardSpeed);
+        IntakePivot(intakePivotRelativeMaxPosition);
+    }
+    else
+    {
+        IntakeRollers(0);
+        IntakePivot(intakePivotRelativeMinPosition);
+    }
+}
+
+void Intake::Manual(const RobotData &robotData, IntakeData &intakeData)
+{
+    if (softLimitsToggled) 
+    {
+        ToggleSoftLimits();
+    }
+
+    if (robotData.controlData.mIntakeDown)
+    {
+        intakePivot.Set(-0.3);
+    }
+    else if (robotData.controlData.mIntakeUp)
+    {
+        intakePivot.Set(0.3);
+    }
+
+    if (robotData.controlData.mIntakeRollersIn) 
+    {
+        IntakeRollers(intakeRollerInwardSpeed);
+    }
+    else if (robotData.controlData.mIntakeRollersOut) 
+    {
+        IntakeRollers(intakeRollerOutwardSpeed);
+    }
+
+    if (robotData.controlData.mForceZeroIntake) 
+    {
+        ZeroIntake();
+    }
+}
+
+/*
+* @param rollerSpeed Desired intake roller speed (0 - 1)
+*/
 void Intake::IntakeRollers(double rollerSpeed)
 {
     intakeRollers.Set(rollerSpeed);
 }
 
+/*
+* @param pivotPosition Desired relative encoder pivot position
+*/
 void Intake::IntakePivot(double pivotPosition)
 {
-    if (pivotPosition >= intakePivotAbosluteMinPosition && pivotPosition <= intakePivotAbsoluteMaxPosition)
+    if (pivotPosition >= intakePivotRelativeMinPosition && pivotPosition <= intakePivotRelativeMaxPosition)
     {
         intakePivotRelativeEncoder.SetPosition(pivotPosition);
     }
 }
 
-void Intake::SemiAuto()
-{
-    if (intakePivotRelativeEncoder.GetVelocity() < 1)
-    {
-        intakePivotRelativeEncoder.SetPosition(AbsoluteToRelative(intakePivotAbsoluteEncoder.GetOutput()));
-    }
-}
-
-void Intake::Manual()
-{
-    // Filler
-}
-
+/*
+* @param currentAbsolutePosition Converts absolute encoder position to relative encoder position
+*/
 double Intake::AbsoluteToRelative(double currentAbsolutePosition) 
 {
     double slope = (intakePivotRelativeMaxPosition - intakePivotRelativeMinPosition) / (intakePivotAbsoluteMaxPosition - intakePivotAbosluteMinPosition);
@@ -65,3 +135,33 @@ double Intake::AbsoluteToRelative(double currentAbsolutePosition)
     return ((slope * currentAbsolutePosition) + b);
 }
 
+/*
+* @note Toggles the soft limits on and off
+* @note for when code switches between manual
+* @note and semi automatic
+*/
+void Intake::ToggleSoftLimits() 
+{
+    if (softLimitsToggled)
+    {
+        intakePivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
+        intakePivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
+    }
+    else if (!softLimitsToggled) 
+    {
+        intakePivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
+        intakePivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
+
+        intakePivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, intakePivotRelativeMinPosition - 0.1);
+        intakePivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, intakePivotRelativeMaxPosition + 0.1);
+    }
+}
+
+/*
+* @note Reseeds relative position based
+* @note on absolute encoder position
+*/
+void Intake::ZeroIntake() 
+{
+    intakePivotRelativeEncoder.SetPosition(AbsoluteToRelative(intakePivotAbsoluteEncoder.GetOutput()));
+}
