@@ -269,26 +269,7 @@ void Auton::fiveBallC(const RobotData &robotData, ControlData &controlData, Cont
     double sec = robotData.timerData.secSinceEnabled;
 
     // intake
-    if (sec > 1 && sec < 5.5)
-    {
-        controlData.saIntake = true;
-    } else if (sec > 8 && sec < 12.5) {
-
-        controlData.saIntake = true;
-    } else 
-    {
-        controlData.saIntake = false;
-    }
-    controlData.saIntake = false;
-
-    //aim-+/
-    if (sec > 0 && sec < 14) 
-    {
-        controlData.shootMode = shootMode_vision;
-    } else 
-    {
-        controlData.shootMode = shootMode_none;
-    }
+    
 }
 
 //     // final shoot

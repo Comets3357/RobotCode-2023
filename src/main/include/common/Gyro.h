@@ -25,6 +25,5 @@ public:
     void RobotPeriodic(GyroData &gyroData);
 
 private:
-    AHRS gyro{frc::SPI::Port::kMXP};
-
+    
 };
