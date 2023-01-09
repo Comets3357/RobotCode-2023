@@ -8,16 +8,15 @@
 struct RobotData;
 
 enum Mode {
-    mode_teleop_sa,
-    mode_teleop_manual,
-    mode_climb_sa,
-    mode_climb_manual
+    MODE_TELEOP_SA,
+    MODE_TELEOP_MANUAL,
+    MODE_AUTO_BALANCE
 };
 
 struct ControlData
 {
     // states:
-    Mode mode{mode_teleop_sa};
+    Mode mode{MODE_TELEOP_SA};
     
     bool shift = false;
 

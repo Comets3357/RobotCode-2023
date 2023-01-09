@@ -11,19 +11,19 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
         case -1:
             break;
         case 0: // up
-            controlData.mode = mode_teleop_manual;
+            controlData.mode = MODE_TELEOP_MANUAL;
             break;
         case 90:    // right
-            controlData.mode = mode_teleop_sa;
+            controlData.mode = MODE_TELEOP_SA;
             break;
         case 180:   // down
-            controlData.mode = mode_climb_manual;
+            controlData.mode = MODE_AUTO_BALANCE;
             break;
         case 270:   // left
-            controlData.mode = mode_climb_sa;
+            // controlData.mode = mode_climb_sa;
             break;
         default:
-            controlData.mode = mode_teleop_sa;
+            controlData.mode = MODE_TELEOP_SA;
             break;
             
     }
