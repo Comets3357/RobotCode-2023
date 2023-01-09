@@ -8,7 +8,8 @@
 #include <frc/DriverStation.h>
 #include <frc/TimedRobot.h>
 #include <rev/CANSparkMax.h>
-#include <wpi/uv/Error.h>
+// #include <wpi/uv/Error.h>
+#include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
 #include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
@@ -97,6 +98,9 @@ private:
 
     bool allValuesWithin(std::deque<double> deque, double tolerance);
 
+    double getEncoderDistance(double encoderPosition);
+
+
     frc::SendableChooser<frc::Pose2d> startPointChooser;
 
     const units::radian_t kZeroAngle{0.0};
@@ -106,7 +110,7 @@ private:
     units::radian_t zeroRadians{0};
     const frc::Rotation2d testRot{zeroRadians};
     const frc::Pose2d kZeroPose{testTrans, testRot};
-    frc::DifferentialDriveOdometry odometry{kZeroAngle};
+    frc::DifferentialDriveOdometry odometry{testRot, units::meter_t{0.0}, units::meter_t{0.0}};
     const units::meter_t kTrackWidth{0.55};
     frc::DifferentialDriveKinematics kinematics{kTrackWidth};
     frc::Trajectory trajectory{};
@@ -127,8 +131,9 @@ private:
     // const double metersToTicks = (6.0 / 0.1524) * (1 / (6.0 * M_PI)) * (64.0 / 8.0) * (2048.0);
 
     // meters per second to ticks per decisecond converstion factor for 4 in wheels
-    const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
-    const double metersToTicks = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0);
+    // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
+    const double mpsToRpm = 1.0/((1.0/1.0)*(9.0/44.0)*((4*M_PI)/1)*(1.0/39.0)*(1.0/60.0));
+    const double rotationsToMeters = (9.0/44.0)*((4.0*M_PI)/1.0)*(1.0/39.3701);
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};
