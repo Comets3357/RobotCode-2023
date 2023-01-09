@@ -119,10 +119,7 @@ void Intake::IntakeRollers(double rollerSpeed)
 */
 void Intake::IntakePivot(double pivotPosition)
 {
-    if (pivotPosition >= intakePivotRelativeMinPosition && pivotPosition <= intakePivotRelativeMaxPosition)
-    {
-        intakePivotRelativeEncoder.SetPosition(pivotPosition);
-    }
+    intakePivotPIDController.SetReference(pivotPosition, rev::CANSparkMax::ControlType::kPosition);
 }
 
 /*
