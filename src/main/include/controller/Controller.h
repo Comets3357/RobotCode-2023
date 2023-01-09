@@ -8,26 +8,15 @@
 struct RobotData;
 
 enum Mode {
-    mode_teleop_sa,
-    mode_teleop_manual,
-    mode_climb_sa,
-    mode_climb_manual
-};
-
-enum ShootMode {
-    shootMode_none,
-    shootMode_vision,
-    shootMode_fender,
-    shootMode_sideWall,
-    shootMode_wallLaunchPad,
-    shootMode_cornerLaunchPad
+    MODE_TELEOP_SA,
+    MODE_TELEOP_MANUAL,
+    MODE_AUTO_BALANCE
 };
 
 struct ControlData
 {
     // states:
-    Mode mode{mode_teleop_sa};
-    ShootMode shootMode = shootMode_none;
+    Mode mode{MODE_TELEOP_SA};
     
     bool shift = false;
 
@@ -41,72 +30,19 @@ struct ControlData
     bool vectorDrive;
 
     //intake:
-    bool mIntakeDown; 
-    //brings the intake down MANUAL (hold)
-    bool mIntakeUp; // (hold)
-    bool mIntakeRollersIn; //runs intake forward MANUAL (axis)
-    bool mIntakeRollersOut; //runs intake backward MANUAL (axis)
-    bool mZeroIntakePivot;
-    bool mZeroHood; //set the hood encoder to zero MANUAL
-    bool mZeroTurret; //set the turret encoder to zero MANUAL
-    bool saIntake; //runs the intake rollers and brings intake down and the indexer to intake balls SEMIAUTO
-    bool saIntakeBackward; //runs the intake backwards SEMIAUTO
-    bool saIntakeIdle; // turns intakeIdle true while held
 
-    //indexer:
-    bool mSideWheelForward;
-    bool mSideWheelBackward;
-    bool mCenterWheelForward;
-    bool mCenterWheelBackward;
-    bool mIndexerDown; //runs indexer backwards MANUAL
-    bool mIndexerUp; //runs indexer foward MANUAL
-    bool saEjectBalls; //runs intake and indexer backwards to eject balls SEMIAUTO
-    bool mDecrementCargo; // manually decrements the amount of cargo in the indexer from the front of the deque
-    bool mIncrementCargo; // manually increments the amount of cargo in the indexer from the front of the deque
+    bool mIntakeDown;
+    bool mIntakeUp;
+    bool mIntakeRollersIn;
+    bool mIntakeRollersOut;
+    bool mForceZeroIntake;
 
-    //shooter:
-    bool saShooting; //gets hood at right angle, shooter wheel up to speed SEMIAUTO
-    bool saFinalShoot; //makes belts run to actually fire balls SEMIAUTO
-    bool saIndexerShooting;   // semi auto command
-    bool staticTurret;
+    bool saIntaking;
+    bool saIntakeBackwards;
 
-    bool upperHubShot = true;
-    bool cornerLaunchPadShot; //fixed long shot from the launch pad to upper hub SEMIAUTO
-    bool wallLaunchPadShot;
-    bool sideWallShot;
-    bool fenderShot;
-    bool hubShot;//fixed close shot to lower hub from infront of hub SEMIAUTO
-    bool autoRejectOpponentCargo = true;
-    bool wrongBall; //if the ball isn't our alliance color eject ball out shooter SEMIAUTO  DEPRECATED (using ControlData.autoRejectOpponentCargo)
-    bool mShooterWheelForward; //get flywheel running MANUAL
-    bool mShooterWheelBackward; //get flywheel running backward MANUAL
-    double mHood; //moves hood up or down MANUAL (axis)
-    double mTurret; // moves turret left or right MANUAL (axis)
-    float saTurretDirectionController; //move the turret in the direction of the joystick
-    bool usingTurretDirection;
-    float saDistanceOffset = 0; //everytime pressed, add or subtract six inches to distance
 
-    //climb:
-    bool saClimbTraversalSequence;
-    bool saClimbHeightSequence;
-    bool saCancelSequence;
-    bool saClimbInit;
-    bool climbZeroing;
-    bool saPauseSequence;
-    bool mClimbZeroElevatorRev;
-    bool mClimbZeroPivotArmsRev;
-    
-    double mElevatorExtension;
-    double mArmPivot;
 
-    //benchTest:
 
-    bool manualBenchTest = false;
-    bool autoBenchTest = false;
-    bool incrementMotor = false;
-    bool incrementSpeed = false;
-    bool incrementSubsystem = false;
-    bool PIDModeToggle = false;
 };
 
 struct ControllerData

@@ -12,7 +12,7 @@ void Controller::TeleopPeriodic(const RobotData &robotData, ControllerData &cont
 {
     updateBtnData(controllerData);
     updateControlData(robotData, controllerData, controlData);
-    updateShootMode(robotData, controlData);
+    // updateShootMode(robotData, controlData);
 
     
 }
