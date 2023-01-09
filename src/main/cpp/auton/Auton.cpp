@@ -82,7 +82,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 {
     // frc::smartDashboard::PutString("autonRoutineName", autonData.autonRoutineName);
 
-    controlData.mode = mode_teleop_sa;
+    controlData.mode = MODE_TELEOP_SA;
 
     // if (autonData.autonRoutineName == "potato")
     // {

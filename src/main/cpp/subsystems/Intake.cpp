@@ -31,10 +31,10 @@ void Intake::RobotPeriodic(const RobotData &robotData, IntakeData &intakeData)
     // changing controls based off the mode robot is in
     switch (robotData.controlData.mode) 
     {
-        case mode_teleop_manual:
+        case MODE_TELEOP_MANUAL:
             Manual(robotData, intakeData);
             break;
-        case mode_teleop_sa:
+        case MODE_TELEOP_SA:
             SemiAuto(robotData, intakeData);
             break;
         default:
