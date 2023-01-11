@@ -4,8 +4,8 @@
 static const int
     leftLeadDeviceID = 1,
     leftFollowDeviceID = 2,
-    rightLeadDeviceID = 4,
-    rightFollowDeviceID = 5;
+    rightLeadDeviceID = 3,
+    rightFollowDeviceID = 4;
 
 //intake:
 static const int

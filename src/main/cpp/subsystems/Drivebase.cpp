@@ -74,12 +74,12 @@ void Drivebase::RobotInit()
     // dbRPIDController.SetP(0.10814);
     // dbRPIDController.SetD(0);
 
-    dbLPIDController.SetP(0.3926);
-    dbLPIDController.SetFF(0.2688);
+    dbLPIDController.SetP(0.35832);
+    dbLPIDController.SetFF(0.26329);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.3926);
-    dbRPIDController.SetFF(0.2688);
+    dbRPIDController.SetP(0.35832);
+    dbRPIDController.SetFF(0.26329);
     dbRPIDController.SetD(0);
 
     setPercentOutput(0, 0);

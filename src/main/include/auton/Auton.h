@@ -35,6 +35,8 @@ private:
 
     frc::SendableChooser<std::string> autonChooser;
 
+    void driveLine(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+
 
     // secondary controls:
     // void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);

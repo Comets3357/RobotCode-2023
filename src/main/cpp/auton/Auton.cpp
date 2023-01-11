@@ -64,7 +64,7 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("fourBallB", "fourBallB");
     // autonChooser.AddOption("fourBallC", "fourBallC");
     
-    autonChooser.AddOption("5Ball", "5Ball");
+    autonChooser.AddOption("driveLine", "driveLine");
     // autonChooser.AddOption("fiveBallCAlt", "fiveBallCAlt");
 
     // autonChooser.AddOption("citrus", "citrus");
@@ -83,6 +83,11 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     // frc::smartDashboard::PutString("autonRoutineName", autonData.autonRoutineName);
 
     controlData.mode = MODE_TELEOP_SA;
+
+    if (autonData.autonRoutineName == "driveLine")
+    {
+
+    }
 
     // if (autonData.autonRoutineName == "potato")
     // {
@@ -115,10 +120,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     // else if (autonData.autonRoutineName == "fourBallC") {
     //     fourBallC(robotData, controlData, controllerData);
     // }
-    if (autonData.autonRoutineName == "5Ball") 
-    {
-        fiveBallC(robotData, controlData, controllerData);
-    }
+    // if (autonData.autonRoutineName == "5Ball") 
+    // {
+    //     fiveBallC(robotData, controlData, controllerData);
+    // }
     // else if (autonData.autonRoutineName == "fiveBallCAlt") {
     //     fiveBallC(robotData, controlData, controllerData);
     // }
@@ -127,6 +132,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     // }
 }
 
+void Auton::driveLine(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData) 
+{
+
+}
 
 // void Auton::potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 // {
