@@ -7,16 +7,25 @@
 
 struct RobotData;
 
-enum Mode {
+enum Mode 
+{
     MODE_TELEOP_SA,
     MODE_TELEOP_MANUAL,
     MODE_AUTO_BALANCE
+};
+
+enum ElevatorSetPosition
+{
+    SET_POSITION_1,
+    SET_POSITION_2,
+    SET_POSITION_3
 };
 
 struct ControlData
 {
     // states:
     Mode mode{MODE_TELEOP_SA};
+    ElevatorSetPosition elevatorSetPosition{SET_POSITION_1};
     
     bool shift = false;
 
@@ -40,9 +49,16 @@ struct ControlData
     bool saIntaking;
     bool saIntakeBackwards;
 
+    //elevator:
 
+    bool mElevatorUp;
+    bool mElevatorDown;
 
-
+    bool saElevatorUp;
+    bool saElevatorDown;
+    bool saSetPosition1; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+    bool saSetPosition2; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+    bool saSetPosition3; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
 };
 
 struct ControllerData
