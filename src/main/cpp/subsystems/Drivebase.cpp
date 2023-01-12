@@ -74,11 +74,11 @@ void Drivebase::RobotInit()
     // dbRPIDController.SetP(0.10814);
     // dbRPIDController.SetD(0);
 
-    dbLPIDController.SetP(0.35832);
+    dbLPIDController.SetP(0.15832);
     dbLPIDController.SetFF(0.26329);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.35832);
+    dbRPIDController.SetP(0.15832);
     dbRPIDController.SetFF(0.26329);
     dbRPIDController.SetD(0);
 
@@ -168,6 +168,9 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
     // frc::SmartDashboard::PutBoolean("dbStationaryForShot", drivebaseData.dbStationaryForShot);
 
     // frc::SmartDashboard::PutNumber("driveMode", drivebaseData.driveMode);
+
+    frc::SmartDashboard::PutNumber("odometry x", drivebaseData.odometryX);
+    frc::SmartDashboard::PutNumber("odometry y", drivebaseData.odometryY);
 
     // call updateOdometry
     updateOdometry(robotData, drivebaseData);
@@ -305,8 +308,10 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     frc::Rotation2d currentRotation{currentRadians};
 
     // NEGATIVE because left motor/encoder should be inverted
-    units::meter_t leftDistance{-dbLEncoder.GetPosition() * rotationsToMeters}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
-    units::meter_t rightDistance{dbREncoder.GetPosition() * rotationsToMeters}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
+    units::meter_t leftDistance{getEncoderDistance(-dbLEncoder.GetPosition())}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
+    units::meter_t rightDistance{getEncoderDistance(dbREncoder.GetPosition())}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
+
+    frc::SmartDashboard::PutNumber("left distance", getEncoderDistance(-dbLEncoder.GetPosition()));
 
     odometry.Update(currentRotation, leftDistance, rightDistance);
 
@@ -338,7 +343,7 @@ void Drivebase::resetOdometry(const frc::Pose2d &pose, double gyroAngle)
     const units::radian_t gyroRadians{gyroAngle};
     frc::Rotation2d gyroRotation{gyroRadians};
 
-    odometry.ResetPosition(gyroRotation, units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  pose);
+    odometry.ResetPosition(gyroRotation, units::meter_t{-getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  pose);
     zeroEncoders();
 }
 
@@ -357,14 +362,14 @@ void Drivebase::resetOdometry(double x, double y, double radians, const RobotDat
 
     const frc::Rotation2d gyroRotation{gyroRadians};
     const frc::Pose2d resetPose{meterX, meterY, radianYaw};
-    odometry.ResetPosition(gyroRotation, units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  resetPose);
+    odometry.ResetPosition(gyroRotation, units::meter_t{-getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  resetPose);
 
     zeroEncoders();
 }
 
 double Drivebase::getEncoderDistance(double encoderPosition)
 {
-    return 0.0;
+    return encoderPosition*(rotationsToMeters/42.0);
 }
 
 
@@ -434,7 +439,7 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
 
             fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
 
-            fs::path pathDirectory = deployDirectory / "Paths" / (trajectoryName + ".wpilib.json");
+            fs::path pathDirectory = deployDirectory / "Paths" / "output" / (trajectoryName + ".wpilib.json");
 
             frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
 

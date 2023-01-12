@@ -14,7 +14,7 @@ void Auton::AutonomousInit(AutonData &autonData)
     fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
 
     autonData.autonRoutineName = autonChooser.GetSelected();
-    fs::path autonDirectory = deployDirectory / "Autos" / autonData.autonRoutineName;
+    fs::path autonDirectory = deployDirectory / "Autos" /  autonData.autonRoutineName;
     frc::SmartDashboard::PutString("autonDirectory", autonDirectory.string());
 
     std::ifstream inFile;
@@ -86,7 +86,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 
     if (autonData.autonRoutineName == "driveLine")
     {
-
+        driveLine(robotData, controlData, controllerData);
     }
 
     // if (autonData.autonRoutineName == "potato")
