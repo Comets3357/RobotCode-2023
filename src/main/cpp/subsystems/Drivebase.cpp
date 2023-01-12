@@ -308,8 +308,8 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     frc::Rotation2d currentRotation{currentRadians};
 
     // NEGATIVE because left motor/encoder should be inverted
-    units::meter_t leftDistance{getEncoderDistance(-dbLEncoder.GetPosition())}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
-    units::meter_t rightDistance{getEncoderDistance(dbREncoder.GetPosition())}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
+    units::meter_t leftDistance{getEncoderDistance(-dbLEncoder.GetPosition())}; 
+    units::meter_t rightDistance{getEncoderDistance(dbREncoder.GetPosition())}; 
 
     frc::SmartDashboard::PutNumber("left distance", getEncoderDistance(-dbLEncoder.GetPosition()));
 
