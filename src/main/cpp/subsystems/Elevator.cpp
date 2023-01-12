@@ -15,7 +15,24 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 
 void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorData)
 {
-    
+    switch (robotData.controlData.elevatorSetPosition)
+    {
+        case SET_POSITION_1:
+        ElevatorPosition(robotData.controlData.saSetPosition1, 0, elevatorData.elevatorRunning);
+        break;
+
+        case SET_POSITION_2:
+        ElevatorPosition(robotData.controlData.saSetPosition2, 0, elevatorData.elevatorRunning);
+        break;
+
+        case SET_POSITION_3:
+        ElevatorPosition(robotData.controlData.saSetPosition3, 0, elevatorData.elevatorRunning);
+        break;
+
+        default:
+        break;
+
+    }
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
@@ -36,24 +53,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         ElevatorPosition(elevatorDownwardSpeed, 0, elevatorData.elevatorRunning);
         ElevatorPosition(elevatorRelativeMinPosition, 0, elevatorData.elevatorRunning);
     }
-    switch (robotData.controlData.elevatorSetPosition)
-    {
-        case SET_POSITION_1:
-        ElevatorPosition(robotData.controlData.saSetPosition1, 0, elevatorData.elevatorRunning);
-        break;
 
-        case SET_POSITION_2:
-        ElevatorPosition(robotData.controlData.saSetPosition2, 0, elevatorData.elevatorRunning);
-        break;
-
-        case SET_POSITION_3:
-        ElevatorPosition(robotData.controlData.saSetPosition3, 0, elevatorData.elevatorRunning);
-        break;
-
-        default:
-        break;
-
-    }
 }
 
 void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
