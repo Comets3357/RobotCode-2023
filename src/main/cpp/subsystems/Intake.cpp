@@ -10,6 +10,11 @@ void Intake::RobotInit()
     intakeRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     intakeRollers.SetSmartCurrentLimit(45);
     intakeRollers.EnableVoltageCompensation(10.5);
+    intakeRollers2.RestoreFactoryDefaults();
+    intakeRollers2.SetInverted(true);
+    intakeRollers2.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    intakeRollers2.SetSmartCurrentLimit(45);
+    intakeRollers2.EnableVoltageCompensation(10.5);
 
     // Intake Pivot
     intakePivotPIDController.SetP(0.1, 0);
@@ -112,6 +117,7 @@ void Intake::Manual(const RobotData &robotData, IntakeData &intakeData)
 void Intake::IntakeRollers(double rollerSpeed)
 {
     intakeRollers.Set(rollerSpeed);
+    intakeRollers2.Set(-rollerSpeed);
 }
 
 /*

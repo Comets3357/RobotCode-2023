@@ -9,6 +9,7 @@ static const int
 
 //intake:
 static const int
+    intakeRoller2ID = 14, // Not actual value yet.
     intakeRollerID = 12,
     intakePivotID = 11,
     intakeSingulatorID = 13;

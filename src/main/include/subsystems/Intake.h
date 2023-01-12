@@ -43,6 +43,8 @@ private:
 
     // Intake Roller Initialization
     rev::CANSparkMax intakeRollers = rev::CANSparkMax(intakeRollerID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax intakeRollers2 = rev::CANSparkMax(intakeRoller2ID, rev::CANSparkMax::MotorType::kBrushless);
+
     rev::SparkMaxRelativeEncoder intakeRollersRelativeEncoder = intakeRollers.GetEncoder(); // Relative Encoder
 
     // Intake Pivot Initialization
