@@ -369,7 +369,7 @@ void Drivebase::resetOdometry(double x, double y, double radians, const RobotDat
 
 double Drivebase::getEncoderDistance(double encoderPosition)
 {
-    return encoderPosition*(rotationsToMeters/42.0);
+    return encoderPosition*ticksToMeters;
 }
 
 
