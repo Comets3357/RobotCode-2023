@@ -20,6 +20,7 @@ private:
     void ElevatorPosition(double elevatorPosition, int PIDSlot, bool &elevatorRunning);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
     void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
+    void AbsoluteToRelative(double currentAbsolutePosition);
     void ToggleSoftLimits();
 
     double positionError = 1;

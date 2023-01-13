@@ -102,3 +102,10 @@ void Elevator::ToggleSoftLimits()
         elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorRelativeMaxPosition + 0.1);
     }
 }
+
+double Elevator::AbsoluteToRelative(double currentAbsolutePosition) 
+{
+    double slope = (elevatorRelativeMaxPosition - elevatorRelativeMinPosition) / (elevatorAbsoluteMaxPosition - elevatorAbosluteMinPosition);
+    double b = elevatorRelativeMinPosition - (slope * elevatorAbosluteMinPosition);
+    return ((slope * currentAbsolutePosition) + b);
+}
