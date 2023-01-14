@@ -112,7 +112,7 @@ void Drivebase::AutonomousInit(const RobotData &robotData, DrivebaseData &driveb
     zeroEncoders();
 }
 
-void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData)
+void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData)
 {
     updateData(robotData, drivebaseData);
 
@@ -126,11 +126,11 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
 
     if (frc::DriverStation::IsTeleop()) 
     {
-        teleopControl(robotData, drivebaseData);
+        teleopControl(robotData, drivebaseData, gyroData);
     }
     else if (frc::DriverStation::IsAutonomous())
     {
-        autonControl(robotData, drivebaseData, autonData);
+        autonControl(robotData, drivebaseData, autonData, gyroData);
     }
 }
 
@@ -152,9 +152,9 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
     drivebaseData.currentLDBPos = dbLEncoder.GetPosition();
     drivebaseData.currentRDBPos = dbREncoder.GetPosition();
 
-    drivebaseData.lDriveVel = -dbLEncoder.GetVelocity() / mpsToTpds;
+    drivebaseData.lDriveVel = -dbLEncoder.GetVelocity();
     // frc::SmartDashboard::PutNumber("lDriveVel", drivebaseData.lDriveVel);
-    drivebaseData.rDriveVel = -dbREncoder.GetVelocity() / mpsToTpds;
+    drivebaseData.rDriveVel = -dbREncoder.GetVelocity();
     // frc::SmartDashboard::PutNumber("rDriveVel", -drivebaseData.rDriveVel);
 
     // WARNING the average calcuation here subtracts for some reason. The values for left and right db velocity act as expected on their own...
@@ -175,26 +175,27 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
 // driving functions:
 
 // adjusts for the deadzone and converts joystick input to velocity values for PID
-void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData)
+void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData)
 {
     // frc::SmartDashboard::PutNumber("DRIVE MODE", robotData.drivebaseData.driveMode);
     // frc::SmartDashboard::PutNumber("SHOOT MODE", robotData.controlData.shootMode);
     // assign drive mode
     if ((!robotData.controlData.vectorDrive) && ((robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) || (robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08))) {
-        drivebaseData.driveMode = driveMode_joystick;
+        drivebaseData.driveMode = DRIVEMODE_JOYSTICK;
     }
     else if (robotData.controlData.vectorDrive) 
     {
-        drivebaseData.driveMode = driveMode_vector;
+        drivebaseData.driveMode = DRIVEMODE_VECTOR;
     }  
     else 
     {
-        drivebaseData.driveMode = driveMode_joystick;
+        drivebaseData.driveMode = DRIVEMODE_JOYSTICK;
     }
 
 
-    if (drivebaseData.driveMode == driveMode_joystick) 
+    if (drivebaseData.driveMode == DRIVEMODE_JOYSTICK) 
     {
+
         double tempLDrive = robotData.controlData.lDrive;
         double tempRDrive = robotData.controlData.rDrive;
 
@@ -221,22 +222,43 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             tempRDrive = 0;
         }
 
+        if (robotData.controlData.mode == MODE_AUTO_BALANCE)
+        {
+            if (gyroData.rawPitch > 2.5)
+            {
+                tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+                tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+
+            }
+            else if (gyroData.rawPitch < -2.5)
+            {
+                tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+                tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+            }
+            else
+            {
+                tempLDrive = 0;
+                tempRDrive = 0;
+            }
+        }
+
         //set as percent vbus
         setPercentOutput(tempLDrive, tempRDrive);
     }
-    else if (drivebaseData.driveMode == driveMode_turnInPlace) 
+    else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
     {
         //turnInPlaceTeleop(-robotData.limelightData.angleOffset, robotData);
     }
-    else if (drivebaseData.driveMode == driveMode_vector)
+    else if (drivebaseData.driveMode == DRIVEMODE_VECTOR)
     {
         //setPercentOutput(robotData.jetsonData.leftSkew, robotData.jetsonData.rightSkew);
     }
+   
 
 
 }
 
-void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData) 
+void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData) 
 {
     // sample the desired pos based on time from trajectory object
     // get chassis speeds from ramsete controller, comparing current pos w/ desired pos
@@ -246,7 +268,7 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
 
     // frc::smartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
 
-    if (drivebaseData.driveMode == driveMode_break)
+    if (drivebaseData.driveMode == DRIVEMODE_BREAK)
     {
         // frc::SmartDashboard::PutNumber("breakEndSec", breakEndSec);
         if (robotData.timerData.secSinceEnabled > breakEndSec /* && !robotData.controlData.saFinalShoot */) 
@@ -256,11 +278,11 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
             getNextAutonStep(robotData, drivebaseData, autonData);
         }
     }
-    else if (drivebaseData.driveMode == driveMode_turnInPlace)
+    else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE)
     {
         turnInPlaceAuton(turnInPlaceDegrees - robotData.gyroData.rawYaw, robotData, drivebaseData, autonData);
     }
-    else if (drivebaseData.driveMode == driveMode_trajectory)
+    else if (drivebaseData.driveMode == DRIVEMODE_TRAJECTORY)
     {
         frc::SmartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
 
@@ -305,8 +327,8 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     frc::Rotation2d currentRotation{currentRadians};
 
     // NEGATIVE because left motor/encoder should be inverted
-    units::meter_t leftDistance{-dbLEncoder.GetPosition() / metersToTicks};
-    units::meter_t rightDistance{dbREncoder.GetPosition() / metersToTicks};
+    units::meter_t leftDistance{-dbLEncoder.GetPosition() * rotationsToMeters}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
+    units::meter_t rightDistance{dbREncoder.GetPosition() * rotationsToMeters}; // TODO HAVE TO CHANGE THIS TO RETURN PROPER METERS
 
     odometry.Update(currentRotation, leftDistance, rightDistance);
 
@@ -371,13 +393,11 @@ double Drivebase::getEncoderDistance(double encoderPosition)
 // sets the drive base velocity for auton
 void Drivebase::setVelocity(double leftVel, double rightVel)
 {
-    // TDPS: ticks per decisecond
+    double leftRPM = leftVel * mpsToRpm;
+    double rightRPM = rightVel * mpsToRpm;
 
-    double leftTPDS = leftVel * mpsToTpds;
-    double rightTPDS = rightVel * mpsToTpds;
-
-    dbLPIDController.SetReference(leftTPDS, rev::CANSparkMax::ControlType::kVelocity); // dbL.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, leftTPDS);
-    dbRPIDController.SetReference(rightTPDS, rev::CANSparkMax::ControlType::kVelocity); // dbR.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, rightTPDS);
+    dbLPIDController.SetReference(leftRPM, rev::CANSparkMax::ControlType::kVelocity); // dbL.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, leftTPDS);
+    dbRPIDController.SetReference(rightRPM, rev::CANSparkMax::ControlType::kVelocity); // dbR.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, rightTPDS);
 }
 
 void Drivebase::zeroEncoders() 
@@ -417,7 +437,7 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
 
         if (trajectoryName.substr(0, 11) == "turnInPlace")
         {
-            drivebaseData.driveMode = driveMode_turnInPlace;
+            drivebaseData.driveMode = DRIVEMODE_TURNINPLACE;
             turnInPlaceDegrees = robotData.gyroData.rawYaw + std::stod(trajectoryName.substr(12, trajectoryName.length()));
 
             return;
@@ -425,14 +445,14 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
 
         else if (trajectoryName.substr(0, 5) == "break")
         {
-            drivebaseData.driveMode = driveMode_break;
+            drivebaseData.driveMode = DRIVEMODE_BREAK;
             breakEndSec = std::stod(trajectoryName.substr(6, trajectoryName.length())) + robotData.timerData.secSinceEnabled;
             return;
         }
 
         else 
         {
-            drivebaseData.driveMode = driveMode_trajectory; 
+            drivebaseData.driveMode = DRIVEMODE_TRAJECTORY; 
 
             fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
 
@@ -473,7 +493,7 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
     }
     else 
     {
-        drivebaseData.driveMode = driveMode_break;
+        drivebaseData.driveMode = DRIVEMODE_BREAK;
     }
 }
 
@@ -502,7 +522,7 @@ void Drivebase::turnInPlaceAuton(double degrees, const RobotData &robotData, Dri
     {
         setPercentOutput(0, 0);
         // only advance auton step if it's not shooting
-        if (drivebaseData.driveMode == driveMode_turnInPlace) 
+        if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
         {
             getNextAutonStep(robotData, drivebaseData, autonData);
         }

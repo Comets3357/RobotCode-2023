@@ -11,6 +11,7 @@ enum Mode {
     MODE_TELEOP_SA,
     MODE_TELEOP_MANUAL,
     MODE_AUTO_BALANCE
+    
 };
 
 struct ControlData

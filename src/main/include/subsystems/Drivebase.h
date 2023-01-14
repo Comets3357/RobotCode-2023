@@ -2,6 +2,7 @@
 
 #include "Constants.h"
 #include "auton/Auton.h"
+#include "common/Gyro.h"
 
 #include <frc/TimedRobot.h>
 #include <frc/Joystick.h>
@@ -28,16 +29,17 @@
 struct RobotData;
 
 enum DriveMode {
-    driveMode_joystick,
-    driveMode_turnInPlace,
-    driveMode_break,
-    driveMode_trajectory,
-    driveMode_vector
+    DRIVEMODE_JOYSTICK,
+    DRIVEMODE_TURNINPLACE,
+    DRIVEMODE_BREAK,
+    DRIVEMODE_TRAJECTORY,
+    DRIVEMODE_VECTOR,
+    DRIVEMODE_AUTO_BALANCE
 };
 
 struct DrivebaseData
 {
-    DriveMode driveMode = driveMode_break;
+    DriveMode driveMode = DRIVEMODE_BREAK;
 
      // in meters eventually
     double currentLDBPos = 0.0; // ticks
@@ -65,15 +67,15 @@ public:
     void RobotInit();
     void TeleopInit(const RobotData &robotData);
     void AutonomousInit(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
-    void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
+    void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
     void TestPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData);
     void DisabledInit();
 
 private:
 
     void updateData(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
+    void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData);
+    void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
 
     // odometry
     void updateOdometry(const RobotData &robotData, DrivebaseData &drivebaseData);
@@ -131,8 +133,9 @@ private:
     // const double metersToTicks = (6.0 / 0.1524) * (1 / (6.0 * M_PI)) * (64.0 / 8.0) * (2048.0);
 
     // meters per second to ticks per decisecond converstion factor for 4 in wheels
-    const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
-    const double metersToTicks = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0);
+    // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
+    const double mpsToRpm = 1.0/((1.0/1.0)*(9.0/44.0)*((4*M_PI)/1)*(1.0/39.0)*(1.0/60.0));
+    const double rotationsToMeters = (9.0/44.0)*((4.0*M_PI)/1.0)*(1.0/39.3701);
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};
