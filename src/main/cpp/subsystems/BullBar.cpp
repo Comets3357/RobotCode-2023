@@ -42,10 +42,22 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData
             break;
     }
 
-    // reseeding the position of relative if the motor isn't running
-    if (bullbarSliderRelativeEncoder.GetVelocity() < 1)
+
+
+    if (robotData.controlData.saBullBarExtension)
+    {
+        bullbarSliderPIDController.SetReference(1, rev::CANSparkMax::ControlType::kDutyCycle);
+        bullbarRollers.Set(0.5);
+    }
+    else
     {
         ZeroBullBar();
+        bullbarRollers.Set(0);
     }
 
+}
+
+void BullBar::ZeroBullBar()
+{
+    bullbarSliderPIDController.SetReference(0, rev::CANSparkMax::ControlType::kDutyCycle);
 }

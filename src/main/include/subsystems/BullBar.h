@@ -49,8 +49,7 @@ private:
     rev::CANSparkMax bullbarSlider = rev::CANSparkMax(bullbarSliderID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder bullbarSliderRelativeEncoder = bullbarSlider.GetEncoder(); // Relative Encoder
     rev::SparkMaxPIDController bullbarSliderPIDController = bullbarSlider.GetPIDController(); // PID Controller
-    frc::DigitalInput m_input{bullbarAbsoluteEncoderPort};
-    frc::DutyCycle bullbarSliderAbsoluteEncoder = frc::DutyCycle{m_input}; // Absolute Encoder
+    rev::SparkMaxAbsoluteEncoder bullbarSliderAbsoluteEncoder = bullbarSlider.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
     double bullbarSliderRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem

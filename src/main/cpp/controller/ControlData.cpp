@@ -66,6 +66,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 
     controlData.saIntaking = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
+    controlData.saBullBarExtension = (controllerData.sRTrigger > 0.5) && !controlData.shift;
 
     // MANUAL:
     
