@@ -248,6 +248,7 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
     // check if done with current path by either checking TotalTime() or checking in vicinity of final target point
 
     // frc::smartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
+    frc::SmartDashboard::PutNumber("MODE",(int) drivebaseData.driveMode);
 
     if (drivebaseData.driveMode == DRIVEMODE_BREAK)
     {
@@ -258,6 +259,7 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
             // frc::SmartDashboard::PutNumber("breakEndSec", breakEndSec);
             getNextAutonStep(robotData, drivebaseData, autonData);
         }
+        setPercentOutput(0,0);
     }
     else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE)
     {
@@ -278,6 +280,9 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
         {
             getNextAutonStep(robotData, drivebaseData, autonData);
         }
+
+        frc::SmartDashboard::PutNumber("CURRENT TIME", sampleSec.to<double>());
+        frc::SmartDashboard::PutNumber("TARGET TIEM", 6);
         
         frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
         frc::Pose2d desiredPose = trajectoryState.pose;
