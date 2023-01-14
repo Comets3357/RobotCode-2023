@@ -41,11 +41,16 @@ private:
     void Manual(const RobotData &robotData, ArmData &armData);
     
     
-    // Intake Pivot Initialization
+    // joint Pivot Initialization
     rev::CANSparkMax armWrist = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder armWristRelativeEncoder = armWrist.GetEncoder(); // Relative Encoder
     rev::SparkMaxPIDController armWristPIDController = armWrist.GetPIDController(); // PID Controller
     rev::SparkMaxAbsoluteEncoder armWristAbsoluteEncoder = armWrist.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
+
+    rev::CANSparkMax armPivot = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::SparkMaxRelativeEncoder armPivotRelativeEncoder = armPivot.GetEncoder(); // Relative Encoder
+    rev::SparkMaxPIDController armPivotPIDController = armPivot.GetPIDController(); // PID Controller
+    rev::SparkMaxAbsoluteEncoder armPivotAbsoluteEncoder = armPivot.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
     double armWristRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem

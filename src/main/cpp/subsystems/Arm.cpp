@@ -57,11 +57,13 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 {
     if (robotData.controlData.saArmIntakePosition)
     {
-
+        armWristPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
+        armPivotPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
     }
     if (robotData.controlData.saMoveArm)
     {
-        
+        armWristPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
+        armPivotPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
     }
 }
 void Arm::Manual(const RobotData &robotData, ArmData &armData)
