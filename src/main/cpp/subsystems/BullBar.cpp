@@ -11,7 +11,7 @@ void BullBar::RobotInit()
     bullbarRollers.SetSmartCurrentLimit(45);
     bullbarRollers.EnableVoltageCompensation(10.5);
 
-    // Intake Pivot
+    // BullBar Pivot
     bullbarSliderPIDController.SetP(0.1, 0);
     bullbarSliderPIDController.SetI(0, 0);
     bullbarSliderPIDController.SetD(0, 0);
@@ -24,4 +24,28 @@ void BullBar::RobotInit()
 
     // Callibrating Relative Based On Absolute Position
     ZeroBullBar();
+}
+
+void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData)
+{
+    // changing controls based off the mode robot is in
+    switch (robotData.controlData.mode) 
+    {
+        case MODE_TELEOP_MANUAL:
+            Manual(robotData, bullbarData);
+            break;
+        case MODE_TELEOP_SA:
+            SemiAuto(robotData, bullbarData);
+            break;
+        default:
+            SemiAuto(robotData, bullbarData);
+            break;
+    }
+
+    // reseeding the position of relative if the motor isn't running
+    if (bullbarSliderRelativeEncoder.GetVelocity() < 1)
+    {
+        ZeroBullBar();
+    }
+
 }

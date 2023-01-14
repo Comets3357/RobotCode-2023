@@ -46,18 +46,18 @@ private:
     rev::SparkMaxRelativeEncoder bullbarRollersRelativeEncoder = bullbarRollers.GetEncoder(); // Relative Encoder
 
     // Bull Bar Slider Initialization
-    rev::CANSparkMax bullbarPivot = rev::CANSparkMax(bullbarSliderID, rev::CANSparkMax::MotorType::kBrushless);
-    rev::SparkMaxRelativeEncoder bullbarPivotRelativeEncoder = bullbarPivot.GetEncoder(); // Relative Encoder
-    rev::SparkMaxPIDController bullbarPivotPIDController = bullbarPivot.GetPIDController(); // PID Controller
+    rev::CANSparkMax bullbarSlider = rev::CANSparkMax(bullbarSliderID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::SparkMaxRelativeEncoder bullbarSliderRelativeEncoder = bullbarSlider.GetEncoder(); // Relative Encoder
+    rev::SparkMaxPIDController bullbarSliderPIDController = bullbarSlider.GetPIDController(); // PID Controller
     frc::DigitalInput m_input{bullbarAbsoluteEncoderPort};
-    frc::DutyCycle bullbarPivotAbsoluteEncoder = frc::DutyCycle{m_input}; // Absolute Encoder
+    frc::DutyCycle bullbarSliderAbsoluteEncoder = frc::DutyCycle{m_input}; // Absolute Encoder
 
     // Encoder Min and Max Values 
-    double bullbarPivotRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
-    double bullbarPivotRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
+    double bullbarSliderRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
+    double bullbarSliderRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
 
-    double bullbarPivotAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
-    double bullbarPivotAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
+    double bullbarSliderAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
+    double bullbarSliderAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
 
     double bullbarRollerOutwardSpeed = 0.4;
     double bullbarRollerInwardSpeed = -0.4;
