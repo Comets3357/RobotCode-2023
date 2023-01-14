@@ -17,6 +17,8 @@ static const int
 //arm:
 static const int
     armWristID = 43; // Not actual value.
+bullbarRollerID = 55, // NOT ACTUAL VALUES.
+    bullbarSliderID = 56; // NOT ACTUAL VALUES.
 
 static const double
     //practice bot
@@ -135,7 +137,9 @@ static const double
 
 // DIO
 static const int
+    bullbarAbsoluteEncoderPort = 2, // Not actual value.
     intakeAbsoluteEncoderPort = 8,
+    elevatorAbsoluteEncoderPort = 7, // Not actual value.
     climbArmsAbsID = 4,
     HoodAbsoluteEncoderPort = 1,
     TurretAbsoluteEncoderPort = 0,

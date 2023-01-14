@@ -7,7 +7,8 @@
 
 struct RobotData;
 
-enum Mode {
+enum Mode 
+{
     MODE_TELEOP_SA,
     MODE_TELEOP_MANUAL,
     MODE_AUTO_BALANCE
@@ -44,6 +45,8 @@ struct ControlData
 
     bool saMoveArm;
     bool saArmIntakePosition;
+bool saBullBarExtension;
+
 
 
 };
