@@ -39,6 +39,7 @@ struct ControlData
 
     bool saIntaking;
     bool saIntakeBackwards;
+    bool saCubeIntake;
 
 
 

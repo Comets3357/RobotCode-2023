@@ -73,6 +73,11 @@ void Intake::SemiAuto(const RobotData &robotData, IntakeData &intakeData)
         IntakeRollers(intakeRollerOutwardSpeed);
         IntakePivot(intakePivotRelativeMaxPosition);
     }
+    else if (robotData.controlData.saCubeIntake)
+    {
+        IntakeRollers(intakeRollerCubeInwardSpeed);
+        IntakePivot(intakeRollerCubeInwardSpeed);
+    }
     else
     {
         IntakeRollers(0);

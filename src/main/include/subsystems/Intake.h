@@ -64,5 +64,7 @@ private:
     double intakeRollerOutwardSpeed = 0.4;
     double intakeRollerInwardSpeed = -0.4;
 
+    double intakeRollerCubeInwardSpeed = 0.4;
+
     bool softLimitsToggled = false;
 };
