@@ -16,7 +16,7 @@ static const int
 
 //arm:
 static const int
-    armWristID = 43; // Not actual value.
+    armWristID = 43, // Not actual value.
 bullbarRollerID = 55, // NOT ACTUAL VALUES.
     bullbarSliderID = 56; // NOT ACTUAL VALUES.
 

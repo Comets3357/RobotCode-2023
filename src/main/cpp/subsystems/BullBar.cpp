@@ -42,8 +42,15 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData
             break;
     }
 
+}
 
+void BullBar::ZeroBullBar()
+{
+    bullbarSliderPIDController.SetReference(0, rev::CANSparkMax::ControlType::kDutyCycle);
+}
 
+void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
+{
     if (robotData.controlData.saBullBarExtension)
     {
         bullbarSliderPIDController.SetReference(1, rev::CANSparkMax::ControlType::kDutyCycle);
@@ -54,10 +61,9 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData
         ZeroBullBar();
         bullbarRollers.Set(0);
     }
-
 }
 
-void BullBar::ZeroBullBar()
+void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
 {
-    bullbarSliderPIDController.SetReference(0, rev::CANSparkMax::ControlType::kDutyCycle);
+
 }
