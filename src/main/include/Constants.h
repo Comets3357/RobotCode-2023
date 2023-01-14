@@ -13,6 +13,11 @@ static const int
     intakePivotID = 11,
     intakeSingulatorID = 13;
 
+//bull bar:
+static const int
+    bullbarRollerID = 55, // NOT ACTUAL VALUES.
+    bullbarSliderID = 56; // NOT ACTUAL VALUES.
+
 static const double
     //practice bot
     absOut = 0.481,
@@ -130,7 +135,9 @@ static const double
 
 // DIO
 static const int
+    bullbarAbsoluteEncoderPort = 2, // Not actual value.
     intakeAbsoluteEncoderPort = 8,
+    elevatorAbsoluteEncoderPort = 7, // Not actual value.
     climbArmsAbsID = 4,
     HoodAbsoluteEncoderPort = 1,
     TurretAbsoluteEncoderPort = 0,
