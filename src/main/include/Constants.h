@@ -14,6 +14,10 @@ static const int
     intakePivotID = 11,
     intakeSingulatorID = 13;
 
+//arm:
+static const int
+    armWristID = 43; // Not actual value.
+
 static const double
     //practice bot
     absOut = 0.481,

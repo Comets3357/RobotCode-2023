@@ -69,12 +69,10 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saCubeIntake = (controllerData.sLTrigger > 0.5) && controlData.shift;
 
     // MANUAL:
-    
-    controlData.mIntakeDown = controllerData.sRBumper && !controlData.shift;
-    controlData.mIntakeUp = controllerData.sRBumper && controlData.shift;
+
     controlData.mIntakeRollersIn = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mIntakeRollersOut = (controllerData.sRTrigger > 0.5) && controlData.shift;
-    controlData.mForceZeroIntake = controllerData.sRCenterBtn;
+
     
     
 
