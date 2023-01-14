@@ -304,19 +304,21 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 {
 
     // library's odometry
-    units::radian_t currentRadians{(robotData.gyroData.rawYaw / 180) * M_PI};
+    units::radian_t currentRadians{(-robotData.gyroData.rawYaw / 180) * M_PI};
     frc::Rotation2d currentRotation{currentRadians};
 
     // NEGATIVE because left motor/encoder should be inverted
-    units::meter_t leftDistance{getEncoderDistance(-dbLEncoder.GetPosition())}; 
+    units::meter_t leftDistance{getEncoderDistance(dbLEncoder.GetPosition())}; 
     units::meter_t rightDistance{getEncoderDistance(dbREncoder.GetPosition())}; 
 
     frc::SmartDashboard::PutNumber("left distance", getEncoderDistance(-dbLEncoder.GetPosition()));
 
+    frc::SmartDashboard::PutNumber("UPDATELEGTY", (double)leftDistance);
+    frc::SmartDashboard::PutNumber("UPDATERIGHT", (double)rightDistance);
     odometry.Update(currentRotation, leftDistance, rightDistance);
 
     field.SetRobotPose(odometry.GetPose());
-    // frc::SmartDashboard::PutData("Field", &field);
+    frc::SmartDashboard::PutData("Field", &field);
 
 
     drivebaseData.currentPose = odometry.GetPose();
@@ -329,9 +331,9 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     {
         drivebaseData.odometryYaw = 360 + drivebaseData.odometryYaw;
     }
-    // frc::SmartDashboard::PutNumber("odometryX", drivebaseData.odometryX);
-    // frc::SmartDashboard::PutNumber("odometryY", drivebaseData.odometryY);
-    // frc::SmartDashboard::PutNumber("odometryYaw", drivebaseData.odometryYaw);
+    frc::SmartDashboard::PutNumber("odometryX", drivebaseData.odometryX);
+    frc::SmartDashboard::PutNumber("odometryY", drivebaseData.odometryY);
+    frc::SmartDashboard::PutNumber("odometryYaw", drivebaseData.odometryYaw);
 }
 
 /**
@@ -589,18 +591,8 @@ void Drivebase::sendStartPointChooser()
 }
 
 
-void Drivebase::calcTurretEjectAngle(DrivebaseData &drivebaseData) 
+void Drivebase::DisabledPeriodic()
 {
-    if (drivebaseData.odometryX <= 8.23) 
-    {
-        double diffX = 0 - drivebaseData.odometryX;
-        double diffY = 4.115 - drivebaseData.odometryY;
-        drivebaseData.turretEjectAngle = (std::atan(diffY / diffX) * 180 / M_PI) - 180;
-    } else 
-    {
-        double diffX = 16.46 - drivebaseData.odometryX;
-        double diffY = 4.115 - drivebaseData.odometryY;
-        drivebaseData.turretEjectAngle = (std::atan(diffY / diffX) * 180 / M_PI);
-    }
+    frc::SmartDashboard::PutNumber("LEFT DISTANCE", dbLEncoder.GetPosition() * ticksToMeters);
 }
 

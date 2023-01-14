@@ -92,7 +92,9 @@ void Robot::DisabledInit() {
   driveBase.DisabledInit();
 }
 
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+  driveBase.DisabledPeriodic();
+}
 
 void Robot::TestInit() {}
 

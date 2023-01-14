@@ -30,6 +30,8 @@ public:
     void AutonomousInit(AutonData &autonData);
     void AutonomousPeriodic(const RobotData &robotData, AutonData &autonData, ControlData &controlData, ControllerData &controllerData);
     void DisabledInit();
+
+    void DisabledPeriodic();
 private:
     void sendAutonSelectionChooser();
 
