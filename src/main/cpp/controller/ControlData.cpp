@@ -68,7 +68,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
     controlData.saCubeIntake = (controllerData.sLTrigger > 0.5) && controlData.shift;
     controlData.saMoveArm = (controllerData.sYBtn) && !controlData.shift;
-    controlData.saArmIntakePosition = (controlllerData.sABtn) && !controlData.shift;
+    controlData.saArmIntakePosition = (controllerData.sABtn) && !controlData.shift;
     // MANUAL:
 
     controlData.mIntakeRollersIn = (controllerData.sRTrigger > 0.5) && !controlData.shift;
