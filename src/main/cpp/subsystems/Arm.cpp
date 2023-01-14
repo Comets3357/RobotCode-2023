@@ -16,7 +16,31 @@ void Arm::RobotInit()
     armWrist.BurnFlash();
 }
 
-void Arm::RobotPeriodic()
+void Arm::RobotPeriodic(const RobotData &robotData, ArmData &armData)
+{
+   // changing controls based off the mode robot is in
+    switch (robotData.controlData.mode) 
+    {
+        case MODE_TELEOP_MANUAL:
+            Manual(robotData, armData);
+            break;
+        case MODE_TELEOP_SA:
+            SemiAuto(robotData, armData);
+            break;
+        default:
+            SemiAuto(robotData, armData);
+            break;
+    }
+}
+void Arm::DisabledInit()
+{
+
+}
+void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
+{
+
+}
+void Arm::updateData(const RobotData &robotData, ArmData &armData)
 {
     
 }
@@ -27,6 +51,22 @@ void Arm::RobotPeriodic()
 void Arm::ArmWrist(double wristPosition)
 {
     armWristPIDController.SetReference(wristPosition, rev::CANSparkMax::ControlType::kPosition);
+}
+
+void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
+{
+    if (robotData.controlData.saArmIntakePosition)
+    {
+
+    }
+    if (robotData.controlData.saMoveArm)
+    {
+        
+    }
+}
+void Arm::Manual(const RobotData &robotData, ArmData &armData)
+{
+
 }
 
 void Arm::ToggleSoftLimits() 

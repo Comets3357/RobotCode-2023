@@ -21,7 +21,10 @@ class Arm
 {
 public:
     void RobotInit();
-    void RobotPeriodic();
+    void RobotPeriodic(const RobotData &robotData, ArmData &armData);
+    void DisabledInit();
+    void DisabledPeriodic(const RobotData &robotData, ArmData &armData);
+    void updateData(const RobotData &robotData, ArmData &armData);
 
 private:
     double absoluteToRelative(double currentPos);
@@ -33,13 +36,16 @@ private:
     void ZeroArm();
     void ToggleSoftLimits();
     void ArmWrist(double wristPosition);
+
+    void SemiAuto(const RobotData &robotData, ArmData &armData);
+    void Manual(const RobotData &robotData, ArmData &armData);
+    
     
     // Intake Pivot Initialization
     rev::CANSparkMax armWrist = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder armWristRelativeEncoder = armWrist.GetEncoder(); // Relative Encoder
     rev::SparkMaxPIDController armWristPIDController = armWrist.GetPIDController(); // PID Controller
-    frc::DigitalInput m_input{intakeAbsoluteEncoderPort};
-    frc::DutyCycle armWristAbsoluteEncoder = frc::DutyCycle{m_input}; // Absolute Encoder
+    rev::SparkMaxAbsoluteEncoder armWristAbsoluteEncoder = armWrist.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
     double armWristRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem

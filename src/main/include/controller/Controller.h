@@ -42,7 +42,8 @@ struct ControlData
     bool saIntakeBackwards;
     bool saCubeIntake;
 
-
+    bool saMoveArm;
+    bool saArmIntakePosition;
 
 
 };
