@@ -32,19 +32,20 @@ struct ControlData
 
     //intake:
 
-    bool mIntakeDown;
-    bool mIntakeUp;
+    bool mIntakeDown; // TAKE OUT.
+    bool mIntakeUp; // TAKE OUT.
     bool mIntakeRollersIn;
     bool mIntakeRollersOut;
-    bool mForceZeroIntake;
+    bool mForceZeroIntake; // TAKE OUT.
 
     bool saIntaking;
     bool saIntakeBackwards;
     bool saCubeIntake;
 
+    //arm:
+
     bool saMoveArm;
     bool saArmIntakePosition;
-
 
 };
 
