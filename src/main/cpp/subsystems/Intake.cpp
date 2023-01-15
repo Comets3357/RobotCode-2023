@@ -36,7 +36,7 @@ void Intake::RobotPeriodic(const RobotData &robotData, IntakeData &intakeData)
 
 void Intake::SemiAuto(const RobotData &robotData, IntakeData &intakeData)
 {
-    if (robotData.controlData.saIntaking) 
+    if (robotData.controlData.saCubeIntake) 
     {
         IntakeRollers(intakeRollerInwardSpeed);
 

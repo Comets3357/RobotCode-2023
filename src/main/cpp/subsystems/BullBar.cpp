@@ -60,28 +60,38 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
 
     if (bullbarData.bullBarAbsoluteEncoderInitialized)
     {
-        if (robotData.controlData.saBullBarExtension)
+        if (robotData.controlData.saConeIntake)
         {
             bullbarSliderPIDController.SetReference(bullBarAbsoluteMaxPosition, rev::CANSparkMax::ControlType::kDutyCycle);
             bullbarRollers.Set(bullBarRollerExtendedSpeed);
         }
+        else if (robotData.controlData.saCubeIntake)
+        {
+            bullbarSliderPIDController.SetReference(bullBarAbsoluteMaxPosition - 0.1, rev::CANSparkMax::ControlType::kDutyCycle);
+            bullbarRollers.Set(bullBarRollerRetractedSpeed);
+        }
         else
         {
             bullbarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kDutyCycle);
-            bullbarRollers.Set(bullBarRollerRetractedSpeed);
+            bullbarRollers.Set(0);
         }
     }
     else 
     {
-        if (robotData.controlData.saBullBarExtension)
+        if (robotData.controlData.saConeIntake)
         {
-            bullbarSliderPIDController.SetReference(bullBarRelativeMaxPosition, rev::CANSparkMax::ControlType::kPosition);
+            bullbarSliderPIDController.SetReference(bullBarRelativeMaxPosition, rev::CANSparkMax::ControlType::kDutyCycle);
             bullbarRollers.Set(bullBarRollerExtendedSpeed);
+        }
+        else if (robotData.controlData.saCubeIntake)
+        {
+            bullbarSliderPIDController.SetReference(bullBarRelativeMaxPosition - 10, rev::CANSparkMax::ControlType::kDutyCycle);
+            bullbarRollers.Set(bullBarRollerRetractedSpeed);
         }
         else
         {
-            bullbarSliderPIDController.SetReference(bullBarRelativeMinPosition, rev::CANSparkMax::ControlType::kPosition);
-            bullbarRollers.Set(bullBarRollerRetractedSpeed);
+            bullbarSliderPIDController.SetReference(bullBarRelativeMinPosition, rev::CANSparkMax::ControlType::kDutyCycle);
+            bullbarRollers.Set(0);
         }
     }
     
