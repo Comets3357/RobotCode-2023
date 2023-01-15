@@ -38,7 +38,7 @@ struct ControlData
     bool mIntakeRollersOut;
     bool mForceZeroIntake;
 
-    bool saIntaking;
+    bool saConeIntake;
     bool saIntakeBackwards;
     bool saCubeIntake;
 

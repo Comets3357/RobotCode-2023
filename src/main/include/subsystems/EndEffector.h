@@ -27,39 +27,16 @@ public:
     void RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
-    void updateData(const RobotData &robotData, EndEffectorData &endEffectorData);
+    void UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData);
 
 private:
 
-    double AbsoluteToRelative(double currentAbsolutePosition);
-    void IntakeRollers(double rollerSpeed);
-    void IntakePivot(double pivotPosition);
+    void SetIntakeRollerSpeed(double rollerSpeed);
     void SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
     void Manual(const RobotData &robotData, EndEffectorData &endEffectorData);
-    void ToggleSoftLimits();
-    void ZeroIntake();
     
-
-
     // Intake Roller Initialization
     rev::CANSparkMax intakeRollers = rev::CANSparkMax(intakeRollerID, rev::CANSparkMax::MotorType::kBrushless);
-    rev::CANSparkMax intakeRollers2 = rev::CANSparkMax(intakeRoller2ID, rev::CANSparkMax::MotorType::kBrushless);
-
-    rev::SparkMaxRelativeEncoder intakeRollersRelativeEncoder = intakeRollers.GetEncoder(); // Relative Encoder
-
-    // Intake Pivot Initialization
-    rev::CANSparkMax intakePivot = rev::CANSparkMax(intakePivotID, rev::CANSparkMax::MotorType::kBrushless);
-    rev::SparkMaxRelativeEncoder intakePivotRelativeEncoder = intakePivot.GetEncoder(); // Relative Encoder
-    rev::SparkMaxPIDController intakePivotPIDController = intakePivot.GetPIDController(); // PID Controller
-    frc::DigitalInput m_input{intakeAbsoluteEncoderPort};
-    frc::DutyCycle intakePivotAbsoluteEncoder = frc::DutyCycle{m_input}; // Absolute Encoder
-
-    // Encoder Min and Max Values 
-    double intakePivotRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
-    double intakePivotRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
-
-    double intakePivotAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
-    double intakePivotAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
 
     double intakeRollerOutwardSpeed = 0.4;
     double intakeRollerInwardSpeed = -0.4;
