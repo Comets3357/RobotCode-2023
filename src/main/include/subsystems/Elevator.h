@@ -3,33 +3,34 @@
 #include "RobotData.h"
 #include <rev/CANSparkMax.h>
 
+struct ElevatorData
+{
+    bool elevatorRunning = false;
+};
+
 class Elevator
 {
 public:
-
-    struct ElevatorData
-    {
-        bool elevatorRunning = false;
-    };
 
     void RobotInit(const RobotData &robotData, ElevatorData &elevatorData);
     void RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorData);
 
 private:
 
-    void ElevatorPosition(double elevatorPosition, int PIDSlot, bool &elevatorRunning);
+    void SetElevatorPosition(double elevatorAbsolutePosition, int PIDSlot);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
     void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
-    void AbsoluteToRelative(double currentAbsolutePosition);
+    double AbsoluteToRelative(double currentAbsolutePosition);
     void ToggleSoftLimits();
+    void ZeroRelativePosition();
 
     double positionError = 1;
 
     rev::CANSparkMax elevatorMotor{100, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
-    rev::SparkMaxRelativeEncoder elevatorEncoder = elevatorMotor.GetEncoder();
+    rev::SparkMaxRelativeEncoder elevatorRelativeEncoder = elevatorMotor.GetEncoder();
     rev::SparkMaxPIDController elevatorPIDController = elevatorMotor.GetPIDController();
 
-        // Encoder Min and Max Values 
+    // Encoder Min and Max Values 
     double elevatorRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
     double elevatorRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
 
