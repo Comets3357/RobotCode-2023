@@ -39,6 +39,7 @@ private:
     void ToggleSoftLimits();
     void ZeroRelativePosition(BullBarData &bullbarData);
     bool IsAbsoluteEncoderInitialized(BullBarData &bullbarData);
+    void ForceZeroBullBar();
 
     double bullBarRelativeMaxPosition = 0;
     double bullBarRelativeMinPosition = 0;

@@ -58,16 +58,33 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
         ToggleSoftLimits();
     }
 
-    if (robotData.controlData.saBullBarExtension)
+    if (bullbarData.bullBarAbsoluteEncoderInitialized)
     {
-        bullbarSliderPIDController.SetReference(bullBarAbsoluteMaxPosition, rev::CANSparkMax::ControlType::kDutyCycle);
-        bullbarRollers.Set(bullBarRollerExtendedSpeed);
+        if (robotData.controlData.saBullBarExtension)
+        {
+            bullbarSliderPIDController.SetReference(bullBarAbsoluteMaxPosition, rev::CANSparkMax::ControlType::kDutyCycle);
+            bullbarRollers.Set(bullBarRollerExtendedSpeed);
+        }
+        else
+        {
+            bullbarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kDutyCycle);
+            bullbarRollers.Set(bullBarRollerRetractedSpeed);
+        }
     }
-    else
+    else 
     {
-        bullbarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kDutyCycle);
-        bullbarRollers.Set(bullBarRollerRetractedSpeed);
+        if (robotData.controlData.saBullBarExtension)
+        {
+            bullbarSliderPIDController.SetReference(bullBarRelativeMaxPosition, rev::CANSparkMax::ControlType::kPosition);
+            bullbarRollers.Set(bullBarRollerExtendedSpeed);
+        }
+        else
+        {
+            bullbarSliderPIDController.SetReference(bullBarRelativeMinPosition, rev::CANSparkMax::ControlType::kPosition);
+            bullbarRollers.Set(bullBarRollerRetractedSpeed);
+        }
     }
+    
 }
 
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
@@ -136,6 +153,16 @@ bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullbarData)
     }
 
     return bullbarData.bullBarAbsoluteEncoderInitialized;
+}
+
+/*
+* @note If all else fails, this is what 
+* @note driver uses to force zero the bull
+* @note bar to ensure functionality
+*/
+void BullBar::ForceZeroBullBar()
+{
+    bullbarSliderRelativeEncoder.SetPosition(0);
 }
 
 
