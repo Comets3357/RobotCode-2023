@@ -92,7 +92,10 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() 
+{
+  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+}
 
 void Robot::DisabledInit() {
   driveBase.DisabledInit();

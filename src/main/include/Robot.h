@@ -9,6 +9,7 @@
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include "RobotData.h"
+#include "controller/Controller.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -37,8 +38,7 @@ class Robot : public frc::TimedRobot {
   Auton auton{};
   Gyro gyro{};
   Timer timer{};
-  ControlData controlData{};
-  ControllerData controllerData{};
+  Controller controller{};
   RobotData robotData{};
 
 
