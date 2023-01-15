@@ -1,15 +1,15 @@
 #include "common/Gyro.h"
 
 void Gyro::RobotInit() {
-    gyro.Calibrate();
+    // gyro.Calibrate();
     gyro.ZeroYaw();
 }
 
 void Gyro::TeleopInit(GyroData &gyroData) {
-    gyro.ZeroYaw();
-    gyroData.rawYaw = 0;
-    gyroData.rawPitch = 0;
-    gyroData.rawRoll = 0;
+    // gyro.ZeroYaw();
+    // gyroData.rawYaw = 0;
+    // gyroData.rawPitch = 0;
+    // gyroData.rawRoll = 0;
 }
 
 void Gyro::AutonomousInit(GyroData &gyroData) {
@@ -22,7 +22,7 @@ void Gyro::AutonomousInit(GyroData &gyroData) {
 
 void Gyro::RobotPeriodic(GyroData &gyroData) {
 
-   gyroData.rawYaw = -gyro.GetAngle();
+    gyroData.rawYaw = -gyro.GetAngle();
     gyroData.rawPitch = gyro.GetPitch();
     gyroData.rawRoll = gyro.GetRoll();
     gyroData.angularMomentum = gyro.GetRawGyroY();

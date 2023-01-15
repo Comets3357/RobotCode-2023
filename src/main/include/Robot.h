@@ -35,8 +35,7 @@ class Robot : public frc::TimedRobot {
   Auton auton{};
   Gyro gyro{};
   Timer timer{};
-  ControlData controlData{};
-  ControllerData controllerData{};
+  Controller controller{};
   RobotData robotData{};
 
 

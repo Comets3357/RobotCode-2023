@@ -37,6 +37,7 @@ void Robot::RobotPeriodic() {
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
   driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData);
+  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
   
 }
 

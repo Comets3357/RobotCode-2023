@@ -152,9 +152,9 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
     drivebaseData.currentLDBPos = dbLEncoder.GetPosition();
     drivebaseData.currentRDBPos = dbREncoder.GetPosition();
 
-    drivebaseData.lDriveVel = -dbLEncoder.GetVelocity();
+    drivebaseData.lDriveVel = -dbLEncoder.GetVelocity() / mpsToRpm ;
     // frc::SmartDashboard::PutNumber("lDriveVel", drivebaseData.lDriveVel);
-    drivebaseData.rDriveVel = -dbREncoder.GetVelocity();
+    drivebaseData.rDriveVel = -dbREncoder.GetVelocity() / mpsToRpm;
     // frc::SmartDashboard::PutNumber("rDriveVel", -drivebaseData.rDriveVel);
 
     // WARNING the average calcuation here subtracts for some reason. The values for left and right db velocity act as expected on their own...
@@ -309,14 +309,14 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 {
 
     // library's odometry
-    units::radian_t currentRadians{(-robotData.gyroData.rawYaw / 180) * M_PI};
+    units::radian_t currentRadians{(robotData.gyroData.rawYaw / 180) * M_PI};
     frc::Rotation2d currentRotation{currentRadians};
 
     // NEGATIVE because left motor/encoder should be inverted
     units::meter_t leftDistance{getEncoderDistance(dbLEncoder.GetPosition())}; 
     units::meter_t rightDistance{getEncoderDistance(dbREncoder.GetPosition())}; 
 
-    frc::SmartDashboard::PutNumber("left distance", getEncoderDistance(-dbLEncoder.GetPosition()));
+    frc::SmartDashboard::PutNumber("left distance", getEncoderDistance(dbLEncoder.GetPosition()));
 
     frc::SmartDashboard::PutNumber("UPDATELEGTY", (double)leftDistance);
     frc::SmartDashboard::PutNumber("UPDATERIGHT", (double)rightDistance);
@@ -330,8 +330,8 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
     drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
 
-    drivebaseData.odometryYaw = drivebaseData.currentPose.Rotation().Radians().to<double>();
-    drivebaseData.odometryYaw = (drivebaseData.odometryYaw / M_PI * 180); // convert from radians [-pi, pi] to degrees [0, 360]
+    drivebaseData.odometryYaw = drivebaseData.currentPose.Rotation().Degrees().to<double>();
+    // drivebaseData.odometryYaw = (drivebaseData.odometryYaw / M_PI * 180); // convert from radians [-pi, pi] to degrees [0, 360]
     if (drivebaseData.odometryYaw < 0) 
     {
         drivebaseData.odometryYaw = 360 + drivebaseData.odometryYaw;
@@ -350,7 +350,7 @@ void Drivebase::resetOdometry(const frc::Pose2d &pose, double gyroAngle)
     const units::radian_t gyroRadians{gyroAngle};
     frc::Rotation2d gyroRotation{gyroRadians};
 
-    odometry.ResetPosition(gyroRotation, units::meter_t{-getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  pose);
+    odometry.ResetPosition(gyroRotation, units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  pose);
     zeroEncoders();
 }
 
