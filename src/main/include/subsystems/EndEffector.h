@@ -14,28 +14,28 @@
 
 struct RobotData;
 
-struct IntakeData
+struct EndEffectorData
 {
 
 };
 
-class Intake
+class EndEffector
 {
 public:
 
     void RobotInit();
-    void RobotPeriodic(const RobotData &robotData, IntakeData &intakeData);
+    void RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
     void DisabledInit();
-    void DisabledPeriodic(const RobotData &robotData, IntakeData &intakeData);
-    void updateData(const RobotData &robotData, IntakeData &intakeData);
+    void DisabledPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
+    void updateData(const RobotData &robotData, EndEffectorData &endEffectorData);
 
 private:
 
     double AbsoluteToRelative(double currentAbsolutePosition);
     void IntakeRollers(double rollerSpeed);
     void IntakePivot(double pivotPosition);
-    void SemiAuto(const RobotData &robotData, IntakeData &intakeData);
-    void Manual(const RobotData &robotData, IntakeData &intakeData);
+    void SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
+    void Manual(const RobotData &robotData, EndEffectorData &endEffectorData);
     void ToggleSoftLimits();
     void ZeroIntake();
     

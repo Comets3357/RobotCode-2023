@@ -1,8 +1,8 @@
-#include "subsystems/Intake.h"
+#include "subsystems/EndEffector.h"
 #include "RobotData.h"
 #include <cmath>
 
-void Intake::RobotInit()
+void EndEffector::RobotInit()
 {
     // Intake Rollers
     intakeRollers.RestoreFactoryDefaults();
@@ -31,19 +31,19 @@ void Intake::RobotInit()
     ZeroIntake();
 }
 
-void Intake::RobotPeriodic(const RobotData &robotData, IntakeData &intakeData)
+void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
     // changing controls based off the mode robot is in
     switch (robotData.controlData.mode) 
     {
         case MODE_TELEOP_MANUAL:
-            Manual(robotData, intakeData);
+            Manual(robotData, endEffectorData);
             break;
         case MODE_TELEOP_SA:
-            SemiAuto(robotData, intakeData);
+            SemiAuto(robotData, endEffectorData);
             break;
         default:
-            SemiAuto(robotData, intakeData);
+            SemiAuto(robotData, endEffectorData);
             break;
     }
 
@@ -55,7 +55,7 @@ void Intake::RobotPeriodic(const RobotData &robotData, IntakeData &intakeData)
 
 }
 
-void Intake::SemiAuto(const RobotData &robotData, IntakeData &intakeData)
+void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
     if (!softLimitsToggled) 
     {
@@ -85,7 +85,7 @@ void Intake::SemiAuto(const RobotData &robotData, IntakeData &intakeData)
     }
 }
 
-void Intake::Manual(const RobotData &robotData, IntakeData &intakeData)
+void EndEffector::Manual(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
     if (softLimitsToggled) 
     {
@@ -119,7 +119,7 @@ void Intake::Manual(const RobotData &robotData, IntakeData &intakeData)
 /*
 * @param rollerSpeed Desired intake roller speed (0 - 1)
 */
-void Intake::IntakeRollers(double rollerSpeed)
+void EndEffector::IntakeRollers(double rollerSpeed)
 {
     intakeRollers.Set(rollerSpeed);
     intakeRollers2.Set(-rollerSpeed);
@@ -128,7 +128,7 @@ void Intake::IntakeRollers(double rollerSpeed)
 /*
 * @param pivotPosition Desired relative encoder pivot position
 */
-void Intake::IntakePivot(double pivotPosition)
+void EndEffector::IntakePivot(double pivotPosition)
 {
     intakePivotPIDController.SetReference(pivotPosition, rev::CANSparkMax::ControlType::kPosition);
 }
@@ -136,7 +136,7 @@ void Intake::IntakePivot(double pivotPosition)
 /*
 * @param currentAbsolutePosition Converts absolute encoder position to relative encoder position
 */
-double Intake::AbsoluteToRelative(double currentAbsolutePosition) 
+double EndEffector::AbsoluteToRelative(double currentAbsolutePosition) 
 {
     double slope = (intakePivotRelativeMaxPosition - intakePivotRelativeMinPosition) / (intakePivotAbsoluteMaxPosition - intakePivotAbosluteMinPosition);
     double b = intakePivotRelativeMinPosition - (slope * intakePivotAbosluteMinPosition);
@@ -148,7 +148,7 @@ double Intake::AbsoluteToRelative(double currentAbsolutePosition)
 * @note for when code switches between manual
 * @note and semi automatic
 */
-void Intake::ToggleSoftLimits() 
+void EndEffector::ToggleSoftLimits() 
 {
     if (softLimitsToggled)
     {
@@ -169,7 +169,7 @@ void Intake::ToggleSoftLimits()
 * @note Reseeds relative position based
 * @note on absolute encoder position
 */
-void Intake::ZeroIntake() 
+void EndEffector::ZeroIntake() 
 {
     intakePivotRelativeEncoder.SetPosition(AbsoluteToRelative(intakePivotAbsoluteEncoder.GetOutput()));
 }
