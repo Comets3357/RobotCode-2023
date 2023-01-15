@@ -7,8 +7,7 @@
 
 struct RobotData;
 
-enum Mode 
-{
+enum Mode {
     MODE_TELEOP_SA,
     MODE_TELEOP_MANUAL,
     MODE_AUTO_BALANCE
@@ -40,19 +39,22 @@ struct ControlData
 
     //intake:
 
-    bool mIntakeDown;
-    bool mIntakeUp;
+    bool mIntakeDown; // TAKE OUT.
+    bool mIntakeUp; // TAKE OUT.
     bool mIntakeRollersIn;
     bool mIntakeRollersOut;
-    bool mForceZeroIntake;
+    bool mForceZeroIntake; // TAKE OUT.
 
     bool saIntaking;
     bool saIntakeBackwards;
+    bool saCubeIntake;
 
-    //elevator:
+    //Arm:
 
-    bool mElevatorUp;
-    bool mElevatorDown;
+    bool saMoveArm;
+    bool saArmIntakePosition;
+
+    //Elevator:
 
     bool saElevatorUp;
     bool saElevatorDown;

@@ -7,8 +7,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     // states:
     controlData.shift = controllerData.sLBumper;
     
-    switch (controllerData.sDPad) 
-    {
+    switch (controllerData.sDPad) {
         case -1:
             break;
         case 0: // up
@@ -67,28 +66,17 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 
     controlData.saIntaking = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
+    controlData.saCubeIntake = (controllerData.sLTrigger > 0.5) && controlData.shift;
 
     // MANUAL:
-    
-    controlData.mIntakeDown = controllerData.sRBumper && !controlData.shift;
-    controlData.mIntakeUp = controllerData.sRBumper && controlData.shift;
+
     controlData.mIntakeRollersIn = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mIntakeRollersOut = (controllerData.sRTrigger > 0.5) && controlData.shift;
-    controlData.mForceZeroIntake = controllerData.sRCenterBtn;
-    
-// ELEVATOR: 
+
+// ARM:
     // SEMI AUTO:
+    controlData.saMoveArm = (controllerData.sYBtn) && !controlData.shift;
+    controlData.saArmIntakePosition = (controllerData.sABtn) && !controlData.shift;
 
-    // controlData.saElevatorDown = // TODO: Set Controls
-    // controlData.saElevatorUp = // TODO: Set Controls
-    
-    // controlData.saSetPosition1 = //TODO: Set Controls
-    // controlData.saSetPosition2 = //TODO: Set Controls
-    // controlData.saSetPosition3 = //TODO: Set Controls
-
-    // MANUAL:
-
-    // controlData.mElevatorDown = // TODO: Set Controls
-    // controlData.mElevatorUp = // TODO: Set Controls
 }
 
