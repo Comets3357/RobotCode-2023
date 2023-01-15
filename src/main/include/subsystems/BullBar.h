@@ -37,7 +37,6 @@ private:
     void SemiAuto(const RobotData &robotData, BullBarData &bullbarData);
     void Manual(const RobotData &robotData, BullBarData &bullbarData);
     void ToggleSoftLimits();
-    void ZeroBullBar();
     
 
 

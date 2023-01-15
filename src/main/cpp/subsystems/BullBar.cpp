@@ -21,9 +21,6 @@ void BullBar::RobotInit()
     bullbarSlider.EnableVoltageCompensation(10.5);
     bullbarSlider.SetSmartCurrentLimit(20);
     bullbarSlider.BurnFlash();
-
-    // Callibrating Relative Based On Absolute Position
-    ZeroBullBar();
 }
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData)
@@ -44,10 +41,6 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData
 
 }
 
-void BullBar::ZeroBullBar()
-{
-    bullbarSliderPIDController.SetReference(0, rev::CANSparkMax::ControlType::kDutyCycle);
-}
 
 void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
 {
@@ -58,7 +51,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
     }
     else
     {
-        ZeroBullBar();
+        bullbarSliderPIDController.SetReference(0, rev::CANSparkMax::ControlType::kDutyCycle);
         bullbarRollers.Set(0);
     }
 }
@@ -66,4 +59,14 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
 {
 
+}
+
+void BullBar::DisabledInit()
+{
+
+}
+
+void BullBar::DisabledPeriodic(const RobotData &robotData, BullBarData &bullbarData)
+{
+    
 }
