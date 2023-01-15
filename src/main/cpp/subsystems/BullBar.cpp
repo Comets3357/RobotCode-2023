@@ -61,15 +61,29 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
     }
 }
 
+void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
+{
+
+}
+
+/*
+* @note Zeros the relative position on the Slider motor to its realitive position
+*/
 void BullBar::ZeroRelativePosition()
 {
     bullbarSliderRelativeEncoder.SetPosition(AbsoluteToRelative(bullbarSliderAbsoluteEncoder.GetPosition()));
 }
 
-void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
+/*
+* @param currentAbsolutePosition takes in current absolute position and converts to relative
+*/
+double BullBar::AbsoluteToRelative(double currentAbsolutePosition)
 {
-
+    double slope = (bullBarRelativeMaxPosition - bullBarRelativeMinPosition) / (bullBarAbsoluteMaxPosition - bullBarAbsoluteMinPosition);
+    double b = bullBarRelativeMinPosition - (slope * bullBarAbsoluteMinPosition);
+    return ((slope * currentAbsolutePosition) + b);
 }
+
 
 void BullBar::DisabledInit()
 {
@@ -79,11 +93,4 @@ void BullBar::DisabledInit()
 void BullBar::DisabledPeriodic(const RobotData &robotData, BullBarData &bullbarData)
 {
 
-}
-
-double BullBar::AbsoluteToRelative(double currentAbsolutePosition)
-{
-    double slope = (bullBarRelativeMaxPosition - bullBarRelativeMinPosition) / (bullBarAbsoluteMaxPosition - bullBarAbsoluteMinPosition);
-    double b = bullBarRelativeMinPosition - (slope * bullBarAbsoluteMinPosition);
-    return ((slope * currentAbsolutePosition) + b);
 }
