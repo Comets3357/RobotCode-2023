@@ -210,7 +210,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
         else
         {
-            tempLDrive = 0;
+            tempLDrive = 0; 
         }
 
         if (tempRDrive <= -0.08 || tempRDrive >= 0.08)
@@ -222,25 +222,25 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             tempRDrive = 0;
         }
 
-        if (robotData.controlData.mode == MODE_AUTO_BALANCE)
-        {
-            if (gyroData.rawPitch > 2.5)
-            {
-                tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
-                tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+        // if (robotData.controlData.mode == MODE_AUTO_BALANCE)
+        // {
+        //     if (gyroData.rawPitch > 2.5)
+        //     {
+        //         tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+        //         tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
 
-            }
-            else if (gyroData.rawPitch < -2.5)
-            {
-                tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
-                tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
-            }
-            else
-            {
-                tempLDrive = 0;
-                tempRDrive = 0;
-            }
-        }
+        //     }
+        //     else if (gyroData.rawPitch < -2.5)
+        //     {
+        //         tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+        //         tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+        //     }
+        //     else
+        //     {
+        //         tempLDrive = 0;
+        //         tempRDrive = 0;
+        //     }
+        // }
 
         //set as percent vbus
         setPercentOutput(tempLDrive, tempRDrive);
