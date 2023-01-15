@@ -21,6 +21,11 @@ void BullBar::RobotInit()
     bullbarSlider.EnableVoltageCompensation(10.5);
     bullbarSlider.SetSmartCurrentLimit(20);
     bullbarSlider.BurnFlash();
+
+    ZeroRelativePosition();
+
+    bullbarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, 100);
+    bullbarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, 0);
 }
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData)
@@ -56,6 +61,11 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
     }
 }
 
+void BullBar::ZeroRelativePosition()
+{
+    bullbarSliderRelativeEncoder.SetPosition(AbsoluteToRelative(bullbarSliderAbsoluteEncoder.GetPosition()));
+}
+
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
 {
 
@@ -68,5 +78,12 @@ void BullBar::DisabledInit()
 
 void BullBar::DisabledPeriodic(const RobotData &robotData, BullBarData &bullbarData)
 {
-    
+
+}
+
+double BullBar::AbsoluteToRelative(double currentAbsolutePosition)
+{
+    double slope = (bullBarRelativeMaxPosition - bullBarRelativeMinPosition) / (bullBarAbsoluteMaxPosition - bullBarAbsoluteMinPosition);
+    double b = bullBarRelativeMinPosition - (slope * bullBarAbsoluteMinPosition);
+    return ((slope * currentAbsolutePosition) + b);
 }

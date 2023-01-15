@@ -37,6 +37,12 @@ private:
     void SemiAuto(const RobotData &robotData, BullBarData &bullbarData);
     void Manual(const RobotData &robotData, BullBarData &bullbarData);
     void ToggleSoftLimits();
+    void ZeroRelativePosition();
+
+    double bullBarRelativeMaxPosition = 0;
+    double bullBarRelativeMinPosition = 0;
+    double bullBarAbsoluteMaxPosition = 0;
+    double bullBarAbsoluteMinPosition = 0;
     
 
 
