@@ -27,19 +27,24 @@ public:
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullbarData);
-    void updateData(const RobotData &robotData, BullBarData &bullbarData);
+    void UpdateData(const RobotData &robotData, BullBarData &bullbarData);
 
 private:
 
     double AbsoluteToRelative(double currentAbsolutePosition);
+
     void BullBarRollers(double rollerSpeed);
     void BullBarSlider(double sliderPosition);
     void SemiAuto(const RobotData &robotData, BullBarData &bullbarData);
     void Manual(const RobotData &robotData, BullBarData &bullbarData);
     void ToggleSoftLimits();
     void ZeroRelativePosition(BullBarData &bullbarData);
-    bool IsAbsoluteEncoderInitialized(BullBarData &bullbarData);
     void ForceZeroBullBar();
+    
+    
+    bool IsAbsoluteEncoderInitialized(BullBarData &bullbarData);
+
+    
 
     double bullBarRelativeMaxPosition = 0;
     double bullBarRelativeMinPosition = 0;
@@ -49,8 +54,6 @@ private:
     double bullBarRollerExtendedSpeed = 0.5;
     double bullBarRollerRetractedSpeed = 0;
     
-
-
     // Bull Bar Roller Initialization
     rev::CANSparkMax bullbarRollers = rev::CANSparkMax(bullbarRollerID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder bullbarRollersRelativeEncoder = bullbarRollers.GetEncoder(); // Relative Encoder

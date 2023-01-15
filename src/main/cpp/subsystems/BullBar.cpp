@@ -95,6 +95,13 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
     }
 }
 
+
+void BullBar::UpdateData(const RobotData &robotData, BullBarData &bullbarData)
+{
+    frc::SmartDashboard::PutNumber("BULL BAR ABS POSITION", bullbarSliderAbsoluteEncoder.GetPosition());
+    frc::SmartDashboard::PutBoolean("BULL BAR ABS ENCODER INIT", bullbarData.bullBarAbsoluteEncoderInitialized);
+}
+
 /*
 * @note Zeros the relative position on the Slider motor to its realitive position
 */
