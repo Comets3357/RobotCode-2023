@@ -2,14 +2,15 @@
 #include "RobotData.h"
 #include <cmath>
 
-void BullBar::RobotInit()
+void BullBar::RobotInit(BullBarData &bullbarData)
 {
-        // BullBar Rollers
+    // BullBar Rollers
     bullbarRollers.RestoreFactoryDefaults();
     bullbarRollers.SetInverted(true);
     bullbarRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     bullbarRollers.SetSmartCurrentLimit(45);
     bullbarRollers.EnableVoltageCompensation(10.5);
+    bullbarRollers.BurnFlash();
 
     // BullBar Pivot
     bullbarSliderPIDController.SetP(0.1, 0);
@@ -22,10 +23,8 @@ void BullBar::RobotInit()
     bullbarSlider.SetSmartCurrentLimit(20);
     bullbarSlider.BurnFlash();
 
-    ZeroRelativePosition();
-
-    bullbarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, 100);
-    bullbarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, 0);
+    ZeroRelativePosition(bullbarData);
+    ToggleSoftLimits();
 }
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData)
@@ -44,34 +43,50 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData
             break;
     }
 
+    if (bullbarSliderRelativeEncoder.GetVelocity() <= 1)
+    {
+        ZeroRelativePosition(bullbarData);
+    }
+
 }
 
 
 void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
 {
+    if (!softLimitsToggled)
+    {
+        ToggleSoftLimits();
+    }
+
     if (robotData.controlData.saBullBarExtension)
     {
-        bullbarSliderPIDController.SetReference(1, rev::CANSparkMax::ControlType::kDutyCycle);
-        bullbarRollers.Set(0.5);
+        bullbarSliderPIDController.SetReference(bullBarAbsoluteMaxPosition, rev::CANSparkMax::ControlType::kDutyCycle);
+        bullbarRollers.Set(bullBarRollerExtendedSpeed);
     }
     else
     {
-        bullbarSliderPIDController.SetReference(0, rev::CANSparkMax::ControlType::kDutyCycle);
-        bullbarRollers.Set(0);
+        bullbarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kDutyCycle);
+        bullbarRollers.Set(bullBarRollerRetractedSpeed);
     }
 }
 
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
 {
-
+    if (softLimitsToggled)
+    {
+        ToggleSoftLimits();
+    }
 }
 
 /*
 * @note Zeros the relative position on the Slider motor to its realitive position
 */
-void BullBar::ZeroRelativePosition()
+void BullBar::ZeroRelativePosition(BullBarData &bullbarData)
 {
-    bullbarSliderRelativeEncoder.SetPosition(AbsoluteToRelative(bullbarSliderAbsoluteEncoder.GetPosition()));
+    if (IsAbsoluteEncoderInitialized(bullbarData))
+    {
+        bullbarSliderRelativeEncoder.SetPosition(AbsoluteToRelative(bullbarSliderAbsoluteEncoder.GetPosition()));
+    }
 }
 
 /*
@@ -82,6 +97,45 @@ double BullBar::AbsoluteToRelative(double currentAbsolutePosition)
     double slope = (bullBarRelativeMaxPosition - bullBarRelativeMinPosition) / (bullBarAbsoluteMaxPosition - bullBarAbsoluteMinPosition);
     double b = bullBarRelativeMinPosition - (slope * bullBarAbsoluteMinPosition);
     return ((slope * currentAbsolutePosition) + b);
+}
+
+/*
+* @note Toggles the soft limits on and off
+* @note for when code switches between manual
+* @note and semi automatic
+*/
+void BullBar::ToggleSoftLimits() 
+{
+    if (softLimitsToggled)
+    {
+        bullbarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
+        bullbarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
+    }
+    else if (!softLimitsToggled) 
+    {
+        bullbarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
+        bullbarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
+
+        bullbarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMinPosition - 0.1);
+        bullbarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMaxPosition + 0.1);
+    }
+}
+
+/*
+* @note Checks to see if the absolute encoder has initialized
+*/
+bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullbarData)
+{
+    if (bullbarSliderAbsoluteEncoder.GetPosition() >= 0.01)
+    {
+        bullbarData.bullBarAbsoluteEncoderInitialized = true;
+    }
+    else 
+    {
+        bullbarData.bullBarAbsoluteEncoderInitialized = false;
+    }
+
+    return bullbarData.bullBarAbsoluteEncoderInitialized;
 }
 
 

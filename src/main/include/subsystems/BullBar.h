@@ -16,14 +16,14 @@ struct RobotData;
 
 struct BullBarData
 {
-
+    bool bullBarAbsoluteEncoderInitialized = false;
 };
 
 class BullBar
 {
 public:
 
-    void RobotInit();
+    void RobotInit(BullBarData &bullbarData);
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullbarData);
@@ -37,12 +37,16 @@ private:
     void SemiAuto(const RobotData &robotData, BullBarData &bullbarData);
     void Manual(const RobotData &robotData, BullBarData &bullbarData);
     void ToggleSoftLimits();
-    void ZeroRelativePosition();
+    void ZeroRelativePosition(BullBarData &bullbarData);
+    bool IsAbsoluteEncoderInitialized(BullBarData &bullbarData);
 
     double bullBarRelativeMaxPosition = 0;
     double bullBarRelativeMinPosition = 0;
     double bullBarAbsoluteMaxPosition = 0;
     double bullBarAbsoluteMinPosition = 0;
+
+    double bullBarRollerExtendedSpeed = 0.5;
+    double bullBarRollerRetractedSpeed = 0;
     
 
 
@@ -67,4 +71,6 @@ private:
     double bullbarRollerInwardSpeed = -0.4;
 
     bool softLimitsToggled = false;
+
+    
 };
