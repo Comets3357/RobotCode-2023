@@ -33,10 +33,10 @@ void Drivebase::RobotInit()
   *  Use supply current limits to prevent breakers from tripping
   *
   * enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
-    dbL.SetSmartCurrentLimit(10);
-    dbLF.SetSmartCurrentLimit(10);
-    dbR.SetSmartCurrentLimit(10);
-    dbRF.SetSmartCurrentLimit(10);
+    dbL.SetSmartCurrentLimit(60);
+    dbLF.SetSmartCurrentLimit(60);
+    dbR.SetSmartCurrentLimit(60);
+    dbRF.SetSmartCurrentLimit(60);
 
     // PIDs for blue db
     /* dbL.Config_kF(0, 0.032514);
@@ -74,11 +74,11 @@ void Drivebase::RobotInit()
     // dbRPIDController.SetP(0.10814);
     // dbRPIDController.SetD(0);
 
-    dbLPIDController.SetP(0.15832);
+    dbLPIDController.SetP(0.35832);
     dbLPIDController.SetFF(0.26329);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.15832);
+    dbRPIDController.SetP(0.35832);
     dbRPIDController.SetFF(0.26329);
     dbRPIDController.SetD(0);
 
