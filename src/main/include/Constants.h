@@ -10,15 +10,15 @@ static const int
 //intake:
 static const int
     intakeRoller2ID = 14, // Not actual value yet.
-    intakeRollerID = 12,
-    intakePivotID = 11,
+    intakeRollerID = 15,
+    intakePivotID = 16,
     intakeSingulatorID = 13;
 
 //arm:
 static const int
     armWristID = 43, // Not actual value.
-bullbarRollerID = 55, // NOT ACTUAL VALUES.
-    bullbarSliderID = 56; // NOT ACTUAL VALUES.
+    bullbarRollerID = 11, // 
+    bullbarSliderID = 12; // 
 
 static const double
     //practice bot

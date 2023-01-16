@@ -10,6 +10,10 @@ void BullBar::RobotInit(BullBarData &bullbarData)
     bullbarRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     bullbarRollers.SetSmartCurrentLimit(45);
     bullbarRollers.EnableVoltageCompensation(10.5);
+
+    bullbarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
+    bullbarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
+
     bullbarRollers.BurnFlash();
 
     // BullBar Pivot
@@ -24,7 +28,7 @@ void BullBar::RobotInit(BullBarData &bullbarData)
     bullbarSlider.BurnFlash();
 
     ZeroRelativePosition(bullbarData);
-    ToggleSoftLimits();
+    // ToggleSoftLimits();
 }
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData)
@@ -36,27 +40,29 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData
             Manual(robotData, bullbarData);
             break;
         case MODE_TELEOP_SA:
-            SemiAuto(robotData, bullbarData);
+            Manual(robotData, bullbarData);
             break;
         default:
             SemiAuto(robotData, bullbarData);
             break;
     }
 
-    if (bullbarSliderRelativeEncoder.GetVelocity() <= 1)
-    {
-        ZeroRelativePosition(bullbarData);
-    }
+    // if (bullbarSliderRelativeEncoder.GetVelocity() <= 1)
+    // {
+    //     ZeroRelativePosition(bullbarData);
+    // }
+
+    UpdateData(robotData, bullbarData);
 
 }
 
 
 void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
 {
-    if (!softLimitsToggled)
-    {
-        ToggleSoftLimits();
-    }
+    // if (!softLimitsToggled)
+    // {
+    //     ToggleSoftLimits();
+    // }
 
     if (bullbarData.bullBarAbsoluteEncoderInitialized)
     {
@@ -99,9 +105,27 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullbarData)
 
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullbarData)
 {
-    if (softLimitsToggled)
+    // if (softLimitsToggled)
+    // {
+    //     ToggleSoftLimits();
+    // }
+
+    if (robotData.controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08)
+    { 
+        bullbarSlider.Set(robotData.controllerData.sRYStick * 0.8);
+    }
+    else 
     {
-        ToggleSoftLimits();
+        bullbarSlider.Set(0);
+    }
+
+    if (robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08)
+    { 
+        bullbarRollers.Set(robotData.controllerData.sLYStick * 0.8);
+    }
+    else 
+    {
+        bullbarRollers.Set(0);
     }
 }
 

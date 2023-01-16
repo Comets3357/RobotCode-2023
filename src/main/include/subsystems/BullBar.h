@@ -48,8 +48,8 @@ private:
 
     double bullBarRelativeMaxPosition = 0;
     double bullBarRelativeMinPosition = 0;
-    double bullBarAbsoluteMaxPosition = 0;
-    double bullBarAbsoluteMinPosition = 0;
+    double bullBarAbsoluteMaxPosition = 0.4203;
+    double bullBarAbsoluteMinPosition = 0.295;
 
     double bullBarRollerExtendedSpeed = 0.5;
     double bullBarRollerRetractedSpeed = 0;
@@ -65,11 +65,11 @@ private:
     rev::SparkMaxAbsoluteEncoder bullbarSliderAbsoluteEncoder = bullbarSlider.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
-    double bullbarSliderRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
-    double bullbarSliderRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
+    // double bullbarSliderRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
+    // double bullbarSliderRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
 
-    double bullbarSliderAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
-    double bullbarSliderAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
+    // double bullbarSliderAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
+    // double bullbarSliderAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
 
     double bullbarRollerOutwardSpeed = 0.4;
     double bullbarRollerInwardSpeed = -0.4;
