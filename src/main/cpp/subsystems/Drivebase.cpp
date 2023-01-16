@@ -82,6 +82,11 @@ void Drivebase::RobotInit()
     dbRPIDController.SetFF(0.26329);
     dbRPIDController.SetD(0);
 
+    dbL.BurnFlash();
+    dbLF.BurnFlash();
+    dbR.BurnFlash();
+    dbRF.BurnFlash();
+
     setPercentOutput(0, 0);
 
     zeroEncoders();
