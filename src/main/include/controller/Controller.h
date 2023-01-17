@@ -33,11 +33,10 @@ struct ControlData
 
     //intake:
 
-    bool mIntakeDown;
-    bool mIntakeUp;
-    bool mIntakeRollersIn;
-    bool mIntakeRollersOut;
-    bool mForceZeroIntake;
+    bool mBullBarExtension;
+    bool mBullBarRollerForward;
+    bool mBullBarRollerBackward;
+    bool mForceZeroBullBar;
 
     bool saConeIntake;
     bool saIntakeBackwards;
@@ -45,7 +44,7 @@ struct ControlData
 
     bool saMoveArm;
     bool saArmIntakePosition;
-bool saBullBarExtension;
+    bool saBullBarExtension;
 
 
 

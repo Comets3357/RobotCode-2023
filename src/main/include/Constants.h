@@ -17,8 +17,8 @@ static const int
 //arm:
 static const int
     armWristID = 43, // Not actual value.
-    bullbarRollerID = 11, // 
-    bullbarSliderID = 12; // 
+    bullBarRollerID = 11, // 
+    bullBarSliderID = 12; // 
 
 static const double
     //practice bot
