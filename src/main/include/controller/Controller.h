@@ -56,11 +56,10 @@ struct ControlData
 
     //Elevator:
 
-    bool saElevatorUp;
-    bool saElevatorDown;
-    bool saSetPosition1; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
-    bool saSetPosition2; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
-    bool saSetPosition3; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+    bool saElevatorSetHumanPlayerPosition;
+    bool saElevatorSetMidPosition;
+    bool saElevatorSetHighPosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+    bool saElevatorSetIntakePosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
 };
 
 struct ControllerData

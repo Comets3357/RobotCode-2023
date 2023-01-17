@@ -1,4 +1,6 @@
+#include "RobotData.h"
 #include <subsystems/Elevator.h>
+
 
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
@@ -6,7 +8,7 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     elevatorMotor.SetInverted(false);
     elevatorMotor.EnableVoltageCompensation(10.5);
-    elevatorPIDController.SetP(0.1, 0);
+    elevatorPIDController.SetP(0.1, 0); //need to be tuned
     elevatorMotor.BurnFlash();
     
 }
@@ -25,6 +27,12 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             SemiAuto(robotData, elevatorData);
             break;
     }
+
+    if (elevatorRelativeEncoder.GetVelocity() <= 1)
+    {
+        ZeroRelativePosition(elevatorData);
+    }
+
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
@@ -34,34 +42,27 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         ToggleSoftLimits();
     }
 
-    if (robotData.controlData.saElevatorUp) 
+    else if (robotData.controlData.saElevatorSetHumanPlayerPosition)
     {
-        SetElevatorPosition(elevatorRelativeMaxPosition, 0);
-
-    }
-    else if (robotData.controlData.saElevatorDown) 
-    {
-        SetElevatorPosition(elevatorRelativeMinPosition, 0);
+        SetElevatorPosition(humanPlayerElevatorAbsolutePos, 0);
     }
 
-    // switch (robotData.controlData.elevatorSetPosition)
-    // {
-    //     case SET_POSITION_1:
-    //     ElevatorPosition(robotData.controlData.saSetPosition1, 0, elevatorData.elevatorRunning);
-    //         break;
+    else if (robotData.controlData.saElevatorSetMidPosition)
+    {
+        SetElevatorPosition(midElevatorAbsolutePos, 0);
+    }
 
-    //     case SET_POSITION_2:
-    //     ElevatorPosition(robotData.controlData.saSetPosition2, 0, elevatorData.elevatorRunning);
-    //         break;
+    else if (robotData.controlData.saElevatorSetHighPosition)
+    {
+        SetElevatorPosition(highElevatorAbsolutePos, 0);
+    }
 
-    //     case SET_POSITION_3:
-    //     ElevatorPosition(robotData.controlData.saSetPosition3, 0, elevatorData.elevatorRunning);
-    //     break;
+    else if (robotData.controlData.saElevatorSetIntakePosition)
+    {
+        SetElevatorPosition(intakeElevatorAbsolutePos, 0);
+    }
+    
 
-    //     default:
-    //         break;
-
-    // }
 
 }
 
@@ -117,7 +118,25 @@ double Elevator::AbsoluteToRelative(double currentAbsolutePosition)
     return ((slope * currentAbsolutePosition) + b);
 }
 
-void Elevator::ZeroRelativePosition()
+void Elevator::ZeroRelativePosition(ElevatorData &elevatorData)
 {
-    bullbarSliderRelativeEncoder.SetPosition(AbsoluteToRelative(bullbarSliderAbsoluteEncoder.GetPosition()));
+    if (IsAbsoluteEncoderInitialized(elevatorData))
+    {
+        elevatorRelativeEncoder.SetPosition(AbsoluteToRelative(elevatorAbsoluteEncoder.GetPosition()));
+    }
+    
+}
+
+bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
+{
+    if (elevatorAbsoluteEncoder.GetPosition() >= 0.01)
+    {
+        elevatorData.elevatorAbsoluteEncoderInitialized = true;
+    }
+    else 
+    {
+        elevatorData.elevatorAbsoluteEncoderInitialized = false;
+    }
+
+    return elevatorData.elevatorAbsoluteEncoderInitialized;
 }
