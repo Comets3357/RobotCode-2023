@@ -13,6 +13,10 @@ static const int
     intakePivotID = 11,
     intakeSingulatorID = 13;
 
+//end effector:
+static const int
+    endEffectorRollerID = 1024; // NOT REAL VALUE.
+
 static const double
     //practice bot
     absOut = 0.481,

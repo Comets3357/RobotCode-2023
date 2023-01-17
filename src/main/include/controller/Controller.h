@@ -42,6 +42,11 @@ struct ControlData
     bool saIntakeBackwards;
     bool saCubeIntake;
 
+    //end effector:
+    bool mEndEffectorRollersIn;
+    bool mEndEffectorRollersOut;
+
+
 
 
 

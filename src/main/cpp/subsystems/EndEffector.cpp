@@ -4,13 +4,13 @@
 
 void EndEffector::RobotInit()
 {
-    // Intake Rollers
-    intakeRollers.RestoreFactoryDefaults();
-    intakeRollers.SetInverted(true);
-    intakeRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    intakeRollers.SetSmartCurrentLimit(45);
-    intakeRollers.EnableVoltageCompensation(10.5);
-    intakeRollers.BurnFlash();
+    // End Effector Rollers
+    endEffectorRollers.RestoreFactoryDefaults();
+    endEffectorRollers.SetInverted(true);
+    endEffectorRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    endEffectorRollers.SetSmartCurrentLimit(45);
+    endEffectorRollers.EnableVoltageCompensation(10.5);
+    endEffectorRollers.BurnFlash();
 
 }
 
@@ -35,40 +35,40 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
 {
     if (robotData.controlData.saConeIntake) 
     {
-        SetIntakeRollerSpeed(intakeRollerInwardSpeed);
+        SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
 
     }
     else if (robotData.controlData.saIntakeBackwards) 
     {
-        SetIntakeRollerSpeed(intakeRollerOutwardSpeed);
+        SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
     }
     else if (robotData.controlData.saCubeIntake)
     {
-        SetIntakeRollerSpeed(intakeRollerCubeInwardSpeed);
+        SetEndEffectorRollerSpeed(EndEffectorRollerCubeInwardSpeed);
     }
     else
     {
-        SetIntakeRollerSpeed(0);
+        SetEndEffectorRollerSpeed(0);
     }
 }
 
 void EndEffector::Manual(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
 
-    if (robotData.controlData.mIntakeRollersIn) 
+    if (robotData.controlData.mEndEffectorRollersIn) 
     {
-        SetIntakeRollerSpeed(intakeRollerInwardSpeed);
+        SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
     }
-    else if (robotData.controlData.mIntakeRollersOut) 
+    else if (robotData.controlData.mEndEffectorRollersOut) 
     {
-        SetIntakeRollerSpeed(intakeRollerOutwardSpeed);
+        SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
     }
 }
 
 /*
-* @param rollerSpeed Desired intake roller speed (0 - 1)
+* @param rollerSpeed Desired endEffector roller speed (0 - 1)
 */
-void EndEffector::SetIntakeRollerSpeed(double rollerSpeed)
+void EndEffector::SetEndEffectorRollerSpeed(double rollerSpeed)
 {
-    intakeRollers.Set(rollerSpeed);
+    endEffectorRollers.Set(rollerSpeed);
 }

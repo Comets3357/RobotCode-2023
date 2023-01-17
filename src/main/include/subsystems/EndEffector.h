@@ -31,17 +31,17 @@ public:
 
 private:
 
-    void SetIntakeRollerSpeed(double rollerSpeed);
+    void SetEndEffectorRollerSpeed(double rollerSpeed);
     void SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
     void Manual(const RobotData &robotData, EndEffectorData &endEffectorData);
     
-    // Intake Roller Initialization
-    rev::CANSparkMax intakeRollers = rev::CANSparkMax(intakeRollerID, rev::CANSparkMax::MotorType::kBrushless);
+    // EndEffector Roller Initialization
+    rev::CANSparkMax endEffectorRollers = rev::CANSparkMax(endEffectorRollerID, rev::CANSparkMax::MotorType::kBrushless);
 
-    double intakeRollerOutwardSpeed = 0.4;
-    double intakeRollerInwardSpeed = -0.4;
+    double EndEffectorRollerOutwardSpeed = 0.4;
+    double EndEffectorRollerInwardSpeed = -0.4;
 
-    double intakeRollerCubeInwardSpeed = 0.4;
+    double EndEffectorRollerCubeInwardSpeed = 0.4;
 
     bool softLimitsToggled = false;
 };
