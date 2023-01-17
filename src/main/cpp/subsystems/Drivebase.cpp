@@ -18,68 +18,30 @@ void Drivebase::RobotInit()
     dbR.SetInverted(false);
     dbRF.SetInverted(false);
 
-    dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-
-    // NEED TO SET CURRENT LIMIT
-    /**
-  * Configure the current limits that will be used
-  * Stator Current is the current that passes through the motor stators.
-  *  Use stator current limits to limit rotor acceleration/heat production
-  * Supply Current is the current that passes into the controller from the supply
-  *  Use supply current limits to prevent breakers from tripping
-  *
-  * enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
+    // dbL.EnableVoltageCompensation(10.5);
+    // dbLF.EnableVoltageCompensation(10.5);
+    // dbR.EnableVoltageCompensation(10.5);
+    // dbRF.EnableVoltageCompensation(10.5);
+ 
+  
+  /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
     dbL.SetSmartCurrentLimit(60);
     dbLF.SetSmartCurrentLimit(60);
     dbR.SetSmartCurrentLimit(60);
     dbRF.SetSmartCurrentLimit(60);
 
-    // PIDs for blue db
-    /* dbL.Config_kF(0, 0.032514);
-    dbL.Config_kP(0, 0.038723);
-    dbL.Config_kD(0, 0);
-
-    dbR.Config_kF(0, 0.032514);
-    dbR.Config_kP(0, 0.038723);
-    dbR.Config_kD(0, 0); */
-
-    // PIDs for 2022 Calvin University
-    // dbL.Config_kF(0, 0.077626);
-    // dbL.Config_kP(0, 0.10352);
-    // dbL.Config_kD(0, 0);
-
-    // dbR.Config_kF(0, 0.077626);
-    // dbR.Config_kP(0, 0.10352);
-    // dbR.Config_kD(0, 0);
-
-    // Atlas 03.26.22 Morning
-    // dbL.Config_kF(0, 0.074655);
-    // dbL.Config_kP(0, 0.1079);
-    // dbL.Config_kD(0, 0);
-
-    // dbR.Config_kF(0, 0.074655);
-    // dbR.Config_kP(0, 0.1079);
-    // dbR.Config_kD(0, 0);
-
-    // Atlas 04.07.22 Final tread center drop but not fresh treads
-    // dbLPIDController.SetFF(0.071797);
-    // dbLPIDController.SetP(0.10814);
-    // dbLPIDController.SetD(0);
-
-    // dbRPIDController.SetFF(0.071797);
-    // dbRPIDController.SetP(0.10814);
-    // dbRPIDController.SetD(0);
-
-    dbLPIDController.SetP(0.35832);
-    dbLPIDController.SetFF(0.26329);
+    // PIDs for Mule bot 2023
+    dbLPIDController.SetP(0.027491 / mpsToRpm);
+    dbLPIDController.SetFF(0.07476 / mpsToRpm);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.35832);
-    dbRPIDController.SetFF(0.26329);
+    dbRPIDController.SetP(0.027491/mpsToRpm);
+    dbRPIDController.SetFF(0.07476/mpsToRpm);
     dbRPIDController.SetD(0);
 
     dbL.BurnFlash();
@@ -123,10 +85,10 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
 
     if (frc::DriverStation::IsEnabled())
     {
-        dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-        dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-        dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-        dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        // dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        // dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        // dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        // dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     }
 
     if (frc::DriverStation::IsTeleop()) 
@@ -143,10 +105,10 @@ void Drivebase::DisabledInit()
 {
     
     setPercentOutput(0, 0);
-    dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     odometryInitialized = false;
 }
 
@@ -390,6 +352,9 @@ void Drivebase::setVelocity(double leftVel, double rightVel)
 {
     double leftRPM = leftVel * mpsToRpm;
     double rightRPM = rightVel * mpsToRpm;
+
+    frc::SmartDashboard::PutNumber("left rpm", leftRPM);
+    frc::SmartDashboard::PutNumber("right rpm", rightRPM);
 
     dbLPIDController.SetReference(leftRPM, rev::CANSparkMax::ControlType::kVelocity); // dbL.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, leftTPDS);
     dbRPIDController.SetReference(rightRPM, rev::CANSparkMax::ControlType::kVelocity); // dbR.Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, rightTPDS);

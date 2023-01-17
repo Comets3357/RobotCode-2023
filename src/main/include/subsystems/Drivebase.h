@@ -133,8 +133,8 @@ private:
 
     // meters per second to ticks per decisecond converstion factor for 4 in wheels
     // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
-    const double mpsToRpm = (60.0/1.0)*(39.3701/1.0)*(1.0/4.25*M_PI)*(44.0/9.0); // 40:10 for actual comp bot
-    const double ticksToMeters = (9.0/44.0)*(4.25*M_PI/1.0)*(1.0/39.3701);
+    const double mpsToRpm = ((60.0/1.0)*(39.3701/1.0)*(1.0/(4.25*M_PI))*(44.0/9.0)); // 40:10 for actual comp bot
+    const double ticksToMeters = (9.0/44.0)*(4.0*M_PI/1.0)*(1.0/39.3701)*(39.3701/42.3701);
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};

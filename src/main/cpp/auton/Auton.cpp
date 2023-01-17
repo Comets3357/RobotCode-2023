@@ -65,6 +65,7 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("fourBallC", "fourBallC");
     
     autonChooser.AddOption("driveLine", "driveLine");
+    autonChooser.AddOption("TwoBlueLeftNoClimb", "TwoBlueLeftNoClimb");
     // autonChooser.AddOption("fiveBallCAlt", "fiveBallCAlt");
 
     // autonChooser.AddOption("citrus", "citrus");
@@ -85,6 +86,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     controlData.mode = MODE_TELEOP_SA;
 
     if (autonData.autonRoutineName == "driveLine")
+    {
+        driveLine(robotData, controlData, controllerData);
+    }
+    else if (autonData.autonRoutineName == "TwoBlueLeftNoClimb")
     {
         driveLine(robotData, controlData, controllerData);
     }
