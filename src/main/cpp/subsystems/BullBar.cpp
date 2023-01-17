@@ -29,6 +29,8 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 
     ZeroRelativePosition(bullBarData);
     // ToggleSoftLimits();
+
+    frc::SmartDashboard::PutBoolean("FORCE ZERO BULL BAR", 0);
 }
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData)
@@ -53,6 +55,11 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
     // }
 
     UpdateData(robotData, bullBarData);
+
+    if (forceZero)
+    {
+        ForceZeroBullBar();
+    }
 
 }
 
@@ -142,8 +149,10 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 
 void BullBar::UpdateData(const RobotData &robotData, BullBarData &bullBarData)
 {
-    frc::SmartDashboard::PutNumber("BULL BAR ABS POSITION", bullBarSliderAbsoluteEncoder.GetPosition());
-    frc::SmartDashboard::PutBoolean("BULL BAR ABS ENCODER INIT", bullBarData.bullBarAbsoluteEncoderInitialized);
+    frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
+    frc::SmartDashboard::PutBoolean("bull bar abs init successful", bullBarData.bullBarAbsoluteEncoderInitialized);
+    
+    forceZero = frc::SmartDashboard::GetBoolean("FORCE ZERO BULL BAR", 0);
 }
 
 /*

@@ -43,6 +43,9 @@ private:
     
     bool IsAbsoluteEncoderInitialized(BullBarData &bullBarData);
 
+    // force zeroing the bull bar
+    bool forceZero = false;
+
     // Positions for intaking cone or cube
     double bullBarConeIntakeAbsolutePosition = 0;
     double bullBarConeIntakeRelativePosition = 0;

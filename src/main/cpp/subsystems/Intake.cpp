@@ -57,14 +57,14 @@ void Intake::SemiAuto(const RobotData &robotData, IntakeData &intakeData)
 
 void Intake::Manual(const RobotData &robotData, IntakeData &intakeData)
 {
-    if (robotData.controlData.mIntakeRollersIn) 
-    {
-        IntakeRollers(intakeRollerInwardSpeed);
-    }
-    else if (robotData.controlData.mIntakeRollersOut) 
-    {
-        IntakeRollers(intakeRollerOutwardSpeed);
-    }
+    // if (robotData.controlData.mIntakeRollersIn) 
+    // {
+    //     IntakeRollers(intakeRollerInwardSpeed);
+    // }
+    // else if (robotData.controlData.mIntakeRollersOut) 
+    // {
+    //     IntakeRollers(intakeRollerOutwardSpeed);
+    // }
 }
 
 /*
