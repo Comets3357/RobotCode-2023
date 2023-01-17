@@ -75,7 +75,18 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mIntakeRollersIn = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mIntakeRollersOut = (controllerData.sRTrigger > 0.5) && controlData.shift;
     controlData.mForceZeroIntake = controllerData.sRCenterBtn;
-    
+
+// END EFFECTOR:
+    //SEMI AUTO:
+
+    // No Semi Controls ATM :(
+
+    // MANUAL:
+
+    controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;
+    controlData.mEndEffectorRollersOut = controllerData.sYBtn && !controlData.shift;
+
+
     
 
 }
