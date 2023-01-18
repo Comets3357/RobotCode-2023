@@ -21,7 +21,8 @@ public:
 
 private:
 
-    void SetElevatorPosition(double elevatorAbsolutePosition, int PIDSlot);
+    void SetElevatorAbsolutePosition(double elevatorAbsolutePosition, int PIDSlot);
+    void SetElevatorRelativePosition(double elevatorAbsolutePosition, int PIDSlot);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
     void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
     double AbsoluteToRelative(double currentAbsolutePosition);

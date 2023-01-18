@@ -42,27 +42,50 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         ToggleSoftLimits();
     }
 
-    else if (robotData.controlData.saElevatorSetHumanPlayerPosition)
+    if (elevatorData.elevatorAbsoluteEncoderInitialized)
     {
-        SetElevatorPosition(humanPlayerElevatorAbsolutePos, 0);
-    }
+        if (robotData.controlData.saElevatorSetHumanPlayerPosition)
+        {
+            SetElevatorAbsolutePosition(humanPlayerElevatorAbsolutePos, 0);
+        }
 
-    else if (robotData.controlData.saElevatorSetMidPosition)
+        else if (robotData.controlData.saElevatorSetMidPosition)
+        {
+            SetElevatorAbsolutePosition(midElevatorAbsolutePos, 0);
+        }
+
+        else if (robotData.controlData.saElevatorSetHighPosition)
+        {
+            SetElevatorAbsolutePosition(highElevatorAbsolutePos, 0);
+        }
+
+        else if (robotData.controlData.saElevatorSetIntakePosition)
+        {
+            SetElevatorAbsolutePosition(intakeElevatorAbsolutePos, 0);
+        }
+    }
+    else
     {
-        SetElevatorPosition(midElevatorAbsolutePos, 0);
-    }
+        if (robotData.controlData.saElevatorSetHumanPlayerPosition)
+        {
+            SetElevatorRelativePosition(AbsoluteToRelative(humanPlayerElevatorAbsolutePos), 0);
+        }
 
-    else if (robotData.controlData.saElevatorSetHighPosition)
-    {
-        SetElevatorPosition(highElevatorAbsolutePos, 0);
-    }
+        else if (robotData.controlData.saElevatorSetMidPosition)
+        {
+            SetElevatorRelativePosition(AbsoluteToRelative(midElevatorAbsolutePos), 0);
+        }
 
-    else if (robotData.controlData.saElevatorSetIntakePosition)
-    {
-        SetElevatorPosition(intakeElevatorAbsolutePos, 0);
-    }
-    
+        else if (robotData.controlData.saElevatorSetHighPosition)
+        {
+            SetElevatorRelativePosition(AbsoluteToRelative(highElevatorAbsolutePos), 0);
+        }
 
+        else if (robotData.controlData.saElevatorSetIntakePosition)
+        {
+            SetElevatorRelativePosition(AbsoluteToRelative(intakeElevatorAbsolutePos), 0);
+        }
+    }
 
 }
 
@@ -79,10 +102,14 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
 * @param PIDSlot PID slot to use for setting position
 * @note Sets position of elevator using absoute position
 */
-void Elevator::SetElevatorPosition(double elevatorAbsolutePosition, int PIDSlot)
+void Elevator::SetElevatorAbsolutePosition(double elevatorAbsolutePosition, int PIDSlot)
 {
     elevatorPIDController.SetReference(elevatorAbsolutePosition, rev::CANSparkMax::ControlType::kDutyCycle, PIDSlot);
+}
 
+void Elevator::SetElevatorRelativePosition(double elevatorAbsolutePosition, int PIDSlot)
+{
+    elevatorPIDController.SetReference(elevatorAbsolutePosition, rev::CANSparkMax::ControlType::kPosition, PIDSlot);
 }
 
 /*
@@ -96,8 +123,6 @@ void Elevator::ToggleSoftLimits()
     {
         elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
         elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
-
-        softLimitsToggled = false;
     }
     else if (!softLimitsToggled) 
     {
@@ -106,8 +131,6 @@ void Elevator::ToggleSoftLimits()
 
         elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorRelativeMinPosition - 0.1);
         elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorRelativeMaxPosition + 0.1);
-
-        softLimitsToggled = true;
     }
 }
 
