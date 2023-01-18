@@ -96,6 +96,8 @@ void Elevator::ToggleSoftLimits()
     {
         elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
         elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
+
+        softLimitsToggled = false;
     }
     else if (!softLimitsToggled) 
     {
@@ -104,6 +106,8 @@ void Elevator::ToggleSoftLimits()
 
         elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorRelativeMinPosition - 0.1);
         elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorRelativeMaxPosition + 0.1);
+
+        softLimitsToggled = true;
     }
 }
 
