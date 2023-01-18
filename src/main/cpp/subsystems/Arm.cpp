@@ -62,13 +62,9 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     if (robotData.controlData.saArmIntakePosition)
     {
-        armWristPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
-        armPivotPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
     }
     if (robotData.controlData.saMoveArm)
     {
-        armWristPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
-        armPivotPIDController.SetReference(0.5, rev::CANSparkMax::ControlType::kDutyCycle);
     }
 }
 
@@ -92,14 +88,6 @@ void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
     
-}
-
-/*
-* @param pivotPosition Desired relative encoder pivot position
-*/
-void Arm::ArmWrist(double wristPosition)
-{
-    armWristPIDController.SetReference(wristPosition, rev::CANSparkMax::ControlType::kPosition);
 }
 
 void Arm::ToggleSoftLimits() 
@@ -190,4 +178,18 @@ double Arm::ArmToRelativePivot(double currentAbsolutePosition)
     double slope = (armPivotRelativeMaxPosition - armPivotRelativeMinPosition) / (armPivotAbsoluteMaxPosition - armPivotAbsoluteMinPosition);
     double b = armPivotRelativeMinPosition - (slope * armPivotAbsoluteMinPosition);
     return ((slope * currentAbsolutePosition) + b);
+}
+
+double Arm::AngleToAbsoluteWrist(double desiredAnglePosition)
+{
+    double slope = (armWristAbsoluteMaxPosition - armWristAbosluteMinPosition) / (armWristMaxAngle - armWristMinAngle);
+    double b = armWristAbosluteMinPosition - (slope * armWristMinAngle);
+    return ((slope * desiredAnglePosition) + b);
+}
+
+double Arm::AngleToAbsolutePivot(double desiredAnglePosition)
+{
+    double slope = (armPivotAbsoluteMaxPosition - armPivotAbsoluteMinPosition) / (armPivotMaxAngle - armPivotMinAngle);
+    double b = armPivotAbsoluteMinPosition - (slope * armPivotMinAngle);
+    return ((slope * desiredAnglePosition) + b);
 }

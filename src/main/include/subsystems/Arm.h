@@ -28,12 +28,14 @@ public:
     void UpdateData(const RobotData &robotData, ArmData &armData);
 
 private:
-    void ZeroArm();
+
     void ToggleSoftLimits();
-    void ArmWrist(double wristPosition);
 
     void SemiAuto(const RobotData &robotData, ArmData &armData);
     void Manual(const RobotData &robotData, ArmData &armData);
+
+    void SetAngleOfWrist(double desiredAngle);
+    void SetAngleOfPivot(double desiredAngle);
 
     void ZeroRelativePositionWrist(ArmData &armData);
     void ZeroRelativePositionPivot(ArmData &armData);
@@ -43,6 +45,9 @@ private:
 
     double AbsoluteToRelativeWrist(double currentAbsolutePosition);
     double ArmToRelativePivot(double currentAbsolutePosition);
+
+    double AngleToAbsoluteWrist(double desiredAnglePosition);
+    double AngleToAbsolutePivot(double desiredAnglePosition);
     
     
     // joint Pivot Initialization
@@ -63,12 +68,19 @@ private:
     double armWristAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
     double armWristAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
 
-    // Pivot Encoder Mind and Max Values
+    // Pivot Encoder Min and Max Values
     double armPivotRelativeMaxPosition = 0;
     double armPivotRelativeMinPosition = 0;
 
     double armPivotAbsoluteMaxPosition = 0;
     double armPivotAbsoluteMinPosition = 0;
+
+    // angles for pivot and wrist
+    double armPivotMaxAngle = 0;
+    double armPivotMinAngle = 0;
+
+    double armWristMaxAngle = 0;
+    double armWristMinAngle = 0;
 
     bool softLimitsToggled = false;
 };
