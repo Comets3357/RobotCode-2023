@@ -8,6 +8,7 @@
 #include "auton/Auton.h"
 
 #include "subsystems/Drivebase.h"
+#include "subsystems/EndEffector.h"
 #include "subsystems/BullBar.h"
 
 //could be separated into all separate files for the data *from* each subsystem
@@ -22,5 +23,6 @@ struct RobotData
     AutonData autonData;
 
     DrivebaseData drivebaseData;
+    EndEffectorData endEffectorData;
     BullBarData bullBarData;
 };

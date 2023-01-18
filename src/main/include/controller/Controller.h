@@ -45,6 +45,11 @@ struct ControlData
     bool saMoveArm;
     bool saArmIntakePosition;
     bool saBullBarExtension;
+    //end effector:
+    bool mEndEffectorRollersIn;
+    bool mEndEffectorRollersOut;
+
+
 
 
 

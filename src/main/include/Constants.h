@@ -10,9 +10,13 @@ static const int
 //intake:
 static const int
     intakeRoller2ID = 14, // Not actual value yet.
-    intakeRollerID = 15,
-    intakePivotID = 16,
+    intakeRollerID = 12,
+    intakePivotID = 11,
     intakeSingulatorID = 13;
+
+//end effector:
+static const int
+    endEffectorRollerID = 1024; // NOT REAL VALUE.
 
 //arm:
 static const int
