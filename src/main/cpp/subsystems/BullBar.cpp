@@ -187,6 +187,8 @@ void BullBar::ToggleSoftLimits()
     {
         bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
         bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
+
+        softLimitsToggled = false;
     }
     else if (!softLimitsToggled) 
     {
@@ -195,6 +197,8 @@ void BullBar::ToggleSoftLimits()
 
         bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMinPosition - 0.1);
         bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMaxPosition + 0.1);
+
+        softLimitsToggled = true;
     }
 }
 
