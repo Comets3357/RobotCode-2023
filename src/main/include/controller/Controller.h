@@ -47,6 +47,9 @@ struct ControlData
     bool saMoveArm;
     bool saArmIntakePosition;
 
+    bool mMovePivot;
+    bool mMoveWrist;
+
 };
 
 struct ControllerData

@@ -16,6 +16,9 @@ struct ArmData
 {
     bool wristInitialized = false;
     bool pivotInitialized = false;
+
+    double pivotAngle = 0;
+    double wristAngle = 0;
 };
 
 class Arm
@@ -44,14 +47,16 @@ private:
     bool IsPivotAbolsoluteEncoderInitialized(ArmData &armData);
 
     double AbsoluteToRelativeWrist(double currentAbsolutePosition);
-    double ArmToRelativePivot(double currentAbsolutePosition);
+    double AbsoluteToRelativePivot(double currentAbsolutePosition);
 
     double AngleToAbsoluteWrist(double desiredAnglePosition);
     double AngleToAbsolutePivot(double desiredAnglePosition);
 
     double AngleToRelativePivot(double desiredAnglePosition);
     double AngleToRelativeWrist(double desiredAnglePosition);
-    
+
+    double RelativeToAnglePivot(double relativePosition);
+    double RelativeToAngleWrist(double relativePosition);
     
     // joint Pivot Initialization
     rev::CANSparkMax armWrist = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
