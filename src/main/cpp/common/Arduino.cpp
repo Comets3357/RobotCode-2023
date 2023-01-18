@@ -21,11 +21,16 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
     {
 
         //code
+        colorCode = 0;
+        
+        //if statements
+        
 
+        char value[1] = {(char)colorCode};
 
         try
         {
-            //arduinoPort->Write(value, 1);
+            arduinoPort->Write(value, 1);
         }
         catch(...)
         {
@@ -36,11 +41,11 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
         //read data
         try
         {
-            if (arduinoPort->GetBytesReceived() >= 1)
-            {
-                //arduinoPort->Read(colors, 1);
-                arduinoPort->Reset();
-            }
+            // if (arduinoPort->GetBytesReceived() >= 1)
+            // {
+            //     arduinoPort->Read(colors, 1);
+            //     arduinoPort->Reset();
+            // }
         }
         catch(...)
         {
@@ -54,11 +59,11 @@ void Arduino::DisabledPeriodic()
 {
     if (arduinoWorking)
     {
-        //colorCode = 0;
-        //char value[1] = {(char)colorCode};
+        colorCode = 0;
+        char value[1] = {(char)colorCode};
 
         try {   
-            //arduino->Write(value, 1);
+            arduinoPort->Write(value, 1);
         } catch (...){
             failedTransfers += 1;
         }

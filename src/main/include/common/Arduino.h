@@ -7,7 +7,7 @@
 
 struct ArduinoData
 {
-
+       
 };
 
 class Arduino
@@ -21,6 +21,7 @@ public:
 private:
 
     bool arduinoWorking = true;
+    int colorCode;
 
     frc::SerialPort *arduinoPort;
 
