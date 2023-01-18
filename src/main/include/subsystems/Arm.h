@@ -34,8 +34,8 @@ private:
     void SemiAuto(const RobotData &robotData, ArmData &armData);
     void Manual(const RobotData &robotData, ArmData &armData);
 
-    void SetAngleOfWrist(double desiredAngle);
-    void SetAngleOfPivot(double desiredAngle);
+    void SetAngleOfWrist(ArmData &armData, double desiredAngle);
+    void SetAngleOfPivot(ArmData &armData, double desiredAngle);
 
     void ZeroRelativePositionWrist(ArmData &armData);
     void ZeroRelativePositionPivot(ArmData &armData);
@@ -48,6 +48,9 @@ private:
 
     double AngleToAbsoluteWrist(double desiredAnglePosition);
     double AngleToAbsolutePivot(double desiredAnglePosition);
+
+    double AngleToRelativePivot(double desiredAnglePosition);
+    double AngleToRelativeWrist(double desiredAnglePosition);
     
     
     // joint Pivot Initialization

@@ -62,6 +62,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     if (robotData.controlData.saArmIntakePosition)
     {
+        // SetAngleOfWrist(armData, 0);
+        // SetAngleOfPivot(armData, 0);
     }
     if (robotData.controlData.saMoveArm)
     {
@@ -88,6 +90,30 @@ void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
     
+}
+
+void Arm::SetAngleOfWrist(ArmData &armData, double desiredAngle)
+{
+    if (armData.wristInitialized)
+    {
+        armWristPIDController.SetReference(AngleToAbsoluteWrist(desiredAngle), rev::CANSparkMax::ControlType::kDutyCycle);
+    }
+    else 
+    {
+        armWristPIDController.SetReference(AngleToAbsoluteWrist(desiredAngle), rev::CANSparkMax::ControlType::kPosition);
+    }
+}
+
+void Arm::SetAngleOfPivot(ArmData &armData, double desiredAngle)
+{
+    if (armData.pivotInitialized)
+    {
+        armPivotPIDController.SetReference(AngleToAbsolutePivot(desiredAngle), rev::CANSparkMax::ControlType::kDutyCycle);
+    }
+    else
+    {
+        armPivotPIDController.SetReference(AngleToAbsolutePivot(desiredAngle), rev::CANSparkMax::ControlType::kPosition);
+    }
 }
 
 void Arm::ToggleSoftLimits() 
@@ -191,5 +217,19 @@ double Arm::AngleToAbsolutePivot(double desiredAnglePosition)
 {
     double slope = (armPivotAbsoluteMaxPosition - armPivotAbsoluteMinPosition) / (armPivotMaxAngle - armPivotMinAngle);
     double b = armPivotAbsoluteMinPosition - (slope * armPivotMinAngle);
+    return ((slope * desiredAnglePosition) + b);
+}
+
+double Arm::AngleToRelativeWrist(double desiredAnglePosition)
+{
+    double slope = (armWristRelativeMaxPosition - armWristRelativeMinPosition) / (armPivotMaxAngle - armPivotMinAngle);
+    double b = armWristRelativeMinPosition - (slope * armPivotMinAngle);
+    return ((slope * desiredAnglePosition) + b);
+}
+
+double Arm::AngleToRelativePivot(double desiredAnglePosition)
+{
+    double slope = (armPivotRelativeMaxPosition - armPivotRelativeMinPosition) / (armPivotMaxAngle - armPivotMinAngle);
+    double b = armPivotRelativeMinPosition - (slope * armPivotMinAngle);
     return ((slope * desiredAnglePosition) + b);
 }
