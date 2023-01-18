@@ -1,9 +1,28 @@
 #include "subsystems/Drivebase.h"
 #include "RobotData.h"
 
+frc::SendableChooser<std::string> m_positionChooser;
+frc::SendableChooser<bool> m_pCanScale;
 
 void Drivebase::RobotInit()
 {
+  m_positionChooser.AddOption("Left", "Left");
+  m_positionChooser.AddOption("Middle", "Middle");
+  m_positionChooser.AddOption("Right", "Right");
+
+  m_pCanScale.AddOption("Yes", true);
+  m_pCanScale.SetDefaultOption("No", false);
+
+  frc::Shuffleboard::GetTab("Preround")
+    .Add("Robot Position", m_positionChooser)
+    .WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
+    // Can also use a different widget type:
+    // .WithWidget(&frc::BuiltInWidgets::kSplitButtonChooser);
+
+  frc::Shuffleboard::GetTab("Preround")
+    .Add("Partner can scale", m_pCanScale)
+    .WithWidget(frc::BuiltInWidgets::kSplitButtonChooser);
+
     dbL.RestoreFactoryDefaults();
     dbR.RestoreFactoryDefaults();
     dbLF.RestoreFactoryDefaults();
@@ -115,7 +134,8 @@ void Drivebase::AutonomousInit(const RobotData &robotData, DrivebaseData &driveb
 void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData)
 {
     updateData(robotData, drivebaseData);
-    frc::SmartDashboard::PutNumber("Drivebase Velocity", (dbLEncoder.GetVelocity() + dbREncoder.GetVelocity()) / 2.0);
+
+    frc::SmartDashboard::PutNumber("Drivebase Velocity", abs((dbLEncoder.GetVelocity() + dbREncoder.GetVelocity()) / 2.0));
     frc::SmartDashboard::PutNumber("Drivebase Left Position", (dbREncoder.GetPosition()));
     frc::SmartDashboard::PutNumber("Drivebase Right Position", (dbLEncoder.GetPosition()));
 

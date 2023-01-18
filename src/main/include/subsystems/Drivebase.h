@@ -17,6 +17,7 @@
 #include <frc/trajectory/Trajectory.h>
 #include <frc/controller/RamseteController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/shuffleboard/Shuffleboard.h>
 #include <frc/smartdashboard/Field2d.h>
 #include <cmath>
 #include <algorithm>
