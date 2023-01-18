@@ -33,10 +33,10 @@ void Drivebase::RobotInit()
   *  Use supply current limits to prevent breakers from tripping
   *
   * enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
-    dbL.SetSmartCurrentLimit(10);
-    dbLF.SetSmartCurrentLimit(10);
-    dbR.SetSmartCurrentLimit(10);
-    dbRF.SetSmartCurrentLimit(10);
+    dbL.SetSmartCurrentLimit(60);
+    dbLF.SetSmartCurrentLimit(60);
+    dbR.SetSmartCurrentLimit(60);
+    dbRF.SetSmartCurrentLimit(60);
 
     // PIDs for blue db
     /* dbL.Config_kF(0, 0.032514);
@@ -115,6 +115,9 @@ void Drivebase::AutonomousInit(const RobotData &robotData, DrivebaseData &driveb
 void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData)
 {
     updateData(robotData, drivebaseData);
+    frc::SmartDashboard::PutNumber("Drivebase Velocity", (dbLEncoder.GetVelocity() + dbREncoder.GetVelocity()) / 2.0);
+    frc::SmartDashboard::PutNumber("Drivebase Left Position", (dbREncoder.GetPosition()));
+    frc::SmartDashboard::PutNumber("Drivebase Right Position", (dbLEncoder.GetPosition()));
 
     if (frc::DriverStation::IsEnabled())
     {
