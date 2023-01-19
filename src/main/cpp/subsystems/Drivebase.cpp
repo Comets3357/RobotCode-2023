@@ -1,32 +1,21 @@
 #include "subsystems/Drivebase.h"
 #include "RobotData.h"
 
-frc::SendableChooser<std::string> m_positionChooser;
-frc::SendableChooser<bool> m_pCanScale;
+frc::SendableChooser<bool> m_testBoolean;
 
 void Drivebase::RobotInit()
 {
-  m_positionChooser.AddOption("Left", "Left");
-  m_positionChooser.AddOption("Middle", "Middle");
-  m_positionChooser.AddOption("Right", "Right");
-
-  m_pCanScale.AddOption("Yes", true);
-  m_pCanScale.SetDefaultOption("No", false);
-
-  frc::Shuffleboard::GetTab("Preround")
-    .Add("Robot Position", m_positionChooser)
-    .WithWidget(frc::BuiltInWidgets::kComboBoxChooser);
-    // Can also use a different widget type:
-    // .WithWidget(&frc::BuiltInWidgets::kSplitButtonChooser);
-
-  frc::Shuffleboard::GetTab("Preround")
-    .Add("Partner can scale", m_pCanScale)
-    .WithWidget(frc::BuiltInWidgets::kSplitButtonChooser);
-
     dbL.RestoreFactoryDefaults();
     dbR.RestoreFactoryDefaults();
     dbLF.RestoreFactoryDefaults();
     dbRF.RestoreFactoryDefaults();
+
+    frc::SmartDashboard::PutBoolean("fdsfs", false);
+    
+    auto inst = nt::NetworkTableInstance::GetDefault();
+    auto table = inst.GetTable("default");
+
+    toggle = table->GetEntry("togggleeeee");
 
     
     dbRF.Follow(dbR);
@@ -138,6 +127,27 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
     frc::SmartDashboard::PutNumber("Drivebase Velocity", abs((dbLEncoder.GetVelocity() + dbREncoder.GetVelocity()) / 2.0));
     frc::SmartDashboard::PutNumber("Drivebase Left Position", (dbREncoder.GetPosition()));
     frc::SmartDashboard::PutNumber("Drivebase Right Position", (dbLEncoder.GetPosition()));
+    frc::SmartDashboard::PutNumber("Battery Voltage", frc::DriverStation::GetBatteryVoltage());
+    frc::SmartDashboard::PutNumber("Elapsed Time", frc::DriverStation::GetMatchTime());
+    frc::SmartDashboard::PutBoolean("Test Bool", testBoolean);
+    testBoolean = frc::SmartDashboard::GetBoolean("fdsfs", false);
+    if (testBoolean == true)
+    {
+        frc::SmartDashboard::PutNumber("Bol", 1);
+    }
+    else
+    {
+        frc::SmartDashboard::PutNumber("Bol", 0);
+    }
+
+    toggle.SetBoolean(testBoolean);
+
+
+    // frc::SmartDashboard::PutNumber("something I want to do", 10000000);
+
+
+    
+    
 
     if (frc::DriverStation::IsEnabled())
     {
@@ -307,7 +317,7 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
     }
     else if (drivebaseData.driveMode == DRIVEMODE_TRAJECTORY)
     {
-        frc::SmartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
+        // frc::SmartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
 
         units::second_t sampleSec{robotData.timerData.secSinceEnabled - trajectorySecOffset};
 
@@ -484,7 +494,7 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
             frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
 
             trajectory = frc::TrajectoryUtil::FromPathweaverJson(pathDirectory.string());
-            frc::SmartDashboard::PutNumber("original seconds since enabled", robotData.timerData.secSinceEnabled);
+            // frc::SmartDashboard::PutNumber("original seconds since enabled", robotData.timerData.secSinceEnabled);
             trajectorySecOffset = robotData.timerData.secSinceEnabled;
 
             
@@ -644,3 +654,8 @@ void Drivebase::calcTurretEjectAngle(DrivebaseData &drivebaseData)
     }
 }
 
+void Drivebase::testCommand()
+{
+    dbL.Set(0.3);
+    dbR.Set(0.3);
+}

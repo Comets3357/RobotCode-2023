@@ -25,6 +25,9 @@
 #include <fstream>
 #include <deque>
 
+#include "networktables/NetworkTableInstance.h"
+#include "networktables/NetworkTable.h"
+
 #define M_PI 3.14159265358979323846
 
 struct RobotData;
@@ -73,7 +76,6 @@ public:
     void DisabledInit();
 
 private:
-
     void updateData(const RobotData &robotData, DrivebaseData &drivebaseData);
     void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData);
     void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
@@ -102,6 +104,8 @@ private:
     bool allValuesWithin(std::deque<double> deque, double tolerance);
 
     double getEncoderDistance(double encoderPosition);
+
+    void testCommand();
 
 
     frc::SendableChooser<frc::Pose2d> startPointChooser;
@@ -149,4 +153,7 @@ private:
     rev::SparkMaxRelativeEncoder dbREncoder = dbR.GetEncoder();
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
 
+    nt::NetworkTableEntry toggle;
+
+    bool testBoolean = false;
 };
