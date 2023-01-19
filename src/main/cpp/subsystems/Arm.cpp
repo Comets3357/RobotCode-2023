@@ -67,6 +67,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     }
     if (robotData.controlData.saMoveArm)
     {
+        
     }
 }
 
@@ -78,12 +79,12 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
     // }
     if (robotData.controlData.mMovePivot)
     {
-        // armPivot.Set(robotData.controlData.)
+        // armPivot.Set(robotData.controlData.sLYStick)
     }
 
     if (robotData.controlData.mMoveWrist)
     {
-        
+        //armWrist.Set(robotData.controlData.sRYStick);
     }
 }
 
