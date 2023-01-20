@@ -23,7 +23,7 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             Manual(robotData, endEffectorData);
             break;
         case MODE_TELEOP_SA:
-            SemiAuto(robotData, endEffectorData);
+            Manual(robotData, endEffectorData);
             break;
         default:
             SemiAuto(robotData, endEffectorData);
@@ -62,6 +62,10 @@ void EndEffector::Manual(const RobotData &robotData, EndEffectorData &endEffecto
     else if (robotData.controlData.mEndEffectorRollersOut) 
     {
         SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
+    }
+    else 
+    {
+        SetEndEffectorRollerSpeed(0);
     }
 }
 

@@ -11,9 +11,6 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     bullBarRollers.SetSmartCurrentLimit(45);
     bullBarRollers.EnableVoltageCompensation(10.5);
 
-    bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
-    bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
-
     bullBarRollers.BurnFlash();
 
     // BullBar Pivot
@@ -25,12 +22,14 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     bullBarSliderPIDController.SetOutputRange(-1, 1, 0);
     bullBarSlider.EnableVoltageCompensation(10.5);
     bullBarSlider.SetSmartCurrentLimit(20);
+    bullBarSlider.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     bullBarSlider.BurnFlash();
 
     ZeroRelativePosition(bullBarData);
-    // ToggleSoftLimits();
+    ToggleSoftLimits();
 
     frc::SmartDashboard::PutBoolean("FORCE ZERO BULL BAR", 0);
+    frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
 }
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData)
@@ -49,12 +48,13 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
             break;
     }
 
-    // if (bullBarSliderRelativeEncoder.GetVelocity() <= 1)
-    // {
-    //     ZeroRelativePosition(bullBarData);
-    // }
+    if (bullBarSliderRelativeEncoder.GetVelocity() <= 1)
+    {
+        ZeroRelativePosition(bullBarData);
+    }
 
     UpdateData(robotData, bullBarData);
+    frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
 
     if (forceZero)
     {
@@ -66,10 +66,10 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
 
 void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 {
-    // if (!softLimitsToggled)
-    // {
-    //     ToggleSoftLimits();
-    // }
+    if (!softLimitsToggled)
+    {
+        ToggleSoftLimits();
+    }
 
     // Absolute encoder is initialized and the code the abs position is used
     if (bullBarData.bullBarAbsoluteEncoderInitialized)
@@ -113,14 +113,16 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 {
-    // if (softLimitsToggled)
-    // {
-    //     ToggleSoftLimits();
-    // }
+
+    frc::SmartDashboard::PutBoolean("manual working", true);
+    if (softLimitsToggled)
+    {
+        ToggleSoftLimits();
+    }
 
     if (robotData.controlData.mBullBarExtension)
     { 
-        bullBarSlider.Set(robotData.controlData.mBullBarExtension * 0.8);
+        bullBarSlider.Set(robotData.controllerData.sRYStick * 0.25);
     }
     else 
     {
@@ -149,7 +151,7 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 
 void BullBar::UpdateData(const RobotData &robotData, BullBarData &bullBarData)
 {
-    frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
+    // frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
     frc::SmartDashboard::PutBoolean("bull bar abs init successful", bullBarData.bullBarAbsoluteEncoderInitialized);
     
     forceZero = frc::SmartDashboard::GetBoolean("FORCE ZERO BULL BAR", 0);

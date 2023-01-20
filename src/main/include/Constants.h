@@ -16,7 +16,7 @@ static const int
 
 //end effector:
 static const int
-    endEffectorRollerID = 1024; // NOT REAL VALUE.
+    endEffectorRollerID = 33; // NOT REAL VALUE.
 
 //arm:
 static const int
@@ -37,17 +37,7 @@ static const double
     // revOut = 6.09,
     // revIn = 0;
 
-//indexer
-static const int
-    indexerBeltsID = 22,
-    indexerWheelID = 21;
 
-// shooter IDs
-static const int
-    shooterWheelID = 31,
-    shooterHoodID = 33, 
-    shooterTurretID = 34, 
-    hoodRollerID = 32; 
 
 static const float
     //comp bot shooter hood positions

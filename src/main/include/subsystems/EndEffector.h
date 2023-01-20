@@ -38,8 +38,8 @@ private:
     // EndEffector Roller Initialization
     rev::CANSparkMax endEffectorRollers = rev::CANSparkMax(endEffectorRollerID, rev::CANSparkMax::MotorType::kBrushless);
 
-    double EndEffectorRollerOutwardSpeed = 0.4;
-    double EndEffectorRollerInwardSpeed = -0.4;
+    double EndEffectorRollerOutwardSpeed = 0.3;
+    double EndEffectorRollerInwardSpeed = -0.3;
 
     double EndEffectorRollerCubeInwardSpeed = 0.4;
 

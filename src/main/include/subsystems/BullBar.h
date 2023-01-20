@@ -53,10 +53,10 @@ private:
     double bullBarCubeIntakeRelativePosition = 0;
 
     // Encoder Min and Max Values 
-    double bullBarRelativeMaxPosition = 0;
+    double bullBarRelativeMaxPosition = 94.5;
     double bullBarRelativeMinPosition = 0;
-    double bullBarAbsoluteMaxPosition = 0.4203;
-    double bullBarAbsoluteMinPosition = 0.295;
+    double bullBarAbsoluteMaxPosition = 0.408;
+    double bullBarAbsoluteMinPosition = 0.535;
 
     // intake speed
     double bullBarRollerExtendedSpeed = 0.5;
