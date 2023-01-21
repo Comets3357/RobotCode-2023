@@ -53,16 +53,16 @@ private:
 
     
     // Encoder Min and Max Values 
-    double bullBarRelativeMaxPosition = -94.5;
+    double bullBarRelativeMaxPosition = 18;
     double bullBarRelativeMinPosition = 0;
-    double bullBarAbsoluteMinPosition = 47.49;
-    double bullBarAbsoluteMaxPosition = bullBarAbsoluteMinPosition - 18;
+    double bullBarAbsoluteMinPosition = 0;
+    double bullBarAbsoluteMaxPosition = 18;
 
     // Positions for intaking cone or cube
-    double bullBarConeIntakeAbsolutePosition = bullBarAbsoluteMinPosition - 17.208;
-    double bullBarConeIntakeRelativePosition = bullBarRelativeMinPosition - 86.5;
-    double bullBarCubeIntakeAbsolutePosition = bullBarAbsoluteMinPosition - 14.497;
-    double bullBarCubeIntakeRelativePosition = bullBarRelativeMinPosition - 72.85;
+    double bullBarConeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 17.208;
+    double bullBarConeIntakeRelativePosition = bullBarRelativeMinPosition + 17.208;
+    double bullBarCubeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 14.497;
+    double bullBarCubeIntakeRelativePosition = bullBarRelativeMinPosition + 14.497;
 
     // intake speed
     double bullBarRollerExtendedSpeed = 0.5;

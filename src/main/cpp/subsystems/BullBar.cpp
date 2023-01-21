@@ -13,8 +13,11 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     bullBarRollers.BurnFlash();
 
 
-    bullBarSliderAbsoluteEncoder.SetInverted(false);
-    bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43); 
+    bullBarSliderAbsoluteEncoder.SetInverted(true);
+    bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(-47.49);
+
+    bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
     // BullBar Pivot
 
@@ -27,7 +30,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     bullBarSliderPIDController.SetOutputRange(-1, 1, 0);
 
     // relative
-    bullBarSliderPIDController.SetP(3, 1);
+    bullBarSliderPIDController.SetP(0.225, 1);
     bullBarSliderPIDController.SetI(0, 1);
     bullBarSliderPIDController.SetD(0, 1);
     bullBarSliderPIDController.SetIZone(0, 1);
@@ -36,7 +39,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 
     bullBarSlider.EnableVoltageCompensation(10.5);
     bullBarSlider.SetSmartCurrentLimit(20);
-    bullBarSlider.SetInverted(false);
+    bullBarSlider.SetInverted(true);
     bullBarSlider.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     bullBarSlider.BurnFlash();
     
@@ -243,8 +246,8 @@ void BullBar::EnableSoftLimits(BullBarData &bullBarData)
     else 
     {
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMinPosition + 0.1);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMaxPosition - 0.1);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMinPosition - 0.3);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMaxPosition + 0.3);
     }   
 
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
