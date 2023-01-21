@@ -28,6 +28,7 @@ public:
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData);
+    void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
 
 private:
 
@@ -44,8 +45,6 @@ private:
     void ForceZeroBullBar();
 
     
-    void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
-    
     bool IsAbsoluteEncoderInitialized(BullBarData &bullBarData);
 
     // force zeroing the bull bar
@@ -55,13 +54,13 @@ private:
     // Encoder Min and Max Values 
     double bullBarRelativeMaxPosition = 94.5;
     double bullBarRelativeMinPosition = 0;
-    double bullBarAbsoluteMinPosition = 0.544;
-    double bullBarAbsoluteMaxPosition = bullBarAbsoluteMinPosition + 0.159;
+    double bullBarAbsoluteMinPosition = 48.23;
+    double bullBarAbsoluteMaxPosition = bullBarAbsoluteMinPosition - 18;
 
     // Positions for intaking cone or cube
-    double bullBarConeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 0.1587;
+    double bullBarConeIntakeAbsolutePosition = bullBarAbsoluteMinPosition - 17.208;
     double bullBarConeIntakeRelativePosition = bullBarRelativeMinPosition + 86.5;
-    double bullBarCubeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 0.1337;
+    double bullBarCubeIntakeAbsolutePosition = bullBarAbsoluteMinPosition - 14.497;
     double bullBarCubeIntakeRelativePosition = bullBarRelativeMinPosition + 72.85;
 
     // intake speed

@@ -13,15 +13,27 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     bullBarRollers.BurnFlash();
 
 
-    bullBarSliderAbsoluteEncoder.SetInverted(true);
+    bullBarSliderAbsoluteEncoder.SetInverted(false);
+    bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43); 
 
     // BullBar Pivot
-    bullBarSliderPIDController.SetP(3, 0);
+
+    // abs
+    bullBarSliderPIDController.SetP(0.225, 0);
     bullBarSliderPIDController.SetI(0, 0);
     bullBarSliderPIDController.SetD(0, 0);
     bullBarSliderPIDController.SetIZone(0, 0);
     bullBarSliderPIDController.SetFF(0, 0);
     bullBarSliderPIDController.SetOutputRange(-1, 1, 0);
+
+    // relative
+    bullBarSliderPIDController.SetP(3, 1);
+    bullBarSliderPIDController.SetI(0, 1);
+    bullBarSliderPIDController.SetD(0, 1);
+    bullBarSliderPIDController.SetIZone(0, 1);
+    bullBarSliderPIDController.SetFF(0, 1);
+    bullBarSliderPIDController.SetOutputRange(-1, 1, 1);
+
     bullBarSlider.EnableVoltageCompensation(10.5);
     bullBarSlider.SetSmartCurrentLimit(20);
     bullBarSlider.SetInverted(false);
@@ -38,10 +50,10 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData)
 {
-    if (absoluteWasInitialized && !IsAbsoluteEncoderInitialized(bullBarData));
-    {
-        EnableSoftLimits(bullBarData);
-    }
+    // if (absoluteWasInitialized && !IsAbsoluteEncoderInitialized(bullBarData));
+    // {
+    //     EnableSoftLimits(bullBarData);
+    // }
     
     absoluteWasInitialized = IsAbsoluteEncoderInitialized(bullBarData);
 
@@ -90,17 +102,17 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
     {
         if (robotData.controlData.saConeIntake)
         {
-            bullBarSliderPIDController.SetReference(bullBarConeIntakeAbsolutePosition, rev::CANSparkMax::ControlType::kPosition);
-            bullBarRollers.Set(bullBarRollerExtendedSpeed);
+            bullBarSliderPIDController.SetReference(bullBarConeIntakeAbsolutePosition, rev::CANSparkMax::ControlType::kPosition, 0);
+            bullBarRollers.Set(bullBarRollerRetractedSpeed);
         }
         else if (robotData.controlData.saCubeIntake)
         {
-            bullBarSliderPIDController.SetReference(bullBarCubeIntakeAbsolutePosition, rev::CANSparkMax::ControlType::kPosition);
-            bullBarRollers.Set(bullBarRollerRetractedSpeed);
+            bullBarSliderPIDController.SetReference(bullBarCubeIntakeAbsolutePosition, rev::CANSparkMax::ControlType::kPosition, 0);
+            bullBarRollers.Set(bullBarRollerExtendedSpeed);
         }
         else
         {
-            bullBarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kPosition);
+            bullBarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kPosition, 0);
             bullBarRollers.Set(0);
         }
     }
@@ -108,17 +120,17 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
     {
         if (robotData.controlData.saConeIntake)
         {
-            bullBarSliderPIDController.SetReference(bullBarConeIntakeRelativePosition, rev::CANSparkMax::ControlType::kPosition);
+            bullBarSliderPIDController.SetReference(bullBarConeIntakeRelativePosition, rev::CANSparkMax::ControlType::kPosition, 1);
             bullBarRollers.Set(bullBarRollerExtendedSpeed);
         }
         else if (robotData.controlData.saCubeIntake)
         {
-            bullBarSliderPIDController.SetReference(bullBarCubeIntakeRelativePosition, rev::CANSparkMax::ControlType::kPosition);
+            bullBarSliderPIDController.SetReference(bullBarCubeIntakeRelativePosition, rev::CANSparkMax::ControlType::kPosition, 1);
             bullBarRollers.Set(bullBarRollerRetractedSpeed);
         }
         else
         {
-            bullBarSliderPIDController.SetReference(bullBarRelativeMinPosition, rev::CANSparkMax::ControlType::kPosition);
+            bullBarSliderPIDController.SetReference(bullBarRelativeMinPosition, rev::CANSparkMax::ControlType::kPosition, 1);
             bullBarRollers.Set(0);
         }
     }
@@ -133,6 +145,9 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
     {
         DisableSoftLimits();
     }
+
+    // EnableSoftLimits(bullBarData);
+    
 
     if (robotData.controlData.mBullBarExtension)
     { 
@@ -193,6 +208,9 @@ double BullBar::AbsoluteToRelative(double currentAbsolutePosition)
     return ((slope * currentAbsolutePosition) + b);
 }
 
+/*
+* @note Disables soft limits
+*/
 void BullBar::DisableSoftLimits() 
 {
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
@@ -201,16 +219,16 @@ void BullBar::DisableSoftLimits()
     softLimitsToggled = false;
 }
 
+/*
+* @note Enables soft limits
+*/
 void BullBar::EnableSoftLimits(BullBarData &bullBarData)
 {
-    bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
-    bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
-
     if (bullBarData.bullBarAbsoluteEncoderInitialized)
     {
-        bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarAbsoluteMinPosition + 0.005);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarAbsoluteMaxPosition - 0.005);
+        bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);    
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarAbsoluteMinPosition - 0.3);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarAbsoluteMaxPosition + 0.3);
     }
     else 
     {
@@ -218,6 +236,9 @@ void BullBar::EnableSoftLimits(BullBarData &bullBarData)
         bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMinPosition + 0.1);
         bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMaxPosition - 0.1);
     }   
+
+    bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
+    bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
     softLimitsToggled = true;
 }
