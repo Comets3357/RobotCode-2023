@@ -5,30 +5,11 @@
 void BullBar::RobotInit(BullBarData &bullBarData)
 { // check current vals and then burn flash if they are different
     // BullBar Rollers
-    bullBarRollers.RestoreFactoryDefaults();
-    bullBarRollers.SetInverted(true);
-    bullBarRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    bullBarRollers.SetSmartCurrentLimit(45);
-    bullBarRollers.EnableVoltageCompensation(10.5);
-    bullBarRollers.BurnFlash();
+    BullBarRollerBurnFlash();
 
-
-    bullBarSliderAbsoluteEncoder.SetInverted(true);
-
-    // BullBar Pivot
-    bullBarSliderPIDController.SetP(3, 0);
-    bullBarSliderPIDController.SetI(0, 0);
-    bullBarSliderPIDController.SetD(0, 0);
-    bullBarSliderPIDController.SetIZone(0, 0);
-    bullBarSliderPIDController.SetFF(0, 0);
-    bullBarSliderPIDController.SetOutputRange(-1, 1, 0);
-    bullBarSlider.EnableVoltageCompensation(10.5);
-    bullBarSlider.SetSmartCurrentLimit(20);
-    bullBarSlider.SetInverted(false);
-    bullBarSlider.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    bullBarSlider.BurnFlash();
+    // BullBar Slider
+    BullBarSliderBurnFlash();
     
-
     ZeroRelativePosition(bullBarData);
     EnableSoftLimits(bullBarData);
 
@@ -239,6 +220,81 @@ bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullBarData)
     return bullBarData.bullBarAbsoluteEncoderInitialized;
 }
 
+void BullBar::BullBarRollerBurnFlash()
+{
+    bullBarRollerBurnFlash = false;
+    if (bullBarRollers.GetInverted() == false)
+    {
+        bullBarRollers.SetInverted(true);
+        bullBarRollerBurnFlash = true;
+    }
+    if (bullBarRollers.GetIdleMode() != rev::CANSparkMax::IdleMode::kCoast)
+    {
+        bullBarRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+        bullBarRollerBurnFlash = true;
+    }
+    if (bullBarRollers.GetVoltageCompensationNominalVoltage() != 10.5)
+    {
+        bullBarRollers.EnableVoltageCompensation(10.5);
+        bullBarRollerBurnFlash = true;
+    }
+    bullBarRollers.SetSmartCurrentLimit(45);
+    if (bullBarRollerBurnFlash = true)
+        bullBarRollers.BurnFlash();
+}
+
+void BullBar::BullBarSliderBurnFlash()
+{
+    bullBarSliderBurnFlash = false;
+    if (bullBarSliderPIDController.GetP() != 3)
+    {
+        bullBarSliderPIDController.SetP(3, 0);
+        bullBarSliderBurnFlash = true;  
+    }
+    if (bullBarSliderPIDController.GetI() != 0)
+    {
+        bullBarSliderPIDController.SetI(0, 0);
+        bullBarSliderBurnFlash = true;
+    }
+    if (bullBarSliderPIDController.GetD() != 0)
+    {
+        bullBarSliderPIDController.SetD(0, 0);
+        bullBarSliderBurnFlash = true;
+    }
+    if (bullBarSliderPIDController.GetIZone() != 0)
+    {
+        bullBarSliderPIDController.SetIZone(0, 0);
+        bullBarSliderBurnFlash = true;
+    }
+    if (bullBarSliderPIDController.GetFF() != 0)
+    {
+        bullBarSliderPIDController.SetFF(0, 0);
+        bullBarSliderBurnFlash = true;
+    }
+    if (bullBarSliderPIDController.GetOutputMin() != -1 || bullBarSliderPIDController.GetOutputMax() != 1)
+    {
+        bullBarSliderPIDController.SetOutputRange(-1, 1, 0);
+        bullBarSliderBurnFlash = true;
+    }
+    if (bullBarSlider.GetVoltageCompensationNominalVoltage() != 10.5)
+    {
+        bullBarSlider.EnableVoltageCompensation(10.5);
+        bullBarSliderBurnFlash = true;
+    }
+    if (bullBarSlider.GetInverted() != false)
+    {
+        bullBarSlider.SetInverted(false);
+        bullBarSliderBurnFlash = true;
+    }
+        if (bullBarSlider.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake)
+    {
+        bullBarSlider.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        bullBarSliderBurnFlash = true;
+    }
+    bullBarSlider.SetSmartCurrentLimit(20);
+    if (bullBarSliderBurnFlash = true)
+        bullBarSlider.BurnFlash();
+}
 /*
 * @note If all else fails, this is what 
 * @note driver uses to force zero the bull

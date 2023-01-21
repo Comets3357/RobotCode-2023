@@ -42,6 +42,8 @@ private:
     void DisableSoftLimits();
     void ZeroRelativePosition(BullBarData &bullBarData);
     void ForceZeroBullBar();
+    void BullBarRollerBurnFlash();
+    void BullBarSliderBurnFlash();
 
     
     void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
@@ -84,4 +86,6 @@ private:
 
     bool softLimitsToggled = false;  
     bool absoluteWasInitialized = false;
+    bool bullBarRollerBurnFlash = false;
+    bool bullBarSliderBurnFlash = false;
 };
