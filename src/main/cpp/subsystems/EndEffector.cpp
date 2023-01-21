@@ -23,7 +23,7 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             Manual(robotData, endEffectorData);
             break;
         case MODE_TELEOP_SA:
-            Manual(robotData, endEffectorData);
+            SemiAuto(robotData, endEffectorData);
             break;
         default:
             SemiAuto(robotData, endEffectorData);

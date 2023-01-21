@@ -14,6 +14,7 @@
 
 struct RobotData;
 
+// Add forceZeroBullBar && ifForceZeroed && switch from abs to relative 
 struct BullBarData
 {
     bool bullBarAbsoluteEncoderInitialized = false;
@@ -27,7 +28,6 @@ public:
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData);
-    void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
 
 private:
 
@@ -40,6 +40,9 @@ private:
     void ToggleSoftLimits(BullBarData &bullBarData);
     void ZeroRelativePosition(BullBarData &bullBarData);
     void ForceZeroBullBar();
+
+    
+    void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
     
     bool IsAbsoluteEncoderInitialized(BullBarData &bullBarData);
 

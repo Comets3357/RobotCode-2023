@@ -3,24 +3,18 @@
 #include <cmath>
 
 void BullBar::RobotInit(BullBarData &bullBarData)
-{
+{ // check current vals and then burn flash if they are different
     // BullBar Rollers
     bullBarRollers.RestoreFactoryDefaults();
     bullBarRollers.SetInverted(true);
     bullBarRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     bullBarRollers.SetSmartCurrentLimit(45);
     bullBarRollers.EnableVoltageCompensation(10.5);
-
     bullBarRollers.BurnFlash();
 
 
     bullBarSliderAbsoluteEncoder.SetInverted(true);
 
-
-    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarAbsoluteMinPosition + .05);
-    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarAbsoluteMaxPosition - 0.08);
-    // bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
-    //     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
     // BullBar Pivot
     bullBarSliderPIDController.SetP(3, 0);
     bullBarSliderPIDController.SetI(0, 0);
@@ -44,6 +38,8 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData)
 {
+    IsAbsoluteEncoderInitialized(bullBarData);
+
     // changing controls based off the mode robot is in
     switch (robotData.controlData.mode) 
     {
@@ -58,7 +54,7 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
             break;
     }
 
-    if (bullBarSliderRelativeEncoder.GetVelocity() <= 1)
+    if (bullBarSliderRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
     {
         ZeroRelativePosition(bullBarData);
     }
@@ -72,6 +68,7 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
     }
 
     frc::SmartDashboard::PutBoolean("soft limits toggled", softLimitsToggled);
+
 
 }
 
@@ -98,7 +95,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
         }
         else
         {
-            bullBarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kDutyCycle);
+            bullBarSliderPIDController.SetReference(bullBarAbsoluteMinPosition, rev::CANSparkMax::ControlType::kPosition);
             bullBarRollers.Set(0);
         }
     }
@@ -220,7 +217,7 @@ void BullBar::ToggleSoftLimits(BullBarData &bullBarData)
         {
             bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
             bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMinPosition + 0.1);
-            bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarAbsoluteMaxPosition - 0.1);
+            bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMaxPosition - 0.1);
         }   
 
         softLimitsToggled = true;

@@ -27,13 +27,13 @@ public:
     void RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
-    void UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData);
 
 private:
 
     void SetEndEffectorRollerSpeed(double rollerSpeed);
     void SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
     void Manual(const RobotData &robotData, EndEffectorData &endEffectorData);
+    void UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData);
     
     // EndEffector Roller Initialization
     rev::CANSparkMax endEffectorRollers = rev::CANSparkMax(endEffectorRollerID, rev::CANSparkMax::MotorType::kBrushless);
@@ -43,5 +43,4 @@ private:
 
     double EndEffectorRollerCubeInwardSpeed = 0.4;
 
-    bool softLimitsToggled = false;
 };
