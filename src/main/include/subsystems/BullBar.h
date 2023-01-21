@@ -37,7 +37,9 @@ private:
     void BullBarSlider(double sliderPosition);
     void SemiAuto(const RobotData &robotData, BullBarData &bullBarData);
     void Manual(const RobotData &robotData, BullBarData &bullBarData);
-    void ToggleSoftLimits(BullBarData &bullBarData);
+    // void ToggleSoftLimits(BullBarData &bullBarData);
+    void EnableSoftLimits(BullBarData &bullBarData);
+    void DisableSoftLimits();
     void ZeroRelativePosition(BullBarData &bullBarData);
     void ForceZeroBullBar();
 
@@ -81,4 +83,5 @@ private:
     rev::SparkMaxAbsoluteEncoder bullBarSliderAbsoluteEncoder = bullBarSlider.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     bool softLimitsToggled = false;  
+    bool absoluteWasInitialized = false;
 };
