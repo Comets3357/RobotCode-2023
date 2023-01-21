@@ -71,6 +71,8 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
             break;
     }
 
+    frc::SmartDashboard::PutNumber("encoder", bullBarSliderRelativeEncoder.GetPosition());
+
     if (bullBarSliderRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
     {
         ZeroRelativePosition(bullBarData);
@@ -100,6 +102,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
     // Absolute encoder is initialized and the code the abs position is used
     if (bullBarData.bullBarAbsoluteEncoderInitialized)
     {
+        frc::SmartDashboard::PutBoolean("I am getting here", true);
         if (robotData.controlData.saConeIntake)
         {
             bullBarSliderPIDController.SetReference(bullBarConeIntakeAbsolutePosition, rev::CANSparkMax::ControlType::kPosition, 0);
@@ -116,23 +119,29 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             bullBarRollers.Set(0);
         }
     }
-    else // abs encoder is not up, so we default off of relative encoder
+    else if (bullBarForcedZeroed )// abs encoder is not up, so we default off of relative encoder
     {
+         frc::SmartDashboard::PutBoolean("I am getting here", false);
         if (robotData.controlData.saConeIntake)
         {
             bullBarSliderPIDController.SetReference(bullBarConeIntakeRelativePosition, rev::CANSparkMax::ControlType::kPosition, 1);
-            bullBarRollers.Set(bullBarRollerExtendedSpeed);
+            bullBarRollers.Set(bullBarRollerRetractedSpeed);
         }
         else if (robotData.controlData.saCubeIntake)
         {
             bullBarSliderPIDController.SetReference(bullBarCubeIntakeRelativePosition, rev::CANSparkMax::ControlType::kPosition, 1);
-            bullBarRollers.Set(bullBarRollerRetractedSpeed);
+            bullBarRollers.Set(bullBarRollerExtendedSpeed);
         }
         else
         {
             bullBarSliderPIDController.SetReference(bullBarRelativeMinPosition, rev::CANSparkMax::ControlType::kPosition, 1);
             bullBarRollers.Set(0);
         }
+    }
+    else
+    {
+        bullBarRollers.Set(0);
+        bullBarSlider.Set(0);
     }
     
 }
@@ -174,6 +183,7 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
     if (robotData.controlData.mForceZeroBullBar)
     {
         ForceZeroBullBar();
+        
     }
 }
 
@@ -233,8 +243,8 @@ void BullBar::EnableSoftLimits(BullBarData &bullBarData)
     else 
     {
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMinPosition + 0.1);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMaxPosition - 0.1);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMinPosition + 0.1);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMaxPosition - 0.1);
     }   
 
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
@@ -268,6 +278,7 @@ bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullBarData)
 void BullBar::ForceZeroBullBar()
 {
     bullBarSliderRelativeEncoder.SetPosition(0);
+    bullBarForcedZeroed = true;
 }
 
 
