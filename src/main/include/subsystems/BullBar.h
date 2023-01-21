@@ -37,7 +37,7 @@ private:
     void BullBarSlider(double sliderPosition);
     void SemiAuto(const RobotData &robotData, BullBarData &bullBarData);
     void Manual(const RobotData &robotData, BullBarData &bullBarData);
-    void ToggleSoftLimits();
+    void ToggleSoftLimits(BullBarData &bullBarData);
     void ZeroRelativePosition(BullBarData &bullBarData);
     void ForceZeroBullBar();
     
@@ -48,16 +48,16 @@ private:
 
     
     // Encoder Min and Max Values 
-    double bullBarRelativeMaxPosition = -94.5;
+    double bullBarRelativeMaxPosition = 94.5;
     double bullBarRelativeMinPosition = 0;
-    double bullBarAbsoluteMinPosition = 0.474;
-    double bullBarAbsoluteMaxPosition = bullBarAbsoluteMinPosition - 0.1618;
+    double bullBarAbsoluteMinPosition = 0.544;
+    double bullBarAbsoluteMaxPosition = bullBarAbsoluteMinPosition + 0.159;
 
     // Positions for intaking cone or cube
-    double bullBarConeIntakeAbsolutePosition = bullBarAbsoluteMinPosition - 0.1587;
-    double bullBarConeIntakeRelativePosition = bullBarRelativeMinPosition - 86.5;
-    double bullBarCubeIntakeAbsolutePosition = bullBarAbsoluteMinPosition - 0.1337;
-    double bullBarCubeIntakeRelativePosition = bullBarRelativeMinPosition - 72.85;
+    double bullBarConeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 0.1587;
+    double bullBarConeIntakeRelativePosition = bullBarRelativeMinPosition + 86.5;
+    double bullBarCubeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 0.1337;
+    double bullBarCubeIntakeRelativePosition = bullBarRelativeMinPosition + 72.85;
 
     // intake speed
     double bullBarRollerExtendedSpeed = 0.5;
