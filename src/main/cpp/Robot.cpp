@@ -88,7 +88,6 @@ void Robot::AutonomousPeriodic() {
   auton.AutonomousPeriodic(robotData, robotData.autonData, robotData.controlData, robotData.controllerData);
   driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData);
 
-  bullBar.UpdateData(robotData, robotData.bullBarData);
 
   
 }

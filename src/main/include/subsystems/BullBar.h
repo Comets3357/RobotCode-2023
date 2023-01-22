@@ -20,6 +20,13 @@ struct BullBarData
     bool bullBarAbsoluteEncoderInitialized = false;
 };
 
+enum BullBarRunMode
+{
+    ABSOLUTE_RUN,
+    RELATIVE_RUN,
+    NONE
+};
+
 class BullBar
 {
 public:
@@ -28,11 +35,12 @@ public:
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData);
-    void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
 
 private:
 
-    double AbsoluteToRelative(double currentAbsolutePosition);
+    void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
+
+    //double AbsoluteToRelative(double currentAbsolutePosition);
 
     void BullBarRollers(double rollerSpeed);
     void BullBarSlider(double sliderPosition);
@@ -47,22 +55,20 @@ private:
     
     bool IsAbsoluteEncoderInitialized(BullBarData &bullBarData);
 
+    BullBarRunMode runMode = ABSOLUTE_RUN;
+
     // force zeroing the bull bar
     bool forceZero = false;
     bool bullBarForcedZeroed = false;
 
     
     // Encoder Min and Max Values 
-    double bullBarRelativeMaxPosition = 18;
-    double bullBarRelativeMinPosition = 0;
-    double bullBarAbsoluteMinPosition = 0;
-    double bullBarAbsoluteMaxPosition = 18;
+    double bullBarMaxPosition = 18;
+    double bullBarMinPosition = 0;
 
     // Positions for intaking cone or cube
-    double bullBarConeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 17.208;
-    double bullBarConeIntakeRelativePosition = bullBarRelativeMinPosition + 17.208;
-    double bullBarCubeIntakeAbsolutePosition = bullBarAbsoluteMinPosition + 14.497;
-    double bullBarCubeIntakeRelativePosition = bullBarRelativeMinPosition + 14.497;
+    double bullBarConeIntakePosition = bullBarMinPosition + 17.208;
+    double bullBarCubeIntakePosition = bullBarMinPosition + 14.497;
 
     // intake speed
     double bullBarRollerExtendedSpeed = 0.5;
