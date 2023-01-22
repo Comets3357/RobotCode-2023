@@ -91,13 +91,13 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
         ZeroRelativePosition(bullBarData);
     }
 
-    UpdateData(robotData, bullBarData);
+    // UpdateData(robotData, bullBarData);
     frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
 
-    // if (forceZero)
-    // {
-    //     ForceZeroBullBar();
-    // }
+    if (forceZero)
+    {
+        ForceZeroBullBar();
+    }
 
     frc::SmartDashboard::PutBoolean("soft limits toggled", softLimitsToggled);
 
@@ -109,12 +109,12 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
 
 void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 {
-    // if (!softLimitsToggled)
-    // {
-    //     EnableSoftLimits(bullBarData);
-    // }
+    if (!softLimitsToggled)
+    {
+        EnableSoftLimits(bullBarData);
+    }
 
-    EnableSoftLimits(bullBarData);
+    // EnableSoftLimits(bullBarData);
 
     frc::SmartDashboard::PutNumber("run mode bull bar", runMode);
 
@@ -218,16 +218,6 @@ void BullBar::ZeroRelativePosition(BullBarData &bullBarData)
 }
 
 /*
-* @param currentAbsolutePosition takes in current absolute position and converts to relative
-*/
-// double BullBar::AbsoluteToRelative(double currentAbsolutePosition)
-// {
-//     double slope = (bullBarRelativeMaxPosition - bullBarRelativeMinPosition) / (bullBarAbsoluteMaxPosition - bullBarAbsoluteMinPosition);
-//     double b = bullBarRelativeMinPosition - (slope * bullBarAbsoluteMinPosition);
-//     return ((slope * currentAbsolutePosition) + b);
-// }
-
-/*
 * @note Disables soft limits
 */
 void BullBar::DisableSoftLimits() 
@@ -242,19 +232,7 @@ void BullBar::DisableSoftLimits()
 * @note Enables soft limits
 */
 void BullBar::EnableSoftLimits(BullBarData &bullBarData)
-{
-    // if (bullBarData.bullBarAbsoluteEncoderInitialized)
-    // {
-    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.3);
-    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.3); 
-    // }
-    // else
-    // {
-    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.3);
-    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.3); 
-    // }
-
-    
+{   
     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.7);
     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.3); 
 
@@ -265,7 +243,7 @@ void BullBar::EnableSoftLimits(BullBarData &bullBarData)
 }
 
 /*
-* @note Checks to see if the absolute encoder has initialized
+* @note Checks to see if the absolute encoder xhas initialized
 */
 bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullBarData)
 {
