@@ -63,8 +63,8 @@ private:
 
     
     // Encoder Min and Max Values 
-    double bullBarMaxPosition = 18;
-    double bullBarMinPosition = 0;
+    double bullBarMaxPosition = 28;
+    double bullBarMinPosition = 10;
 
     // Positions for intaking cone or cube
     double bullBarConeIntakePosition = bullBarMinPosition + 17.208;

@@ -79,6 +79,6 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mBullBarExtension = controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08;
     controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
-    controlData.mForceZeroBullBar = controllerData.sABtn + !controlData.shift;
+    controlData.mForceZeroBullBar = controllerData.sABtn && !controlData.shift;
 }
 

@@ -20,9 +20,12 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(67);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(47.5);
+    
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048);
+
+    bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
 
     // BullBar Pivot
 
@@ -91,10 +94,10 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
     UpdateData(robotData, bullBarData);
     frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
 
-    if (forceZero)
-    {
-        ForceZeroBullBar();
-    }
+    // if (forceZero)
+    // {
+    //     ForceZeroBullBar();
+    // }
 
     frc::SmartDashboard::PutBoolean("soft limits toggled", softLimitsToggled);
 
@@ -106,17 +109,21 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
 
 void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 {
-    if (!softLimitsToggled)
-    {
-        EnableSoftLimits(bullBarData);
-    }
+    // if (!softLimitsToggled)
+    // {
+    //     EnableSoftLimits(bullBarData);
+    // }
+
+    EnableSoftLimits(bullBarData);
+
+    frc::SmartDashboard::PutNumber("run mode bull bar", runMode);
 
     if (bullBarData.bullBarAbsoluteEncoderInitialized && runMode != ABSOLUTE_RUN)
     {
         runMode = ABSOLUTE_RUN;
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
     }
-    else if (bullBarForcedZeroed && runMode != RELATIVE_RUN)
+    else if ((bullBarForcedZeroed && runMode != RELATIVE_RUN))
     {
         runMode = RELATIVE_RUN;
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
@@ -156,6 +163,7 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
     {
         DisableSoftLimits();
     }
+    // EnableSoftLimits(bullBarData);
 
     
 
@@ -205,7 +213,7 @@ void BullBar::ZeroRelativePosition(BullBarData &bullBarData)
     if (IsAbsoluteEncoderInitialized(bullBarData))
     {
         bullBarSliderRelativeEncoder.SetPosition(bullBarSliderAbsoluteEncoder.GetPosition());
-        //frc::SmartDashboard::PutNumber("relative zeroed position", AbsoluteToRelative(bullBarSliderAbsoluteEncoder.GetPosition()));
+        frc::SmartDashboard::PutNumber("relative zeroed position", bullBarSliderRelativeEncoder.GetPosition());
     }
 }
 
@@ -235,8 +243,20 @@ void BullBar::DisableSoftLimits()
 */
 void BullBar::EnableSoftLimits(BullBarData &bullBarData)
 {
-    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.13);
-    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.13); 
+    // if (bullBarData.bullBarAbsoluteEncoderInitialized)
+    // {
+    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.3);
+    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.3); 
+    // }
+    // else
+    // {
+    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.3);
+    //     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.3); 
+    // }
+
+    
+    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.7);
+    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.3); 
 
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
@@ -270,7 +290,7 @@ bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullBarData)
 */
 void BullBar::ForceZeroBullBar()
 {
-    bullBarSliderRelativeEncoder.SetPosition(0);
+    bullBarSliderRelativeEncoder.SetPosition(10);
     bullBarForcedZeroed = true;
 }
 
