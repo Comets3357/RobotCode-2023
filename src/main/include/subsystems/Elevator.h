@@ -33,7 +33,6 @@ private:
     void SetElevatorPosition(double elevatorAbsolutePosition);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
     void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
-    //double AbsoluteToRelative(double currentAbsolutePosition);
     void DisableSoftLimits();
     void EnableSoftLimits();
     void ZeroRelativePosition(ElevatorData &elevatorData);
@@ -53,7 +52,7 @@ private:
 
     // Encoder Min and Max Values 
     double elevatorMaxPosition = elevatorMinPosition+31.375; // TODO: fix this value when we get subsystem
-    double elevatorMinPosition = 0; // TODO: fix this value when we get subsystem
+    double elevatorMinPosition = 10; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;
     double elevatorDownwardSpeed = -0.4;

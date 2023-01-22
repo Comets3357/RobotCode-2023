@@ -9,6 +9,7 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     elevatorMotor.SetInverted(false);
     elevatorMotor.EnableVoltageCompensation(10.5);
     elevatorPIDController.SetP(0.1, 0); //need to be tuned
+    elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     elevatorMotor.BurnFlash();
 
     //FIND THESE VALUES THEN GOOD
@@ -146,22 +147,12 @@ void Elevator::ForceZeroElevator()
     elevatorForceZeroed = true;
 }
 
-/*
-* @param currentAbsolutePosition Pass in the current absolute position of Elevator
-* @note Converts the absolute position to relative position
-*/
-// double Elevator::AbsoluteToRelative(double currentAbsolutePosition) 
-// {
-//     double slope = (elevatorRelativeMaxPosition - elevatorRelativeMinPosition) / (elevatorAbsoluteMaxPosition - elevatorAbosluteMinPosition);
-//     double b = elevatorRelativeMinPosition - (slope * elevatorAbosluteMinPosition);
-//     return ((slope * currentAbsolutePosition) + b);
-// }
+
 
 void Elevator::ZeroRelativePosition(ElevatorData &elevatorData)
 {
     if (IsAbsoluteEncoderInitialized(elevatorData))
     {
-        //elevatorRelativeEncoder.SetPosition(AbsoluteToRelative(elevatorAbsoluteEncoder.GetPosition()));
         elevatorRelativeEncoder.SetPosition(elevatorAbsoluteEncoder.GetPosition());
         runMode = RELATIVE_RUN;
     }
