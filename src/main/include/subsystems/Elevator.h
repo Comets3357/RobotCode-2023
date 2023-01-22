@@ -52,7 +52,7 @@ private:
     rev::SparkMaxAbsoluteEncoder elevatorAbsoluteEncoder = elevatorMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
-    double elevatorMaxPosition = 31.375; // TODO: fix this value when we get subsystem
+    double elevatorMaxPosition = elevatorMinPosition+31.375; // TODO: fix this value when we get subsystem
     double elevatorMinPosition = 0; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;
