@@ -14,8 +14,13 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 
 
     bullBarSliderAbsoluteEncoder.SetInverted(true);
+    // bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
+    // bullBarSliderAbsoluteEncoder.SetZeroOffset(-111.49);
+
+    // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
+
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(-47.49);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(67);
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
@@ -23,7 +28,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 
     // abs
     bullBarSliderPIDController.SetP(0.225, 0);
-    bullBarSliderPIDController.SetI(0, 0);
+    bullBarSliderPIDController.SetI(0, 0);  
     bullBarSliderPIDController.SetD(0, 0);
     bullBarSliderPIDController.SetIZone(0, 0);
     bullBarSliderPIDController.SetFF(0, 0);
