@@ -22,7 +22,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
     bullBarSliderAbsoluteEncoder.SetZeroOffset(67);
 
-    bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
+    bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048);
 
     // BullBar Pivot
 
@@ -158,10 +158,11 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 {
 
     frc::SmartDashboard::PutBoolean("manual working", true);
-    if (softLimitsToggled)
-    {
-        DisableSoftLimits();
-    }
+    // if (softLimitsToggled)
+    // {
+    //     DisableSoftLimits();
+    // }
+    EnableSoftLimits(bullBarData);
 
     // EnableSoftLimits(bullBarData);
     
@@ -245,14 +246,14 @@ void BullBar::EnableSoftLimits(BullBarData &bullBarData)
     if (bullBarData.bullBarAbsoluteEncoderInitialized)
     {
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);    
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarAbsoluteMinPosition - 0.3);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarAbsoluteMaxPosition + 0.3);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarAbsoluteMinPosition + 0.3);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarAbsoluteMaxPosition - 0.3);
     }
     else 
     {
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMinPosition - 0.3);
-        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMaxPosition + 0.3);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarRelativeMinPosition + 0.13);
+        bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarRelativeMaxPosition - 0.13);
     }   
 
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
