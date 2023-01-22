@@ -42,11 +42,11 @@ private:
     bool IsAbsoluteEncoderInitialized(ElevatorData &bullbarData);
 
     bool softLimitsEnabled = false;
-    bool forceZeroed = false;
+    bool elevatorForceZeroed = false;
 
     bool absoluteEncoderFeedBackDevice = true;
 
-    rev::CANSparkMax elevatorMotor{100, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax elevatorMotor{21, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
     rev::SparkMaxRelativeEncoder elevatorRelativeEncoder = elevatorMotor.GetEncoder();
     rev::SparkMaxPIDController elevatorPIDController = elevatorMotor.GetPIDController();
     rev::SparkMaxAbsoluteEncoder elevatorAbsoluteEncoder = elevatorMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);

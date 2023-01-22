@@ -60,6 +60,8 @@ struct ControlData
     bool saElevatorSetMidPosition;
     bool saElevatorSetHighPosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
     bool saElevatorSetIntakePosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+
+    bool forceZeroElevator;
 };
 
 struct ControllerData

@@ -78,5 +78,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saMoveArm = (controllerData.sYBtn) && !controlData.shift;
     controlData.saArmIntakePosition = (controllerData.sABtn) && !controlData.shift;
 
+    controlData.forceZeroElevator = (controllerData.sBBtn) && ! controlData.shift;
+
 }
 

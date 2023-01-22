@@ -52,7 +52,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         runMode = ABSOLUTE_RUN;
         elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     }
-    else if (forceZeroed && runMode != RELATIVE_RUN)
+    else if (elevatorForceZeroed && runMode != RELATIVE_RUN)
     {
         runMode = RELATIVE_RUN;
         elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
@@ -94,6 +94,20 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
     {
         DisableSoftLimits();
     }
+
+    if (robotData.controlData.forceZeroElevator)
+    {
+        ForceZeroElevator();
+    }
+
+    if (robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08)
+    {
+        elevatorMotor.Set(robotData.controllerData.sLYStick * 0.25);
+    }
+    else
+    {
+        elevatorMotor.Set(0);
+    }
 }
 
 /*
@@ -129,7 +143,7 @@ void Elevator::DisableSoftLimits()
 void Elevator::ForceZeroElevator()
 {
     elevatorRelativeEncoder.SetPosition(0);
-    runMode = RELATIVE_RUN;
+    elevatorForceZeroed = true;
 }
 
 /*
