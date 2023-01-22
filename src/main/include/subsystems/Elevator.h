@@ -9,6 +9,13 @@ struct ElevatorData
     bool elevatorAbsoluteEncoderInitialized = false;
 };
 
+enum ElevatorRunMode
+{
+    ABSOLUTE_RUN,
+    RELATIVE_RUN,
+    NONE
+};
+
 class Elevator
 {
 public:
@@ -21,18 +28,23 @@ public:
 
 private:
 
-    void SetElevatorAbsolutePosition(double elevatorAbsolutePosition, int PIDSlot);
-    void SetElevatorRelativePosition(double elevatorAbsolutePosition, int PIDSlot);
+    ElevatorRunMode runMode = ABSOLUTE_RUN;
+
+    void SetElevatorPosition(double elevatorAbsolutePosition);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
     void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
-    double AbsoluteToRelative(double currentAbsolutePosition);
-    void ToggleSoftLimits();
+    //double AbsoluteToRelative(double currentAbsolutePosition);
+    void DisableSoftLimits();
+    void EnableSoftLimits();
     void ZeroRelativePosition(ElevatorData &elevatorData);
     void ForceZeroElevator();
 
     bool IsAbsoluteEncoderInitialized(ElevatorData &bullbarData);
 
-    bool softLimitsToggled = false;
+    bool softLimitsEnabled = false;
+    bool forceZeroed = false;
+
+    bool absoluteEncoderFeedBackDevice = true;
 
     rev::CANSparkMax elevatorMotor{100, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
     rev::SparkMaxRelativeEncoder elevatorRelativeEncoder = elevatorMotor.GetEncoder();
@@ -40,10 +52,8 @@ private:
     rev::SparkMaxAbsoluteEncoder elevatorAbsoluteEncoder = elevatorMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
-    double elevatorRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
-    double elevatorRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
-    double elevatorAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
-    double elevatorAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
+    double elevatorMaxPosition = 31.375; // TODO: fix this value when we get subsystem
+    double elevatorMinPosition = 0; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;
     double elevatorDownwardSpeed = -0.4;
