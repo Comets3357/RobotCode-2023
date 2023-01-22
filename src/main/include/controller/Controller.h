@@ -50,6 +50,9 @@ struct ControlData
     bool mMovePivot;
     bool mMoveWrist;
 
+    bool mForceZeroWrist;
+    bool mForceZeroPivot;
+
 };
 
 struct ControllerData

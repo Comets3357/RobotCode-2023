@@ -15,6 +15,12 @@ void Arm::RobotInit(ArmData &armData)
     armWrist.EnableVoltageCompensation(10.5);
     armWrist.SetSmartCurrentLimit(45);
 
+    armWristAbsoluteEncoder.SetZeroOffset(1);
+    armWristAbsoluteEncoder.SetPositionConversionFactor(1);
+    armWristRelativeEncoder.SetPosition(1);
+
+    armWristPIDController.SetFeedbackDevice(armWristAbsoluteEncoder);
+
     armWrist.BurnFlash();
 
     armPivotPIDController.SetP(0.1, 0);
@@ -27,12 +33,66 @@ void Arm::RobotInit(ArmData &armData)
     armPivot.EnableVoltageCompensation(10.5);
     armPivot.SetSmartCurrentLimit(45);
 
+    armPivotAbsoluteEncoder.SetZeroOffset(1);
+    armPivotAbsoluteEncoder.SetPositionConversionFactor(1);
+    armPivotRelativeEncoder.SetPosition(1);
+
+    armPivotPIDController.SetFeedbackDevice(armPivotAbsoluteEncoder);
+
     armPivot.BurnFlash();
 
     ZeroRelativePositionWrist(armData);
     ZeroRelativePositionPivot(armData);
 
     // ToggleSoftLimits();
+}
+
+void Arm::ZeroRelativePositionWrist(ArmData& armData)
+{
+    if (IsWristAbolsoluteEncoderInitialized(armData))
+    {
+        armWristRelativeEncoder.SetPosition(armWristAbsoluteEncoder.GetPosition());
+    }
+}
+
+void Arm::ZeroRelativePositionPivot(ArmData& armData)
+{
+    if (IsPivotAbolsoluteEncoderInitialized(armData))
+    {
+        armPivotRelativeEncoder.SetPosition(armPivotAbsoluteEncoder.GetPosition());
+    }
+}
+
+bool Arm::IsWristAbolsoluteEncoderInitialized(ArmData& armData)
+{
+    if (armWristAbsoluteEncoder.GetPosition() >= 0.01)
+    {
+        armData.wristAbsoluteInitialized = true;
+        wristRunMode = ABSOLUTE_RUN;
+    }
+    else 
+    {
+        armData.wristAbsoluteInitialized = false;
+        wristRunMode = NONE;
+    }
+
+    return armData.wristAbsoluteInitialized;
+}
+
+bool Arm::IsPivotAbolsoluteEncoderInitialized(ArmData& armData)
+{
+    if (armPivotAbsoluteEncoder.GetPosition() >= 0.01)
+    {
+        armData.pivotAbsoluteInitialized = true;
+        pivotRunMode = ABSOLUTE_RUN;
+    }
+    else 
+    {
+        armData.pivotAbsoluteInitialized = false;
+        pivotRunMode = NONE;
+    }
+
+    return armData.pivotAbsoluteInitialized;
 }
 
 void Arm::RobotPeriodic(const RobotData &robotData, ArmData &armData)
@@ -50,41 +110,114 @@ void Arm::RobotPeriodic(const RobotData &robotData, ArmData &armData)
             SemiAuto(robotData, armData);
             break;
     }
+
+    if (armPivotRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
+    {
+        ZeroRelativePositionPivot(armData);
+    }
+
+    if (armWristRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
+    {
+        ZeroRelativePositionWrist(armData);
+    }
 }
 
 void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 {
 
-    // if (!softLimitsToggled)
-    // {
-    //     ToggleSoftLimits();
-    // }
+    if (!wristSoftLimitsToggled)
+    {
+        EnableWristSoftLimits();
+    }
 
-    if (robotData.controlData.saArmIntakePosition)
+    if (!pivotSoftLimitsToggled)
+    {
+        EnablePivotSoftLimits();
+    }
+
+    if (armData.pivotAbsoluteInitialized && pivotRunMode != ABSOLUTE_RUN)
+    {
+        pivotRunMode = ABSOLUTE_RUN;
+        armPivotPIDController.SetFeedbackDevice(armPivotAbsoluteEncoder);
+        pivotForceZeroed = false;
+    }
+    else if (pivotForceZeroed && pivotRunMode != RELATIVE_RUN)
+    {
+        pivotRunMode = RELATIVE_RUN;
+        armPivotPIDController.SetFeedbackDevice(armPivotRelativeEncoder);
+    }
+
+    if (armData.wristAbsoluteInitialized && wristRunMode != ABSOLUTE_RUN)
+    {
+        wristRunMode = ABSOLUTE_RUN;
+        armWristPIDController.SetFeedbackDevice(armWristAbsoluteEncoder);
+        wristForceZeroed = false;
+    }
+    else if (wristForceZeroed && wristRunMode != RELATIVE_RUN)
+    {
+        pivotRunMode = RELATIVE_RUN;
+        armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
+    }
+
+    if (pivotRunMode != NONE && wristRunMode != NONE)
+    {
+        if (robotData.controlData.saArmIntakePosition)
     {
         // SetAngleOfWrist(armData, 0);
         // SetAngleOfPivot(armData, 0);
+        }
+        if (robotData.controlData.saMoveArm)
+        {
+            
+        }
     }
-    if (robotData.controlData.saMoveArm)
+    else
     {
-        
+        armWrist.Set(0);
+        armPivot.Set(0);
     }
+    
 }
 
 void Arm::Manual(const RobotData &robotData, ArmData &armData)
 {
-    // if (softLimitsToggled)
-    // {
-    //     ToggleSoftLimits();
-    // }
+    if (wristSoftLimitsToggled)
+    {
+        DisableWristSoftLimits();
+    }
+
+    if (pivotSoftLimitsToggled)
+    {
+        DisablePivotSoftLimits();
+    }
+
     if (robotData.controlData.mMovePivot)
     {
         armPivot.Set(robotData.controllerData.sLYStick);
+    }
+    else
+    {
+        armPivot.Set(0);
     }
 
     if (robotData.controlData.mMoveWrist)
     {
         armWrist.Set(robotData.controllerData.sRYStick);
+    }
+    else
+    {
+        armWrist.Set(0);
+    }
+
+
+    if (robotData.controlData.mForceZeroPivot)
+    {
+        ForceZeroPivot();
+    }
+
+    if (robotData.controlData.mForceZeroWrist)
+    {
+        ForceZeroWrist();
     }
 }
 
@@ -102,68 +235,54 @@ void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
     
 }
 
-void Arm::SetAngleOfWrist(ArmData &armData, double desiredAngle)
-{
-    if (armData.wristInitialized)
-    {
-        armWristPIDController.SetReference(desiredAngle, rev::CANSparkMax::ControlType::kDutyCycle);
-    }
-    else 
-    {
-        armWristPIDController.SetReference(desiredAngle, rev::CANSparkMax::ControlType::kPosition);
-
-    }
-}
-
-void Arm::SetAngleOfPivot(ArmData &armData, double desiredAngle)
-{
-    if (armData.pivotInitialized)
-    {
-        armPivotPIDController.SetReference(desiredAngle, rev::CANSparkMax::ControlType::kDutyCycle);
-    }
-    else
-    {
-        armPivotPIDController.SetReference(desiredAngle, rev::CANSparkMax::ControlType::kPosition);
-
-    }
-}
-
-void Arm::DisableSoftLimits()
+void Arm::DisableWristSoftLimits()
 {
     armWrist.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
     armWrist.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
-        
+
+    wristSoftLimitsToggled = false;
+}
+
+void Arm::DisablePivotSoftLimits()
+{
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
 
-    softLimitsToggled = false;
+    pivotSoftLimitsToggled = false;
 }
 
-void Arm::EnableSoftLimits(ArmData &armData)
+void Arm::EnableWristSoftLimits()
 {
-    if (armData.pivotInitialized && armData.wristInitialized)
-    {
-        armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armWristAbosluteMinPosition - 0.1);
-        armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armWristAbsoluteMaxPosition + 0.1);
 
-        armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotAbsoluteMinPosition - 0.1);
-        armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotAbsoluteMaxPosition + 0.1);
-    }
-    else 
-    {
-        armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armWristRelativeMinPosition - 0.1);
-        armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armWristRelativeMaxPosition + 0.1);
-
-        armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotRelativeMinPosition - 0.1);
-        armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotRelativeMaxPosition + 0.1);        
-    }
-
+    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armWristMinPosition - 0.1);
+    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armWristMaxPosition + 0.1);
 
     armWrist.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     armWrist.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
+    wristSoftLimitsToggled = true;
+}
+
+void Arm::EnablePivotSoftLimits()
+{
+
+    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotMinPosition - 0.1);
+    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition + 0.1);
+
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
-    softLimitsToggled = true;
+    pivotSoftLimitsToggled = true;
+}
+
+void Arm::ForceZeroPivot()
+{
+    armPivotRelativeEncoder.SetPosition(armPivotMinPosition);
+    pivotForceZeroed = true;
+}
+
+void Arm::ForceZeroWrist()
+{
+    armWristRelativeEncoder.SetPosition(armWristMinPosition);
+    wristForceZeroed = true;
 }

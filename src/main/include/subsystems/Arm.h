@@ -14,8 +14,8 @@
 
 struct ArmData
 {
-    bool wristInitialized = false;
-    bool pivotInitialized = false;
+    bool wristAbsoluteInitialized = false;
+    bool pivotAbsoluteInitialized = false;
 
     double pivotAngle = 0;
     double wristAngle = 0;
@@ -39,22 +39,29 @@ public:
 
 private:
 
-    void ToggleSoftLimits();
+    void EnableWristSoftLimits();
+    void DisableWristSoftLimits();
 
-    void EnableSoftLimits(ArmData &armData);
-    void DisableSoftLimits();
+    void EnablePivotSoftLimits();
+    void DisablePivotSoftLimits();
 
     void SemiAuto(const RobotData &robotData, ArmData &armData);
     void Manual(const RobotData &robotData, ArmData &armData);
-
-    void SetAngleOfWrist(ArmData &armData, double desiredAngle);
-    void SetAngleOfPivot(ArmData &armData, double desiredAngle);
 
     void ZeroRelativePositionWrist(ArmData &armData);
     void ZeroRelativePositionPivot(ArmData &armData);
 
     bool IsWristAbolsoluteEncoderInitialized(ArmData &armData);
     bool IsPivotAbolsoluteEncoderInitialized(ArmData &armData);
+
+    void ForceZeroWrist();
+    void ForceZeroPivot();
+
+    bool pivotForceZeroed;
+    bool wristForceZeroed;
+
+    ArmRunMode pivotRunMode = NONE;
+    ArmRunMode wristRunMode = NONE;
     
     // joint Pivot Initialization
     rev::CANSparkMax armWrist = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
@@ -68,25 +75,13 @@ private:
     rev::SparkMaxAbsoluteEncoder armPivotAbsoluteEncoder = armPivot.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Wrist Encoder Min and Max Values 
-    double armWristRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
-    double armWristRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
-
-    double armWristAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
-    double armWristAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
+    double armWristMaxPosition = 13; // TODO: fix this value when we get subsystem
+    double armWristMinPosition = 0; // TODO: fix this value when we get subsystem
 
     // Pivot Encoder Min and Max Values
-    double armPivotRelativeMaxPosition = 0;
-    double armPivotRelativeMinPosition = 0;
+    double armPivotMaxPosition = 0;
+    double armPivotMinPosition = 0;
 
-    double armPivotAbsoluteMaxPosition = 0;
-    double armPivotAbsoluteMinPosition = 0;
-
-    // angles for pivot and wrist
-    double armPivotMaxAngle = 0;
-    double armPivotMinAngle = 0;
-
-    double armWristMaxAngle = 0;
-    double armWristMinAngle = 0;
-
-    bool softLimitsToggled = false;
+    bool pivotSoftLimitsToggled = false;
+    bool wristSoftLimitsToggled = false;
 };
