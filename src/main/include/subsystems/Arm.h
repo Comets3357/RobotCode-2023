@@ -21,6 +21,13 @@ struct ArmData
     double wristAngle = 0;
 };
 
+enum ArmRunMode
+{
+    ABSOLUTE_RUN,
+    RELATIVE_RUN,
+    NONE
+};
+
 class Arm
 {
 public:
@@ -34,6 +41,9 @@ private:
 
     void ToggleSoftLimits();
 
+    void EnableSoftLimits(ArmData &armData);
+    void DisableSoftLimits();
+
     void SemiAuto(const RobotData &robotData, ArmData &armData);
     void Manual(const RobotData &robotData, ArmData &armData);
 
@@ -45,18 +55,6 @@ private:
 
     bool IsWristAbolsoluteEncoderInitialized(ArmData &armData);
     bool IsPivotAbolsoluteEncoderInitialized(ArmData &armData);
-
-    double AbsoluteToRelativeWrist(double currentAbsolutePosition);
-    double AbsoluteToRelativePivot(double currentAbsolutePosition);
-
-    double AngleToAbsoluteWrist(double desiredAnglePosition);
-    double AngleToAbsolutePivot(double desiredAnglePosition);
-
-    double AngleToRelativePivot(double desiredAnglePosition);
-    double AngleToRelativeWrist(double desiredAnglePosition);
-
-    double RelativeToAnglePivot(double relativePosition);
-    double RelativeToAngleWrist(double relativePosition);
     
     // joint Pivot Initialization
     rev::CANSparkMax armWrist = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
