@@ -182,34 +182,86 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         armPivot.Set(0);
     }
 
-    if (profileActive)
+    if (pivotProfileActive)
     {
-        units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - profileStartTime};
-        auto setpoint = profile.Calculate(elapsedTime);
-        double feedForward = a * sin(((b * armPivotAbsoluteEncoder.GetPosition()) + c) / 180.0 * 3.14159265358979);
+        units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - pivotProfileStartTime};
+        auto setpoint = pivotProfile.Calculate(elapsedTime);
+        double feedForward = pivotFeedForwardA * sin(((pivotFeedForwardB * armPivotAbsoluteEncoder.GetPosition()) + pivotFeedForwardC) / 180.0 * 3.14159265358979);
 
         armPivotPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition, feedForward);
+
+        if (pivotProfile.IsFinished(elapsedTime))
+        {
+            pivotProfileActive = false;
+        }
+    }
+
+    if (wristProfileActive)
+    {
+        units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - pivotProfileStartTime};
+        auto setPoint = wristProfile.Calculate(elapsedTime);
+        double feedForward = wristFeedForwardA * sin(((wristFeedForwardB * armPivotAbsoluteEncoder.GetPosition()) + wristFeedForwardC) / 180.0 * 3.14159265358979);
+
+        armWristPIDController.SetReference(setPoint.position.value(), rev::CANSparkMax::ControlType::kPosition, feedForward);
+
+        if (wristProfile.IsFinished(elapsedTime))
+        {
+            wristProfileActive = false;//
+        }
     }
     
 }
 
 void Arm::RotatePivot(double r, RobotData& robotData)
 {
-    
+    pivotProfileActive = true;
+    pivotProfileStartTime = robotData.timerData.secSinceEnabled;
 
-    profileActive = true;
-    profileStartTime = robotData.timerData.secSinceEnabled;
-    profileStartPos = armPivotAbsoluteEncoder.GetPosition();
-    profileEndPos = armPivotAbsoluteEncoder.GetPosition() + r;
+    if (pivotRunMode == ABSOLUTE_RUN)
+    {
+        pivotProfileStartPos = armPivotAbsoluteEncoder.GetPosition();
+        pivotProfileEndPos = armPivotAbsoluteEncoder.GetPosition() + r;
+    }
+    else
+    {
+        pivotProfileStartPos = armPivotRelativeEncoder.GetPosition();
+        pivotProfileEndPos = armPivotRelativeEncoder.GetPosition() + r;
+    }
 
-    profile = frc::TrapezoidProfile<units::degrees>
+    pivotProfile = frc::TrapezoidProfile<units::degrees>
     {
         frc::TrapezoidProfile<units::degrees>::Constraints{1_deg_per_s, 0.5_deg/(1_s * 1_s)},
-        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{profileStartPos}, units::angular_velocity::degrees_per_second_t{0}},
-        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{profileEndPos}, units::angular_velocity::degrees_per_second_t{0}}
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}}
     };
 
 }
+
+void Arm::RotateWrist(double r, RobotData& robotData)
+{
+    wristProfileActive = true;
+    wristProfileStartTime = robotData.timerData.secSinceEnabled;
+    
+    if (wristRunMode == RELATIVE_RUN)
+    {
+        wristProfileStartPos = armWristAbsoluteEncoder.GetPosition();
+        wristProfileEndPos = armWristAbsoluteEncoder.GetPosition() + r;
+    }
+    else
+    {
+        wristProfileStartPos = armWristRelativeEncoder.GetPosition();
+        wristProfileEndPos = armWristRelativeEncoder.GetPosition() + r;
+    }
+
+    wristProfile = frc::TrapezoidProfile<units::degrees>
+    {
+        frc::TrapezoidProfile<units::degrees>::Constraints{1_deg_per_s, 0.5_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{wristProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{wristProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}}
+    };
+}
+
+
 
 void Arm::Manual(const RobotData &robotData, ArmData &armData)
 {

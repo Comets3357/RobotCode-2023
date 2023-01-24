@@ -68,17 +68,27 @@ private:
     void ForceZeroPivot();
 
     void RotatePivot(double r, RobotData& robotData);
+    void RotateWrist(double r, RobotData& robotData);
 
-    bool profileActive = false;
-    double profileStartPos = 0;
-    double profileEndPos = 0;
-    double profileStartTime = 0;    
-    frc::TrapezoidProfile<units::degree> profile;
+    bool pivotProfileActive = false;
+    double pivotProfileStartPos = 0;
+    double pivotProfileEndPos = 0;
+    double pivotProfileStartTime = 0;    
+    frc::TrapezoidProfile<units::degree> pivotProfile;
 
-    //sin
-    double a = 1;
-    double b = 2;
-    double c = 3;
+    double pivotFeedForwardA = 1;
+    double pivotFeedForwardB = 1;
+    double pivotFeedForwardC = 1;
+
+    bool wristProfileActive = false;
+    double wristProfileStartPos = 0;
+    double wristProfileEndPos = 0;
+    double wristProfileStartTime = 0;    
+    frc::TrapezoidProfile<units::degree> wristProfile;
+
+    double wristFeedForwardA = 1;
+    double wristFeedForwardB = 1;
+    double wristFeedForwardC = 1;
 
     bool pivotForceZeroed;
     bool wristForceZeroed;
@@ -92,7 +102,7 @@ private:
     rev::SparkMaxPIDController armWristPIDController = armWrist.GetPIDController(); // PID Controller
     rev::SparkMaxAbsoluteEncoder armWristAbsoluteEncoder = armWrist.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
-    rev::CANSparkMax armPivot = rev::CANSparkMax(armPivotID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax armPivot = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder armPivotRelativeEncoder = armPivot.GetEncoder(); // Relative Encoder
     rev::SparkMaxPIDController armPivotPIDController = armPivot.GetPIDController(); // PID Controller
     rev::SparkMaxAbsoluteEncoder armPivotAbsoluteEncoder = armPivot.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
