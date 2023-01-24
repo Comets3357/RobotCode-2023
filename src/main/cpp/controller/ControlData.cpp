@@ -61,18 +61,25 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 //        MANIPULATOR / SECONDARY DRIVER BUTTONS:
 //-----------------------------------------------------------------------------------------------------------------------------------
 
-// INTAKE:
     // SEMI AUTO:
 
-    controlData.saIntaking = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
-    controlData.saCubeIntake = (controllerData.sLTrigger > 0.5) && controlData.shift;
+    controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
+
+	controlData.saBullBarExtension = (controllerData.sRTrigger > 0.5) && !controlData.shift;    
+    // controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
+    controlData.saMoveArm = (controllerData.sYBtn) && !controlData.shift;
+    controlData.saArmIntakePosition = (controllerData.sABtn) && !controlData.shift;
 
     // MANUAL:
+    controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;
+    controlData.mEndEffectorRollersOut = controllerData.sYBtn && !controlData.shift;
 
-    controlData.mIntakeRollersIn = (controllerData.sRTrigger > 0.5) && !controlData.shift;
-    controlData.mIntakeRollersOut = (controllerData.sRTrigger > 0.5) && controlData.shift;
-
+    controlData.mBullBarExtension = controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08;
+    controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
+    controlData.mForceZeroBullBar = controllerData.sABtn && !controlData.shift;
 // ARM:
     // SEMI AUTO:
     controlData.saMoveArm = (controllerData.sYBtn) && !controlData.shift;
