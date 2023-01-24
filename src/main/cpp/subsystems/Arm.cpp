@@ -1,6 +1,6 @@
 #include "subsystems/Arm.h"
 #include "RobotData.h"
-#include <cmath>
+#include <math.h>
 
 void Arm::RobotInit(ArmData &armData)
 {
@@ -44,8 +44,13 @@ void Arm::RobotInit(ArmData &armData)
     ZeroRelativePositionWrist(armData);
     ZeroRelativePositionPivot(armData);
 
+
+    //Trapezoid Profile
+
     // ToggleSoftLimits();
 }
+
+
 
 void Arm::ZeroRelativePositionWrist(ArmData& armData)
 {
@@ -162,7 +167,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     if (pivotRunMode != NONE && wristRunMode != NONE)
     {
         if (robotData.controlData.saArmIntakePosition)
-    {
+        {
         // SetAngleOfWrist(armData, 0);
         // SetAngleOfPivot(armData, 0);
         }
@@ -176,7 +181,34 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         armWrist.Set(0);
         armPivot.Set(0);
     }
+
+    if (profileActive)
+    {
+        units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - profileStartTime};
+        auto setpoint = profile.Calculate(elapsedTime);
+        double feedForward = a * sin(((b * armPivotAbsoluteEncoder.GetPosition()) + c) / 180.0 * 3.14159265358979);
+
+        armPivotPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition, feedForward);
+    }
     
+}
+
+void Arm::RotatePivot(double r, RobotData& robotData)
+{
+    
+
+    profileActive = true;
+    profileStartTime = robotData.timerData.secSinceEnabled;
+    profileStartPos = armPivotAbsoluteEncoder.GetPosition();
+    profileEndPos = armPivotAbsoluteEncoder.GetPosition() + r;
+
+    profile = frc::TrapezoidProfile<units::degrees>
+    {
+        frc::TrapezoidProfile<units::degrees>::Constraints{1_deg_per_s, 0.5_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{profileStartPos}, units::angular_velocity::degrees_per_second_t{0}},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{profileEndPos}, units::angular_velocity::degrees_per_second_t{0}}
+    };
+
 }
 
 void Arm::Manual(const RobotData &robotData, ArmData &armData)

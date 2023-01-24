@@ -11,6 +11,16 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DutyCycle.h>
 #include <frc/DigitalInput.h>
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <frc/controller/ArmFeedforward.h>
+#include <frc2/command/ProfiledPIDSubsystem.h>
+#include <units/acceleration.h>
+#include <units/length.h>
+#include <units/time.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
+#include <units/angle.h>
+#include <math.h>
 
 struct ArmData
 {
@@ -28,7 +38,7 @@ enum ArmRunMode
     NONE
 };
 
-class Arm
+class Arm 
 {
 public:
     void RobotInit(ArmData &armData);
@@ -56,6 +66,19 @@ private:
 
     void ForceZeroWrist();
     void ForceZeroPivot();
+
+    void RotatePivot(double r, RobotData& robotData);
+
+    bool profileActive = false;
+    double profileStartPos = 0;
+    double profileEndPos = 0;
+    double profileStartTime = 0;    
+    frc::TrapezoidProfile<units::degree> profile;
+
+    //sin
+    double a = 1;
+    double b = 2;
+    double c = 3;
 
     bool pivotForceZeroed;
     bool wristForceZeroed;
