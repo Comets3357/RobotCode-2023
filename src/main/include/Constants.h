@@ -16,7 +16,8 @@ static const int
 
 //arm:
 static const int
-    armWristID = 43; // Not actual value.
+    armWristID = 32, // Not actual value.
+    armPivotID = 31;
 
 static const double
     //practice bot
@@ -113,14 +114,6 @@ static const float
     wallVel = 1510.0f,
     fenderHood = -10.0f,
     fenderVel = 1375.0f;
-
-// climb
-static const int
-    climbElevatorID = 41,
-    climbArmsID = 43;
-    
-const float 
-    climbArmsZero = 0.8105f;
 
 //limelight:
 static const double

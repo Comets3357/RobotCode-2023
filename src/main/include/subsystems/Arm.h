@@ -92,7 +92,7 @@ private:
     rev::SparkMaxPIDController armWristPIDController = armWrist.GetPIDController(); // PID Controller
     rev::SparkMaxAbsoluteEncoder armWristAbsoluteEncoder = armWrist.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
-    rev::CANSparkMax armPivot = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax armPivot = rev::CANSparkMax(armPivotID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder armPivotRelativeEncoder = armPivot.GetEncoder(); // Relative Encoder
     rev::SparkMaxPIDController armPivotPIDController = armPivot.GetPIDController(); // PID Controller
     rev::SparkMaxAbsoluteEncoder armPivotAbsoluteEncoder = armPivot.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
