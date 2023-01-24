@@ -91,5 +91,6 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mForceZeroIntake = (controllerData.sBBtn) && !controlData.shift;
     controlData.mForceZeroIntake = (controllerData.sXBtn) && !controlData.shift;
 
+    controlData.forceZeroElevator = (controllerData.sBBtn) && ! controlData.shift;
 }
 
