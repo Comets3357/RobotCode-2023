@@ -112,14 +112,14 @@ private:
     rev::SparkMaxPIDController armWristPIDController = armWrist.GetPIDController(); // PID Controller
     rev::SparkMaxAbsoluteEncoder armWristAbsoluteEncoder = armWrist.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
-    rev::CANSparkMax armPivot = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::CANSparkMax armPivot = rev::CANSparkMax(armPivotID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder armPivotRelativeEncoder = armPivot.GetEncoder(); // Relative Encoder
     rev::SparkMaxPIDController armPivotPIDController = armPivot.GetPIDController(); // PID Controller
     rev::SparkMaxAbsoluteEncoder armPivotAbsoluteEncoder = armPivot.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Wrist Encoder Min and Max Values 
-    double armWristMaxPosition = 13; // TODO: fix this value when we get subsystem
-    double armWristMinPosition = 0; // TODO: fix this value when we get subsystem
+    double armWristMaxPosition = 280; // TODO: fix this value when we get subsystem
+    double armWristMinPosition = 10; // TODO: fix this value when we get subsystem
 
     // Pivot Encoder Min and Max Values
     double armPivotMaxPosition = 0;

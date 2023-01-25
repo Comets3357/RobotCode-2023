@@ -4,7 +4,7 @@
 void Arm::RobotInit(ArmData &armData)
 {
     // Wrist Initialization
-    armWristPIDController.SetP(0.1, 0);
+    armWristPIDController.SetP(0.5, 0);
     armWristPIDController.SetI(0, 0);
     armWristPIDController.SetD(0, 0);
     armWristPIDController.SetIZone(0, 0);
@@ -12,13 +12,18 @@ void Arm::RobotInit(ArmData &armData)
 
     armWristPIDController.SetOutputRange(-0.2, 0.2, 0);
     armWrist.EnableVoltageCompensation(10.5);
-    armWrist.SetSmartCurrentLimit(45);
+    armWrist.SetSmartCurrentLimit(20);
+    armWrist.SetInverted(false);
+    armWrist.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armWristAbsoluteEncoder.SetPositionConversionFactor(1);
-    armWristAbsoluteEncoder.SetZeroOffset(1);
-    armWristRelativeEncoder.SetPosition(1);
+    armWristAbsoluteEncoder.SetPositionConversionFactor(360);
+    armWristAbsoluteEncoder.SetZeroOffset(0);
+    armWristRelativeEncoder.SetPositionConversionFactor(4.2976522);
+    // armWristRelativeEncoder.SetZeroOffset(10);
 
-    armWristPIDController.SetFeedbackDevice(armWristAbsoluteEncoder);
+    armWristRelativeEncoder.SetPosition(10);
+
+    armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
 
     armWrist.BurnFlash();
 
@@ -31,6 +36,8 @@ void Arm::RobotInit(ArmData &armData)
     armPivotPIDController.SetOutputRange(-0.2, 0.2, 0);
     armPivot.EnableVoltageCompensation(10.5);
     armPivot.SetSmartCurrentLimit(45);
+
+    armPivot.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
     armPivotAbsoluteEncoder.SetPositionConversionFactor(1);
     armPivotAbsoluteEncoder.SetZeroOffset(1);
@@ -58,22 +65,22 @@ void Arm::RobotPeriodic(const RobotData &robotData, ArmData &armData)
             Manual(robotData, armData);
             break;
         case MODE_TELEOP_SA:
-            SemiAuto(robotData, armData);
+            Manual(robotData, armData);
             break;
         default:
             SemiAuto(robotData, armData);
             break;
     }
 
-    if (armPivotRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
-    {
-        ZeroRelativePositionPivot(armData);
-    }
+    // if (armPivotRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
+    // {
+    //     ZeroRelativePositionPivot(armData);
+    // }
 
-    if (armWristRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
-    {
-        ZeroRelativePositionWrist(armData);
-    }
+    // if (armWristRelativeEncoder.GetVelocity() <= 1) // && inRelativeMode
+    // {
+    //     ZeroRelativePositionWrist(armData);
+    // }
 }
 
 void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
@@ -131,6 +138,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     {
         if (robotData.controlData.saArmIntakePosition)
         {
+            armWristPIDController.SetReference(50, rev::ControlType::kPosition);
         // SetAngleOfWrist(armData, 0);
         // SetAngleOfPivot(armData, 0);
         }
@@ -198,8 +206,14 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
     //     DisablePivotSoftLimits();
     // }
 
+    // armWristPIDController.SetReference(50, rev::ControlType::kPosition);
+
     EnablePivotSoftLimits();
     EnableWristSoftLimits();
+
+    frc::SmartDashboard::PutNumber("current rev for wrist", armWristRelativeEncoder.GetPosition());
+
+    frc::SmartDashboard::PutBoolean("i AM HERE IN WRIST", true);
 
     // if (robotData.controlData.mMovePivot)
     // {
@@ -212,12 +226,16 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
 
     if (robotData.controlData.mMoveWrist)
     {
-        armWrist.Set(robotData.controllerData.sRYStick);
+        armPivot.Set(robotData.controllerData.sRYStick * 0.25);
     }
     else
     {
-        armWrist.Set(0);
+        armPivot.Set(0);
     }
+
+    // armWrist.Set(robotData.controllerData.sRYStick * 0.25);
+
+    // frc::SmartDashboard::PutNumber("RIGHT JOYSTICK", robotData.controllerData.sRYStick);
 
 
     if (robotData.controlData.mForceZeroPivot)
@@ -361,8 +379,8 @@ void Arm::DisablePivotSoftLimits()
 void Arm::EnableWristSoftLimits()
 {
 
-    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armWristMinPosition - 0.1);
-    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armWristMaxPosition + 0.1);
+    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armWristMinPosition + 20);
+    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armWristMaxPosition - 20);
 
     armWrist.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     armWrist.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
