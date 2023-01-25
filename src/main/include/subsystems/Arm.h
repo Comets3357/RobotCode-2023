@@ -74,7 +74,12 @@ private:
     double pivotProfileStartPos = 0;
     double pivotProfileEndPos = 0;
     double pivotProfileStartTime = 0;    
-    frc::TrapezoidProfile<units::degree> pivotProfile;
+    frc::TrapezoidProfile<units::degree> pivotProfile
+    {
+        frc::TrapezoidProfile<units::degrees>::Constraints{0_deg_per_s, 0_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{0}, units::angular_velocity::degrees_per_second_t{0}},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{0}, units::angular_velocity::degrees_per_second_t{0}}
+    };
 
     double pivotFeedForwardA = 1;
     double pivotFeedForwardB = 1;
@@ -84,7 +89,12 @@ private:
     double wristProfileStartPos = 0;
     double wristProfileEndPos = 0;
     double wristProfileStartTime = 0;    
-    frc::TrapezoidProfile<units::degree> wristProfile;
+    frc::TrapezoidProfile<units::degree> wristProfile
+    {
+        frc::TrapezoidProfile<units::degrees>::Constraints{0_deg_per_s, 0_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{0}, units::angular_velocity::degrees_per_second_t{0}},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{0}, units::angular_velocity::degrees_per_second_t{0}}
+    };
 
     double wristFeedForwardA = 1;
     double wristFeedForwardB = 1;

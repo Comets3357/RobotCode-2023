@@ -1,6 +1,5 @@
 #include "subsystems/Arm.h"
 #include "RobotData.h"
-#include <math.h>
 
 void Arm::RobotInit(ArmData &armData)
 {
@@ -11,7 +10,7 @@ void Arm::RobotInit(ArmData &armData)
     armWristPIDController.SetIZone(0, 0);
     armWristPIDController.SetFF(0, 0);
 
-    armWristPIDController.SetOutputRange(-1, 1, 0);
+    armWristPIDController.SetOutputRange(-0.2, 0.2, 0);
     armWrist.EnableVoltageCompensation(10.5);
     armWrist.SetSmartCurrentLimit(45);
 
@@ -29,13 +28,13 @@ void Arm::RobotInit(ArmData &armData)
     armPivotPIDController.SetIZone(0, 0);
     armPivotPIDController.SetFF(0, 0);
 
-    armPivotPIDController.SetOutputRange(-1, 1, 0);
+    armPivotPIDController.SetOutputRange(-0.2, 0.2, 0);
     armPivot.EnableVoltageCompensation(10.5);
     armPivot.SetSmartCurrentLimit(45);
 
     armPivotAbsoluteEncoder.SetPositionConversionFactor(1);
     armPivotAbsoluteEncoder.SetZeroOffset(1);
-    armPivotRelativeEncoder.SetPosition(1);
+    // armPivotRelativeEncoder.SetPosition(1);
 
     armPivotPIDController.SetFeedbackDevice(armPivotAbsoluteEncoder);
 
