@@ -77,6 +77,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     // SEMI AUTO:
     controlData.saMoveArm = (controllerData.sYBtn) && !controlData.shift;
     controlData.saArmIntakePosition = (controllerData.sABtn) && !controlData.shift;
+    controlData.saArmPositionTwo = (controllerData.sBBtn) && !controlData.shift;
+    controlData.saArmPositionThree = (controllerData.sYBtn) && !controlData.shift;
 
     // MANUAL:
     controlData.mMovePivot = (controllerData.sLYStick > 0.08 || controllerData.sLYStick < -0.08) && controlData.shift;

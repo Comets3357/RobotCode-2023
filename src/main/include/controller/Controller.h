@@ -46,6 +46,8 @@ struct ControlData
 
     bool saMoveArm;
     bool saArmIntakePosition;
+    bool saArmPositionTwo;
+    bool saArmPositionThree;
 
     bool mMovePivot;
     bool mMoveWrist;

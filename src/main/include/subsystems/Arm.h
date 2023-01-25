@@ -67,8 +67,8 @@ private:
     void ForceZeroWrist();
     void ForceZeroPivot();
 
-    void RotatePivot(double r, RobotData& robotData);
-    void RotateWrist(double r, RobotData& robotData);
+    void RotatePivot(double targetDegree, RobotData& robotData);
+    void RotateWrist(double targetDegree, RobotData& robotData);
 
     bool pivotProfileActive = false;
     double pivotProfileStartPos = 0;

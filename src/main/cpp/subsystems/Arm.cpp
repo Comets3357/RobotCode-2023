@@ -135,6 +135,14 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         // SetAngleOfWrist(armData, 0);
         // SetAngleOfPivot(armData, 0);
         }
+        else if (robotData.controlData.saArmPositionTwo)
+        {
+
+        }
+        else if (robotData.controlData.saArmPositionThree)
+        {
+
+        }
         if (robotData.controlData.saMoveArm)
         {
             
@@ -160,7 +168,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
         if (wristProfile.IsFinished(elapsedTime))
         {
-            wristProfileActive = false;//
+            wristProfileActive = false;
         }
     }
 
@@ -181,15 +189,18 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
 void Arm::Manual(const RobotData &robotData, ArmData &armData)
 {
-    if (wristSoftLimitsToggled)
-    {
-        DisableWristSoftLimits();
-    }
+    // if (wristSoftLimitsToggled)
+    // {
+    //     DisableWristSoftLimits();
+    // }
 
-    if (pivotSoftLimitsToggled)
-    {
-        DisablePivotSoftLimits();
-    }
+    // if (pivotSoftLimitsToggled)
+    // {
+    //     DisablePivotSoftLimits();
+    // }
+
+    EnablePivotSoftLimits();
+    EnableWristSoftLimits();
 
     if (robotData.controlData.mMovePivot)
     {
@@ -221,7 +232,7 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
     }
 }
 
-void Arm::RotatePivot(double r, RobotData& robotData)
+void Arm::RotatePivot(double targetDegree, RobotData& robotData)
 {
     pivotProfileActive = true;
     pivotProfileStartTime = robotData.timerData.secSinceEnabled;
@@ -229,12 +240,12 @@ void Arm::RotatePivot(double r, RobotData& robotData)
     if (pivotRunMode == ABSOLUTE_RUN)
     {
         pivotProfileStartPos = armPivotAbsoluteEncoder.GetPosition();
-        pivotProfileEndPos = armPivotAbsoluteEncoder.GetPosition() + r;
+        pivotProfileEndPos = targetDegree;
     }
     else
     {
         pivotProfileStartPos = armPivotRelativeEncoder.GetPosition();
-        pivotProfileEndPos = armPivotRelativeEncoder.GetPosition() + r;
+        pivotProfileEndPos = targetDegree;
     }
 
     pivotProfile = frc::TrapezoidProfile<units::degrees>
@@ -246,7 +257,7 @@ void Arm::RotatePivot(double r, RobotData& robotData)
 
 }
 
-void Arm::RotateWrist(double r, RobotData& robotData)
+void Arm::RotateWrist(double targetDegree, RobotData& robotData)
 {
     wristProfileActive = true;
     wristProfileStartTime = robotData.timerData.secSinceEnabled;
@@ -254,12 +265,12 @@ void Arm::RotateWrist(double r, RobotData& robotData)
     if (wristRunMode == RELATIVE_RUN)
     {
         wristProfileStartPos = armWristAbsoluteEncoder.GetPosition();
-        wristProfileEndPos = armWristAbsoluteEncoder.GetPosition() + r;
+        wristProfileEndPos = targetDegree;
     }
     else
     {
         wristProfileStartPos = armWristRelativeEncoder.GetPosition();
-        wristProfileEndPos = armWristRelativeEncoder.GetPosition() + r;
+        wristProfileEndPos = targetDegree;
     }
 
     wristProfile = frc::TrapezoidProfile<units::degrees>
