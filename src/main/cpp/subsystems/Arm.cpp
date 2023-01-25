@@ -201,14 +201,14 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
     EnablePivotSoftLimits();
     EnableWristSoftLimits();
 
-    if (robotData.controlData.mMovePivot)
-    {
-        armPivot.Set(robotData.controllerData.sLYStick);
-    }
-    else
-    {
-        armPivot.Set(0);
-    }
+    // if (robotData.controlData.mMovePivot)
+    // {
+    //     armPivot.Set(robotData.controllerData.sLYStick);
+    // }
+    // else
+    // {
+    //     armPivot.Set(0);
+    // }
 
     if (robotData.controlData.mMoveWrist)
     {
