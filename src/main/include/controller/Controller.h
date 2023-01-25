@@ -50,11 +50,7 @@ struct ControlData
     bool saIntakeBackwards;
     bool saCubeIntake;
 
-<<<<<<<
-    //arm:
-=======
     //Arm:
->>>>>>>
 
     bool saMoveArm;
     bool saArmIntakePosition;

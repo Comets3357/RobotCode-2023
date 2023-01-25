@@ -7,13 +7,8 @@ struct ElevatorData
 {
     bool elevatorRunning = false;
     bool elevatorAbsoluteEncoderInitialized = false;
-};
 
-enum ElevatorRunMode
-{
-    ABSOLUTE_RUN,
-    RELATIVE_RUN,
-    NONE
+    double currentElevatorPosition;
 };
 
 class Elevator
@@ -28,7 +23,7 @@ public:
 
 private:
 
-    ElevatorRunMode runMode = ABSOLUTE_RUN;
+    RobotRunMode runMode = NONE;
 
     void SetElevatorPosition(double elevatorAbsolutePosition);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);

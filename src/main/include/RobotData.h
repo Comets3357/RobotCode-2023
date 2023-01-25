@@ -12,6 +12,13 @@
 #include "subsystems/EndEffector.h"
 #include "subsystems/BullBar.h"
 
+enum RobotRunMode
+{
+    ABSOLUTE_RUN,
+    RELATIVE_RUN,
+    NONE
+};
+
 //could be separated into all separate files for the data *from* each subsystem
 //commented out variables are not in use
 struct RobotData
@@ -27,4 +34,6 @@ struct RobotData
     ElevatorData elevatorData;
     EndEffectorData endEffectorData;
     BullBarData bullBarData;
+
+    
 };

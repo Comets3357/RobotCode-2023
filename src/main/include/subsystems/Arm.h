@@ -29,13 +29,9 @@ struct ArmData
 
     double pivotAngle = 0;
     double wristAngle = 0;
-};
 
-enum ArmRunMode
-{
-    ABSOLUTE_RUN,
-    RELATIVE_RUN,
-    NONE
+    double currentPivotPosition;
+    double currentWristPosition;
 };
 
 class Arm 
@@ -93,8 +89,8 @@ private:
     bool pivotForceZeroed;
     bool wristForceZeroed;
 
-    ArmRunMode pivotRunMode = NONE;
-    ArmRunMode wristRunMode = NONE;
+    RobotRunMode pivotRunMode = NONE;
+    RobotRunMode wristRunMode = NONE;
     
     // joint Pivot Initialization
     rev::CANSparkMax armWrist = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
