@@ -61,17 +61,14 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 //        MANIPULATOR / SECONDARY DRIVER BUTTONS:
 //-----------------------------------------------------------------------------------------------------------------------------------
 
-// INTAKE:
     // SEMI AUTO:
 
-    controlData.saIntaking = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
-    controlData.saCubeIntake = (controllerData.sLTrigger > 0.5) && controlData.shift;
-
+    controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
     // MANUAL:
-
-    controlData.mIntakeRollersIn = (controllerData.sRTrigger > 0.5) && !controlData.shift;
-    controlData.mIntakeRollersOut = (controllerData.sRTrigger > 0.5) && controlData.shift;
+    controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;
+    controlData.mEndEffectorRollersOut = controllerData.sYBtn && !controlData.shift;
 
 // ARM:
     // SEMI AUTO:
@@ -83,10 +80,10 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     // MANUAL:
     controlData.mMovePivot = (controllerData.sLYStick > 0.2 || controllerData.sLYStick < -0.2) && !controlData.shift;
     controlData.mMoveWrist = (controllerData.sRYStick > 0.2 || controllerData.sRYStick < -0.2) && !controlData.shift;
-    controlData.mForceZeroIntake = (controllerData.sBBtn) && !controlData.shift;
-    controlData.mForceZeroIntake = (controllerData.sXBtn) && !controlData.shift;
-
     controlData.mForceZeroWrist = (controllerData.sABtn) && !controlData.shift;
-
+    controlData.mBullBarExtension = controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08;
+    controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
+    controlData.mForceZeroBullBar = controllerData.sABtn && !controlData.shift;
 }
 
