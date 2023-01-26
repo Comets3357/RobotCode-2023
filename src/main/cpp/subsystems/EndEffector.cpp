@@ -48,7 +48,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else
     {
-        SetEndEffectorRollerSpeed(0);
+        SetEndEffectorRollerSpeed(0.05);
     }
 }
 
