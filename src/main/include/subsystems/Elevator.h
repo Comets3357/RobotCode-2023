@@ -1,7 +1,24 @@
 #pragma once
 
 
+#include <frc/DriverStation.h>
+#include <frc/TimedRobot.h>
 #include <rev/CANSparkMax.h>
+#include <rev/SparkMaxPIDController.h>
+#include <rev/CANEncoder.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DutyCycle.h>
+#include <frc/DigitalInput.h>
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <frc/controller/ArmFeedforward.h>
+#include <frc2/command/ProfiledPIDSubsystem.h>
+#include <units/acceleration.h>
+#include <units/length.h>
+#include <units/time.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
+#include <units/angle.h>
+#include <math.h>
 
 struct ElevatorData
 {
@@ -39,6 +56,7 @@ private:
     void ForceZeroElevator();
 
     bool IsAbsoluteEncoderInitialized(ElevatorData &bullbarData);
+    void MoveElevator(double targetDegree, const RobotData& robotData);
 
     bool softLimitsEnabled = false;
     bool elevatorForceZeroed = false;
@@ -56,6 +74,19 @@ private:
 
     double elevatorUpwardSpeed = 0.4;
     double elevatorDownwardSpeed = -0.4;
+
+
+
+    bool elevatorProfileActive = false;
+    double elevatorProfileStartPos = 0;
+    double elevatorProfileEndPos = 0;
+    double elevatorProfileStartTime = 0;    
+    frc::TrapezoidProfile<units::degree> elevatorProfile
+    {
+        frc::TrapezoidProfile<units::degrees>::Constraints{0_deg_per_s, 0_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{0}, units::angular_velocity::degrees_per_second_t{0}},
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{0}, units::angular_velocity::degrees_per_second_t{0}}
+    };
 
 
 
