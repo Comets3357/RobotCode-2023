@@ -81,8 +81,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saArmPositionThree = (controllerData.sYBtn) && !controlData.shift;
 
     // MANUAL:
-    controlData.mMovePivot = (controllerData.sLYStick > 0.08 || controllerData.sLYStick < -0.08) && controlData.shift;
-    controlData.mMoveWrist = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && !controlData.shift;
+    controlData.mMovePivot = (controllerData.sLYStick > 0.2 || controllerData.sLYStick < -0.2) && !controlData.shift;
+    controlData.mMoveWrist = (controllerData.sRYStick > 0.2 || controllerData.sRYStick < -0.2) && !controlData.shift;
     controlData.mForceZeroIntake = (controllerData.sBBtn) && !controlData.shift;
     controlData.mForceZeroIntake = (controllerData.sXBtn) && !controlData.shift;
 

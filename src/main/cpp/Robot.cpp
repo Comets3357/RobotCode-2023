@@ -18,6 +18,7 @@ void Robot::RobotInit() {
   arm.RobotInit(robotData.armData);
   gyro.RobotInit();
   timer.RobotInit(robotData.timerData);
+
   auton.RobotInit(robotData.autonData);
 
 
@@ -87,7 +88,9 @@ void Robot::AutonomousPeriodic() {
   
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+  timer.EnabledInit(robotData.timerData);
+}
 
 void Robot::TeleopPeriodic() {}
 

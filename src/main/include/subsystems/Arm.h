@@ -67,8 +67,8 @@ private:
     void ForceZeroWrist();
     void ForceZeroPivot();
 
-    void RotatePivot(double targetDegree, RobotData& robotData);
-    void RotateWrist(double targetDegree, RobotData& robotData);
+    void RotatePivot(double targetDegree, const RobotData& robotData);
+    void RotateWrist(double targetDegree, const RobotData& robotData);
 
     bool pivotProfileActive = false;
     double pivotProfileStartPos = 0;
@@ -118,12 +118,12 @@ private:
     rev::SparkMaxAbsoluteEncoder armPivotAbsoluteEncoder = armPivot.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Wrist Encoder Min and Max Values 
-    double armWristMaxPosition = 280; // TODO: fix this value when we get subsystem
+    double armWristMaxPosition = 250; // TODO: fix this value when we get subsystem
     double armWristMinPosition = 10; // TODO: fix this value when we get subsystem
 
     // Pivot Encoder Min and Max Values
-    double armPivotMaxPosition = 0;
-    double armPivotMinPosition = 0;
+    double armPivotMaxPosition = 170;
+    double armPivotMinPosition = 10;
 
     bool pivotSoftLimitsToggled = false;
     bool wristSoftLimitsToggled = false;
