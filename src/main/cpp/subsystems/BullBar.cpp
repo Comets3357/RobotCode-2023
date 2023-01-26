@@ -20,7 +20,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(47.5);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(55.8);
     
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048);
@@ -118,33 +118,72 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 
     frc::SmartDashboard::PutNumber("run mode bull bar", runMode);
 
-    if (bullBarData.bullBarAbsoluteEncoderInitialized && runMode != ABSOLUTE_RUN)
+    if (bullBarData.bullBarAbsoluteEncoderInitialized && runMode != BULLBAR_ABSOLUTE_RUN)
     {
-        runMode = ABSOLUTE_RUN;
+        runMode = BULLBAR_ABSOLUTE_RUN;
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
     }
-    else if ((bullBarForcedZeroed && runMode != RELATIVE_RUN))
+    else if ((bullBarForcedZeroed && runMode != BULLBAR_RELATIVE_RUN))
     {
-        runMode = RELATIVE_RUN;
+        runMode = BULLBAR_RELATIVE_RUN;
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
     }
 
-    if (runMode != NONE)
+    if (runMode != BULLBAR_NONE)
     {
         if (robotData.controlData.saConeIntake)
         {
-            bullBarSliderPIDController.SetReference(bullBarConeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
-            bullBarRollers.Set(bullBarRollerRetractedSpeed);
+            if (robotData.armData.wristSafePosition)
+            {
+                bullBarSliderPIDController.SetReference(bullBarConeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
+                bullBarRollers.Set(bullBarRollerRetractedSpeed);
+            }
+
+            if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarConeIntakePosition - 0.5 && bullBarSliderAbsoluteEncoder.GetPosition() < bullBarConeIntakePosition + 0.5) 
+               || (bullBarSliderRelativeEncoder.GetPosition() > bullBarConeIntakePosition - 0.5 && bullBarSliderRelativeEncoder.GetPosition() < bullBarConeIntakePosition + 0.5))
+            {
+                bullBarData.bullBarSafePosition = true;
+            }
+            else
+            {
+                bullBarData.bullBarSafePosition = false;
+            }
         }
         else if (robotData.controlData.saCubeIntake)
         {
-            bullBarSliderPIDController.SetReference(bullBarCubeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
-            bullBarRollers.Set(bullBarRollerExtendedSpeed);
+            if (robotData.armData.wristSafePosition)
+            {
+                bullBarSliderPIDController.SetReference(bullBarCubeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
+                bullBarRollers.Set(bullBarRollerExtendedSpeed);
+            }
+
+            if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderAbsoluteEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5) 
+               || (bullBarSliderRelativeEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderRelativeEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5))
+            {
+                bullBarData.bullBarSafePosition = true;
+            }
+            else
+            {
+                bullBarData.bullBarSafePosition = false;
+            }
         }
         else
         {
-            bullBarSliderPIDController.SetReference(bullBarMinPosition, rev::CANSparkMax::ControlType::kPosition, 0);
-            bullBarRollers.Set(0);
+            if (robotData.armData.wristSafePosition)
+            {
+                bullBarSliderPIDController.SetReference(bullBarMinPosition+1, rev::CANSparkMax::ControlType::kPosition, 0);
+                bullBarRollers.Set(0);
+            }
+
+            if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderAbsoluteEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5) 
+               || (bullBarSliderRelativeEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderRelativeEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5))
+            {
+                bullBarData.bullBarSafePosition = true;
+            }
+            else
+            {
+                bullBarData.bullBarSafePosition = false;
+            }
         }
     }
     else
@@ -250,12 +289,12 @@ bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullBarData)
     if (bullBarSliderAbsoluteEncoder.GetPosition() >= 0.01)
     {
         bullBarData.bullBarAbsoluteEncoderInitialized = true;
-        runMode = ABSOLUTE_RUN;
+        runMode = BULLBAR_ABSOLUTE_RUN;
     }
     else 
     {
         bullBarData.bullBarAbsoluteEncoderInitialized = false;
-        runMode = NONE;
+        runMode = BULLBAR_NONE;
     }
 
     return bullBarData.bullBarAbsoluteEncoderInitialized;

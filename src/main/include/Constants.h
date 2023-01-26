@@ -21,7 +21,7 @@ static const int
 //arm:
 static const int
     bullBarRollerID = 11, // 
-    bullBarSliderID = 12; // 
+    bullBarSliderID = 12, // 
     armWristID = 32, // Not actual value.
     armPivotID = 31;
 

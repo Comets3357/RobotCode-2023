@@ -29,13 +29,15 @@ struct ArmData
 
     double pivotAngle = 0;
     double wristAngle = 0;
+
+    bool wristSafePosition = false;
 };
 
 enum ArmRunMode
 {
-    ABSOLUTE_RUN,
-    RELATIVE_RUN,
-    NONE
+    ARM_ABSOLUTE_RUN,
+    ARM_RELATIVE_RUN,
+    ARM_NONE
 };
 
 class Arm 
@@ -103,8 +105,8 @@ private:
     bool pivotForceZeroed;
     bool wristForceZeroed;
 
-    ArmRunMode pivotRunMode = NONE;
-    ArmRunMode wristRunMode = NONE;
+    ArmRunMode pivotRunMode = ARM_NONE;
+    ArmRunMode wristRunMode = ARM_NONE;
     
     // joint Pivot Initialization
     rev::CANSparkMax armWrist = rev::CANSparkMax(armWristID, rev::CANSparkMax::MotorType::kBrushless);
@@ -127,4 +129,9 @@ private:
 
     bool pivotSoftLimitsToggled = false;
     bool wristSoftLimitsToggled = false;
+
+    bool readyRunBasedOffBullBar = false;
+
+    bool controllerFlipped = false;
+    bool tempVar = false;
 };

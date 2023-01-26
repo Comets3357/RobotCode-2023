@@ -78,10 +78,10 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saArmPositionThree = (controllerData.sYBtn) && !controlData.shift;
 
     // MANUAL:
-    controlData.mMovePivot = (controllerData.sLYStick > 0.2 || controllerData.sLYStick < -0.2) && !controlData.shift;
-    controlData.mMoveWrist = (controllerData.sRYStick > 0.2 || controllerData.sRYStick < -0.2) && !controlData.shift;
-    controlData.mForceZeroWrist = (controllerData.sABtn) && !controlData.shift;
-    controlData.mBullBarExtension = controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08;
+    controlData.mMovePivot = (controllerData.sLYStick > 0.2 || controllerData.sLYStick < -0.2) && controlData.shift;
+    controlData.mMoveWrist = (controllerData.sRYStick > 0.2 || controllerData.sRYStick < -0.2) && controlData.shift;
+    // controlData.mForceZeroWrist = (controllerData.sABtn) && !controlData.shift;
+    controlData.mBullBarExtension = (controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08) && !controlData.shift;
     controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
     controlData.mForceZeroBullBar = controllerData.sABtn && !controlData.shift;

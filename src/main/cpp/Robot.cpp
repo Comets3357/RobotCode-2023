@@ -102,7 +102,7 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() 
 {
-  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+  // controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
 }
 
 void Robot::DisabledInit() {

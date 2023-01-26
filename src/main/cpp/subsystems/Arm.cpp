@@ -10,7 +10,7 @@ void Arm::RobotInit(ArmData &armData)
     armWristPIDController.SetIZone(0, 0);
     armWristPIDController.SetFF(0, 0);
 
-    armWristPIDController.SetOutputRange(-1, 1, 0);
+    armWristPIDController.SetOutputRange(-0.5, 0.5, 0);
     armWrist.EnableVoltageCompensation(10.5);
     armWrist.SetSmartCurrentLimit(20);
     armWrist.SetInverted(false);
@@ -106,19 +106,19 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         EnableWristSoftLimits();
     }
 
-    if (armData.wristAbsoluteInitialized && wristRunMode != ABSOLUTE_RUN)
+    if (armData.wristAbsoluteInitialized && wristRunMode != ARM_ABSOLUTE_RUN)
     {
-        wristRunMode = ABSOLUTE_RUN;
+        wristRunMode = ARM_ABSOLUTE_RUN;
         armWristPIDController.SetFeedbackDevice(armWristAbsoluteEncoder);
         wristForceZeroed = false;
     }
-    else if (wristForceZeroed && wristRunMode != RELATIVE_RUN)
+    else if (wristForceZeroed && wristRunMode != ARM_RELATIVE_RUN)
     {
-        wristRunMode = RELATIVE_RUN;
+        wristRunMode = ARM_RELATIVE_RUN;
         armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
     }
 
-    wristRunMode = RELATIVE_RUN;
+    wristRunMode = ARM_RELATIVE_RUN;
     armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
 
 /* -----------------------------------------------------------------------------------------------------------------------------
@@ -130,27 +130,30 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         EnablePivotSoftLimits();
     }
 
-    if (armData.pivotAbsoluteInitialized && pivotRunMode != ABSOLUTE_RUN)
+    if (armData.pivotAbsoluteInitialized && pivotRunMode != ARM_ABSOLUTE_RUN)
     {
-        pivotRunMode = ABSOLUTE_RUN;
+        pivotRunMode = ARM_ABSOLUTE_RUN;
         armPivotPIDController.SetFeedbackDevice(armPivotAbsoluteEncoder);
         pivotForceZeroed = false;
     }
-    else if (pivotForceZeroed && pivotRunMode != RELATIVE_RUN)
+    else if (pivotForceZeroed && pivotRunMode != ARM_RELATIVE_RUN)
     {
-        pivotRunMode = RELATIVE_RUN;
+        pivotRunMode = ARM_RELATIVE_RUN;
         armPivotPIDController.SetFeedbackDevice(armPivotRelativeEncoder);
     }
 
-    pivotRunMode = RELATIVE_RUN;
+    pivotRunMode = ARM_RELATIVE_RUN;
     armPivotPIDController.SetFeedbackDevice(armPivotRelativeEncoder);
 
 /* --------------------------------------------------------------------------------------------------------------------------
 *                                   SEMI AUTO FULL FUNCTIONALITY CODE
 *  --------------------------------------------------------------------------------------------------------------------------
 */
+    tempVar = controllerFlipped;
+    controllerFlipped = robotData.controlData.saConeIntake || robotData.controlData.saCubeIntake;
 
-    if (pivotRunMode != NONE || wristRunMode != NONE)
+
+    if (pivotRunMode != ARM_NONE || wristRunMode != ARM_NONE)
     {
         if (robotData.controlData.saArmIntakePosition)
         {
@@ -159,7 +162,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             RotateWrist(120, robotData);
             RotatePivot(100, robotData);
             ZeroRelativePositionWrist(armData);
-    ZeroRelativePositionPivot(armData);
+            ZeroRelativePositionPivot(armData);
             frc::SmartDashboard::PutBoolean("I AMM GETTTING HERE", true);
         // SetAngleOfWrist(armData, 0);
         //RotateWrist(120, robotData);
@@ -172,12 +175,84 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         }
         else if (robotData.controlData.saArmPositionThree)
         {
-
+            RotateWrist(15, robotData);
+            RotatePivot(25, robotData);
+            ZeroRelativePositionWrist(armData);
+            ZeroRelativePositionPivot(armData);
+            frc::SmartDashboard::PutBoolean("I AMM GETTTING HERE", true);
         }
+
+        if (robotData.controlData.saConeIntake)
+        {
+            if (robotData.bullBarData.bullBarSafePosition)
+            {
+                if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
+                {
+                    RotatePivot(25, robotData);
+                    RotateWrist(129, robotData);
+                }
+            }
+            else if (!robotData.bullBarData.bullBarSafePosition)
+            {
+                
+            }
+            readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
+        }
+        else 
+        {
+            if (tempVar != controllerFlipped)
+            {
+                RotatePivot(25, robotData);
+                RotateWrist(15, robotData);
+            }
+        }
+        
+        if (robotData.controlData.saCubeIntake)
+        {
+            if (robotData.bullBarData.bullBarSafePosition)
+            {
+                if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
+                {
+                    RotatePivot(34, robotData);
+                    RotateWrist(198, robotData);
+                }
+            }
+            else 
+            {
+                
+            }
+            readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
+        }
+        else 
+        {
+            if (tempVar != controllerFlipped)
+            {
+                RotatePivot(25, robotData);
+                RotateWrist(15, robotData);
+            }
+        }
+
+        if ((/*(armPivotAbsoluteEncoder.GetPosition() > 20 && armPivotAbsoluteEncoder.GetPosition() < 30) ||*/ (armPivotRelativeEncoder.GetPosition() > 20 && armPivotRelativeEncoder.GetPosition() < 30)) &&
+            (/*(armWristAbsoluteEncoder.GetPosition() > 10 && armWristAbsoluteEncoder.GetPosition() < 30) ||*/ (armWristRelativeEncoder.GetPosition() > 10 && armWristRelativeEncoder.GetPosition() < 30)))
+            {
+                armData.wristSafePosition = true;
+            }
+            else 
+            {
+                armData.wristSafePosition = false;
+            }
+        
+        frc::SmartDashboard::PutBoolean("arm in safe position", armData.wristSafePosition);
+
+        frc::SmartDashboard::PutNumber("WRIST CURRENT POSITION", armWristRelativeEncoder.GetPosition());
+
+        
+
         if (robotData.controlData.saMoveArm)
         {
             
         }
+
     }
     else
     {
@@ -282,7 +357,7 @@ void Arm::RotatePivot(double targetDegree, const RobotData& robotData)
     pivotProfileActive = true;
     pivotProfileStartTime = robotData.timerData.secSinceEnabled;
 
-    if (pivotRunMode == ABSOLUTE_RUN)
+    if (pivotRunMode == ARM_ABSOLUTE_RUN)
     {
         pivotProfileStartPos = armPivotRelativeEncoder.GetPosition();
         pivotProfileEndPos = targetDegree;
@@ -307,7 +382,7 @@ void Arm::RotateWrist(double targetDegree, const RobotData& robotData)
     wristProfileActive = true;
     wristProfileStartTime = robotData.timerData.secSinceEnabled;
     
-    if (wristRunMode == RELATIVE_RUN)
+    if (wristRunMode == ARM_RELATIVE_RUN)
     {
         wristProfileStartPos = armWristRelativeEncoder.GetPosition();
         wristProfileEndPos = targetDegree;
@@ -347,12 +422,12 @@ bool Arm::IsWristAbolsoluteEncoderInitialized(ArmData& armData)
     if (armWristAbsoluteEncoder.GetPosition() >= 0.01)
     {
         armData.wristAbsoluteInitialized = true;
-        wristRunMode = ABSOLUTE_RUN;
+        wristRunMode = ARM_ABSOLUTE_RUN;
     }
     else 
     {
         armData.wristAbsoluteInitialized = false;
-        wristRunMode = NONE;
+        wristRunMode = ARM_NONE;
     }
 
     return armData.wristAbsoluteInitialized;
@@ -363,12 +438,12 @@ bool Arm::IsPivotAbolsoluteEncoderInitialized(ArmData& armData)
     if (armPivotAbsoluteEncoder.GetPosition() >= 0.01)
     {
         armData.pivotAbsoluteInitialized = true;
-        pivotRunMode = ABSOLUTE_RUN;
+        pivotRunMode = ARM_ABSOLUTE_RUN;
     }
     else 
     {
         armData.pivotAbsoluteInitialized = false;
-        pivotRunMode = NONE;
+        pivotRunMode = ARM_NONE;
     }
 
     return armData.pivotAbsoluteInitialized;
@@ -407,7 +482,7 @@ void Arm::DisablePivotSoftLimits()
 void Arm::EnableWristSoftLimits()
 {
 
-    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armWristMinPosition + 1);
+    armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armWristMinPosition + 5);
     armWrist.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armWristMaxPosition - 5);
 
     armWrist.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
@@ -419,8 +494,8 @@ void Arm::EnableWristSoftLimits()
 void Arm::EnablePivotSoftLimits()
 {
 
-    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotMinPosition + 20);
-    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition - 20);
+    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotMinPosition + 3);
+    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition - 3);
 
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);

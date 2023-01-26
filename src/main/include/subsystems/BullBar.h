@@ -18,13 +18,15 @@ struct RobotData;
 struct BullBarData
 {
     bool bullBarAbsoluteEncoderInitialized = false;
+
+    bool bullBarSafePosition = false;
 };
 
 enum BullBarRunMode
 {
-    ABSOLUTE_RUN,
-    RELATIVE_RUN,
-    NONE
+    BULLBAR_ABSOLUTE_RUN,
+    BULLBAR_RELATIVE_RUN,
+    BULLBAR_NONE
 };
 
 class BullBar
@@ -55,7 +57,7 @@ private:
     
     bool IsAbsoluteEncoderInitialized(BullBarData &bullBarData);
 
-    BullBarRunMode runMode = ABSOLUTE_RUN;
+    BullBarRunMode runMode = BULLBAR_NONE;
 
     // force zeroing the bull bar
     bool forceZero = false;
