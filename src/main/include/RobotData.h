@@ -8,6 +8,7 @@
 #include "auton/Auton.h"
 
 #include "subsystems/Drivebase.h"
+#include "subsystems/Elevator.h"
 #include "subsystems/EndEffector.h"
 #include "subsystems/BullBar.h"
 #include "subsystems/Arm.h"
@@ -26,6 +27,6 @@ struct RobotData
     AutonData autonData;
 
     DrivebaseData drivebaseData;
+    ElevatorData elevatorData;
     EndEffectorData endEffectorData;
-    BullBarData bullBarData;
 };
