@@ -29,4 +29,5 @@ struct RobotData
     DrivebaseData drivebaseData;
     ElevatorData elevatorData;
     EndEffectorData endEffectorData;
+    BullBarData bullBarData;
 };
