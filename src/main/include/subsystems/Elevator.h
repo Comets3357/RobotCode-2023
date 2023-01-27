@@ -47,7 +47,7 @@ private:
 
     ElevatorRunMode runMode = ABSOLUTE_RUN;
 
-    void SetElevatorPosition(double elevatorAbsolutePosition);
+    //void SetElevatorPosition(double elevatorAbsolutePosition);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
     void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
     void DisableSoftLimits();
@@ -69,7 +69,7 @@ private:
     rev::SparkMaxAbsoluteEncoder elevatorAbsoluteEncoder = elevatorMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
-    double elevatorMaxPosition = elevatorMinPosition+31.375; // TODO: fix this value when we get subsystem
+    double elevatorMaxPosition = elevatorMinPosition + 31.375; // TODO: fix this value when we get subsystem
     double elevatorMinPosition = 10; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;
@@ -88,12 +88,7 @@ private:
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{0}, units::angular_velocity::degrees_per_second_t{0}}
     };
 
-
-
-
-
-
-    //elevator heights
+    //elevator heights todo
     double intakeElevatorAbsolutePos = 0.0;
     double midElevatorAbsolutePos = 0.0;
     double highElevatorAbsolutePos = 0.0;
