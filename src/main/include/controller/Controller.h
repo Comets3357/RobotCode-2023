@@ -45,7 +45,7 @@ struct ControlData
     //arm:
 
     bool saMoveArm;
-    bool saArmIntakePosition;
+    bool saArmPositionOne;
     bool saArmPositionTwo;
     bool saArmPositionThree;
     bool saBullBarExtension;

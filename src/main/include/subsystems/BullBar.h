@@ -70,7 +70,7 @@ private:
 
     // Positions for intaking cone or cube
     double bullBarConeIntakePosition = bullBarMinPosition + 17.208;
-    double bullBarCubeIntakePosition = bullBarMinPosition + 14.497;
+    double bullBarCubeIntakePosition = bullBarMinPosition + 12;
 
     // intake speed
     double bullBarRollerExtendedSpeed = 0.5;

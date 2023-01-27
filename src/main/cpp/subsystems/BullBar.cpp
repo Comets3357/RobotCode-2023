@@ -20,7 +20,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(55.8);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(60.4);
     
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048);
@@ -171,7 +171,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
         {
             if (robotData.armData.wristSafePosition)
             {
-                bullBarSliderPIDController.SetReference(bullBarMinPosition+1, rev::CANSparkMax::ControlType::kPosition, 0);
+                bullBarSliderPIDController.SetReference(bullBarMinPosition, rev::CANSparkMax::ControlType::kPosition, 0);
                 bullBarRollers.Set(0);
             }
 
@@ -272,7 +272,7 @@ void BullBar::DisableSoftLimits()
 */
 void BullBar::EnableSoftLimits(BullBarData &bullBarData)
 {   
-    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.7);
+    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.2);
     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.3); 
 
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);

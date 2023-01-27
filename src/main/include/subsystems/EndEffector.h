@@ -16,7 +16,8 @@ struct RobotData;
 
 struct EndEffectorData
 {
-
+    bool isCone = false;
+    bool isCube = false;
 };
 
 class EndEffector
@@ -38,9 +39,12 @@ private:
     // EndEffector Roller Initialization
     rev::CANSparkMax endEffectorRollers = rev::CANSparkMax(endEffectorRollerID, rev::CANSparkMax::MotorType::kBrushless);
 
-    double EndEffectorRollerOutwardSpeed = 0.3;
-    double EndEffectorRollerInwardSpeed = -0.3;
+    // rev::SparkMaxLimitSwitch coneLimitSwitch = endEffectorRollers.GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen);
+    // rev::SparkMaxLimitSwitch cubeLimitSwitch = endEffectorRollers.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen);
 
-    double EndEffectorRollerCubeInwardSpeed = 0.4;
+    double EndEffectorRollerOutwardSpeed = 0.5;
+    double EndEffectorRollerInwardSpeed = -0.5;
+
+    double EndEffectorRollerCubeInwardSpeed = 0.2;
 
 };

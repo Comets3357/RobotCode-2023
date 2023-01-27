@@ -134,4 +134,10 @@ private:
 
     bool controllerFlipped = false;
     bool tempVar = false;
+
+    bool endEffectorGamePiece = false;
+    bool endEffectorGamePiecePastRead = false;
+
+    bool wristInPositionForArm = false;
+    bool wristInPositionForArmPastRead = false;
 };

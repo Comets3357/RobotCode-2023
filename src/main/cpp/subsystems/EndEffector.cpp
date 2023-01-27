@@ -11,6 +11,7 @@ void EndEffector::RobotInit()
     endEffectorRollers.SetSmartCurrentLimit(45);
     endEffectorRollers.EnableVoltageCompensation(10.5);
     endEffectorRollers.BurnFlash();
+    
 
 }
 
@@ -29,6 +30,24 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             SemiAuto(robotData, endEffectorData);
             break;
     }
+
+    // if (coneLimitSwitch.Get())
+    // {
+    //     endEffectorData.isCone = true;
+    //     endEffectorData.isCube = false;
+    // }
+    // else if (cubeLimitSwitch.Get())
+    // {
+    //     endEffectorData.isCone = false;
+    //     endEffectorData.isCube = true;
+    // }
+    // else
+    // {
+    //     endEffectorData.isCone = false;
+    //     endEffectorData.isCube = false;
+    // }
+
+
 }
 
 void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData)
