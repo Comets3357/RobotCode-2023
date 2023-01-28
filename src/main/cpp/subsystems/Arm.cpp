@@ -406,7 +406,7 @@ void Arm::RotatePivot(double targetDegree, const RobotData& robotData)
     }
     else
     {
-        pivotProfileStartPos = armPivotAbsoluteEncoder.GetPosition();
+        pivotProfileStartPos = armPivotRelativeEncoder.GetPosition();
         pivotProfileEndPos = targetDegree;
     }
 
@@ -431,7 +431,7 @@ void Arm::RotateWrist(double targetDegree, const RobotData& robotData)
     }
     else
     {
-        wristProfileStartPos = armWristAbsoluteEncoder.GetPosition();
+        wristProfileStartPos = armWristRelativeEncoder.GetPosition();
         wristProfileEndPos = targetDegree;
     }
 

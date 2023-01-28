@@ -6,16 +6,18 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorMotor.RestoreFactoryDefaults();
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    elevatorMotor.SetInverted(false);
+    elevatorMotor.SetInverted(true);
     elevatorMotor.EnableVoltageCompensation(10.5);
-    elevatorPIDController.SetP(0.1, 0); //need to be tuned
-    elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+    elevatorPIDController.SetP(0.3, 0); 
+    //elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     elevatorMotor.BurnFlash();
+    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    elevatorPIDController.SetOutputRange(-0.5,0.5);
 
     //FIND THESE VALUES THEN GOOD
-    elevatorAbsoluteEncoder.SetPositionConversionFactor(0.1);
-    elevatorAbsoluteEncoder.SetZeroOffset(0.1);
-    elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
+    // elevatorAbsoluteEncoder.SetPositionConversionFactor(0.1);
+    // elevatorAbsoluteEncoder.SetZeroOffset(0.1);
+    // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
     
 }
 
@@ -27,7 +29,7 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             Manual(robotData, elevatorData);
             break;
         case MODE_TELEOP_SA:
-            SemiAuto(robotData, elevatorData);
+            Manual(robotData, elevatorData);
             break;
         default:
             SemiAuto(robotData, elevatorData);
@@ -39,6 +41,25 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
         ZeroRelativePosition(elevatorData);
     }
 
+    frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
+    if (robotData.controllerData.sXBtn)
+    {
+        MoveElevator(20, robotData);
+    }
+
+    if (elevatorProfileActive)
+    {
+        units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - elevatorProfileStartTime};
+        auto setpoint = elevatorProfile.Calculate(elapsedTime);
+
+        elevatorPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
+        frc::SmartDashboard::PutNumber("elevatorPos TRAP", setpoint.position.value());
+        if (elevatorProfile.IsFinished(elapsedTime))
+        {
+            elevatorProfileActive = false;
+        }
+    }
+
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
@@ -48,16 +69,18 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         EnableSoftLimits();
     }
 
-    if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ABSOLUTE_RUN)
-    {
-        runMode = ABSOLUTE_RUN;
-        elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
-    }
+    // if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ABSOLUTE_RUN)
+    // {
+    //     runMode = RELATIVE_RUN;
+    //     elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+    // }
     else if (elevatorForceZeroed && runMode != RELATIVE_RUN)
     {
         runMode = RELATIVE_RUN;
         elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     }
+    runMode = RELATIVE_RUN;
+    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
 
     if (runMode != NONE)
     {
@@ -86,7 +109,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         elevatorMotor.Set(0);
     }
 
-
+    
 
     if (elevatorProfileActive)
     {
@@ -94,7 +117,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         auto setpoint = elevatorProfile.Calculate(elapsedTime);
 
         elevatorPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
-
+        frc::SmartDashboard::PutNumber("elevatorPos TRAP", setpoint.position.value());
         if (elevatorProfile.IsFinished(elapsedTime))
         {
             elevatorProfileActive = false;
@@ -110,20 +133,20 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
     {
         DisableSoftLimits();
     }
-
+    EnableSoftLimits();
     if (robotData.controlData.forceZeroElevator)
     {
         ForceZeroElevator();
     }
 
-    if (robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08)
-    {
-        elevatorMotor.Set(robotData.controllerData.sLYStick * 0.05);
-    }
-    else
-    {
-        elevatorMotor.Set(0);
-    }
+    // if (robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08)
+    // {
+    //     elevatorMotor.Set(robotData.controllerData.sLYStick * 0.2);
+    // }
+    // else
+    // {
+    //     elevatorMotor.Set(0);
+    // }
 }
 
 void Elevator::MoveElevator(double targetPos, const RobotData& robotData)
@@ -133,7 +156,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData)
 
     if (runMode == ABSOLUTE_RUN)
     {
-        elevatorProfileStartPos = elevatorAbsoluteEncoder.GetPosition();
+        elevatorProfileStartPos = elevatorRelativeEncoder.GetPosition();
         elevatorProfileEndPos = targetPos;
     }
     else
@@ -144,7 +167,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData)
 
     elevatorProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{70_deg_per_s, 15_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{40_deg_per_s, 30_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{elevatorRelativeEncoder.GetVelocity()}}
     };
@@ -162,8 +185,8 @@ void Elevator::EnableSoftLimits()
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
-    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition - 0.1);
-    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition + 0.1);
+    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 2);
+    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 2);
 }
 
 void Elevator::DisableSoftLimits() 
