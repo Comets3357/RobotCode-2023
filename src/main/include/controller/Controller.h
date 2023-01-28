@@ -36,7 +36,7 @@ struct ControlData
     bool turnResponsive;
     bool dbInverted;
     double maxStraight = 1;
-    double maxTurn = 0.4;
+    double maxTurn = 0.55;
     bool vectorDrive;
 
     //intake:

@@ -59,7 +59,14 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else if (robotData.controlData.saIntakeBackwards) 
     {
-        SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
+        if (robotData.armData.isNotCone)
+        {
+            SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
+        }
+        else
+        {
+            SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);   
+        }
     }
     else if (robotData.controlData.saCubeIntake)
     {
@@ -67,7 +74,15 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else
     {
-        SetEndEffectorRollerSpeed(0.05);
+        if (robotData.armData.isNotCone)
+        {
+            SetEndEffectorRollerSpeed(0.05);
+        }
+        else
+        {
+            SetEndEffectorRollerSpeed(-0.05);
+        }
+        
     }
 }
 

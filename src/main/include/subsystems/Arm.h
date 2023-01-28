@@ -31,6 +31,8 @@ struct ArmData
     double wristAngle = 0;
 
     bool wristSafePosition = false;
+
+    bool isNotCone = false;
 };
 
 enum ArmRunMode
@@ -48,6 +50,8 @@ public:
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, ArmData &armData);
     void UpdateData(const RobotData &robotData, ArmData &armData);
+
+    int ran = 0;
 
 private:
 
