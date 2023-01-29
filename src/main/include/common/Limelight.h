@@ -9,6 +9,7 @@
 #include <deque>
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <vector>
 
 struct RobotData;
 
@@ -25,6 +26,6 @@ public:
 private:
 
     std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
-    // double botPose[6] = {0,0,0,0,0,0};
+    std::vector<double> hehe = {0,0,0,0,0,0};
 
 };
