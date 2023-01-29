@@ -67,14 +67,15 @@ public:
     void RobotInit();
     void TeleopInit(const RobotData &robotData);
     void AutonomousInit(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
-    void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
+    void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData, ControlData &controlData);
     void TestPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData);
     void DisabledInit();
 
 private:
 
+    double GetTurnMax();
     void updateData(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData);
+    void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData, ControlData &controlData);
     void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
 
     // odometry

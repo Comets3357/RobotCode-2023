@@ -33,12 +33,17 @@ class Robot : public frc::TimedRobot {
   std::string m_autoSelected;
 
   Drivebase driveBase{};
+  Elevator elevator{};
+  BullBar bullBar{};
+  EndEffector endEffector{};
   Auton auton{};
+
+  Arm arm{};
+
   Gyro gyro{};
   Timer timer{};
-  Controller controller{};
-  
   RobotData robotData{};
+  Controller controller{};
 
 
 };

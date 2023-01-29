@@ -14,11 +14,16 @@ static const int
     intakePivotID = 11,
     intakeSingulatorID = 13;
 
+//end effector:
+static const int
+    endEffectorRollerID = 33; // NOT REAL VALUE.
+
 //arm:
 static const int
-    armWristID = 43, // Not actual value.
-bullbarRollerID = 55, // NOT ACTUAL VALUES.
-    bullbarSliderID = 56; // NOT ACTUAL VALUES.
+    bullBarRollerID = 11, // 
+    bullBarSliderID = 12, // 
+    armWristID = 32, // Not actual value.
+    armPivotID = 31;
 
 static const double
     //practice bot
@@ -33,17 +38,7 @@ static const double
     // revOut = 6.09,
     // revIn = 0;
 
-//indexer
-static const int
-    indexerBeltsID = 22,
-    indexerWheelID = 21;
 
-// shooter IDs
-static const int
-    shooterWheelID = 31,
-    shooterHoodID = 33, 
-    shooterTurretID = 34, 
-    hoodRollerID = 32; 
 
 static const float
     //comp bot shooter hood positions
@@ -115,14 +110,6 @@ static const float
     wallVel = 1510.0f,
     fenderHood = -10.0f,
     fenderVel = 1375.0f;
-
-// climb
-static const int
-    climbElevatorID = 41,
-    climbArmsID = 43;
-    
-const float 
-    climbArmsZero = 0.8105f;
 
 //limelight:
 static const double

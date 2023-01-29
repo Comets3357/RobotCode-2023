@@ -35,6 +35,8 @@ private:
 
     frc::SendableChooser<std::string> autonChooser;
 
+    int step = 0;
+
 
     // secondary controls:
     // void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
@@ -51,7 +53,7 @@ private:
     // void fourBallB(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     // void fourBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     
-    void fiveBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void sixBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 };

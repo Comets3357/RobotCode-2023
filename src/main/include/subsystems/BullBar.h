@@ -14,52 +14,82 @@
 
 struct RobotData;
 
+// Add forceZeroBullBar && ifForceZeroed && switch from abs to relative 
 struct BullBarData
 {
+    bool bullBarAbsoluteEncoderInitialized = false;
 
+    bool bullBarSafePosition = false;
+};
+
+enum BullBarRunMode
+{
+    BULLBAR_ABSOLUTE_RUN,
+    BULLBAR_RELATIVE_RUN,
+    BULLBAR_NONE
 };
 
 class BullBar
 {
 public:
 
-    void RobotInit();
-    void RobotPeriodic(const RobotData &robotData, BullBarData &bullbarData);
+    void RobotInit(BullBarData &bullBarData);
+    void RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData);
     void DisabledInit();
-    void DisabledPeriodic(const RobotData &robotData, BullBarData &bullbarData);
-    void updateData(const RobotData &robotData, BullBarData &bullbarData);
+    void DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData);
 
 private:
 
-    double AbsoluteToRelative(double currentAbsolutePosition);
+    void UpdateData(const RobotData &robotData, BullBarData &bullBarData);
+
+    //double AbsoluteToRelative(double currentAbsolutePosition);
+
     void BullBarRollers(double rollerSpeed);
     void BullBarSlider(double sliderPosition);
-    void SemiAuto(const RobotData &robotData, BullBarData &bullbarData);
-    void Manual(const RobotData &robotData, BullBarData &bullbarData);
-    void ToggleSoftLimits();
-    void ZeroBullBar();
+    void SemiAuto(const RobotData &robotData, BullBarData &bullBarData);
+    void Manual(const RobotData &robotData, BullBarData &bullBarData);
+    // void ToggleSoftLimits(BullBarData &bullBarData);
+    void EnableSoftLimits(BullBarData &bullBarData);
+    void DisableSoftLimits();
+    void ZeroRelativePosition(BullBarData &bullBarData);
+    void ForceZeroBullBar();
+
     
+    bool IsAbsoluteEncoderInitialized(BullBarData &bullBarData);
 
+    BullBarRunMode runMode = BULLBAR_NONE;
 
+    // force zeroing the bull bar
+    bool forceZero = false;
+    bool bullBarForcedZeroed = false;
+
+    
+    // Encoder Min and Max Values 
+    double bullBarMaxPosition = 28;
+    double bullBarMinPosition = 10;
+
+    // Positions for intaking cone or cube
+    double bullBarConeIntakePosition = bullBarMinPosition + 17.208;
+    double bullBarCubeIntakePosition = bullBarMinPosition + 12;
+
+    // intake speed
+    double bullBarRollerExtendedSpeed = 0.5;
+    double bullBarRollerRetractedSpeed = 0;
+    
+    // intake and outake speeds
+    double bullBarRollerOutwardSpeed = 0.4;
+    double bullBarRollerInwardSpeed = -0.4;
+    
     // Bull Bar Roller Initialization
-    rev::CANSparkMax bullbarRollers = rev::CANSparkMax(bullbarRollerID, rev::CANSparkMax::MotorType::kBrushless);
-    rev::SparkMaxRelativeEncoder bullbarRollersRelativeEncoder = bullbarRollers.GetEncoder(); // Relative Encoder
+    rev::CANSparkMax bullBarRollers = rev::CANSparkMax(bullBarRollerID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::SparkMaxRelativeEncoder bullBarRollersRelativeEncoder = bullBarRollers.GetEncoder(); // Relative Encoder
 
     // Bull Bar Slider Initialization
-    rev::CANSparkMax bullbarSlider = rev::CANSparkMax(bullbarSliderID, rev::CANSparkMax::MotorType::kBrushless);
-    rev::SparkMaxRelativeEncoder bullbarSliderRelativeEncoder = bullbarSlider.GetEncoder(); // Relative Encoder
-    rev::SparkMaxPIDController bullbarSliderPIDController = bullbarSlider.GetPIDController(); // PID Controller
-    rev::SparkMaxAbsoluteEncoder bullbarSliderAbsoluteEncoder = bullbarSlider.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
+    rev::CANSparkMax bullBarSlider = rev::CANSparkMax(bullBarSliderID, rev::CANSparkMax::MotorType::kBrushless);
+    rev::SparkMaxRelativeEncoder bullBarSliderRelativeEncoder = bullBarSlider.GetEncoder(); // Relative Encoder
+    rev::SparkMaxPIDController bullBarSliderPIDController = bullBarSlider.GetPIDController(); // PID Controller
+    rev::SparkMaxAbsoluteEncoder bullBarSliderAbsoluteEncoder = bullBarSlider.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
-    // Encoder Min and Max Values 
-    double bullbarSliderRelativeMaxPosition = 13; // TODO: fix this value when we get subsystem
-    double bullbarSliderRelativeMinPosition = 0; // TODO: fix this value when we get subsystem
-
-    double bullbarSliderAbsoluteMaxPosition = 0.93418697534; // TODO: fix this value when we get subsystem
-    double bullbarSliderAbosluteMinPosition = 0.14207; // TODO: fix this value when we get subsystem
-
-    double bullbarRollerOutwardSpeed = 0.4;
-    double bullbarRollerInwardSpeed = -0.4;
-
-    bool softLimitsToggled = false;
+    bool softLimitsToggled = false;  
+    bool absoluteWasInitialized = false;
 };
