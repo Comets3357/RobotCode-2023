@@ -35,6 +35,12 @@ void Drivebase::RobotInit()
     dbR.SetSmartCurrentLimit(60);
     dbRF.SetSmartCurrentLimit(60);
 
+    dbL.EnableVoltageCompensation(10.5);
+    dbLF.EnableVoltageCompensation(10.5);
+    dbR.EnableVoltageCompensation(10.5);
+    dbRF.EnableVoltageCompensation(10.5);
+
+
     // PIDs for Mule bot 2023
     dbLPIDController.SetP(0.027491 / mpsToRpm);
     dbLPIDController.SetFF(0.07476 / mpsToRpm);

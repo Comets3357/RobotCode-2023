@@ -126,7 +126,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     // else if (autonData.autonRoutineName == "fourBallC") {
     //     fourBallC(robotData, controlData, controllerData);
     // }
-    if (autonData.autonRoutineName == "PlaceCone") 
+    else if (autonData.autonRoutineName == "PlaceCone") 
     {
         placeCone(robotData, controlData, controllerData);
     }
@@ -281,40 +281,41 @@ void Auton::driveLine(const RobotData &robotData, ControlData &controlData, Cont
 
 void Auton::placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    // double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled;
 
-    // if (sec > 2)
-    // {
-    //     step = 2;
-    // }
-    // else if (sec > 5)
-    // {
-    //     step = 3;
-    // }
-
-    // switch (step)
-    // {
-    // case (0):
-        
-    //     controlData.saPositionHigh = true;
-    //     step++;
-    //     break;
+    if (sec > 4 && step < 3)
+    {
+        step = 3;
+    }
+    else if (sec > 3 && step < 2)
+    {
+        step = 2;
+    }
     
-    // case(1):
-    //     controlData.saPositionHigh = false;
-    //     break;
-    // case(2):
-    //     controlData.saIntakeBackwards = true;
-    //     break;
-    // case(3):
-    //     controlData.saIntakeBackwards = false;
-    //     controlData.saHomePosition = true;
-    //     step++;
-    //     break;
-    // case(4):
-    //     controlData.saHomePosition = false;
-    //     break;
-    // }
+
+    switch (step)
+    {
+    case (0):
+        
+        controlData.saPositionHigh = true;
+        step++;
+        break;
+    
+    case(1):
+        controlData.saPositionHigh = false;
+        break;
+    case(2):
+        controlData.saIntakeBackwards = true;
+        break;
+    case(3):
+        controlData.saIntakeBackwards = false;
+        controlData.saHomePosition = true;
+        step++;
+        break;
+    case(4):
+        controlData.saHomePosition = false;
+        break;
+    }
 
     
 

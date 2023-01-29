@@ -20,7 +20,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(86.6);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(86.7);
     
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048);
