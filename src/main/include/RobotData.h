@@ -6,6 +6,7 @@
 #include "common/Timer.h"
 
 #include "auton/Auton.h"
+#include "common/Limelight.h"
 
 #include "subsystems/Drivebase.h"
 
@@ -21,4 +22,5 @@ struct RobotData
     AutonData autonData;
 
     DrivebaseData drivebaseData;
+    LimelightData limelightData;
 };
