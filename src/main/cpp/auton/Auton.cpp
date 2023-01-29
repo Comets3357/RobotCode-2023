@@ -66,6 +66,7 @@ void Auton::sendAutonSelectionChooser() {
     
     autonChooser.AddOption("driveLine", "driveLine");
     autonChooser.AddOption("TwoBlueLeftNoClimb", "TwoBlueLeftNoClimb");
+    autonChooser.AddOption("PlaceCone", "PlaceCone");
     // autonChooser.AddOption("fiveBallCAlt", "fiveBallCAlt");
 
     // autonChooser.AddOption("citrus", "citrus");
@@ -125,10 +126,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     // else if (autonData.autonRoutineName == "fourBallC") {
     //     fourBallC(robotData, controlData, controllerData);
     // }
-    // if (autonData.autonRoutineName == "5Ball") 
-    // {
-    //     fiveBallC(robotData, controlData, controllerData);
-    // }
+    if (autonData.autonRoutineName == "PlaceCone") 
+    {
+        placeCone(robotData, controlData, controllerData);
+    }
     // else if (autonData.autonRoutineName == "fiveBallCAlt") {
     //     fiveBallC(robotData, controlData, controllerData);
     // }
@@ -278,9 +279,45 @@ void Auton::driveLine(const RobotData &robotData, ControlData &controlData, Cont
 //     }
 // }
 
-void Auton::fiveBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
+void Auton::placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    // double sec = robotData.timerData.secSinceEnabled;
+
+    // if (sec > 2)
+    // {
+    //     step = 2;
+    // }
+    // else if (sec > 5)
+    // {
+    //     step = 3;
+    // }
+
+    // switch (step)
+    // {
+    // case (0):
+        
+    //     controlData.saPositionHigh = true;
+    //     step++;
+    //     break;
+    
+    // case(1):
+    //     controlData.saPositionHigh = false;
+    //     break;
+    // case(2):
+    //     controlData.saIntakeBackwards = true;
+    //     break;
+    // case(3):
+    //     controlData.saIntakeBackwards = false;
+    //     controlData.saHomePosition = true;
+    //     step++;
+    //     break;
+    // case(4):
+    //     controlData.saHomePosition = false;
+    //     break;
+    // }
+
+    
+
 
     // intake
     

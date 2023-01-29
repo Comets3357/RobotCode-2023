@@ -15,8 +15,15 @@ void Robot::RobotInit() {
 
 
   driveBase.RobotInit();
+  endEffector.RobotInit();
+
+  bullBar.RobotInit(robotData.bullBarData);
+
+  arm.RobotInit(robotData.armData);
+  elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
   timer.RobotInit(robotData.timerData);
+
   auton.RobotInit(robotData.autonData);
 
 
@@ -36,8 +43,11 @@ void Robot::RobotPeriodic() {
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
-  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData);
-  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
+  bullBar.RobotPeriodic(robotData, robotData.bullBarData);
+  endEffector.RobotPeriodic(robotData, robotData.endEffectorData);
+  arm.RobotPeriodic(robotData, robotData.armData);
+  elevator.RobotPeriodic(robotData, robotData.elevatorData);
   
 }
 
@@ -81,18 +91,30 @@ void Robot::AutonomousPeriodic() {
   timer.EnabledPeriodic(robotData.timerData);
   gyro.RobotPeriodic(robotData.gyroData);
   auton.AutonomousPeriodic(robotData, robotData.autonData, robotData.controlData, robotData.controllerData);
-  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData);
+  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
+
+
   
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+  timer.EnabledInit(robotData.timerData);
+}
 
-void Robot::TeleopPeriodic() {}
+void Robot::TeleopPeriodic() 
+{
+  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+}
 
 void Robot::DisabledInit() {
   driveBase.DisabledInit();
+  bullBar.DisabledInit();
 }
 
+void Robot::DisabledPeriodic() {
+  bullBar.DisabledPeriodic(robotData, robotData.bullBarData);
+  arm.DisabledPeriodic(robotData, robotData.armData);
+}
 void Robot::DisabledPeriodic() {
   driveBase.DisabledPeriodic();
 }

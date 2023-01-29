@@ -7,16 +7,26 @@
 
 struct RobotData;
 
-enum Mode {
+enum Mode 
+{
     MODE_TELEOP_SA,
     MODE_TELEOP_MANUAL,
     MODE_AUTO_BALANCE
+    
+};
+
+enum ElevatorSetPosition
+{
+    SET_POSITION_1,
+    SET_POSITION_2,
+    SET_POSITION_3
 };
 
 struct ControlData
 {
     // states:
     Mode mode{MODE_TELEOP_SA};
+    ElevatorSetPosition elevatorSetPosition{SET_POSITION_1};
     
     bool shift = false;
 
@@ -26,23 +36,43 @@ struct ControlData
     bool turnResponsive;
     bool dbInverted;
     double maxStraight = 1;
-    double maxTurn = 0.4;
+    double maxTurn = 0.55;
     bool vectorDrive;
 
     //intake:
 
-    bool mIntakeDown;
-    bool mIntakeUp;
-    bool mIntakeRollersIn;
-    bool mIntakeRollersOut;
-    bool mForceZeroIntake;
+    bool mBullBarExtension;
+    bool mBullBarRollerForward;
+    bool mBullBarRollerBackward;
+    bool mForceZeroBullBar;
 
-    bool saIntaking;
+    bool saConeIntake;
     bool saIntakeBackwards;
+    bool saCubeIntake;
 
+    //arm:
 
+    bool saMoveArm;
+    bool saHomePosition;
+    bool saPositionMid;
+    bool saPositionHigh;
+    bool saBullBarExtension;
+    //end effector:
+    bool mEndEffectorRollersIn;
+    bool mEndEffectorRollersOut;
 
+    bool mMovePivot;
+    bool mMoveWrist;
 
+    bool mForceZeroWrist;
+    bool mForceZeroPivot;
+
+    bool saElevatorSetHumanPlayerPosition;
+    bool saElevatorSetMidPosition;
+    bool saElevatorSetHighPosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+    bool saElevatorSetIntakePosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+
+    bool forceZeroElevator;
 };
 
 struct ControllerData
