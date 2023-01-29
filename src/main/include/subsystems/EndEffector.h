@@ -16,7 +16,7 @@ struct RobotData;
 
 struct EndEffectorData
 {
-    bool isCone = false;
+    bool isCone = true;
     bool isCube = false;
 };
 

@@ -20,7 +20,7 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(77.2);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(86.6);
     
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048);
@@ -103,7 +103,7 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
 
     UpdateData(robotData, bullBarData);
 
-
+    frc::SmartDashboard::PutBoolean("RBUMPER", robotData.controllerData.sRBumper);
 }
 
 
@@ -136,6 +136,13 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             if (robotData.armData.wristSafePosition)
             {
                 bullBarSliderPIDController.SetReference(bullBarConeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
+            }
+            if (robotData.controllerData.sRBumper)
+            {
+                bullBarRollers.Set(-bullBarRollerExtendedSpeed);   
+            }
+            else
+            {
                 bullBarRollers.Set(bullBarRollerRetractedSpeed);
             }
 
@@ -154,7 +161,17 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             if (robotData.armData.wristSafePosition)
             {
                 bullBarSliderPIDController.SetReference(bullBarCubeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
-                bullBarRollers.Set(bullBarRollerExtendedSpeed);
+                
+            }
+            if (robotData.controllerData.sRBumper)
+            {
+            bullBarRollers.Set(-bullBarRollerExtendedSpeed);
+
+            }
+            else
+            {
+            bullBarRollers.Set(bullBarRollerExtendedSpeed);
+
             }
 
             if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderAbsoluteEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5) 

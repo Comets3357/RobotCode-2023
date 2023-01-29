@@ -56,7 +56,7 @@ private:
     void ForceZeroElevator();
 
     bool IsAbsoluteEncoderInitialized(ElevatorData &bullbarData);
-    void MoveElevator(double targetDegree, const RobotData& robotData);
+    void MoveElevator(double targetDegree, const RobotData& robotData, double timeOffset);
 
     bool softLimitsEnabled = false;
     bool elevatorForceZeroed = false;
@@ -81,6 +81,7 @@ private:
     double elevatorProfileStartPos = 0;
     double elevatorProfileEndPos = 0;
     double elevatorProfileStartTime = 0;    
+    double elevatorTimeOffset = 0;
     frc::TrapezoidProfile<units::degree> elevatorProfile
     {
         frc::TrapezoidProfile<units::degrees>::Constraints{0_deg_per_s, 0_deg/(1_s * 1_s)},

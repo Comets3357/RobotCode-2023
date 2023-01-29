@@ -112,7 +112,7 @@ void Drivebase::AutonomousInit(const RobotData &robotData, DrivebaseData &driveb
     zeroEncoders();
 }
 
-void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData)
+void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData, ControlData &controlData)
 {
     updateData(robotData, drivebaseData);
 
@@ -126,7 +126,7 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
 
     if (frc::DriverStation::IsTeleop()) 
     {
-        teleopControl(robotData, drivebaseData, gyroData);
+        teleopControl(robotData, drivebaseData, gyroData, controlData);
     }
     else if (frc::DriverStation::IsAutonomous())
     {
@@ -143,6 +143,17 @@ void Drivebase::DisabledInit()
     dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     odometryInitialized = false;
+}
+
+double Drivebase::GetTurnMax()
+{
+    double maxTurn = 0.5;
+    double minTurn = 0.15;
+
+    double velocityAverage = abs((dbLEncoder.GetVelocity() + dbREncoder.GetVelocity())/2.0);
+    double slope = (minTurn - maxTurn) / (5500);
+    double b = maxTurn - (slope * 0);
+    return ((slope * velocityAverage) + b);
 }
 
 // updates encoder and gyro values
@@ -175,7 +186,7 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
 // driving functions:
 
 // adjusts for the deadzone and converts joystick input to velocity values for PID
-void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData)
+void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData, ControlData &controlData)
 {
     // frc::SmartDashboard::PutNumber("DRIVE MODE", robotData.drivebaseData.driveMode);
     // frc::SmartDashboard::PutNumber("SHOOT MODE", robotData.controlData.shootMode);
@@ -195,7 +206,8 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
     if (drivebaseData.driveMode == DRIVEMODE_JOYSTICK) 
     {
-
+        controlData.maxTurn = GetTurnMax();
+        frc::SmartDashboard::PutNumber("TURNMAX", GetTurnMax());
         double tempLDrive = robotData.controlData.lDrive;
         double tempRDrive = robotData.controlData.rDrive;
 
