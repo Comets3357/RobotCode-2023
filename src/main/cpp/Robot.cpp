@@ -41,6 +41,8 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
+  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
   driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
@@ -48,6 +50,7 @@ void Robot::RobotPeriodic() {
   endEffector.RobotPeriodic(robotData, robotData.endEffectorData);
   arm.RobotPeriodic(robotData, robotData.armData);
   elevator.RobotPeriodic(robotData, robotData.elevatorData);
+  
   
 }
 

@@ -9,7 +9,7 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     elevatorMotor.SetInverted(true);
     elevatorMotor.EnableVoltageCompensation(10.5);
     elevatorMotor.SetSmartCurrentLimit(55);
-    elevatorPIDController.SetP(0.3, 0); 
+    elevatorPIDController.SetP(0.9, 0); 
     //elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     elevatorMotor.BurnFlash();
     elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
@@ -84,7 +84,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(23.5, robotData, 0);
+            MoveElevator(91, robotData, 0);
         }
     }
     else
@@ -115,6 +115,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 
 void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
 {
+    DisableSoftLimits();
     if (softLimitsEnabled) 
     {
         DisableSoftLimits();
@@ -124,9 +125,9 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
         ForceZeroElevator();
     }
 
-    if (robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08)
+    if ((robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08) && !robotData.controlData.shift)
     {
-        elevatorMotor.Set(robotData.controllerData.sLYStick * 0.2);
+        elevatorMotor.Set(robotData.controllerData.sLYStick * 1);
     }
     else
     {
@@ -153,7 +154,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
 
     elevatorProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{40_deg_per_s, 30_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{120_deg_per_s, 90_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{elevatorRelativeEncoder.GetVelocity()}}
     };

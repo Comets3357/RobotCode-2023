@@ -16,10 +16,10 @@ void Arm::RobotInit(ArmData &armData)
     armWrist.SetInverted(false);
     armWrist.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armWristAbsoluteEncoder.SetInverted(true);
+    armWristAbsoluteEncoder.SetInverted(false);
     armWristAbsoluteEncoder.SetPositionConversionFactor(360);
-    armWristAbsoluteEncoder.SetZeroOffset(0);
-    armWristRelativeEncoder.SetPositionConversionFactor(4.2976522);
+    armWristAbsoluteEncoder.SetZeroOffset(9.299444);
+    armWristRelativeEncoder.SetPositionConversionFactor(360.0/82.09);//90.453243);//4.2976522);
     armWristRelativeEncoder.SetPosition(10);
 
     armWristRelativeEncoder.SetPosition(10);
@@ -215,7 +215,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             {
 
                 RotateWrist(10, robotData, 1);
-                RotatePivot(145, robotData, 1);
+                RotatePivot(147, robotData, 1);
                 // ZeroRelativePositionWrist(armData);
                 // ZeroRelativePositionPivot(armData);
 
@@ -322,8 +322,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     if (robotData.controllerData.sXBtn)
     {
-        ZeroRelativePositionPivot(armData);
-        ZeroRelativePositionWrist(armData);
+    //     ZeroRelativePositionPivot(armData);
+    //     ZeroRelativePositionWrist(armData);
     }
 /* --------------------------------------------------------------------------------------------------------------------------
 *                                   TRAP MOVEMENTS
@@ -525,8 +525,8 @@ void Arm::DisabledInit()
 
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
-    ZeroRelativePositionPivot(armData);
-    ZeroRelativePositionWrist(armData);
+    // ZeroRelativePositionPivot(armData);
+    // ZeroRelativePositionWrist(armData);
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
