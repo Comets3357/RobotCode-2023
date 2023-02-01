@@ -32,7 +32,6 @@ struct ArmData
 
     bool wristSafePosition = false;
 
-    bool isNotCone = false;
 };
 
 enum ArmRunMode

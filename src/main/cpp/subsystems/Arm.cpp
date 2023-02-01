@@ -154,7 +154,14 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     controllerFlipped = robotData.controlData.saConeIntake || robotData.controlData.saCubeIntake;
 
     endEffectorGamePiecePastRead = endEffectorGamePiece;
-    endEffectorGamePiece = robotData.endEffectorData.isCone || robotData.endEffectorData.isCube;
+    if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
+    {
+        endEffectorGamePiece = true;
+    }
+    else
+    {
+        endEffectorGamePiece = false;
+    }
 
     wristInPositionForArmPastRead = wristInPositionForArm;
     wristInPositionForArm = armWristRelativeEncoder.GetPosition() < 100;
@@ -167,78 +174,148 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     if (pivotRunMode != ARM_NONE || wristRunMode != ARM_NONE)
     {
-        if (armData.isNotCone)
+        switch (robotData.endEffectorData.gamePieceType)
         {
-            if (robotData.controlData.saPositionMid)
-            {
-                // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
-                // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
-                RotateWrist(50, robotData, 0);
-                RotatePivot(146, robotData, 0);
-                // ZeroRelativePositionWrist(armData);
-                // ZeroRelativePositionPivot(armData);
-                frc::SmartDashboard::PutBoolean("I AMM GETTTING HERE", true);
-            // SetAngleOfWrist(armData, 0);
-            //RotateWrist(120, robotData);
 
-            // SetAngleOfPivot(armData, 0);
-            }
-            else if (robotData.controlData.saPositionHigh)
-            {
+            case CONE:
+            
+                if (robotData.controlData.saPositionMid)
+                {
+                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
+                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(146, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                // SetAngleOfWrist(armData, 0);
+                //RotateWrist(120, robotData);
 
-                RotateWrist(36.6, robotData, 1);
-                RotatePivot(140, robotData, 1);
-                // ZeroRelativePositionWrist(armData);
-                // ZeroRelativePositionPivot(armData);
+                // SetAngleOfPivot(armData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
 
-            }
-            else if (robotData.controlData.saHomePosition)
-            {
-                RotateWrist(10, robotData, 0);
-                RotatePivot(17, robotData, 0);
-                // ZeroRelativePositionWrist(armData);
-                // ZeroRelativePositionPivot(armData);
-                
-            }
-        }
-        else 
-        {
-            if (robotData.controlData.saPositionMid)
-            {
-                // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
-                // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
-                RotateWrist(10, robotData, 0);
-                RotatePivot(146, robotData, 0);
-                // ZeroRelativePositionWrist(armData);
-                // ZeroRelativePositionPivot(armData);
-            // SetAngleOfWrist(armData, 0);
-            //RotateWrist(120, robotData);
+                    RotateWrist(10, robotData, 1);
+                    RotatePivot(147, robotData, 1);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
 
-            // SetAngleOfPivot(armData, 0);
-            }
-            else if (robotData.controlData.saPositionHigh)
-            {
+                }
+                else if (robotData.controlData.saHomePosition)
+                {
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(17, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                }
+                break;
 
-                RotateWrist(10, robotData, 1);
-                RotatePivot(147, robotData, 1);
-                // ZeroRelativePositionWrist(armData);
-                // ZeroRelativePositionPivot(armData);
+            case CUBE:
 
-            }
-            else if (robotData.controlData.saHomePosition)
-            {
-                RotateWrist(10, robotData, 0);
-                RotatePivot(17, robotData, 0);
-                // ZeroRelativePositionWrist(armData);
-                // ZeroRelativePositionPivot(armData);
-            }
+                if (robotData.controlData.saPositionMid)
+                {
+                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
+                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
+                    RotateWrist(50, robotData, 0);
+                    RotatePivot(146, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                    frc::SmartDashboard::PutBoolean("I AMM GETTTING HERE", true);
+                // SetAngleOfWrist(armData, 0);
+                //RotateWrist(120, robotData);
+
+                // SetAngleOfPivot(armData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+
+                    RotateWrist(36.6, robotData, 1);
+                    RotatePivot(140, robotData, 1);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+
+                }
+                else if (robotData.controlData.saHomePosition)
+                {
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(17, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                    
+                }
+                break;
+
+            case NONE:
+
+                if (robotData.controlData.saPositionMid)
+                {
+                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
+                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(146, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                // SetAngleOfWrist(armData, 0);
+                //RotateWrist(120, robotData);
+
+                // SetAngleOfPivot(armData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+
+                    RotateWrist(10, robotData, 1);
+                    RotatePivot(147, robotData, 1);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+
+                }
+                else if (robotData.controlData.saHomePosition)
+                {
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(17, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                }
+                break;
+
+            default:
+
+                if (robotData.controlData.saPositionMid)
+                {
+                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
+                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(146, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                // SetAngleOfWrist(armData, 0);
+                //RotateWrist(120, robotData);
+
+                // SetAngleOfPivot(armData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+
+                    RotateWrist(10, robotData, 1);
+                    RotatePivot(147, robotData, 1);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+
+                }
+                else if (robotData.controlData.saHomePosition)
+                {
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(17, robotData, 0);
+                    // ZeroRelativePositionWrist(armData);
+                    // ZeroRelativePositionPivot(armData);
+                }
+                break;
         }
         
         // if (!robotData.endEffectorData.isCone || !robotData.endEffectorData.isCube)
         // {
             if (robotData.controlData.saConeIntake)
             {
-                armData.isNotCone = false;
                 if (robotData.bullBarData.bullBarSafePosition)
                 {
                     if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
@@ -269,7 +346,6 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             
             if (robotData.controlData.saCubeIntake)
             {
-                armData.isNotCone = true;
                 if (tempVar != controllerFlipped)
                 {
                     RotatePivot(41, robotData, 0);

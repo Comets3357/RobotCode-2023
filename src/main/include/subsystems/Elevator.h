@@ -28,9 +28,9 @@ struct ElevatorData
 
 enum ElevatorRunMode
 {
-    ABSOLUTE_RUN,
-    RELATIVE_RUN,
-    NONE
+    ELEVATOR_ABSOLUTE_RUN,
+    ELEVATOR_RELATIVE_RUN,
+    ELEVATOR_NONE
 };
 
 class Elevator
@@ -45,7 +45,7 @@ public:
 
 private:
 
-    ElevatorRunMode runMode = ABSOLUTE_RUN;
+    ElevatorRunMode runMode = ELEVATOR_ABSOLUTE_RUN;
 
     //void SetElevatorPosition(double elevatorAbsolutePosition);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);

@@ -38,7 +38,7 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             break;
     }
 
-    // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != RELATIVE_RUN)
+    // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
     // {
     //     ZeroRelativePosition(elevatorData);
     // }
@@ -57,31 +57,29 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         EnableSoftLimits();
     }
 
-    // if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ABSOLUTE_RUN)
+    // if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
     // {
-    //     runMode = RELATIVE_RUN;
+    //     runMode = ELEVATOR_RELATIVE_RUN;
     //     elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     // }
-    if (elevatorForceZeroed && runMode != RELATIVE_RUN)
+    if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)
     {
-        runMode = RELATIVE_RUN;
+        runMode = ELEVATOR_RELATIVE_RUN;
         elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     }
-    runMode = RELATIVE_RUN;
+    runMode = ELEVATOR_RELATIVE_RUN;
     elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
 
-    if (runMode != NONE)
+    if (runMode != ELEVATOR_NONE)
     {
         if (robotData.controlData.saHomePosition)
         {
             MoveElevator(0, robotData, 0.5);
         }
-
         else if (robotData.controlData.saPositionMid)
         {
             MoveElevator(5, robotData, 0);
         }
-
         else if (robotData.controlData.saPositionHigh)
         {
             MoveElevator(91, robotData, 0);
@@ -146,7 +144,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
     elevatorProfileActive = true;
     elevatorProfileStartTime = robotData.timerData.secSinceEnabled+timeOffset;
 
-    if (runMode == ABSOLUTE_RUN)
+    if (runMode == ELEVATOR_ABSOLUTE_RUN)
     {
         elevatorProfileStartPos = elevatorRelativeEncoder.GetPosition();
         elevatorProfileEndPos = targetPos;
@@ -213,7 +211,7 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
     else 
     {
         elevatorData.elevatorAbsoluteEncoderInitialized = false;
-        runMode = NONE;
+        runMode = ELEVATOR_NONE;
     }
 
     return elevatorData.elevatorAbsoluteEncoderInitialized;

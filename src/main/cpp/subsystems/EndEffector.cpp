@@ -35,21 +35,18 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             break;
     }
 
-    // if (coneLimitSwitch.Get())
-    // {
-    //     endEffectorData.isCone = true;
-    //     endEffectorData.isCube = false;
-    // }
-    // else if (cubeLimitSwitch.Get())
-    // {
-    //     endEffectorData.isCone = false;
-    //     endEffectorData.isCube = true;
-    // }
-    // else
-    // {
-    //     endEffectorData.isCone = false;
-    //     endEffectorData.isCube = false;
-    // }
+    if (coneLimitSwitch.Get())
+    {
+        endEffectorData.gamePieceType = GamePiece::CONE;
+    }
+    else if (cubeLimitSwitch.Get())
+    {
+        endEffectorData.gamePieceType = GamePiece::CUBE;
+    }
+    else
+    {
+        endEffectorData.gamePieceType = GamePiece::NONE;
+    }
 
 
 }
@@ -67,31 +64,43 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else if (robotData.controlData.saIntakeBackwards) 
     {
-        if (robotData.armData.isNotCone)
+        switch (robotData.endEffectorData.gamePieceType)
         {
-            SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
-        }
-        else
-        {
-            SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);   
+            case CONE:
+                SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);  
+                break;
+            case CUBE:
+                SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
+                break;
+            case NONE:
+                SetEndEffectorRollerSpeed(0.0);
+                break;
+            default:
+                SetEndEffectorRollerSpeed(0.0);
+                break;
         }
     }
     else if (robotData.controlData.saCubeIntake)
     {
         SetEndEffectorRollerSpeed(EndEffectorRollerCubeInwardSpeed);
     }
-    
     else
     {
-        if (robotData.armData.isNotCone)
+        switch (robotData.endEffectorData.gamePieceType)
         {
-            SetEndEffectorRollerSpeed(0.05);
+            case CONE:
+                SetEndEffectorRollerSpeed(0.05);
+                break;
+            case CUBE:
+                SetEndEffectorRollerSpeed(-0.05);
+                break;
+            case NONE:
+                SetEndEffectorRollerSpeed(0.0);
+                break;
+            default:
+                SetEndEffectorRollerSpeed(0.0);
+                break;
         }
-        else
-        {
-            SetEndEffectorRollerSpeed(-0.05);
-        }
-        
     }
 }
 

@@ -14,10 +14,16 @@
 
 struct RobotData;
 
+enum GamePiece
+{
+    CUBE,
+    CONE,
+    NONE
+};
+
 struct EndEffectorData
 {
-    bool isCone = true;
-    bool isCube = false;
+    GamePiece gamePieceType;
 };
 
 class EndEffector
