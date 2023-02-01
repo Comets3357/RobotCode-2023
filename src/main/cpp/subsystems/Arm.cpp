@@ -42,7 +42,7 @@ void Arm::RobotInit(ArmData &armData)
 
     armPivotAbsoluteEncoder.SetInverted(true);
     armPivotAbsoluteEncoder.SetPositionConversionFactor(360);
-    armPivotAbsoluteEncoder.SetZeroOffset(99.1);
+    armPivotAbsoluteEncoder.SetZeroOffset(99.1 + 3.644505);
     armPivotRelativeEncoder.SetPositionConversionFactor(1.565569);
     armPivotRelativeEncoder.SetPosition(10);
 
@@ -141,6 +141,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         pivotRunMode = ARM_RELATIVE_RUN;
         armPivotPIDController.SetFeedbackDevice(armPivotRelativeEncoder);
     }
+    
 
     pivotRunMode = ARM_RELATIVE_RUN;
     armPivotPIDController.SetFeedbackDevice(armPivotRelativeEncoder);
@@ -158,7 +159,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     wristInPositionForArmPastRead = wristInPositionForArm;
     wristInPositionForArm = armWristRelativeEncoder.GetPosition() < 100;
     
-
+    if (robotData.controlData.saPositionHumanPlayer)
+    {
+        RotateWrist(50, robotData, 0);
+        RotatePivot(30, robotData, 0);
+    }
 
     if (pivotRunMode != ARM_NONE || wristRunMode != ARM_NONE)
     {

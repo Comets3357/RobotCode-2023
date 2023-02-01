@@ -56,6 +56,7 @@ struct ControlData
     bool saHomePosition;
     bool saPositionMid;
     bool saPositionHigh;
+    bool saPositionHumanPlayer;
     bool saBullBarExtension;
     //end effector:
     bool mEndEffectorRollersIn;

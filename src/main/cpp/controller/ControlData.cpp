@@ -73,6 +73,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 // ARM:
     // SEMI AUTO:
     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    controlData.saPositionHumanPlayer = (controllerData.sABtn) && controlData.shift;
     controlData.saPositionMid = (controllerData.sBBtn) && !controlData.shift;
     controlData.saPositionHigh = (controllerData.sYBtn) && !controlData.shift;
 

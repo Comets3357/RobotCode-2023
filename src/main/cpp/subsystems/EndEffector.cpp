@@ -10,6 +10,10 @@ void EndEffector::RobotInit()
     endEffectorRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     endEffectorRollers.SetSmartCurrentLimit(45);
     endEffectorRollers.EnableVoltageCompensation(10.5);
+
+    coneLimitSwitch.EnableLimitSwitch(false);
+    cubeLimitSwitch.EnableLimitSwitch(false);
+    
     endEffectorRollers.BurnFlash();
     
 
@@ -52,7 +56,11 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 
 void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
-    if (robotData.controlData.saConeIntake) 
+    if (robotData.controlData.saPositionHumanPlayer)
+    {
+        SetEndEffectorRollerSpeed(0.5);
+    }
+    else if (robotData.controlData.saConeIntake) 
     {
         SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
 
@@ -72,6 +80,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     {
         SetEndEffectorRollerSpeed(EndEffectorRollerCubeInwardSpeed);
     }
+    
     else
     {
         if (robotData.armData.isNotCone)

@@ -106,6 +106,11 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             if (elevatorProfile.IsFinished(elapsedTime))
             {
                 elevatorProfileActive = false;
+                if (elevatorRelativeEncoder.GetPosition() < 3)
+                {
+                    elevatorMotor.Set(0);
+                    elevatorRelativeEncoder.SetPosition(0);
+                }
             }
         }
     }
@@ -154,7 +159,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
 
     elevatorProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{120_deg_per_s, 90_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{120_deg_per_s, 70_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{elevatorRelativeEncoder.GetVelocity()}}
     };
