@@ -37,15 +37,18 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 
     if (coneLimitSwitch.Get())
     {
-        endEffectorData.gamePieceType = GamePiece::CONE;
+        endEffectorData.gamePieceType = CONE;
     }
     else if (cubeLimitSwitch.Get())
     {
-        endEffectorData.gamePieceType = GamePiece::CUBE;
+        if (robotData.armData.wristSafeCubeDetectionPosition)
+        {
+            endEffectorData.gamePieceType = CUBE;
+        }
     }
     else
     {
-        endEffectorData.gamePieceType = GamePiece::NONE;
+        endEffectorData.gamePieceType = NONE;
     }
 
 
@@ -55,7 +58,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
 {
     if (robotData.controlData.saPositionHumanPlayer)
     {
-        SetEndEffectorRollerSpeed(0.5);
+        SetEndEffectorRollerSpeed(-0.3);
     }
     else if (robotData.controlData.saConeIntake) 
     {
@@ -89,10 +92,10 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
         switch (robotData.endEffectorData.gamePieceType)
         {
             case CONE:
-                SetEndEffectorRollerSpeed(0.05);
+                SetEndEffectorRollerSpeed(-0.05);
                 break;
             case CUBE:
-                SetEndEffectorRollerSpeed(-0.05);
+                SetEndEffectorRollerSpeed(0.05);
                 break;
             case NONE:
                 SetEndEffectorRollerSpeed(0.0);
@@ -102,6 +105,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 break;
         }
     }
+    frc::SmartDashboard::PutNumber("BHASIUDGUISAD", endEffectorData.gamePieceType);
 }
 
 void EndEffector::Manual(const RobotData &robotData, EndEffectorData &endEffectorData)

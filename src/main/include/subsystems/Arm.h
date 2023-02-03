@@ -31,6 +31,7 @@ struct ArmData
     double wristAngle = 0;
 
     bool wristSafePosition = false;
+    bool wristSafeCubeDetectionPosition = false;
 
 };
 

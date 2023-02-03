@@ -9,7 +9,7 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     elevatorMotor.SetInverted(true);
     elevatorMotor.EnableVoltageCompensation(10.5);
     elevatorMotor.SetSmartCurrentLimit(55);
-    elevatorPIDController.SetP(0.9, 0); 
+    elevatorPIDController.SetP(0.3, 0); 
     //elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     elevatorMotor.BurnFlash();
     elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
@@ -82,7 +82,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(91, robotData, 0);
+            MoveElevator(80, robotData, 0);
         }
     }
     else

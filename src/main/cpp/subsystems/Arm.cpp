@@ -174,6 +174,14 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     if (pivotRunMode != ARM_NONE || wristRunMode != ARM_NONE)
     {
+        if (armWristRelativeEncoder.GetPosition() < 25)
+        {
+            armData.wristSafeCubeDetectionPosition = false;
+        }
+        else
+        {
+            armData.wristSafeCubeDetectionPosition = true;
+        }
         switch (robotData.endEffectorData.gamePieceType)
         {
 
@@ -183,7 +191,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
                     // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
                     // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
-                    RotateWrist(10, robotData, 0);
+                    RotateWrist(30, robotData, 0);
                     RotatePivot(146, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
@@ -195,7 +203,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(10, robotData, 1);
+                    RotateWrist(30, robotData, 1);
                     RotatePivot(147, robotData, 1);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
@@ -203,8 +211,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
-                    RotateWrist(10, robotData, 0);
-                    RotatePivot(17, robotData, 0);
+                    RotateWrist(30, robotData, 0);
+                    RotatePivot(11, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
                 }
@@ -237,8 +245,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
-                    RotateWrist(10, robotData, 0);
-                    RotatePivot(17, robotData, 0);
+                    RotateWrist(30, robotData, 0);
+                    RotatePivot(11, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
                     
@@ -251,7 +259,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
                     // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
                     // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
-                    RotateWrist(10, robotData, 0);
+                    RotateWrist(30, robotData, 0);
                     RotatePivot(146, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
@@ -263,7 +271,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(10, robotData, 1);
+                    RotateWrist(30, robotData, 1);
                     RotatePivot(147, robotData, 1);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
@@ -271,8 +279,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
-                    RotateWrist(10, robotData, 0);
-                    RotatePivot(17, robotData, 0);
+                    RotateWrist(30, robotData, 0);
+                    RotatePivot(11, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
                 }
@@ -284,7 +292,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
                     // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
                     // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
-                    RotateWrist(10, robotData, 0);
+                    RotateWrist(30, robotData, 0);
                     RotatePivot(146, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
@@ -296,7 +304,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(10, robotData, 1);
+                    RotateWrist(30, robotData, 1);
                     RotatePivot(147, robotData, 1);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
@@ -304,8 +312,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
-                    RotateWrist(10, robotData, 0);
-                    RotatePivot(17, robotData, 0);
+                    RotateWrist(30, robotData, 0);
+                    RotatePivot(11, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
                 }
@@ -320,8 +328,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
                     if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
                     {
-                        RotatePivot(17, robotData, 0);
-                        RotateWrist(129, robotData, 0);
+                        RotatePivot(10, robotData, 0);
+                        RotateWrist(132, robotData, 0);
                     }
                 }
                 else if (!robotData.bullBarData.bullBarSafePosition && (tempVar != controllerFlipped))
@@ -334,13 +342,14 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             {
                 if (tempVar != controllerFlipped)
                 {
-                    RotateWrist(10, robotData, 0);
+                    
+                    RotateWrist(30, robotData, 0);
                     // RotatePivot(25, robotData);
                 }
 
                 if (wristInPositionForArmPastRead != wristInPositionForArm && armWristRelativeEncoder.GetPosition() < 100)
                 {
-                    RotatePivot(17, robotData, 0);
+                    RotatePivot(11, robotData, 0);
                 }
             }
             
@@ -349,7 +358,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 if (tempVar != controllerFlipped)
                 {
                     RotatePivot(41, robotData, 0);
-                    RotateWrist(199.5, robotData, 0);
+                    RotateWrist(199.5+3, robotData, 0);
                 }
                 readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
             }
@@ -357,14 +366,14 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             {
                 if (tempVar != controllerFlipped)
                 {
-                    RotateWrist(10, robotData, 0);
+                    RotateWrist(30, robotData, 0);
                     RotatePivot(55, robotData, 0);
                 }
 
                 if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
                 {
-                    //RotateWrist(10, robotData, 0);
-                    RotatePivot(17, robotData, 0);
+                    //RotateWrist(30, robotData, 0);
+                    RotatePivot(11, robotData, 0);
                 }
             }
         // }
@@ -386,6 +395,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             {
                 armData.wristSafePosition = false;
             }
+            armData.wristSafePosition = true;
         
         frc::SmartDashboard::PutBoolean("arm in safe position", armData.wristSafePosition);
 
@@ -403,8 +413,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     if (robotData.controllerData.sXBtn)
     {
-    //     ZeroRelativePositionPivot(armData);
-    //     ZeroRelativePositionWrist(armData);
+        ZeroRelativePositionPivot(armData);
+        ZeroRelativePositionWrist(armData);
     }
 /* --------------------------------------------------------------------------------------------------------------------------
 *                                   TRAP MOVEMENTS
@@ -455,15 +465,13 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
     //     DisableWristSoftLimits();
     // }
 
-    // if (pivotSoftLimitsToggled)
-    // {
-    //     DisablePivotSoftLimits();
-    // }
+    if (pivotSoftLimitsToggled)
+    {
+        DisablePivotSoftLimits();
+    }
 
     // armWristPIDController.SetReference(50, rev::ControlType::kPosition);
 
-    EnablePivotSoftLimits();
-    EnableWristSoftLimits();
 
 
     // frc::SmartDashboard::PutBoolean("i AM HERE IN WRIST", true);
@@ -606,8 +614,8 @@ void Arm::DisabledInit()
 
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
-    // ZeroRelativePositionPivot(armData);
-    // ZeroRelativePositionWrist(armData);
+    ZeroRelativePositionPivot(armData);
+    ZeroRelativePositionWrist(armData);
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
