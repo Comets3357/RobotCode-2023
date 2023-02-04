@@ -11,6 +11,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DutyCycle.h>
 #include <frc/DigitalInput.h>
+#include <ctre/Phoenix.h>
 
 struct RobotData;
 
@@ -81,8 +82,7 @@ private:
     double bullBarRollerInwardSpeed = -0.4;
     
     // Bull Bar Roller Initialization
-    rev::CANSparkMax bullBarRollers = rev::CANSparkMax(bullBarRollerID, rev::CANSparkMax::MotorType::kBrushless);
-    rev::SparkMaxRelativeEncoder bullBarRollersRelativeEncoder = bullBarRollers.GetEncoder(); // Relative Encoder
+    ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};
 
     // Bull Bar Slider Initialization
     rev::CANSparkMax bullBarSlider = rev::CANSparkMax(bullBarSliderID, rev::CANSparkMax::MotorType::kBrushless);
