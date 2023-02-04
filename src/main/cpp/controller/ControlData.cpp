@@ -63,9 +63,18 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 
     // SEMI AUTO:
 
-    controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
+    {
+        controlData.saConeIntake = false;
+        controlData.saCubeIntake = false;
+    }
+    else 
+    {
+        controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
+        controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    }
+
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
-    controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
     // MANUAL:
     controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;
     controlData.mEndEffectorRollersOut = controllerData.sYBtn && !controlData.shift;

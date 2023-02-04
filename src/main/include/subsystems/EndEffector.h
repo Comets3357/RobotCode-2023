@@ -23,7 +23,7 @@ enum GamePiece
 
 struct EndEffectorData
 {
-    GamePiece gamePieceType;
+    GamePiece gamePieceType = NONE;
 };
 
 class EndEffector
@@ -52,5 +52,7 @@ private:
     double EndEffectorRollerInwardSpeed = -0.5;
 
     double EndEffectorRollerCubeInwardSpeed = 0.2;
+
+    
 
 };

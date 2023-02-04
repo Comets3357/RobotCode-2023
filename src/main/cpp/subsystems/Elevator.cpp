@@ -78,11 +78,11 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         }
         else if (robotData.controlData.saPositionMid)
         {
-            MoveElevator(5, robotData, 0);
+            MoveElevator(20, robotData, 0);
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(80, robotData, 0);
+            MoveElevator(70, robotData, 0);
         }
     }
     else
@@ -118,15 +118,16 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 
 void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
 {
-    DisableSoftLimits();
-    if (softLimitsEnabled) 
-    {
-        DisableSoftLimits();
-    }
+    // DisableSoftLimits();
+    // if (softLimitsEnabled) 
+    // {
+    //     DisableSoftLimits();
+    // }
     if (robotData.controlData.forceZeroElevator)
     {
         ForceZeroElevator();
     }
+    EnableSoftLimits();
 
     if ((robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08) && !robotData.controlData.shift)
     {

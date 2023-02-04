@@ -71,15 +71,15 @@ private:
 
     // Positions for intaking cone or cube
     double bullBarConeIntakePosition = bullBarMinPosition + 17.208;
-    double bullBarCubeIntakePosition = bullBarMinPosition + 12;
+    double bullBarCubeIntakePosition = bullBarMinPosition + 12.5;
 
     // intake speed
-    double bullBarRollerExtendedSpeed = 0.5;
+    double bullBarRollerExtendedSpeed = 0.9;
     double bullBarRollerRetractedSpeed = 0;
     
     // intake and outake speeds
-    double bullBarRollerOutwardSpeed = 0.4;
-    double bullBarRollerInwardSpeed = -0.4;
+    double bullBarRollerOutwardSpeed = 0.9;
+    double bullBarRollerInwardSpeed = -0.9;
     
     // Bull Bar Roller Initialization
     ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};

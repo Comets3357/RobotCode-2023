@@ -6,10 +6,8 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 { // check current vals and then burn flash if they are different
     // BullBar Rollers
     bullBarRollers.ConfigFactoryDefault();
-    bullBarRollers.SetInverted(true);
+    bullBarRollers.SetInverted(false);
     bullBarRollers.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
-    bullBarRollers.ConfigVoltageCompSaturation(10.5);
-    bullBarRollers.EnableVoltageCompensation(true);
 
 
 
@@ -20,17 +18,17 @@ void BullBar::RobotInit(BullBarData &bullBarData)
     // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
 
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(86.6);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(53);
     
 
-    bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048);
+    bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048 * 15.2/18.9 * .9491525423728814);
 
     bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
 
     // BullBar Pivot
 
     // abs
-    bullBarSliderPIDController.SetP(0.225, 0);
+    bullBarSliderPIDController.SetP(0.5, 0);
     bullBarSliderPIDController.SetI(0, 0);  
     bullBarSliderPIDController.SetD(0, 0);
     bullBarSliderPIDController.SetIZone(0, 0);
@@ -129,6 +127,17 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
     }
 
+    if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5) 
+    || (bullBarSliderRelativeEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5))
+    {
+        bullBarData.bullBarSafePosition = true;
+    }
+    else
+    {
+        bullBarData.bullBarSafePosition = false;
+    }
+    frc::SmartDashboard::PutBoolean("Bull Bar Safe", bullBarData.bullBarSafePosition);
+
     if (runMode != BULLBAR_NONE)
     {
         if (robotData.controlData.saConeIntake)
@@ -146,15 +155,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
                 bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, bullBarRollerRetractedSpeed);
             }
 
-            if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarConeIntakePosition - 0.5 && bullBarSliderAbsoluteEncoder.GetPosition() < bullBarConeIntakePosition + 0.5) 
-               || (bullBarSliderRelativeEncoder.GetPosition() > bullBarConeIntakePosition - 0.5 && bullBarSliderRelativeEncoder.GetPosition() < bullBarConeIntakePosition + 0.5))
-            {
-                bullBarData.bullBarSafePosition = true;
-            }
-            else
-            {
-                bullBarData.bullBarSafePosition = false;
-            }
+            
         }
         else if (robotData.controlData.saCubeIntake)
         {
@@ -174,15 +175,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 
             }
 
-            if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderAbsoluteEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5) 
-               || (bullBarSliderRelativeEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderRelativeEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5))
-            {
-                bullBarData.bullBarSafePosition = true;
-            }
-            else
-            {
-                bullBarData.bullBarSafePosition = false;
-            }
+            
         }
         else
         {
@@ -192,15 +185,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
                 bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
             }
 
-            if ((bullBarSliderAbsoluteEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderAbsoluteEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5) 
-               || (bullBarSliderRelativeEncoder.GetPosition() > bullBarCubeIntakePosition - 0.5 && bullBarSliderRelativeEncoder.GetPosition() < bullBarCubeIntakePosition + 0.5))
-            {
-                bullBarData.bullBarSafePosition = true;
-            }
-            else
-            {
-                bullBarData.bullBarSafePosition = false;
-            }
+           
         }
     }
     else
