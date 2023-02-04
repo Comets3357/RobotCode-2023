@@ -208,7 +208,6 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
         bullBarSlider.Set(0);
         bullBarRollers.Set(0);
     }
-    bullBarData.bullBarSafePosition = true;
     
 }
 

@@ -395,7 +395,6 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             {
                 armData.wristSafePosition = false;
             }
-            armData.wristSafePosition = true;
         
         frc::SmartDashboard::PutBoolean("arm in safe position", armData.wristSafePosition);
 
