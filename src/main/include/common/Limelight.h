@@ -45,9 +45,9 @@ private:
     double distanceToClosestTag = 0;
 
     double aprilTagHeight = 13.0;
-    double limelightHeight = 0.0;
+    double limelightHeight = 15.75;
     
-    double limelightAngle = 0.0;
+    double limelightAngle = 11.6;
 
     double inchesToMeters = 0.0254;
 

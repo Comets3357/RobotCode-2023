@@ -40,6 +40,7 @@ void Robot::RobotPeriodic() {
   controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
   limelight.RobotPeriodic(robotData, robotData.limelightData);
   
+  frc::SmartDashboard::PutNumber("i am also here", 1000);
 }
 
 /**
