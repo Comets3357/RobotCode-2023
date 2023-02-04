@@ -5,6 +5,7 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/NetworkTableEntry.h>
 #include <networktables/NetworkTableValue.h>
+#include "LimelightHelpers.h"
 #include <cmath>
 #include <deque>
 #include <frc/DriverStation.h>
@@ -29,11 +30,14 @@ private:
 
     double GetDistance();
 
-    std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
+    // std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
+    LimelightHelpers::LimelightResultsClass llresults = LimelightHelpers::getLatestResults();
     std::vector<double> limelightOdometry = {0,0,0,0,0,0};
+
 
     double tempX = 0;
     double tempY = 0;
+    int numberOfTagsInView = 0;
 
     double distanceToClosestTag = 0;
 
@@ -43,5 +47,6 @@ private:
     double limelightAngle = 0.0;
 
     double inchesToMeters = 0.0254;
+
 
 };
