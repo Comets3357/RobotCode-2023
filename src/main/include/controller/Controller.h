@@ -40,6 +40,8 @@ struct ControlData
     bool saIntaking;
     bool saIntakeBackwards;
 
+    bool saResetOdometry;
+
 
 
 

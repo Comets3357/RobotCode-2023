@@ -74,6 +74,11 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mIntakeRollersIn = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mIntakeRollersOut = (controllerData.sRTrigger > 0.5) && controlData.shift;
     controlData.mForceZeroIntake = controllerData.sRCenterBtn;
+
+// Limelight:
+
+    controlData.saResetOdometry = controllerData.sRCenterBtnToggled && controlData.shift;
+
     
     
 

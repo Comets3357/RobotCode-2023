@@ -119,14 +119,7 @@ const float
 
 //limelight:
 static const double
-    pi = 3.141592653589793238463,
-    hubHeight = 104,
-    limelightMount = 36.5, //height of mount
-    limelightAngle = 36.2, //angle of limelight on mount
-    xcameraDistanceFromBot = 4.2,//3.8,//3.35, //3.2, //3.0625, //offset from center of shooter X
-    ycameraDistanceFromBot = 9.5, //offset from center of shooter Y
-    shooterDistanceFromCenterOfBot = 2, 
-    crosshairOffset = 0;
+    pi = 3.141592653589793238463;
 
 // DIO
 static const int

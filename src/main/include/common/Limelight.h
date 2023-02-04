@@ -10,12 +10,14 @@
 #include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <vector>
+#include <math.h>
 
 struct RobotData;
 
 struct LimelightData
 {
-
+    int limelightOdometryX = 0;
+    int limelightOdometryY = 0;
 };
 
 class Limelight
@@ -25,7 +27,21 @@ public:
 
 private:
 
+    double GetDistance();
+
     std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
-    std::vector<double> hehe = {0,0,0,0,0,0};
+    std::vector<double> limelightOdometry = {0,0,0,0,0,0};
+
+    double tempX = 0;
+    double tempY = 0;
+
+    double distanceToClosestTag = 0;
+
+    double aprilTagHeight = 13.0;
+    double limelightHeight = 0.0;
+    
+    double limelightAngle = 0.0;
+
+    double inchesToMeters = 0.0254;
 
 };
