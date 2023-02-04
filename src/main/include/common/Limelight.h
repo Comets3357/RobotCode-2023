@@ -17,8 +17,11 @@ struct RobotData;
 
 struct LimelightData
 {
-    int limelightOdometryX = 0;
-    int limelightOdometryY = 0;
+    double limelightPastOdometryX = 0;
+    double limelightPastOdometryY = 0;
+
+    double limelightOdometryX = 0;
+    double limelightOdometryY = 0;
 };
 
 class Limelight

@@ -17,6 +17,9 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         frc::SmartDashboard::PutNumber("ll x", tempX);
         frc::SmartDashboard::PutNumber("ll y", tempY);
 
+        limelightData.limelightPastOdometryX = limelightData.limelightOdometryX;
+        limelightData.limelightPastOdometryY = limelightData.limelightOdometryY;
+
         if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1))
         {
             distanceToClosestTag = GetDistance();

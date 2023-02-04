@@ -285,8 +285,8 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
     frc::SmartDashboard::PutNumber("left distance", getEncoderDistance(dbLEncoder.GetPosition()));
 
-    frc::SmartDashboard::PutNumber("UPDATELEGTY", (double)leftDistance);
-    frc::SmartDashboard::PutNumber("UPDATERIGHT", (double)rightDistance);
+    frc::SmartDashboard::PutNumber("UPDATE LEFT", (double)leftDistance);
+    frc::SmartDashboard::PutNumber("UPDATE RIGHT", (double)rightDistance);
     odometry.Update(currentRotation, leftDistance, rightDistance);
 
     field.SetRobotPose(odometry.GetPose());
@@ -294,8 +294,18 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
 
     drivebaseData.currentPose = odometry.GetPose();
-    drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
-    drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
+
+    if ((robotData.limelightData.limelightPastOdometryX != robotData.limelightData.limelightOdometryX || robotData.limelightData.limelightPastOdometryY != robotData.limelightData.limelightOdometryY) && 
+        (robotData.limelightData.limelightOdometryX < 50 || robotData.limelightData.limelightOdometryY < 50))
+    {
+        drivebaseData.odometryX = robotData.limelightData.limelightOdometryX;
+        drivebaseData.odometryY = robotData.limelightData.limelightOdometryY;
+    }
+    else
+    {
+        drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
+        drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
+    }
 
     drivebaseData.odometryYaw = drivebaseData.currentPose.Rotation().Degrees().to<double>();
     // drivebaseData.odometryYaw = (drivebaseData.odometryYaw / M_PI * 180); // convert from radians [-pi, pi] to degrees [0, 360]
