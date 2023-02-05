@@ -136,6 +136,15 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
     {
         bullBarData.bullBarSafePosition = false;
     }
+
+    if ((bullBarSliderAbsoluteEncoder.GetPosition() < 12 && bullBarData.bullBarAbsoluteEncoderInitialized) || bullBarSliderRelativeEncoder.GetPosition() < 12)
+    {
+        bullBarData.bullBarUprightConeSafePosition = true;
+    }
+    else
+    {
+        bullBarData.bullBarUprightConeSafePosition = false;
+    }
     frc::SmartDashboard::PutBoolean("Bull Bar Safe", bullBarData.bullBarSafePosition);
 
     if (runMode != BULLBAR_NONE)
@@ -157,6 +166,14 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 
             
         }
+        else if (robotData.controlData.saConeFlipPosition)
+        {
+            if (robotData.armData.wristSafePosition)
+            {
+                bullBarSliderPIDController.SetReference(16, rev::CANSparkMax::ControlType::kPosition, 0);
+            }
+            bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, bullBarRollerExtendedSpeed);   
+        }
         else if (robotData.controlData.saCubeIntake)
         {
             if (robotData.armData.wristSafePosition)
@@ -177,21 +194,32 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 
             
         }
+        
         else
         {
             if (robotData.armData.wristSafePosition)
             {
                 bullBarSliderPIDController.SetReference(bullBarMinPosition, rev::CANSparkMax::ControlType::kPosition, 0);
-                bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+                
             }
+            if(!bullBarData.bullBarUprightConeSafePosition)
+                {
+                    bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -bullBarRollerExtendedSpeed); 
+                }
+                else
+                {
+                    bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+                }
 
            
         }
     }
+    
     else
     {
         bullBarSlider.Set(0);
         bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+
     }
     
 }

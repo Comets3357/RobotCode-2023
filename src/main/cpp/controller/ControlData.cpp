@@ -67,11 +67,22 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     {
         controlData.saConeIntake = false;
         controlData.saCubeIntake = false;
+        controlData.saUprightConeIntake = false;
     }
     else 
     {
+        controlData.saUprightConeIntake = (controllerData.sXBtn) && controlData.shift;
         controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
         controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    }
+
+    if (robotData.endEffectorData.armRetractRequest)
+    {
+        controlData.saHomePosition = true;
+    }
+    else
+    {
+        controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     }
 
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
@@ -81,10 +92,11 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 
 // ARM:
     // SEMI AUTO:
-    controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    
     controlData.saPositionHumanPlayer = (controllerData.sABtn) && controlData.shift;
     controlData.saPositionMid = (controllerData.sBBtn) && !controlData.shift;
     controlData.saPositionHigh = (controllerData.sYBtn) && !controlData.shift;
+    controlData.saConeFlipPosition = (controllerData.sYBtn) && controlData.shift;
 
     // MANUAL:
     controlData.mMovePivot = (controllerData.sLYStick > 0.2 || controllerData.sLYStick < -0.2) && controlData.shift;

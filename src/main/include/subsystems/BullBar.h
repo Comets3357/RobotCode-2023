@@ -19,8 +19,8 @@ struct RobotData;
 struct BullBarData
 {
     bool bullBarAbsoluteEncoderInitialized = false;
-
     bool bullBarSafePosition = false;
+    bool bullBarUprightConeSafePosition = false;
 };
 
 enum BullBarRunMode

@@ -37,17 +37,20 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 
     if (coneLimitSwitch.Get())
     {
+        endEffectorData.lastPieceType = CONE;
         endEffectorData.gamePieceType = CONE;
     }
     else if (cubeLimitSwitch.Get())
     {
         if (robotData.armData.wristSafeCubeDetectionPosition)
         {
+            endEffectorData.lastPieceType = CUBE;
             endEffectorData.gamePieceType = CUBE;
         }
     }
-    else
+    else if (!robotData.controlData.saConeIntake || !robotData.controlData.saCubeIntake || !robotData.controlData.saElevatorSetHumanPlayerPosition || !robotData.controlData.saUprightConeIntake)
     {
+        
         endEffectorData.gamePieceType = NONE;
     }
 
@@ -56,11 +59,20 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 
 void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
+    endEffectorData.armRetractRequest = false;
     if (robotData.controlData.saPositionHumanPlayer)
     {
-        SetEndEffectorRollerSpeed(-0.3);
+        if (endEffectorData.gamePieceType != CONE)
+        {
+            SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
+        }
+        else
+        {
+            SetEndEffectorRollerSpeed(-0.05);
+        }
+        
     }
-    else if (robotData.controlData.saConeIntake) 
+    else if (robotData.controlData.saConeIntake || robotData.controlData.saUprightConeIntake) 
     {
         if (endEffectorData.gamePieceType != CONE)
         {
@@ -70,7 +82,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else if (robotData.controlData.saIntakeBackwards) 
     {
-        switch (robotData.endEffectorData.gamePieceType)
+        switch (robotData.endEffectorData.lastPieceType)
         {
             case CONE:
                 SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);  
@@ -78,12 +90,10 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
             case CUBE:
                 SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
                 break;
-            case NONE:
-                SetEndEffectorRollerSpeed(0.0);
-                break;
-            default:
-                SetEndEffectorRollerSpeed(0.0);
-                break;
+        }
+        if (endEffectorData.gamePieceType == NONE)
+        {
+            eject = true;
         }
     }
     else if (robotData.controlData.saCubeIntake)
@@ -110,6 +120,11 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 SetEndEffectorRollerSpeed(0.0);
                 break;
         }
+    }
+    if (eject == true)
+    {
+        endEffectorData.armRetractRequest = true;
+        eject = false;
     }
     frc::SmartDashboard::PutNumber("BHASIUDGUISAD", endEffectorData.gamePieceType);
 }

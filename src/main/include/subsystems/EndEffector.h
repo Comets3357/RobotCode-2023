@@ -24,6 +24,9 @@ enum GamePiece
 struct EndEffectorData
 {
     GamePiece gamePieceType = NONE;
+    GamePiece lastPieceType = CONE;
+
+    bool armRetractRequest = false;
 };
 
 class EndEffector
@@ -52,6 +55,10 @@ private:
     double EndEffectorRollerInwardSpeed = -0.5;
 
     double EndEffectorRollerCubeInwardSpeed = 0.2;
+
+    bool eject = false;
+
+
 
     
 
