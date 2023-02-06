@@ -34,7 +34,7 @@ private:
     double GetDistance();
 
     // std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
-    LimelightHelpers::LimelightResultsClass llresults = LimelightHelpers::getLatestResults();
+    LimelightHelpers::LimelightResultsClass llresults; //= LimelightHelpers::getLatestResults();
     std::vector<double> limelightOdometry = {0,0,0,0,0,0};
 
 
