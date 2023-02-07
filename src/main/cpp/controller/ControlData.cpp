@@ -96,6 +96,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saPositionHumanPlayer = (controllerData.sABtn) && controlData.shift;
     controlData.saPositionMid = (controllerData.sBBtn) && !controlData.shift;
     controlData.saPositionHigh = (controllerData.sYBtn) && !controlData.shift;
+    controlData.saSetUpPosition = (controllerData.sBBtn) && controlData.shift;
     controlData.saConeFlipPosition = (controllerData.sYBtn) && controlData.shift;
 
     // MANUAL:

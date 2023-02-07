@@ -58,6 +58,7 @@ struct ControlData
     bool saHomePosition;
     bool saPositionMid;
     bool saPositionHigh;
+    bool saSetUpPosition;
     bool saPositionHumanPlayer;
     bool saBullBarExtension;
     //end effector:

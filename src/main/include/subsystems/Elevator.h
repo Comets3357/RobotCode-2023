@@ -24,6 +24,7 @@ struct ElevatorData
 {
     bool elevatorRunning = false;
     bool elevatorAbsoluteEncoderInitialized = false;
+    bool drivebaseSlowMode = false;
 };
 
 enum ElevatorRunMode

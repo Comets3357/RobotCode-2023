@@ -13,6 +13,9 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+timer.RobotInit(robotData.timerData);
+
+
 
   driveBase.RobotInit();
   endEffector.RobotInit();
@@ -22,7 +25,7 @@ void Robot::RobotInit() {
   arm.RobotInit(robotData.armData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
-  timer.RobotInit(robotData.timerData);
+  
 
   auton.RobotInit(robotData.autonData);
 

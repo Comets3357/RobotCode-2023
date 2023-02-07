@@ -101,6 +101,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 *                                   WRIST SEMI AUTO FEEDBACK DEVICES
 *  --------------------------------------------------------------------------------------------------------------------------
 */
+frc::SmartDashboard::PutNumber("elbowSpeed", armPivot.Get());
+frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
 
     if (!wristSoftLimitsToggled)
     {
@@ -196,6 +198,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             }
             
         }
+        if (robotData.controlData.saSetUpPosition)
+        {
+            RotateWrist(30, robotData, 0);
+            RotatePivot(120, robotData, 0);
+        }
         switch (robotData.endEffectorData.gamePieceType)
         {
 
@@ -217,8 +224,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(30, robotData, 1);
-                    RotatePivot(142, robotData, 1);
+                    RotateWrist(30, robotData, 0);
+                    RotatePivot(130, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
 
@@ -285,8 +292,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(30, robotData, 1);
-                    RotatePivot(147, robotData, 1);
+                    RotateWrist(30, robotData, 0.2);
+                    RotatePivot(146, robotData, 0.2);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
 
@@ -344,7 +351,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                     if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
                     {
                         RotatePivot(10, robotData, 0);
-                        RotateWrist(128, robotData, 0);
+                        RotateWrist(125, robotData, 0);
                     }
                 }
                 else if (!robotData.bullBarData.bullBarSafePosition && (coneIntakeToggle != armData.coneIntakeRunning))
@@ -400,7 +407,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             {
                 if (cubeIntakeToggle != armData.cubeIntakeRunning)
                 {
-                    RotatePivot(36, robotData, 0);
+                    RotatePivot(39, robotData, 0);
                     RotateWrist(199.5+3, robotData, 0);
                 }
                 readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
@@ -570,7 +577,7 @@ void Arm::RotatePivot(double targetDegree, const RobotData& robotData, double ti
 
     pivotProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{360_deg_per_s, 450_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{720_deg_per_s, 700_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };
@@ -595,7 +602,7 @@ void Arm::RotateWrist(double targetDegree, const RobotData& robotData, double ti
 
     wristProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{300_deg_per_s, 250_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{400_deg_per_s, 350_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{wristProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{wristProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };

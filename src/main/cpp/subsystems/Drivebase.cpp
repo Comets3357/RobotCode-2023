@@ -188,6 +188,15 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
 // adjusts for the deadzone and converts joystick input to velocity values for PID
 void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData, ControlData &controlData)
 {
+
+    if (robotData.elevatorData.drivebaseSlowMode)
+    {
+        drivebaseMultiplier = 0.45;
+    }
+    else
+    {
+        drivebaseMultiplier = 1;
+    }
     // frc::SmartDashboard::PutNumber("DRIVE MODE", robotData.drivebaseData.driveMode);
     // frc::SmartDashboard::PutNumber("SHOOT MODE", robotData.controlData.shootMode);
     // assign drive mode
@@ -255,7 +264,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
 
         //set as percent vbus
-        setPercentOutput(tempLDrive, tempRDrive);
+        setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
     }
     else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
     {

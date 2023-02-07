@@ -57,6 +57,15 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         EnableSoftLimits();
     }
 
+    if (elevatorRelativeEncoder.GetPosition() > 40)
+    {
+        elevatorData.drivebaseSlowMode = true;
+    }
+    else
+    {
+        elevatorData.drivebaseSlowMode = false;
+    }
+
     // if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
     // {
     //     runMode = ELEVATOR_RELATIVE_RUN;
@@ -74,15 +83,19 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
     {
         if (robotData.controlData.saHomePosition)
         {
-            MoveElevator(0, robotData, 0.5);
+            MoveElevator(0, robotData, 0.25);
         }
         else if (robotData.controlData.saPositionMid)
         {
-            MoveElevator(20, robotData, 0);
+            MoveElevator(21, robotData, 0);
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(70, robotData, 0);
+            MoveElevator(71, robotData, 0);
+        }
+        else if (robotData.controlData.saSetUpPosition)
+        {
+            MoveElevator(30, robotData, 0);
         }
     }
     else
@@ -104,10 +117,10 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             if (elevatorProfile.IsFinished(elapsedTime))
             {
                 elevatorProfileActive = false;
-                if (elevatorRelativeEncoder.GetPosition() < 3)
+                if (elevatorRelativeEncoder.GetPosition() < 0.25)
                 {
                     elevatorMotor.Set(0);
-                    elevatorRelativeEncoder.SetPosition(0);
+                    
                 }
             }
         }
@@ -118,16 +131,17 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 
 void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
 {
+    elevatorData.drivebaseSlowMode = false;
     // DisableSoftLimits();
-    // if (softLimitsEnabled) 
-    // {
-    //     DisableSoftLimits();
-    // }
+    if (softLimitsEnabled) 
+    {
+        DisableSoftLimits();
+    }
     if (robotData.controlData.forceZeroElevator)
     {
         ForceZeroElevator();
     }
-    EnableSoftLimits();
+
 
     if ((robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08) && !robotData.controlData.shift)
     {
@@ -158,7 +172,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
 
     elevatorProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{120_deg_per_s, 70_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{240_deg_per_s, 140_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{elevatorRelativeEncoder.GetVelocity()}}
     };
@@ -176,7 +190,7 @@ void Elevator::EnableSoftLimits()
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
-    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 0.5);
+    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 0.05);
     elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 0.5);
 }
 
