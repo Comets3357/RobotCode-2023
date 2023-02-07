@@ -41,10 +41,10 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             break;
     }
 
-    // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
-    // {
-    //     ZeroRelativePosition(elevatorData);
-    // }
+    if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
+    {
+        ZeroRelativePosition(elevatorData);
+    }
 
     frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
 }
@@ -65,11 +65,12 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         elevatorData.drivebaseSlowMode = false;
     }
 
-    // if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
-    // {
-    //     runMode = ELEVATOR_RELATIVE_RUN;
-    //     elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
-    // }
+    if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
+    {
+        runMode = ELEVATOR_RELATIVE_RUN;
+        elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+    }
+    
     if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)
     {
         runMode = ELEVATOR_RELATIVE_RUN;
