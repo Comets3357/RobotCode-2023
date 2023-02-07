@@ -149,4 +149,6 @@ private:
     rev::SparkMaxRelativeEncoder dbREncoder = dbR.GetEncoder();
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
 
+    double drivebaseMultiplier = 1;
+
 };

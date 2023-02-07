@@ -24,13 +24,14 @@ struct ElevatorData
 {
     bool elevatorRunning = false;
     bool elevatorAbsoluteEncoderInitialized = false;
+    bool drivebaseSlowMode = false;
 };
 
 enum ElevatorRunMode
 {
-    ABSOLUTE_RUN,
-    RELATIVE_RUN,
-    NONE
+    ELEVATOR_ABSOLUTE_RUN,
+    ELEVATOR_RELATIVE_RUN,
+    ELEVATOR_NONE
 };
 
 class Elevator
@@ -45,7 +46,7 @@ public:
 
 private:
 
-    ElevatorRunMode runMode = ABSOLUTE_RUN;
+    ElevatorRunMode runMode = ELEVATOR_ABSOLUTE_RUN;
 
     //void SetElevatorPosition(double elevatorAbsolutePosition);
     void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
@@ -69,7 +70,7 @@ private:
     rev::SparkMaxAbsoluteEncoder elevatorAbsoluteEncoder = elevatorMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
-    double elevatorMaxPosition = elevatorMinPosition + 25; // TODO: fix this value when we get subsystem
+    double elevatorMaxPosition = elevatorMinPosition + 75; // TODO: fix this value when we get subsystem
     double elevatorMinPosition = 0; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;

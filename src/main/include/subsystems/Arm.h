@@ -31,8 +31,13 @@ struct ArmData
     double wristAngle = 0;
 
     bool wristSafePosition = false;
+    bool wristSafeCubeDetectionPosition = false;
 
-    bool isNotCone = false;
+    bool cubeIntakeRunning = false;
+    bool coneIntakeRunning = false;
+    bool humanPlayerConeIntakeRunning = false;
+    bool uprightConeIntakeRunning = false;
+
 };
 
 enum ArmRunMode
@@ -135,9 +140,13 @@ private:
     bool wristSoftLimitsToggled = false;
 
     bool readyRunBasedOffBullBar = false;
+    bool bullBarIn = false;
 
-    bool controllerFlipped = false;
-    bool tempVar = false;
+    bool coneIntakeToggle = false;
+    bool cubeIntakeToggle = false;
+    bool humanPlayerIntakeToggle = false;
+    bool uprightConeIntakeToggle = false;
+    bool coneFlipPosition = false;
 
     bool endEffectorGamePiece = false;
     bool endEffectorGamePiecePastRead = false;
