@@ -5,27 +5,18 @@
 void BullBar::RobotInit(BullBarData &bullBarData)
 { // check current vals and then burn flash if they are different
     // BullBar Rollers
-    bullBarRollers.ConfigFactoryDefault();
+
     bullBarRollers.SetInverted(false);
-    bullBarRollers.SetNeutralMode(ctre::phoenix::motorcontrol::Brake);
-
-
 
     bullBarSliderAbsoluteEncoder.SetInverted(true);
-    // bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
-    // bullBarSliderAbsoluteEncoder.SetZeroOffset(-111.49);
-
-    // bullBarSliderRelativeEncoder.SetPositionConversionFactor(5.25);
-
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43);
     bullBarSliderAbsoluteEncoder.SetZeroOffset(53);
-    
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048 * 15.2/18.9 * .9491525423728814);
 
     bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
 
-    // BullBar Pivot
+    // BullBar 
 
     // abs
     bullBarSliderPIDController.SetP(0.5, 0);
@@ -157,11 +148,11 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             }
             if (robotData.controllerData.sRBumper)
             {
-                bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -bullBarRollerExtendedSpeed);   
+                bullBarRollers.Set(-bullBarRollerExtendedSpeed);
             }
             else
             {
-                bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, bullBarRollerRetractedSpeed);
+                bullBarRollers.Set(bullBarRollerRetractedSpeed);
             }
 
             
@@ -172,29 +163,23 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             {
                 bullBarSliderPIDController.SetReference(16, rev::CANSparkMax::ControlType::kPosition, 0);
             }
-            bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, bullBarRollerExtendedSpeed);   
+            bullBarRollers.Set(bullBarRollerExtendedSpeed);  
         }
         else if (robotData.controlData.saCubeIntake)
         {
             if (robotData.armData.wristSafePosition)
             {
                 bullBarSliderPIDController.SetReference(bullBarCubeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
-                
             }
             if (robotData.controllerData.sRBumper)
             {
-            bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -bullBarRollerExtendedSpeed);
-
+                bullBarRollers.Set(-bullBarRollerExtendedSpeed); 
             }
             else
             {
-            bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, bullBarRollerExtendedSpeed);
-
-            }
-
-            
+                bullBarRollers.Set(bullBarRollerExtendedSpeed); 
+            }  
         }
-        
         else
         {
             if (robotData.armData.wristSafePosition)
@@ -203,23 +188,19 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
                 
             }
             if(!bullBarData.bullBarUprightConeSafePosition)
-                {
-                    bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -bullBarRollerExtendedSpeed); 
-                }
-                else
-                {
-                    bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
-                }
-
-           
+            {
+                bullBarRollers.Set(-bullBarRollerExtendedSpeed); 
+            }
+            else
+            {
+                bullBarRollers.Set(0); 
+            }
         }
     }
-    
     else
     {
         bullBarSlider.Set(0);
-        bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
-
+        bullBarRollers.Set(0);
     }
     
 }
@@ -246,16 +227,16 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
     }
 
     if (robotData.controlData.mBullBarRollerForward)
-    { 
-        bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0.6);
+    {
+        bullBarRollers.Set(0.6);
     }
     else if (robotData.controlData.mBullBarRollerBackward)
     {
-        bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, -0.6);
+        bullBarRollers.Set(-0.6);
     }
     else 
     {
-        bullBarRollers.Set(ctre::phoenix::motorcontrol::ControlMode::PercentOutput, 0);
+        bullBarRollers.Set(0);
     }
 
     if (robotData.controlData.mForceZeroBullBar)

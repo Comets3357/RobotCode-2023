@@ -9,10 +9,13 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     elevatorMotor.SetInverted(true);
     elevatorMotor.EnableVoltageCompensation(10.5);
     elevatorMotor.SetSmartCurrentLimit(55);
+
     elevatorPIDController.SetP(0.3, 0); 
-    //elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+
     elevatorMotor.BurnFlash();
+
     elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+
     elevatorPIDController.SetOutputRange(-1,1);
     elevatorRelativeEncoder.SetPosition(0);
 
@@ -44,10 +47,6 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
     // }
 
     frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
-
-
-    
-
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
@@ -103,8 +102,6 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         elevatorMotor.Set(0);
     }
 
-    
-
     if (elevatorProfileActive)
     {
         if (robotData.timerData.secSinceEnabled > elevatorProfileStartTime)
@@ -132,11 +129,11 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorData.drivebaseSlowMode = false;
-    // DisableSoftLimits();
     if (softLimitsEnabled) 
     {
         DisableSoftLimits();
     }
+    
     if (robotData.controlData.forceZeroElevator)
     {
         ForceZeroElevator();

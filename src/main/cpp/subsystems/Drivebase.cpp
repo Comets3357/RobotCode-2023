@@ -38,42 +38,6 @@ void Drivebase::RobotInit()
     dbR.SetSmartCurrentLimit(60);
     dbRF.SetSmartCurrentLimit(60);
 
-    // PIDs for blue db
-    /* dbL.Config_kF(0, 0.032514);
-    dbL.Config_kP(0, 0.038723);
-    dbL.Config_kD(0, 0);
-
-    dbR.Config_kF(0, 0.032514);
-    dbR.Config_kP(0, 0.038723);
-    dbR.Config_kD(0, 0); */
-
-    // PIDs for 2022 Calvin University
-    // dbL.Config_kF(0, 0.077626);
-    // dbL.Config_kP(0, 0.10352);
-    // dbL.Config_kD(0, 0);
-
-    // dbR.Config_kF(0, 0.077626);
-    // dbR.Config_kP(0, 0.10352);
-    // dbR.Config_kD(0, 0);
-
-    // Atlas 03.26.22 Morning
-    // dbL.Config_kF(0, 0.074655);
-    // dbL.Config_kP(0, 0.1079);
-    // dbL.Config_kD(0, 0);
-
-    // dbR.Config_kF(0, 0.074655);
-    // dbR.Config_kP(0, 0.1079);
-    // dbR.Config_kD(0, 0);
-
-    // Atlas 04.07.22 Final tread center drop but not fresh treads
-    // dbLPIDController.SetFF(0.071797);
-    // dbLPIDController.SetP(0.10814);
-    // dbLPIDController.SetD(0);
-
-    // dbRPIDController.SetFF(0.071797);
-    // dbRPIDController.SetP(0.10814);
-    // dbRPIDController.SetD(0);
-
     dbLPIDController.SetP(0.3926);
     dbLPIDController.SetFF(0.2688);
     dbLPIDController.SetD(0);

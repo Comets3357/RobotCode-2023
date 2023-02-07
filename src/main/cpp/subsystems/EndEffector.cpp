@@ -15,7 +15,6 @@ void EndEffector::RobotInit()
     cubeLimitSwitch.EnableLimitSwitch(false);
     
     endEffectorRollers.BurnFlash();
-    
 
 }
 

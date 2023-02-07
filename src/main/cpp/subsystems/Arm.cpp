@@ -9,8 +9,8 @@ void Arm::RobotInit(ArmData &armData)
     armWristPIDController.SetD(0, 0);
     armWristPIDController.SetIZone(0, 0);
     armWristPIDController.SetFF(0, 0);
-
     armWristPIDController.SetOutputRange(-1, 1, 0);
+    
     armWrist.EnableVoltageCompensation(10.5);
     armWrist.SetSmartCurrentLimit(20);
     armWrist.SetInverted(false);
@@ -19,9 +19,8 @@ void Arm::RobotInit(ArmData &armData)
     armWristAbsoluteEncoder.SetInverted(false);
     armWristAbsoluteEncoder.SetPositionConversionFactor(360);
     armWristAbsoluteEncoder.SetZeroOffset(9.299444);
-    armWristRelativeEncoder.SetPositionConversionFactor(360.0/82.09);//90.453243);//4.2976522);
-    armWristRelativeEncoder.SetPosition(10);
 
+    armWristRelativeEncoder.SetPositionConversionFactor(360.0/82.09);
     armWristRelativeEncoder.SetPosition(10);
 
     armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
@@ -38,7 +37,6 @@ void Arm::RobotInit(ArmData &armData)
     armPivot.EnableVoltageCompensation(10.5);
     armPivot.SetSmartCurrentLimit(45);
     armPivot.SetInverted(true);
-
     armPivot.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
     armPivotAbsoluteEncoder.SetInverted(true);
@@ -101,8 +99,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 *                                   WRIST SEMI AUTO FEEDBACK DEVICES
 *  --------------------------------------------------------------------------------------------------------------------------
 */
-frc::SmartDashboard::PutNumber("elbowSpeed", armPivot.Get());
-frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
+    frc::SmartDashboard::PutNumber("elbowSpeed", armPivot.Get());
+    frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
 
     if (!wristSoftLimitsToggled)
     {
@@ -163,8 +161,11 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
     armData.uprightConeIntakeRunning = robotData.controlData.saUprightConeIntake;
     armData.humanPlayerConeIntakeRunning = robotData.controlData.saPositionHumanPlayer;
 
-
     endEffectorGamePiecePastRead = endEffectorGamePiece;
+
+    wristInPositionForArmPastRead = wristInPositionForArm;
+    wristInPositionForArm = armWristRelativeEncoder.GetPosition() < 100;
+
     if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
     {
         endEffectorGamePiece = true;
@@ -173,12 +174,7 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
     {
         endEffectorGamePiece = false;
     }
-
-    wristInPositionForArmPastRead = wristInPositionForArm;
-    wristInPositionForArm = armWristRelativeEncoder.GetPosition() < 100;
     
-    
-
     if (pivotRunMode != ARM_NONE || wristRunMode != ARM_NONE)
     {
         if (armWristRelativeEncoder.GetPosition() < 25)
@@ -210,32 +206,18 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
             
                 if (robotData.controlData.saPositionMid)
                 {
-                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
-                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
                     RotateWrist(30, robotData, 0);
                     RotatePivot(142, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-                // SetAngleOfWrist(armData, 0);
-                //RotateWrist(120, robotData);
-
-                // SetAngleOfPivot(armData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-
                     RotateWrist(30, robotData, 0);
                     RotatePivot(130, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
                     RotateWrist(30, robotData, 0);
                     RotatePivot(11, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
                 }
                 break;
 
@@ -243,34 +225,20 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
 
                 if (robotData.controlData.saPositionMid)
                 {
-                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
-                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
                     RotateWrist(50, robotData, 0);
                     RotatePivot(146, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-                    frc::SmartDashboard::PutBoolean("I AMM GETTTING HERE", true);
-                // SetAngleOfWrist(armData, 0);
-                //RotateWrist(120, robotData);
-
-                // SetAngleOfPivot(armData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
 
                     RotateWrist(36.6, robotData, 1);
                     RotatePivot(140, robotData, 1);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
 
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
                     RotateWrist(30, robotData, 0);
-                    RotatePivot(11, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-                    
+                    RotatePivot(11, robotData, 0);  
                 }
                 break;
 
@@ -278,32 +246,18 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
 
                 if (robotData.controlData.saPositionMid)
                 {
-                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
-                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
                     RotateWrist(30, robotData, 0);
                     RotatePivot(146, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-                // SetAngleOfWrist(armData, 0);
-                //RotateWrist(120, robotData);
-
-                // SetAngleOfPivot(armData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-
                     RotateWrist(30, robotData, 0.2);
                     RotatePivot(146, robotData, 0.2);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
                     RotateWrist(30, robotData, 0);
                     RotatePivot(11, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
                 }
                 break;
 
@@ -311,131 +265,99 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
 
                 if (robotData.controlData.saPositionMid)
                 {
-                    // armWristPIDController.SetReference(120, rev::ControlType::kPosition);
-                    // armPivotPIDController.SetReference(100, rev::ControlType::kPosition);
                     RotateWrist(10, robotData, 0);
                     RotatePivot(148, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-                // SetAngleOfWrist(armData, 0);
-                //RotateWrist(120, robotData);
-
-                // SetAngleOfPivot(armData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-
-                    RotateWrist(10, robotData, 1);
-                    RotatePivot(148, robotData, 1);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
-
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(148, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
                     RotateWrist(30, robotData, 0);
                     RotatePivot(11, robotData, 0);
-                    // ZeroRelativePositionWrist(armData);
-                    // ZeroRelativePositionPivot(armData);
                 }
                 break;
         }
-        
-        // if (!robotData.endEffectorData.isCone || !robotData.endEffectorData.isCube)
-        // {
-        
-            if (robotData.controlData.saConeIntake)
-            {
-                if (robotData.bullBarData.bullBarSafePosition)
-                {
-                    if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
-                    {
-                        RotatePivot(10, robotData, 0);
-                        RotateWrist(125, robotData, 0);
-                    }
-                }
-                else if (!robotData.bullBarData.bullBarSafePosition && (coneIntakeToggle != armData.coneIntakeRunning))
-                {
-                    RotateWrist(50, robotData, 0);
-                }
-                readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
-            }
-            else if (!robotData.controlData.saCubeIntake)
-            {
-                if (cubeIntakeToggle != armData.cubeIntakeRunning)
-                {
-                    RotateWrist(30, robotData, 0);
-                    // RotatePivot(25, robotData);
-                }
 
-                if (wristInPositionForArmPastRead != wristInPositionForArm && armWristRelativeEncoder.GetPosition() < 100)
+        if (robotData.controlData.saConeIntake)
+        {
+            if (robotData.bullBarData.bullBarSafePosition)
+            {
+                if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
                 {
-                    RotatePivot(11, robotData, 0);
+                    RotatePivot(10, robotData, 0);
+                    RotateWrist(125, robotData, 0);
                 }
             }
-
-            if (robotData.controlData.saUprightConeIntake)
+            else if (!robotData.bullBarData.bullBarSafePosition && (coneIntakeToggle != armData.coneIntakeRunning))
             {
-                if (robotData.bullBarData.bullBarUprightConeSafePosition)
-                {
-                    if (bullBarIn != robotData.bullBarData.bullBarUprightConeSafePosition)
-                    {
-                        RotatePivot(16, robotData, 0);
-                        RotateWrist(130, robotData, 0);
-                    }
-                }
-                else if (!robotData.bullBarData.bullBarUprightConeSafePosition && (uprightConeIntakeToggle != armData.uprightConeIntakeRunning))
-                {
-                    RotateWrist(50, robotData, 0);
-                }
-                bullBarIn = robotData.bullBarData.bullBarUprightConeSafePosition;
+                RotateWrist(50, robotData, 0);
             }
-            else if (!robotData.controlData.saUprightConeIntake)
+            readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
+        }
+        else if (!robotData.controlData.saCubeIntake)
+        {
+            if (cubeIntakeToggle != armData.cubeIntakeRunning)
             {
-                bullBarIn = false;
-                if (uprightConeIntakeToggle != armData.uprightConeIntakeRunning)
-                {
-                    RotateWrist(30, robotData, 0);
-                    RotatePivot(11, robotData, 0);
-                }
+                RotateWrist(30, robotData, 0);
             }
 
-
-        
-        
-            if (robotData.controlData.saCubeIntake)
+            if (wristInPositionForArmPastRead != wristInPositionForArm && armWristRelativeEncoder.GetPosition() < 100)
             {
-                if (cubeIntakeToggle != armData.cubeIntakeRunning)
-                {
-                    RotatePivot(39, robotData, 0);
-                    RotateWrist(199.5+3, robotData, 0);
-                }
-                readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
+                RotatePivot(11, robotData, 0);
             }
-            else if (!robotData.controlData.saConeIntake)
-            {
-                if (coneIntakeToggle != armData.coneIntakeRunning)
-                {
-                    RotateWrist(30, robotData, 0);
-                    RotatePivot(55, robotData, 0);
-                }
+        }
 
-                if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
+        if (robotData.controlData.saUprightConeIntake)
+        {
+            if (robotData.bullBarData.bullBarUprightConeSafePosition)
+            {
+                if (bullBarIn != robotData.bullBarData.bullBarUprightConeSafePosition)
                 {
-                    //RotateWrist(30, robotData, 0);
-                    RotatePivot(11, robotData, 0);
+                    RotatePivot(16, robotData, 0);
+                    RotateWrist(130, robotData, 0);
                 }
             }
-        // }
-        // else
-        // {
-        //     if (endEffectorGamePiecePastRead != endEffectorGamePiece)
-        //     {
-        //         RotatePivot(25, robotData);
-        //         RotateWrist(15, robotData);
-        //     }
-        // }
+            else if (!robotData.bullBarData.bullBarUprightConeSafePosition && (uprightConeIntakeToggle != armData.uprightConeIntakeRunning))
+            {
+                RotateWrist(50, robotData, 0);
+            }
+            bullBarIn = robotData.bullBarData.bullBarUprightConeSafePosition;
+        }
+        else if (!robotData.controlData.saUprightConeIntake)
+        {
+            bullBarIn = false;
+            if (uprightConeIntakeToggle != armData.uprightConeIntakeRunning)
+            {
+                RotateWrist(30, robotData, 0);
+                RotatePivot(11, robotData, 0);
+            }
+        }
 
+        if (robotData.controlData.saCubeIntake)
+        {
+            if (cubeIntakeToggle != armData.cubeIntakeRunning)
+            {
+                RotatePivot(39, robotData, 0);
+                RotateWrist(199.5+3, robotData, 0);
+            }
+            readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
+        }
+        else if (!robotData.controlData.saConeIntake)
+        {
+            if (coneIntakeToggle != armData.coneIntakeRunning)
+            {
+                RotateWrist(30, robotData, 0);
+                RotatePivot(55, robotData, 0);
+            }
+
+            if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
+            {
+                RotatePivot(11, robotData, 0);
+            }
+        }
 
         if (armWristRelativeEncoder.GetPosition() < 50 || armPivotRelativeEncoder.GetPosition() > 70)
         {
@@ -447,12 +369,7 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
         }
         
         frc::SmartDashboard::PutBoolean("arm in safe position", armData.wristSafePosition);
-
         frc::SmartDashboard::PutNumber("WRIST CURRENT POSITION", armWristRelativeEncoder.GetPosition());
-
-        
-
-
     }
     else
     {
@@ -478,7 +395,6 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
 
         units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - wristProfileStartTime};
         auto setPoint = wristProfile.Calculate(elapsedTime);
-        //double feedForward = wristFeedForwardA * sin(((wristFeedForwardB * armPivotAbsoluteEncoder.GetPosition()) + wristFeedForwardC) / 180.0 * 3.14159265358979);
 
         armWristPIDController.SetReference(setPoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
         frc::SmartDashboard::PutNumber("TRAP Wrist", setPoint.position.value());
@@ -509,21 +425,15 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
 
 void Arm::Manual(const RobotData &robotData, ArmData &armData)
 {
-    // if (wristSoftLimitsToggled)
-    // {
-    //     DisableWristSoftLimits();
-    // }
+    if (wristSoftLimitsToggled)
+    {
+        DisableWristSoftLimits();
+    }
 
     if (pivotSoftLimitsToggled)
     {
         DisablePivotSoftLimits();
     }
-
-    // armWristPIDController.SetReference(50, rev::ControlType::kPosition);
-
-
-
-    // frc::SmartDashboard::PutBoolean("i AM HERE IN WRIST", true);
 
     if (robotData.controlData.mMovePivot)
     {
@@ -542,11 +452,6 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
     {
         armWrist .Set(0);
     }
-
-    // armWrist.Set(robotData.controllerData.sRYStick * 0.25);
-
-    // frc::SmartDashboard::PutNumber("RIGHT JOYSTICK", robotData.controllerData.sRYStick);
-
 
     if (robotData.controlData.mForceZeroPivot)
     {
