@@ -407,8 +407,8 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
             {
                 if (cubeIntakeToggle != armData.cubeIntakeRunning)
                 {
-                    RotatePivot(39, robotData, 0);
-                    RotateWrist(199.5+3, robotData, 0);
+                    RotatePivot(37, robotData, 0); // 39
+                    RotateWrist(199.5 + 3, robotData, 0);
                 }
                 readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
             }
