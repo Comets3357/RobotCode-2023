@@ -284,7 +284,7 @@ void BullBar::DisableSoftLimits()
 */
 void BullBar::EnableSoftLimits(BullBarData &bullBarData)
 {   
-    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 0.3);
+    bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, bullBarMinPosition + 1);
     bullBarSlider.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, bullBarMaxPosition - 0.35); 
 
     bullBarSlider.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);

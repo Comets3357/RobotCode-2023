@@ -266,7 +266,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 if (robotData.controlData.saPositionMid)
                 {
                     RotateWrist(10, robotData, 0);
-                    RotatePivot(148, robotData, 0);
+                    RotatePivot(120, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
@@ -430,11 +430,12 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
         DisableWristSoftLimits();
     }
 
-    // if (pivotSoftLimitsToggled)
-    // {
-    //     DisablePivotSoftLimits();
-    // }
-    EnablePivotSoftLimits();
+    if (pivotSoftLimitsToggled)
+    {
+        DisablePivotSoftLimits();
+    }
+    // EnablePivotSoftLimits();
+    // EnablePivotSoftLimits();
 
     if (robotData.controlData.mMovePivot)
     {
@@ -569,8 +570,8 @@ void Arm::DisabledInit()
 
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
-    // ZeroRelativePositionPivot(armData);
-    ZeroRelativePositionWrist(armData);
+    ZeroRelativePositionPivot(armData);
+    // ZeroRelativePositionWrist(armData);
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
@@ -609,7 +610,7 @@ void Arm::EnablePivotSoftLimits()
 {
 
     armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotMinPosition + 3);
-    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition - 3);
+    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition - 50);
 
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
