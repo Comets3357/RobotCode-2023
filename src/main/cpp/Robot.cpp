@@ -51,8 +51,8 @@ void Robot::RobotPeriodic() {
   driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
   bullBar.RobotPeriodic(robotData, robotData.bullBarData); //0.002
   endEffector.RobotPeriodic(robotData, robotData.endEffectorData);
-  arm.RobotPeriodic(robotData, robotData.armData); //0.01
-  elevator.RobotPeriodic(robotData, robotData.elevatorData);
+  // arm.RobotPeriodic(robotData, robotData.armData); //0.01
+  // elevator.RobotPeriodic(robotData, robotData.elevatorData);
   
   
 }

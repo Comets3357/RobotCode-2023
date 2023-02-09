@@ -8,11 +8,11 @@ static const int
     rightFollowDeviceID = 5;
 
 //intake:
-static const int
-    intakeRoller2ID = 14, // Not actual value yet.
-    intakeRollerID = 12,
-    intakePivotID = 11,
-    intakeSingulatorID = 13;
+// static const int
+    // intakeRoller2ID = 14, // Not actual value yet.
+    // intakeRollerID = 12,
+    // intakePivotID = 11,
+    // intakeSingulatorID = 13;
 
 //end effector:
 static const int

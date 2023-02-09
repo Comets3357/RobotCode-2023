@@ -18,7 +18,7 @@ void Arm::RobotInit(ArmData &armData)
 
     armWristAbsoluteEncoder.SetInverted(false);
     armWristAbsoluteEncoder.SetPositionConversionFactor(360);
-    armWristAbsoluteEncoder.SetZeroOffset(9.299444);
+    armWristAbsoluteEncoder.SetZeroOffset(255.9);
 
     armWristRelativeEncoder.SetPositionConversionFactor(360.0/82.09);
     armWristRelativeEncoder.SetPosition(10);
@@ -41,7 +41,7 @@ void Arm::RobotInit(ArmData &armData)
 
     armPivotAbsoluteEncoder.SetInverted(true);
     armPivotAbsoluteEncoder.SetPositionConversionFactor(360);
-    armPivotAbsoluteEncoder.SetZeroOffset(103.826942);
+    armPivotAbsoluteEncoder.SetZeroOffset(159.3);
     armPivotRelativeEncoder.SetPositionConversionFactor(1.565569);
     armPivotRelativeEncoder.SetPosition(10);
 
@@ -430,10 +430,11 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
         DisableWristSoftLimits();
     }
 
-    if (pivotSoftLimitsToggled)
-    {
-        DisablePivotSoftLimits();
-    }
+    // if (pivotSoftLimitsToggled)
+    // {
+    //     DisablePivotSoftLimits();
+    // }
+    EnablePivotSoftLimits();
 
     if (robotData.controlData.mMovePivot)
     {
@@ -568,7 +569,7 @@ void Arm::DisabledInit()
 
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
-    ZeroRelativePositionPivot(armData);
+    // ZeroRelativePositionPivot(armData);
     ZeroRelativePositionWrist(armData);
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
