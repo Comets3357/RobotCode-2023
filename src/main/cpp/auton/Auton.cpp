@@ -64,7 +64,7 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("fourBallB", "fourBallB");
     // autonChooser.AddOption("fourBallC", "fourBallC");
     
-    autonChooser.AddOption("5Ball", "5Ball");
+    autonChooser.AddOption("PlaceCone", "PlaceCone");
     // autonChooser.AddOption("fiveBallCAlt", "fiveBallCAlt");
 
     // autonChooser.AddOption("citrus", "citrus");
@@ -82,7 +82,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 {
     // frc::smartDashboard::PutString("autonRoutineName", autonData.autonRoutineName);
 
-    controlData.mode = mode_teleop_sa;
+    controlData.mode = MODE_TELEOP_SA;
 
     // if (autonData.autonRoutineName == "potato")
     // {
@@ -115,9 +115,9 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     // else if (autonData.autonRoutineName == "fourBallC") {
     //     fourBallC(robotData, controlData, controllerData);
     // }
-    if (autonData.autonRoutineName == "5Ball") 
+    if (autonData.autonRoutineName == "PlaceCone") 
     {
-        fiveBallC(robotData, controlData, controllerData);
+        placeCone(robotData, controlData, controllerData);
     }
     // else if (autonData.autonRoutineName == "fiveBallCAlt") {
     //     fiveBallC(robotData, controlData, controllerData);
@@ -264,31 +264,48 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 //     }
 // }
 
-void Auton::fiveBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
+void Auton::placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    // double sec = robotData.timerData.secSinceEnabled;
+
+    // if (sec > 2)
+    // {
+    //     step = 2;
+    // }
+    // else if (sec > 5)
+    // {
+    //     step = 3;
+    // }
+
+    // switch (step)
+    // {
+    // case (0):
+        
+    //     controlData.saPositionHigh = true;
+    //     step++;
+    //     break;
+    
+    // case(1):
+    //     controlData.saPositionHigh = false;
+    //     break;
+    // case(2):
+    //     controlData.saIntakeBackwards = true;
+    //     break;
+    // case(3):
+    //     controlData.saIntakeBackwards = false;
+    //     controlData.saHomePosition = true;
+    //     step++;
+    //     break;
+    // case(4):
+    //     controlData.saHomePosition = false;
+    //     break;
+    // }
+
+    
+
 
     // intake
-    if (sec > 1 && sec < 5.5)
-    {
-        controlData.saIntake = true;
-    } else if (sec > 8 && sec < 12.5) {
-
-        controlData.saIntake = true;
-    } else 
-    {
-        controlData.saIntake = false;
-    }
-    controlData.saIntake = false;
-
-    //aim-+/
-    if (sec > 0 && sec < 14) 
-    {
-        controlData.shootMode = shootMode_vision;
-    } else 
-    {
-        controlData.shootMode = shootMode_none;
-    }
+    
 }
 
 //     // final shoot
