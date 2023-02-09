@@ -10,18 +10,22 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     elevatorMotor.EnableVoltageCompensation(10.5);
     elevatorMotor.SetSmartCurrentLimit(55);
 
-    elevatorPIDController.SetP(0.3, 0); 
+    elevatorPIDController.SetP(0.153, 0); 
 
     elevatorMotor.BurnFlash();
 
-    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
 
     elevatorPIDController.SetOutputRange(-1,1);
-    elevatorRelativeEncoder.SetPosition(0);
+
+    elevatorRelativeEncoder.SetPositionConversionFactor(0.51);
+    elevatorRelativeEncoder.SetPosition(10);
+
+
 
     //FIND THESE VALUES THEN GOOD
-    // elevatorAbsoluteEncoder.SetPositionConversionFactor(0.1);
-    // elevatorAbsoluteEncoder.SetZeroOffset(0.1);
+    elevatorAbsoluteEncoder.SetPositionConversionFactor(18.4800000003);
+    elevatorAbsoluteEncoder.SetZeroOffset(0.1);
     // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
     
 }
@@ -76,8 +80,8 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         runMode = ELEVATOR_RELATIVE_RUN;
         elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     }
-    runMode = ELEVATOR_RELATIVE_RUN;
-    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    // runMode = ELEVATOR_RELATIVE_RUN;
+    // elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
 
     if (runMode != ELEVATOR_NONE)
     {
@@ -87,15 +91,15 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         }
         else if (robotData.controlData.saPositionMid)
         {
-            MoveElevator(21, robotData, 0);
+            MoveElevator(21*0.51, robotData, 0);
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(71, robotData, 0);
+            MoveElevator(71*0.51, robotData, 0);
         }
         else if (robotData.controlData.saSetUpPosition)
         {
-            MoveElevator(30, robotData, 0);
+            MoveElevator(30*0.51, robotData, 0);
         }
     }
     else

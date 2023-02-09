@@ -84,7 +84,7 @@ private:
     
     // Bull Bar Roller Initialization
     // ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};
-    frc::PWMSparkMax bullBarRollers{bullBarRollerID};
+    frc::PWMSparkMax bullBarRollers{bullBarRollerPWMID};
 
     // Bull Bar Slider Initialization
     rev::CANSparkMax bullBarSlider = rev::CANSparkMax(bullBarSliderID, rev::CANSparkMax::MotorType::kBrushless);
