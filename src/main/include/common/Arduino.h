@@ -20,7 +20,8 @@ public:
     int failedTransfers = 0;
 private:
 
-    bool arduinoWorking = true;
+    bool arduinoWorking = false;
+    int attemptsToConnectToArduino = 0;
     int colorCode;
 
     frc::SerialPort *arduino;
