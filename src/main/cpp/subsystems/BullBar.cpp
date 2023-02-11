@@ -6,11 +6,12 @@ void BullBar::RobotInit(BullBarData &bullBarData)
 { // check current vals and then burn flash if they are different
     // BullBar Rollers
 
-    bullBarRollers.SetInverted(false);
+    bullBarRollers.SetInverted(true);
+
 
     bullBarSliderAbsoluteEncoder.SetInverted(true);
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(108.43 * 0.9491525424);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(63.9);
+    bullBarSliderAbsoluteEncoder.SetZeroOffset(64.7);
 
     bullBarSliderRelativeEncoder.SetPositionConversionFactor(0.19048 * 15.2/18.9 * .9491525423728814 * 1.274271 * 1.09 * 1.12 * 1.118);
     bullBarSliderRelativeEncoder.SetPosition(10);

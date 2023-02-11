@@ -206,13 +206,13 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             
                 if (robotData.controlData.saPositionMid)
                 {
-                    RotateWrist(30, robotData, 0);
-                    RotatePivot(142, robotData, 0);
+                    RotateWrist(10, robotData, 0);
+                    RotatePivot(145, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    RotateWrist(30, robotData, 0);
-                    RotatePivot(130, robotData, 0);
+                    RotateWrist(15, robotData, 0);
+                    RotatePivot(135, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -231,8 +231,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(36.6, robotData, 1);
-                    RotatePivot(140, robotData, 1);
+                    RotateWrist(45, robotData, 0);
+                    RotatePivot(140, robotData, 0);
 
                 }
                 else if (robotData.controlData.saHomePosition)
@@ -288,7 +288,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 if (readyRunBasedOffBullBar != robotData.bullBarData.bullBarSafePosition)
                 {
                     RotatePivot(10, robotData, 0);
-                    RotateWrist(125, robotData, 0);
+                    RotateWrist(120, robotData, 0);
                 }
             }
             else if (!robotData.bullBarData.bullBarSafePosition && (coneIntakeToggle != armData.coneIntakeRunning))
@@ -301,12 +301,12 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (cubeIntakeToggle != armData.cubeIntakeRunning)
             {
-                RotateWrist(30, robotData, 0);
+                RotateWrist(20, robotData, 0);
             }
 
             if (wristInPositionForArmPastRead != wristInPositionForArm && armWristRelativeEncoder.GetPosition() < 100)
             {
-                RotatePivot(11, robotData, 0);
+                RotatePivot(20, robotData, 0);
             }
         }
 
@@ -355,7 +355,9 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
             if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
             {
+                pivotMaxAcceleration = 100_deg;
                 RotatePivot(11, robotData, 0);
+                pivotMaxAcceleration = 700_deg;
             }
         }
 
@@ -484,7 +486,7 @@ void Arm::RotatePivot(double targetDegree, const RobotData& robotData, double ti
 
     pivotProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{720_deg_per_s, 700_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{720_deg_per_s, pivotMaxAcceleration/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };
@@ -610,7 +612,7 @@ void Arm::EnablePivotSoftLimits()
 {
 
     armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotMinPosition + 5);
-    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition - 50);
+    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition - 5);
 
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);

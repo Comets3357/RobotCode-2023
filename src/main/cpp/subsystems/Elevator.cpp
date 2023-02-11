@@ -4,19 +4,22 @@
 
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
-
-    elevatorAbsoluteEncoder.SetInverted(true);
-    // elevatorAbsoluteEncoder.SetPositionConversionFactor(-76.6533066132);
-    // elevatorAbsoluteEncoder.SetZeroOffset(0);
-
-
     elevatorMotor.RestoreFactoryDefaults();
+    elevatorAbsoluteEncoder.SetInverted(true);
+    elevatorAbsoluteEncoder.SetPositionConversionFactor(72.75406740074442);
+    elevatorAbsoluteEncoder.SetZeroOffset(72.75406740074442 * 0.3201195593878466);
+
+    
+
+    
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     elevatorMotor.SetInverted(true);
     elevatorMotor.EnableVoltageCompensation(10.5);
-    elevatorMotor.SetSmartCurrentLimit(55);
+    elevatorMotor.SetSmartCurrentLimit(50);
 
     elevatorPIDController.SetP(0.153, 0); 
+    elevatorRelativeEncoder.SetPositionConversionFactor(0.496060877648);
+    elevatorRelativeEncoder.SetPosition(10);
 
     elevatorMotor.BurnFlash();
 
@@ -93,19 +96,19 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
     {
         if (robotData.controlData.saHomePosition)
         {
-            MoveElevator(0, robotData, 0.25);
+            MoveElevator(10, robotData, 0);
         }
         else if (robotData.controlData.saPositionMid)
         {
-            MoveElevator(21*0.51, robotData, 0);
+            MoveElevator(25, robotData, 0);
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(71*0.51, robotData, 0);
+            MoveElevator(48, robotData, 0);
         }
         else if (robotData.controlData.saSetUpPosition)
         {
-            MoveElevator(30*0.51, robotData, 0);
+            MoveElevator(40*0.496060877648, robotData, 0);
         }
     }
     else

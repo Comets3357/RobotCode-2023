@@ -60,6 +60,8 @@ public:
 
 private:
 
+units::angle::degree_t pivotMaxAcceleration{700_deg};
+
     void EnableWristSoftLimits();
     void DisableWristSoftLimits();
 
