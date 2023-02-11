@@ -3,7 +3,7 @@
 #include <frc/SerialPort.h>
 #include <time.h>
 
-#include "RobotData.h"
+struct RobotData;
 
 struct ArduinoData
 {

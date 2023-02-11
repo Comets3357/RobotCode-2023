@@ -4,6 +4,7 @@
 #include "controller/Controller.h"
 #include "common/Gyro.h"
 #include "common/Timer.h"
+#include "common/Arduino.h"
 
 #include "auton/Auton.h"
 
@@ -21,6 +22,7 @@ struct RobotData
     ControlData controlData;
     GyroData gyroData;
     TimerData timerData;
+    ArduinoData arduinoData;
 
     ArmData armData;
 

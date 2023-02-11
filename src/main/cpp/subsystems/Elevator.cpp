@@ -4,6 +4,12 @@
 
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
+
+    elevatorAbsoluteEncoder.SetInverted(true);
+    // elevatorAbsoluteEncoder.SetPositionConversionFactor(-76.6533066132);
+    // elevatorAbsoluteEncoder.SetZeroOffset(0);
+
+
     elevatorMotor.RestoreFactoryDefaults();
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     elevatorMotor.SetInverted(true);
@@ -14,18 +20,17 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 
     elevatorMotor.BurnFlash();
 
-    elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+    // elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
 
     elevatorPIDController.SetOutputRange(-1,1);
 
-    elevatorRelativeEncoder.SetPositionConversionFactor(0.51);
-    elevatorRelativeEncoder.SetPosition(10);
+    // elevatorRelativeEncoder.SetPositionConversionFactor(0.51);
+    // elevatorRelativeEncoder.SetPosition(10);
 
 
 
     //FIND THESE VALUES THEN GOOD
-    elevatorAbsoluteEncoder.SetPositionConversionFactor(18.4800000003);
-    elevatorAbsoluteEncoder.SetZeroOffset(0.1);
+    
     // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
     
 }
@@ -45,12 +50,13 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             break;
     }
 
-    if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
-    {
-        ZeroRelativePosition(elevatorData);
-    }
+    // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
+    // {
+    //     ZeroRelativePosition(elevatorData);
+    // }
 
     frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)

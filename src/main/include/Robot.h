@@ -44,6 +44,7 @@ class Robot : public frc::TimedRobot {
   Timer timer{};
   RobotData robotData{};
   Controller controller{};
+  Arduino arduino{};
 
 
 };

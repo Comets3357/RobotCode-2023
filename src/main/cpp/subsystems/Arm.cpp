@@ -41,7 +41,7 @@ void Arm::RobotInit(ArmData &armData)
 
     armPivotAbsoluteEncoder.SetInverted(true);
     armPivotAbsoluteEncoder.SetPositionConversionFactor(360);
-    armPivotAbsoluteEncoder.SetZeroOffset(159.3);
+    armPivotAbsoluteEncoder.SetZeroOffset(163.1);
     armPivotRelativeEncoder.SetPositionConversionFactor(1.565569);
     armPivotRelativeEncoder.SetPosition(10);
 
@@ -571,7 +571,7 @@ void Arm::DisabledInit()
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
     ZeroRelativePositionPivot(armData);
-    // ZeroRelativePositionWrist(armData);
+    ZeroRelativePositionWrist(armData);
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
@@ -609,7 +609,7 @@ void Arm::EnableWristSoftLimits()
 void Arm::EnablePivotSoftLimits()
 {
 
-    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotMinPosition + 3);
+    armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, armPivotMinPosition + 5);
     armPivot.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, armPivotMaxPosition - 50);
 
     armPivot.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
