@@ -3,6 +3,8 @@
 
 void ConfigurationFiles::RobotInit(const RobotData &robotData, ConfigData &configData, const std::string &fileName)
 {
+    frc::SmartDashboard::PutBoolean("Has config been read?", false);
+
     // Accessing the deploy dir
     fs::path deployDir = frc::filesystem::GetDeployDirectory();
 
@@ -24,10 +26,12 @@ void ConfigurationFiles::RobotInit(const RobotData &robotData, ConfigData &confi
         }
 
         inFile.close();
+
+        frc::SmartDashboard::PutBoolean("Has config been read?", true);
     }
     else
     {
-        // Did not work
+        frc::SmartDashboard::PutBoolean("Has config been read?", false);
     }
 
     
@@ -76,11 +80,115 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
     {
         switch (configMap[key])
         {
-            case 0: // BullBarAbsoluteZeroOffset
-                configData.bullBarAbsoluteOffset = std::stod(value);
+// -------------------------------------------------------------------------------------------------------------------------------------
+//                      BULL BAR CONFIG DATA
+// -------------------------------------------------------------------------------------------------------------------------------------
+            case 0: // VoltageCompensation
+                configData.bullBarConfigData.voltageComp = std::stod(value);
+                configData.armConfigData.voltageComp = std::stod(value);
+                configData.endEffectorConfigData.voltageComp = std::stod(value);
+                configData.elevatorConfigData.voltageComp = std::stod(value);
+                configData.drivebaseConfigData.voltageComp = std::stod(value);
                 break;
-            case 1:
-                
+            case 1: // BullBarRollerInverted
+                if (value == "true")
+                {
+                    configData.bullBarConfigData.invertRollers = true;
+                }
+                else
+                {
+                    configData.bullBarConfigData.invertRollers = false;
+                }
+                break;
+            case 2: // BullBarAbsoluteConversionFactor
+                configData.bullBarConfigData.absoluteConversion = std::stod(value);
+                break;
+            case 3: // BullBarAbsoluteZeroOffset
+                configData.bullBarConfigData.absoluteOffset = std::stod(value);
+                break;
+            case 4: // BullBarRelativeConversionFactor
+                configData.bullBarConfigData.relativeConversion = std::stod(value);
+                break;
+            case 5: // BullBarPValue
+                configData.bullBarConfigData.pValue = std::stod(value);
+                break;
+            case 6: // BullBarSmartCurrentLimit
+                configData.bullBarConfigData.currentLimit = std::stod(value);
+                break;
+            case 7: // BullBarSliderInvertedRelative
+                if (value == "true")
+                {
+                    configData.bullBarConfigData.invertSliderRelative = true;
+                }
+                else
+                {
+                    configData.bullBarConfigData.invertSliderRelative = false;
+                }
+                break;
+            case 8: // BullBarSliderInvertedAbsolute
+                if (value == "true")
+                {
+                    configData.bullBarConfigData.invertSliderAbsolute = true;
+                }
+                else
+                {
+                    configData.bullBarConfigData.invertSliderAbsolute = false;
+                }
+                break;
+// -------------------------------------------------------------------------------------------------------------------------------------
+//                      END EFFECTOR CONFIG DATA
+// -------------------------------------------------------------------------------------------------------------------------------------
+            case 20: // EndEffectorInvertRollers
+                if (value == "true")
+                {
+                    configData.endEffectorConfigData.invertRollers = true;
+                }
+                else
+                {
+                    configData.endEffectorConfigData.invertRollers = false;
+                }
+                break;
+            case 21: // EndEffectorCurrentLimit
+                configData.endEffectorConfigData.currentLimit = std::stod(value);
+                break;
+// -------------------------------------------------------------------------------------------------------------------------------------
+//                      ELEVATOR CONFIG DATA
+// -------------------------------------------------------------------------------------------------------------------------------------
+            case 30: // ElevatorInvertedAbsolute
+                if (value == "true")
+                {
+                    configData.elevatorConfigData.invertAbosolute = true;
+                }
+                else
+                {
+                    configData.elevatorConfigData.invertAbosolute = false;
+                }
+                break;
+            case 31: // ElevatorInvertedRelative
+                if (value == "true")
+                {
+                    configData.elevatorConfigData.invertRelative = true;
+                }
+                else
+                {
+                    configData.elevatorConfigData.invertRelative = false;
+                }
+                break;
+            case 32: // ElevatorCurrentLimit
+                configData.elevatorConfigData.currentLimit = std::stod(value);
+                break;
+            case 33: // ElevatorPValue
+                configData.elevatorConfigData.pValue = std::stod(value);
+                break;
+            case 34: // ElevatorRelativeConversionFactor
+                configData.elevatorConfigData.relativeConversionFactor = std::stod(value);
+                break;
+            case 35: // ElevatorAbsoluteConversionFactor
+                configData.elevatorConfigData.absoluteConversionFactor = std::stod(value);
+                break;
+            case 36:
+                configData.elevatorConfigData.absoluteZeroOffset = std::stod(value);
+                break;
         }
     }
     catch(...)

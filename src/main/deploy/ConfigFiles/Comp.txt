@@ -1,3 +1,27 @@
-# bull bar values
+# ENTIRE BOT VOLTAGE COMPENSATION #
+VoltageCompensation = 10.5
 
-BullBarAbsoluteZeroOffset = 56.3
+# BULL BAR VALUES #
+BullBarRollerInverted = true
+BullBarAbsoluteConversionFactor = 102.91661018724
+BullBarAbsoluteZeroOffset = 63.9
+BullBarRelativeConversionFactor = 0.2528804788421377681
+BullBarPValue = 0.5
+BullBarSmartCurrentLimit = 20
+BullBarSliderInvertedRelative = true
+BullBarSliderInvertedAbsolute = true
+
+# END EFFECTOR VALUES #
+EndEffectorInvertRollers = true
+EndEffectorCurrentLimit = 45
+
+# ELEVATOR VALUES #
+ElevatorInvertedAbsolute = true
+ElevatorInvertedRelative = true
+ElevatorCurrentLimit = 50
+ElevatorPValue = 0.153
+ElevatorRelativeConversionFactor = 0.496060877648
+ElevatorAbsoluteConversionFactor = 72.75406740074442
+ElevatorAbsoluteZeroOffset = 23.29
+
+# DRIVEBASE VALUES #
