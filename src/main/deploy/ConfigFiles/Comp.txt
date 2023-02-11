@@ -1,0 +1,3 @@
+# bull bar values
+
+BullBarAbsoluteZeroOffset = 56.3
