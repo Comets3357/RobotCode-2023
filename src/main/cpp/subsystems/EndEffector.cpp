@@ -2,14 +2,14 @@
 #include "RobotData.h"
 #include <cmath>
 
-void EndEffector::RobotInit()
+void EndEffector::RobotInit(const RobotData &robotData)
 {
     // End Effector Rollers
     endEffectorRollers.RestoreFactoryDefaults();
-    endEffectorRollers.SetInverted(true);
+    endEffectorRollers.SetInverted(robotData.configData.endEffectorConfigData.invertRollers);
     endEffectorRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    endEffectorRollers.SetSmartCurrentLimit(45);
-    endEffectorRollers.EnableVoltageCompensation(10.5);
+    endEffectorRollers.SetSmartCurrentLimit(robotData.configData.endEffectorConfigData.currentLimit);
+    endEffectorRollers.EnableVoltageCompensation(robotData.configData.endEffectorConfigData.voltageComp);
 
     coneLimitSwitch.EnableLimitSwitch(false);
     cubeLimitSwitch.EnableLimitSwitch(false);

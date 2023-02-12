@@ -1,48 +1,48 @@
 #include "subsystems/Arm.h"
 #include "RobotData.h"
 
-void Arm::RobotInit(ArmData &armData)
+void Arm::RobotInit(const RobotData &robotData, ArmData &armData)
 {
     // Wrist Initialization
-    armWristPIDController.SetP(0.1, 0); // 0.35
+    armWristPIDController.SetP(robotData.configData.armConfigData.wristP, 0); // 0.35
     armWristPIDController.SetI(0, 0);
     armWristPIDController.SetD(0, 0);
     armWristPIDController.SetIZone(0, 0);
     armWristPIDController.SetFF(0, 0);
     armWristPIDController.SetOutputRange(-1, 1, 0);
     
-    armWrist.EnableVoltageCompensation(10.5);
-    armWrist.SetSmartCurrentLimit(20);
-    armWrist.SetInverted(false);
+    armWrist.EnableVoltageCompensation(robotData.configData.armConfigData.voltageComp);
+    armWrist.SetSmartCurrentLimit(robotData.configData.armConfigData.wristCurrentLimit);
+    armWrist.SetInverted(robotData.configData.armConfigData.wristRelativeInverted); 
     armWrist.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armWristAbsoluteEncoder.SetInverted(false);
-    armWristAbsoluteEncoder.SetPositionConversionFactor(360);
-    armWristAbsoluteEncoder.SetZeroOffset(255.9);
+    armWristAbsoluteEncoder.SetInverted(robotData.configData.armConfigData.wristAbsoluteInverted);
+    armWristAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.wristAbsoluteConversion);
+    armWristAbsoluteEncoder.SetZeroOffset(robotData.configData.armConfigData.wristAbsoluteOffset);
 
-    armWristRelativeEncoder.SetPositionConversionFactor((360.0/82.09));
+    armWristRelativeEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.wristRelativeConversion);
     armWristRelativeEncoder.SetPosition(10);
 
-    armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
+    // armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
 
     armWrist.BurnFlash();
 
-    armPivotPIDController.SetP((0.04833*2), 0);
+    armPivotPIDController.SetP(robotData.configData.armConfigData.pivotP, 0);
     armPivotPIDController.SetI(0, 0);
     armPivotPIDController.SetD(0, 0);
     armPivotPIDController.SetIZone(0, 0);
     armPivotPIDController.SetFF(0, 0);
 
     armPivotPIDController.SetOutputRange(-1, 1, 0);
-    armPivot.EnableVoltageCompensation(10.5);
-    armPivot.SetSmartCurrentLimit(45);
-    armPivot.SetInverted(true);
+    armPivot.EnableVoltageCompensation(robotData.configData.armConfigData.voltageComp);
+    armPivot.SetSmartCurrentLimit(robotData.configData.armConfigData.pivotCurrentLimit);
+    armPivot.SetInverted(robotData.configData.armConfigData.pivotRelativeInverted);
     armPivot.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armPivotAbsoluteEncoder.SetInverted(true);
-    armPivotAbsoluteEncoder.SetPositionConversionFactor(360);
-    armPivotAbsoluteEncoder.SetZeroOffset(163.1);
-    armPivotRelativeEncoder.SetPositionConversionFactor(1.565569);
+    armPivotAbsoluteEncoder.SetInverted(robotData.configData.armConfigData.pivotAbsoluteInverted);
+    armPivotAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.pivotAbsoluteConversion);
+    armPivotAbsoluteEncoder.SetZeroOffset(robotData.configData.armConfigData.pivotAbsoluteOffset);
+    armPivotRelativeEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.pivotRelativeConversion);
     armPivotRelativeEncoder.SetPosition(10);
 
     armPivotPIDController.SetFeedbackDevice(armPivotAbsoluteEncoder);

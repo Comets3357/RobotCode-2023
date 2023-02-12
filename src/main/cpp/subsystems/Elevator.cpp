@@ -5,20 +5,17 @@
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorMotor.RestoreFactoryDefaults();
-    elevatorAbsoluteEncoder.SetInverted(true);
-    elevatorAbsoluteEncoder.SetPositionConversionFactor(72.75406740074442);
-    elevatorAbsoluteEncoder.SetZeroOffset(72.75406740074442 * 0.3201195593878466);
-
-    
-
+    elevatorAbsoluteEncoder.SetInverted(robotData.configData.elevatorConfigData.invertAbosolute);
+    elevatorAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.absoluteConversionFactor);
+    elevatorAbsoluteEncoder.SetZeroOffset(robotData.configData.elevatorConfigData.absoluteZeroOffset);
     
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    elevatorMotor.SetInverted(true);
-    elevatorMotor.EnableVoltageCompensation(10.5);
-    elevatorMotor.SetSmartCurrentLimit(50);
+    elevatorMotor.SetInverted(robotData.configData.elevatorConfigData.invertRelative);
+    elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
+    elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
 
-    elevatorPIDController.SetP(0.153, 0); 
-    elevatorRelativeEncoder.SetPositionConversionFactor(0.496060877648);
+    elevatorPIDController.SetP(robotData.configData.elevatorConfigData.pValue, 0); 
+    elevatorRelativeEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.relativeConversionFactor);
     elevatorRelativeEncoder.SetPosition(10);
 
     elevatorMotor.BurnFlash();
