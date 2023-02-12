@@ -224,8 +224,8 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(30, robotData, 0);
-                    RotatePivot(130, robotData, 0);
+                    RotateWrist(25, robotData, 0);
+                    RotatePivot(124, robotData, 0);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
 
@@ -292,8 +292,8 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
                 else if (robotData.controlData.saPositionHigh)
                 {
 
-                    RotateWrist(30, robotData, 0.2);
-                    RotatePivot(146, robotData, 0.2);
+                    RotateWrist(25, robotData, 0.2);
+                    RotatePivot(124, robotData, 0.2);
                     // ZeroRelativePositionWrist(armData);
                     // ZeroRelativePositionPivot(armData);
 
