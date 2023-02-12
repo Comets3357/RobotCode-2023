@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,81 +10,83 @@
 
 struct RobotData;
 
-struct BullBarConfigData
-{
-    double voltageComp;
 
-    double absoluteConversion;
-    double absoluteOffset;
-    double relativeConversion;
-
-    double pValue;
-    double currentLimit;
-
-    bool invertRollers;
-    bool invertSliderRelative;
-    bool invertSliderAbsolute;
-};
-
-struct ArmConfigData
-{
-    double voltageComp;
-
-    double wristP;
-    double wristCurrentLimit;
-    double wristAbsoluteConversion;
-    double wristAbsoluteOffset;
-    double wristRelativeConversion;
-
-    double pivotP;
-    double pivotCurrentLimit;
-    double pivotAbsoluteConversion;
-    double pivotAbsoluteOffset;
-    double pivotRelativeConversion;
-
-    bool wristRelativeInverted;
-    bool wristAbsoluteInverted;
-
-    bool pivotRelativeInverted;
-    bool pivotAbsoluteInverted;
-};
-
-struct ElevatorConfigData
-{
-    double voltageComp;
-    double pValue;
-    double currentLimit;
-    double relativeConversionFactor;
-    double absoluteConversionFactor;
-    double absoluteZeroOffset;
-
-    bool invertAbosolute;
-    bool invertRelative;
-};
-
-struct EndEffectorConfigData
-{
-    double voltageComp;
-    double currentLimit;
-
-    bool invertRollers;
-};
-
-struct DrivebaseConfigData
-{
-    double voltageComp;
-    double currentLimit;
-    double leftP;
-    double leftFF;
-    double rightP;
-    double rightFF;
-
-    bool rightInverted;
-    bool leftInverted;
-};
 
 struct ConfigData 
 {
+    struct BullBarConfigData
+    {
+        double voltageComp;
+
+        double absoluteConversion;
+        double absoluteOffset;
+        double relativeConversion;
+
+        double pValue;
+        double currentLimit;
+
+        bool invertRollers;
+        bool invertSliderRelative;
+        bool invertSliderAbsolute;
+    };
+
+    struct ArmConfigData
+    {
+        double voltageComp;
+
+        double wristP;
+        double wristCurrentLimit;
+        double wristAbsoluteConversion;
+        double wristAbsoluteOffset;
+        double wristRelativeConversion;
+
+        double pivotP;
+        double pivotCurrentLimit;
+        double pivotAbsoluteConversion;
+        double pivotAbsoluteOffset;
+        double pivotRelativeConversion;
+
+        bool wristRelativeInverted;
+        bool wristAbsoluteInverted;
+
+        bool pivotRelativeInverted;
+        bool pivotAbsoluteInverted;
+    };
+
+    struct ElevatorConfigData
+    {
+        double voltageComp;
+        double pValue;
+        double currentLimit;
+        double relativeConversionFactor;
+        double absoluteConversionFactor;
+        double absoluteZeroOffset;
+
+        bool invertAbosolute;
+        bool invertRelative;
+    };
+
+    struct EndEffectorConfigData
+    {
+        double voltageComp;
+        double currentLimit;
+
+        bool invertRollers;
+    };
+
+    struct DrivebaseConfigData
+    {
+        double voltageComp;
+        double currentLimit;
+        double leftP;
+        double leftFF;
+        double rightP;
+        double rightFF;
+
+        bool rightInverted;
+        bool leftInverted;
+    };
+
     BullBarConfigData bullBarConfigData;
     ArmConfigData armConfigData;
     ElevatorConfigData elevatorConfigData;
@@ -145,6 +149,8 @@ private:
         {"PivotAbsoluteZeroOffset", 95},
         {"PivotRelativeConversion", 96}
     };
+
+    int failedReadAttempts;
 
 
 };

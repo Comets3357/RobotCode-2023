@@ -3,6 +3,7 @@
 
 void ConfigurationFiles::ReadFile(const RobotData &robotData, ConfigData &configData, const std::string &fileName)
 {
+    frc::SmartDashboard::PutNumber("I AM HERE FOR VOLTAGE COMP", false);
     frc::SmartDashboard::PutBoolean("Has config been read?", false);
 
     // Accessing the deploy dir
@@ -34,7 +35,7 @@ void ConfigurationFiles::ReadFile(const RobotData &robotData, ConfigData &config
         frc::SmartDashboard::PutBoolean("Has config been read?", false);
     }
 
-    frc::SmartDashboard::PutNumber("test parsed line", configData.armConfigData.pivotAbsoluteConversion);
+    frc::SmartDashboard::PutNumber("test parsed line", configData.bullBarConfigData.absoluteConversion);
     
 }
 
@@ -60,21 +61,20 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
     if (pos != std::string::npos)
     {
         key = line.substr(0, pos);
-        value = line.substr(1, pos + 1);
+        value = line.substr(pos + 1);
     }
     else 
     {
-        key = line;
+        key = line.substr(1);
         value = "";
     }
 
-    // This trims all of the uneeded space in the keys
+    // This trims all of the uneeded space for the keys and values
     key.erase(0, key.find_first_not_of(" \t"));
-    key.erase(key.find_first_of(" \t") + 1);
-
-    // This trims all of the uneeded space in the values
+    key.erase(key.find_last_not_of(" \t") + 1);
     value.erase(0, value.find_first_not_of(" \t"));
-    value.erase(value.find_first_of(" \t") + 1);
+    value.erase(value.find_last_not_of(" \t") + 1);
+
 
     // This is where we check all of our keys to populate the data struct
     try
@@ -92,7 +92,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 configData.drivebaseConfigData.voltageComp = std::stod(value);
                 break;
             case 1: // BullBarRollerInverted
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.bullBarConfigData.invertRollers = true;
                 }
@@ -117,7 +117,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 configData.bullBarConfigData.currentLimit = std::stod(value);
                 break;
             case 7: // BullBarSliderInvertedRelative
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.bullBarConfigData.invertSliderRelative = true;
                 }
@@ -127,7 +127,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 }
                 break;
             case 8: // BullBarSliderInvertedAbsolute
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.bullBarConfigData.invertSliderAbsolute = true;
                 }
@@ -140,7 +140,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
 //                      END EFFECTOR CONFIG DATA
 // -------------------------------------------------------------------------------------------------------------------------------------
             case 20: // EndEffectorInvertRollers
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.endEffectorConfigData.invertRollers = true;
                 }
@@ -156,7 +156,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
 //                      ELEVATOR CONFIG DATA
 // -------------------------------------------------------------------------------------------------------------------------------------
             case 30: // ElevatorInvertedAbsolute
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.elevatorConfigData.invertAbosolute = true;
                 }
@@ -166,7 +166,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 }
                 break;
             case 31: // ElevatorInvertedRelative
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.elevatorConfigData.invertRelative = true;
                 }
@@ -194,7 +194,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
 //                      DRIVEBASE CONFIG DATA
 // -------------------------------------------------------------------------------------------------------------------------------------
             case 50: // DrivebaseRightInverted
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.drivebaseConfigData.rightInverted = true;
                 }
@@ -204,7 +204,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 }
                 break;
             case 51: // DrivebaseLeftInverted
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.drivebaseConfigData.leftInverted = true;
                 }
@@ -238,7 +238,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 configData.armConfigData.wristCurrentLimit = std::stod(value);
                 break;
             case 72: // WristRelativeInverted
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.armConfigData.wristRelativeInverted = true;
                 }
@@ -248,7 +248,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 }
                 break;
             case 73: // WristAbsoluteInverted
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.armConfigData.wristAbsoluteInverted = true;
                 }
@@ -274,7 +274,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 configData.armConfigData.pivotCurrentLimit = std::stod(value);
                 break;
             case 92: // PivotRelativeInverted
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.armConfigData.pivotRelativeInverted = true;
                 }
@@ -284,7 +284,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 }   
                 break;
             case 93: // PivotAbsoluteInverted
-                if (value == "true")
+                if (value == "true\r")
                 {
                     configData.armConfigData.pivotAbsoluteInverted = true;
                 }
@@ -292,6 +292,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 {
                     configData.armConfigData.pivotAbsoluteInverted = false;
                 }
+                break;
             case 94: // PivotAbsoluteConversion
                 configData.armConfigData.pivotAbsoluteConversion = std::stod(value);
                 break;

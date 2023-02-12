@@ -29,7 +29,7 @@ void Robot::RobotInit() {
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  arduino.RobotInit();
+  // arduino.RobotInit();
   
 
   auton.RobotInit(robotData.autonData);
@@ -49,9 +49,11 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
+  frc::SmartDashboard::PutNumber("bull bar config abs", robotData.configData.bullBarConfigData.absoluteConversion);
+
   controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
 
-  arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  // arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
