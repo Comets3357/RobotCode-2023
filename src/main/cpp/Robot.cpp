@@ -13,7 +13,10 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-timer.RobotInit(robotData.timerData); 
+
+  configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
+
+  timer.RobotInit(robotData.timerData); 
 
 
 
@@ -26,7 +29,7 @@ timer.RobotInit(robotData.timerData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  arduino.RobotInit();
+  // arduino.RobotInit();
   
 
   auton.RobotInit(robotData.autonData);
@@ -46,9 +49,11 @@ timer.RobotInit(robotData.timerData);
  */
 void Robot::RobotPeriodic() {
 
+  frc::SmartDashboard::PutNumber("bull bar config abs", robotData.configData.bullBarConfigData.absoluteConversion);
+
   controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
 
-  arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  // arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);

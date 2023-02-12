@@ -20,14 +20,14 @@ void Arm::RobotInit(ArmData &armData)
     armWristAbsoluteEncoder.SetPositionConversionFactor(360);
     armWristAbsoluteEncoder.SetZeroOffset(255.9);
 
-    armWristRelativeEncoder.SetPositionConversionFactor(360.0/82.09);
+    armWristRelativeEncoder.SetPositionConversionFactor((360.0/82.09));
     armWristRelativeEncoder.SetPosition(10);
 
     armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
 
     armWrist.BurnFlash();
 
-    armPivotPIDController.SetP(0.04833*2, 0);
+    armPivotPIDController.SetP((0.04833*2), 0);
     armPivotPIDController.SetI(0, 0);
     armPivotPIDController.SetD(0, 0);
     armPivotPIDController.SetIZone(0, 0);
