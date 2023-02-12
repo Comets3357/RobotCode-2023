@@ -207,11 +207,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 if (robotData.controlData.saPositionMid)
                 {
                     RotateWrist(10, robotData, 0);
-                    RotatePivot(145, robotData, 0);
+                    RotatePivot(140, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    RotateWrist(15, robotData, 0);
+                    RotateWrist(18, robotData, 0);
                     RotatePivot(135, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
@@ -383,6 +383,12 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     // {
     //     ZeroRelativePositionPivot(armData);
     //     ZeroRelativePositionWrist(armData);
+    // }
+
+    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // {
+    //     RotateWrist(30, robotData, 0.25);
+    //     RotatePivot(11, robotData, 0.25);
     // }
 /* --------------------------------------------------------------------------------------------------------------------------
 *                                   TRAP MOVEMENTS

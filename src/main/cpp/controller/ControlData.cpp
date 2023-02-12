@@ -76,7 +76,16 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
         controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     }
 
-    if (robotData.endEffectorData.armRetractRequest)
+    // if (robotData.endEffectorData.armRetractRequest)
+    // {
+    //     controlData.saHomePosition = true;
+    // }
+    // else
+    // {
+    //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    // }
+
+    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
     {
         controlData.saHomePosition = true;
     }

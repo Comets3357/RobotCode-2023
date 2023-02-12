@@ -116,6 +116,11 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         elevatorMotor.Set(0);
     }
 
+    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // {
+    //     MoveElevator(10, robotData, 0.25);
+    // }
+
     if (elevatorProfileActive)
     {
         if (robotData.timerData.secSinceEnabled > elevatorProfileStartTime)
