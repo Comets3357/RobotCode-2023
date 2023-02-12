@@ -8,7 +8,7 @@ void Arduino::RobotInit()
         try
         {
             arduino = new frc::SerialPort(9600, frc::SerialPort::Port::kUSB);
-            
+            arduinoWorking = true;
         }
         catch(...)
         {
@@ -27,7 +27,7 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
     char value[1];
 
     frc::SmartDashboard::PutNumber("Arduino failed transfers", failedTransfers);
-
+    frc::SmartDashboard::PutBoolean("ARDUINO WORKING", arduinoWorking);
 
     if (frc::DriverStation::IsEnabled() && arduinoWorking)
     {
@@ -41,26 +41,18 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
         || !robotData.bullBarData.bullBarAbsoluteEncoderInitialized 
         || !robotData.elevatorData.elevatorAbsoluteEncoderInitialized) //system fault
         {
-            colorCode = 'm';
+            //colorCode = 'm';
         }
         else if (false)//autobalance not yet implemented
         {
             colorCode = 'l';
         }
-        else if (robotData.endEffectorData.gamePieceType != NONE)//have game piece
+        
+ if (robotData.endEffectorData.gamePieceType != NONE)//have game piece
         {
             colorCode = 'k';
         }
-        else if (robotData.armData.coneIntakeRunning)//intaking cone
-        {
-            colorCode = 'j';
-        }
-        else if (robotData.armData.cubeIntakeRunning)//intaking cube
-        {
-            colorCode = 'i';
-        }
-
-        if (robotData.controlData.saConeCall)//cone call
+        else if (robotData.controlData.saConeCall)//cone call
         {
             colorCode = 'g';
         }
@@ -77,6 +69,20 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
         {
             colorCode = 'f';
         }
+        else if (robotData.armData.coneIntakeRunning)//intaking cone
+        {
+            colorCode = 'j';
+        }
+        else if (robotData.armData.cubeIntakeRunning)//intaking cube
+        {
+            colorCode = 'i';
+        }
+        
+        else
+        {
+            colorCode = 'n';
+        }
+        
 
     }
     else if (arduinoWorking)
@@ -98,7 +104,7 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
         }
     }
 
-    value[1] = colorCode;
+    value[0] = colorCode;
 
     frc::SmartDashboard::PutNumber("LED MODE", value[1]);
 
