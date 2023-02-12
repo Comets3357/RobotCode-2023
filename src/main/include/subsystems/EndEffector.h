@@ -26,6 +26,8 @@ struct EndEffectorData
     GamePiece gamePieceType = NONE;
     GamePiece lastPieceType = CONE;
 
+    GamePiece pastReadOfGamePiece = NONE;
+
     bool armRetractRequest = false;
 };
 

@@ -34,6 +34,8 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             break;
     }
 
+    endEffectorData.pastReadOfGamePiece = endEffectorData.gamePieceType;
+
     if (coneLimitSwitch.Get())
     {
         endEffectorData.lastPieceType = CONE;
@@ -90,10 +92,10 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
                 break;
         }
-        if (endEffectorData.gamePieceType == NONE)
-        {
-            eject = true;
-        }
+        // if (endEffectorData.gamePieceType == NONE)
+        // {
+        //     eject = true;
+        // }
     }
     else if (robotData.controlData.saCubeIntake)
     {
@@ -120,11 +122,11 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 break;
         }
     }
-    if (eject == true)
-    {
-        endEffectorData.armRetractRequest = true;
-        eject = false;
-    }
+    // if (eject == true)
+    // {
+    //     endEffectorData.armRetractRequest = true;
+    //     eject = false;
+    // }
     frc::SmartDashboard::PutNumber("BHASIUDGUISAD", endEffectorData.gamePieceType);
 }
 
