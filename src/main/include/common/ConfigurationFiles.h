@@ -93,7 +93,7 @@ struct ConfigData
 class ConfigurationFiles 
 {
 public:
-    void RobotInit(const RobotData &robotData, ConfigData &configData, const std::string &fileName);
+    void ReadFile(const RobotData &robotData, ConfigData &configData, const std::string &fileName);
 private:
     void ParseLine(ConfigData &configData, const std::string &line);
 

@@ -13,7 +13,10 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-timer.RobotInit(robotData.timerData); 
+
+  configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
+
+  timer.RobotInit(robotData.timerData); 
 
 
 

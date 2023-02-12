@@ -1,7 +1,7 @@
 #include "common/ConfigurationFiles.h"
 #include "RobotData.h"
 
-void ConfigurationFiles::RobotInit(const RobotData &robotData, ConfigData &configData, const std::string &fileName)
+void ConfigurationFiles::ReadFile(const RobotData &robotData, ConfigData &configData, const std::string &fileName)
 {
     frc::SmartDashboard::PutBoolean("Has config been read?", false);
 
@@ -34,6 +34,7 @@ void ConfigurationFiles::RobotInit(const RobotData &robotData, ConfigData &confi
         frc::SmartDashboard::PutBoolean("Has config been read?", false);
     }
 
+    frc::SmartDashboard::PutNumber("test parsed line", configData.armConfigData.pivotAbsoluteConversion);
     
 }
 
