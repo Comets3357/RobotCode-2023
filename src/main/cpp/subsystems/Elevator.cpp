@@ -244,3 +244,10 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
 
     return elevatorData.elevatorAbsoluteEncoderInitialized;
 }
+
+void Elevator::UpdateData(const RobotData &robotData, ElevatorData elevatorData)
+{
+    frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
+    if (frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true || frc::SmartDashboard::GetBoolean("Force Zero All", false) == true)
+        ForceZeroElevator();
+}

@@ -583,7 +583,17 @@ void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
-    
+    frc::SmartDashboard::PutBoolean("Arm Pivot Initialized", robotData.armData.pivotAbsoluteInitialized);
+    frc::SmartDashboard::PutBoolean("Arm Wrist Initialized", robotData.armData.wristAbsoluteInitialized);
+    if (frc::SmartDashboard::GetBoolean("Force Zero Arm Pivot", false) == true)
+        ForceZeroPivot();
+    if (frc::SmartDashboard::GetBoolean("Force Zero Arm Wrist", false) == true)
+        ForceZeroWrist();
+    if (frc::SmartDashboard::GetBoolean("Force Zero All", false) == true)
+    {
+        ForceZeroPivot();
+        ForceZeroWrist();
+    }
 }
 
 void Arm::DisableWristSoftLimits()
