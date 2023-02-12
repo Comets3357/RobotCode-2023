@@ -75,7 +75,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
     value.erase(0, value.find_first_not_of(" \t"));
     value.erase(value.find_first_of(" \t") + 1);
 
-    // This is where we check all of our keys
+    // This is where we check all of our keys to populate the data struct
     try
     {
         switch (configMap[key])
@@ -189,11 +189,123 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
             case 36:
                 configData.elevatorConfigData.absoluteZeroOffset = std::stod(value);
                 break;
+// -------------------------------------------------------------------------------------------------------------------------------------
+//                      DRIVEBASE CONFIG DATA
+// -------------------------------------------------------------------------------------------------------------------------------------
+            case 50: // DrivebaseRightInverted
+                if (value == "true")
+                {
+                    configData.drivebaseConfigData.rightInverted = true;
+                }
+                else
+                {
+                    configData.drivebaseConfigData.rightInverted = false;
+                }
+                break;
+            case 51: // DrivebaseLeftInverted
+                if (value == "true")
+                {
+                    configData.drivebaseConfigData.leftInverted = true;
+                }
+                else
+                {
+                    configData.drivebaseConfigData.leftInverted = false;
+                }
+                break;
+            case 52: // DriveBaseCurrentLimit
+                configData.drivebaseConfigData.currentLimit = std::stod(value);
+                break;
+            case 53: // DrivebaseLeftPValue
+                configData.drivebaseConfigData.leftP = std::stod(value);
+                break;
+            case 54: // DrivebaseLeftFFValue
+                configData.drivebaseConfigData.leftFF = std::stod(value);
+                break;
+            case 55:// DrivebaseRightPValue
+                configData.drivebaseConfigData.rightP = std::stod(value);
+                break;
+            case 56: // DrivebaseRightFFValue
+                configData.drivebaseConfigData.rightFF = std::stod(value);
+                break;
+// -------------------------------------------------------------------------------------------------------------------------------------
+//                      ARM CONFIG DATA
+// -------------------------------------------------------------------------------------------------------------------------------------
+            case 70: // WristPValue
+                configData.armConfigData.wristP = std::stod(value);
+                break;
+            case 71: // WristCurrentLimit
+                configData.armConfigData.wristCurrentLimit = std::stod(value);
+                break;
+            case 72: // WristRelativeInverted
+                if (value == "true")
+                {
+                    configData.armConfigData.wristRelativeInverted = true;
+                }
+                else 
+                {
+                    configData.armConfigData.wristRelativeInverted = false;
+                }
+                break;
+            case 73: // WristAbsoluteInverted
+                if (value == "true")
+                {
+                    configData.armConfigData.wristAbsoluteInverted = true;
+                }
+                else
+                {
+                    configData.armConfigData.wristAbsoluteInverted = false;
+                }
+                break;
+            case 74: // WristAbsoluteConversion
+                configData.armConfigData.wristAbsoluteConversion = std::stod(value);
+                break;
+            case 75: // WristAbsoluteZeroOffset
+                configData.armConfigData.wristAbsoluteOffset = std::stod(value);
+                break;
+            case 76: // WristRelativeConversion
+                configData.armConfigData.wristRelativeConversion = std::stod(value);
+                break;
+
+            case 90: // PivotPValue
+                configData.armConfigData.pivotP = std::stod(value);
+                break;
+            case 91: // PivotCurrentLimit
+                configData.armConfigData.pivotCurrentLimit = std::stod(value);
+                break;
+            case 92: // PivotRelativeInverted
+                if (value == "true")
+                {
+                    configData.armConfigData.pivotRelativeInverted = true;
+                }
+                else
+                {
+                    configData.armConfigData.pivotRelativeInverted = false;
+                }   
+                break;
+            case 93: // PivotAbsoluteInverted
+                if (value == "true")
+                {
+                    configData.armConfigData.pivotAbsoluteInverted = true;
+                }
+                else 
+                {
+                    configData.armConfigData.pivotAbsoluteInverted = false;
+                }
+            case 94: // PivotAbsoluteConversion
+                configData.armConfigData.pivotAbsoluteConversion = std::stod(value);
+                break;
+            case 95: // PivotAbsoluteZeroOffset
+                configData.armConfigData.pivotAbsoluteOffset = std::stod(value);
+                break;
+            case 96: // PivotRelativeConversion
+                configData.armConfigData.pivotRelativeConversion = std::stod(value);
+                break;
+            default:
+                break;
         }
     }
     catch(...)
     {
 
     }
-
 }

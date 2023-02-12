@@ -27,6 +27,24 @@ struct BullBarConfigData
 struct ArmConfigData
 {
     double voltageComp;
+
+    double wristP;
+    double wristCurrentLimit;
+    double wristAbsoluteConversion;
+    double wristAbsoluteOffset;
+    double wristRelativeConversion;
+
+    double pivotP;
+    double pivotCurrentLimit;
+    double pivotAbsoluteConversion;
+    double pivotAbsoluteOffset;
+    double pivotRelativeConversion;
+
+    bool wristRelativeInverted;
+    bool wristAbsoluteInverted;
+
+    bool pivotRelativeInverted;
+    bool pivotAbsoluteInverted;
 };
 
 struct ElevatorConfigData
@@ -53,6 +71,14 @@ struct EndEffectorConfigData
 struct DrivebaseConfigData
 {
     double voltageComp;
+    double currentLimit;
+    double leftP;
+    double leftFF;
+    double rightP;
+    double rightFF;
+
+    bool rightInverted;
+    bool leftInverted;
 };
 
 struct ConfigData 
@@ -95,11 +121,29 @@ private:
         {"ElevatorAbsoluteConversionFactor", 35},
         {"ElevatorAbsoluteZeroOffset", 36},
 
+        {"DrivebaseRightInverted", 50}, 
+        {"DrivebaseLeftInverted", 51},
+        {"DriveBaseCurrentLimit", 52},
+        {"DrivebaseLeftPValue", 53},
+        {"DrivebaseLeftFFValue", 54},
+        {"DrivebaseRightPValue", 55},
+        {"DrivebaseRightFFValue", 56},
 
+        {"WristPValue", 70},
+        {"WristCurrentLimit", 71},
+        {"WristRelativeInverted", 72},
+        {"WristAbsoluteInverted", 73},
+        {"WristAbsoluteConversion", 74},
+        {"WristAbsoluteZeroOffset", 75},
+        {"WristRelativeConversion", 76},
 
-
-
-
+        {"PivotPValue", 90},
+        {"PivotCurrentLimit", 91},
+        {"PivotRelativeInverted", 92},
+        {"PivotAbsoluteInverted", 93},
+        {"PivotAbsoluteConversion", 94},
+        {"PivotAbsoluteZeroOffset", 95},
+        {"PivotRelativeConversion", 96}
     };
 
 
