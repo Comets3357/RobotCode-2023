@@ -91,7 +91,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(71, robotData, 0);
+            MoveElevator(74, robotData, 0);
         }
         else if (robotData.controlData.saSetUpPosition)
         {

@@ -417,7 +417,9 @@ frc::SmartDashboard::PutNumber("wristSpeed", armWrist.Get());
                 if (coneIntakeToggle != armData.coneIntakeRunning)
                 {
                     RotateWrist(30, robotData, 0);
+                    pivotAcceleration = 100_deg;
                     RotatePivot(55, robotData, 0);
+                    pivotAcceleration = 700_deg;
                 }
 
                 if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
@@ -577,7 +579,7 @@ void Arm::RotatePivot(double targetDegree, const RobotData& robotData, double ti
 
     pivotProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{720_deg_per_s, 700_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{720_deg_per_s, pivotAcceleration/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{pivotProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };
