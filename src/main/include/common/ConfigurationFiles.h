@@ -4,9 +4,9 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <map>
+// #include <unor>
+#include <unordered_map>
 #include <frc/FileSystem.h>
-#include <rev/CANSparkMax.h>
 
 struct RobotData;
 
@@ -101,7 +101,7 @@ public:
 private:
     void ParseLine(ConfigData &configData, const std::string &line);
 
-    std::map<std::string, int> configMap = 
+    std::unordered_map<std::string, int> configMap = 
     {
         {"VoltageCompensation", 0},
 
