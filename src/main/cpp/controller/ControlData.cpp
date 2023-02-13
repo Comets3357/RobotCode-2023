@@ -63,18 +63,50 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 
     // SEMI AUTO:
 
-    controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
+    {
+        controlData.saConeIntake = false;
+        controlData.saCubeIntake = false;
+        controlData.saUprightConeIntake = false;
+    }
+    else 
+    {
+        controlData.saUprightConeIntake = (controllerData.sXBtn) && controlData.shift;
+        controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
+        controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+    }
+
+    // if (robotData.endEffectorData.armRetractRequest)
+    // {
+    //     controlData.saHomePosition = true;
+    // }
+    // else
+    // {
+    //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    // }
+
+    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    {
+        controlData.saHomePosition = true;
+    }
+    else
+    {
+        controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    }
+
     controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
-    controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
     // MANUAL:
     controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;
     controlData.mEndEffectorRollersOut = controllerData.sYBtn && !controlData.shift;
 
 // ARM:
     // SEMI AUTO:
-    controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    
+    controlData.saPositionHumanPlayer = (controllerData.sABtn) && controlData.shift;
     controlData.saPositionMid = (controllerData.sBBtn) && !controlData.shift;
     controlData.saPositionHigh = (controllerData.sYBtn) && !controlData.shift;
+    controlData.saSetUpPosition = (controllerData.sBBtn) && controlData.shift;
+    controlData.saConeFlipPosition = (controllerData.sYBtn) && controlData.shift;
 
     // MANUAL:
     controlData.mMovePivot = (controllerData.sLYStick > 0.2 || controllerData.sLYStick < -0.2) && controlData.shift;
@@ -84,5 +116,10 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
     controlData.mForceZeroBullBar = controllerData.sABtn && !controlData.shift;
+
+    controlData.saConeCall = (controllerData.sRCenterBtn) && !controlData.shift;
+    controlData.saCubeCall = (controllerData.sLCenterBtn) && !controlData.shift;
+    controlData.saFastConeCall = (controllerData.sRCenterBtn) && controlData.shift;
+    controlData.saFastCubeCall = (controllerData.sLCenterBtn) && controlData.shift;
 }
 

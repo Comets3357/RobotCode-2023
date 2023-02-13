@@ -64,12 +64,11 @@ class Drivebase
 {
 
 public:
-    void RobotInit();
+    void RobotInit(const RobotData &robotData);
     void TeleopInit(const RobotData &robotData);
     void AutonomousInit(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
     void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData, ControlData &controlData);
     void TestPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void DisabledPeriodic();
     void DisabledInit();
 
 private:
@@ -136,8 +135,8 @@ private:
 
     // meters per second to ticks per decisecond converstion factor for 4 in wheels
     // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
-    const double mpsToRpm = ((60.0/1.0)*(39.3701/1.0)*(1.0/(4.25*M_PI))*(40.0/10.0)); // 40:10 for actual comp bot
-    const double ticksToMeters = (10.0/40.0)*(4.0*M_PI/1.0)*(1.0/39.3701)*(39.3701/42.3701);
+    const double mpsToRpm = 1.0/((1.0/1.0)*(9.0/44.0)*((4*M_PI)/1)*(1.0/39.0)*(1.0/60.0));
+    const double rotationsToMeters = (9.0/44.0)*((4.0*M_PI)/1.0)*(1.0/39.3701);
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};
@@ -149,5 +148,7 @@ private:
     rev::CANSparkMax dbRF{rightFollowDeviceID, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkMaxRelativeEncoder dbREncoder = dbR.GetEncoder();
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
+
+    double drivebaseMultiplier = 1;
 
 };

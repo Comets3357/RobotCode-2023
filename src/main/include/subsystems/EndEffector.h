@@ -14,17 +14,28 @@
 
 struct RobotData;
 
+enum GamePiece
+{
+    CUBE,
+    CONE,
+    NONE
+};
+
 struct EndEffectorData
 {
-    bool isCone = true;
-    bool isCube = false;
+    GamePiece gamePieceType = NONE;
+    GamePiece lastPieceType = CONE;
+
+    GamePiece pastReadOfGamePiece = NONE;
+
+    bool armRetractRequest = false;
 };
 
 class EndEffector
 {
 public:
 
-    void RobotInit();
+    void RobotInit(const RobotData &robotData);
     void RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
@@ -39,12 +50,18 @@ private:
     // EndEffector Roller Initialization
     rev::CANSparkMax endEffectorRollers = rev::CANSparkMax(endEffectorRollerID, rev::CANSparkMax::MotorType::kBrushless);
 
-    // rev::SparkMaxLimitSwitch coneLimitSwitch = endEffectorRollers.GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen);
-    // rev::SparkMaxLimitSwitch cubeLimitSwitch = endEffectorRollers.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen);
+    rev::SparkMaxLimitSwitch coneLimitSwitch = endEffectorRollers.GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
+    rev::SparkMaxLimitSwitch cubeLimitSwitch = endEffectorRollers.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
 
     double EndEffectorRollerOutwardSpeed = 0.5;
     double EndEffectorRollerInwardSpeed = -0.5;
 
-    double EndEffectorRollerCubeInwardSpeed = 0.2;
+    double EndEffectorRollerCubeInwardSpeed = 0.3;
+
+    bool eject = false;
+
+
+
+    
 
 };

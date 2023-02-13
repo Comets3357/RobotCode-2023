@@ -31,8 +31,13 @@ struct ArmData
     double wristAngle = 0;
 
     bool wristSafePosition = false;
+    bool wristSafeCubeDetectionPosition = false;
 
-    bool isNotCone = false;
+    bool cubeIntakeRunning = false;
+    bool coneIntakeRunning = false;
+    bool humanPlayerConeIntakeRunning = false;
+    bool uprightConeIntakeRunning = false;
+
 };
 
 enum ArmRunMode
@@ -45,7 +50,7 @@ enum ArmRunMode
 class Arm 
 {
 public:
-    void RobotInit(ArmData &armData);
+    void RobotInit(const RobotData &robotData, ArmData &armData);
     void RobotPeriodic(const RobotData &robotData, ArmData &armData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, ArmData &armData);
@@ -54,6 +59,8 @@ public:
     int ran = 0;
 
 private:
+
+units::angle::degree_t pivotMaxAcceleration{700_deg};
 
     void EnableWristSoftLimits();
     void DisableWristSoftLimits();
@@ -135,9 +142,13 @@ private:
     bool wristSoftLimitsToggled = false;
 
     bool readyRunBasedOffBullBar = false;
+    bool bullBarIn = false;
 
-    bool controllerFlipped = false;
-    bool tempVar = false;
+    bool coneIntakeToggle = false;
+    bool cubeIntakeToggle = false;
+    bool humanPlayerIntakeToggle = false;
+    bool uprightConeIntakeToggle = false;
+    bool coneFlipPosition = false;
 
     bool endEffectorGamePiece = false;
     bool endEffectorGamePiecePastRead = false;

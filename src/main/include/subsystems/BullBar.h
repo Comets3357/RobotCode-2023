@@ -11,6 +11,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DutyCycle.h>
 #include <frc/DigitalInput.h>
+#include <frc/motorcontrol/PWMSparkMax.h>
 
 struct RobotData;
 
@@ -18,8 +19,8 @@ struct RobotData;
 struct BullBarData
 {
     bool bullBarAbsoluteEncoderInitialized = false;
-
     bool bullBarSafePosition = false;
+    bool bullBarUprightConeSafePosition = false;
 };
 
 enum BullBarRunMode
@@ -33,7 +34,7 @@ class BullBar
 {
 public:
 
-    void RobotInit(BullBarData &bullBarData);
+    void RobotInit(const RobotData &robotData, BullBarData &bullBarData);
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData);
@@ -70,19 +71,19 @@ private:
 
     // Positions for intaking cone or cube
     double bullBarConeIntakePosition = bullBarMinPosition + 17.208;
-    double bullBarCubeIntakePosition = bullBarMinPosition + 12;
+    double bullBarCubeIntakePosition = bullBarMinPosition + 12.5;
 
     // intake speed
-    double bullBarRollerExtendedSpeed = 0.5;
+    double bullBarRollerExtendedSpeed = 0.9;
     double bullBarRollerRetractedSpeed = 0;
     
     // intake and outake speeds
-    double bullBarRollerOutwardSpeed = 0.4;
-    double bullBarRollerInwardSpeed = -0.4;
+    double bullBarRollerOutwardSpeed = 0.9;
+    double bullBarRollerInwardSpeed = -0.9;
     
     // Bull Bar Roller Initialization
-    rev::CANSparkMax bullBarRollers = rev::CANSparkMax(bullBarRollerID, rev::CANSparkMax::MotorType::kBrushless);
-    rev::SparkMaxRelativeEncoder bullBarRollersRelativeEncoder = bullBarRollers.GetEncoder(); // Relative Encoder
+    // ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};
+    frc::PWMSparkMax bullBarRollers{bullBarRollerPWMID};
 
     // Bull Bar Slider Initialization
     rev::CANSparkMax bullBarSlider = rev::CANSparkMax(bullBarSliderID, rev::CANSparkMax::MotorType::kBrushless);

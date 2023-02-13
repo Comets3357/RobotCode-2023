@@ -8,21 +8,36 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <frc/DigitalInput.h>
+
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+  frc::DigitalInput robotIndicator{9};
 
-  driveBase.RobotInit();
-  endEffector.RobotInit();
+  if (robotIndicator.Get())
+  {
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+  }
+  else
+  {
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
+  }
 
-  bullBar.RobotInit(robotData.bullBarData);
+  timer.RobotInit(robotData.timerData); 
+  driveBase.RobotInit(robotData);
+  endEffector.RobotInit(robotData);
 
-  arm.RobotInit(robotData.armData);
+  bullBar.RobotInit(robotData, robotData.bullBarData);
+
+  arm.RobotInit(robotData, robotData.armData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
-  timer.RobotInit(robotData.timerData);
+
+  // arduino.RobotInit();
+  
 
   auton.RobotInit(robotData.autonData);
 
@@ -41,13 +56,20 @@ void Robot::RobotInit() {
  */
 void Robot::RobotPeriodic() {
 
+  frc::SmartDashboard::PutNumber("bull bar config abs", robotData.configData.bullBarConfigData.absoluteConversion);
+
+  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+
+  // arduino.RobotPeriodic(robotData, robotData.arduinoData);
+
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
   driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
-  bullBar.RobotPeriodic(robotData, robotData.bullBarData);
+  bullBar.RobotPeriodic(robotData, robotData.bullBarData); //0.002
   endEffector.RobotPeriodic(robotData, robotData.endEffectorData);
-  arm.RobotPeriodic(robotData, robotData.armData);
+  arm.RobotPeriodic(robotData, robotData.armData); //0.01
   elevator.RobotPeriodic(robotData, robotData.elevatorData);
+  
   
 }
 
@@ -114,7 +136,6 @@ void Robot::DisabledInit() {
 void Robot::DisabledPeriodic() {
   bullBar.DisabledPeriodic(robotData, robotData.bullBarData);
   arm.DisabledPeriodic(robotData, robotData.armData);
-  driveBase.DisabledPeriodic();
 }
 
 void Robot::TestInit() {}

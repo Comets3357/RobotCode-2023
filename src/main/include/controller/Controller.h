@@ -49,6 +49,8 @@ struct ControlData
     bool saConeIntake;
     bool saIntakeBackwards;
     bool saCubeIntake;
+    bool saUprightConeIntake;
+    bool saConeFlipPosition;
 
     //arm:
 
@@ -56,6 +58,8 @@ struct ControlData
     bool saHomePosition;
     bool saPositionMid;
     bool saPositionHigh;
+    bool saSetUpPosition;
+    bool saPositionHumanPlayer;
     bool saBullBarExtension;
     //end effector:
     bool mEndEffectorRollersIn;
@@ -71,6 +75,14 @@ struct ControlData
     bool saElevatorSetMidPosition;
     bool saElevatorSetHighPosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
     bool saElevatorSetIntakePosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
+
+    //piece call
+    bool saCubeCall;
+    bool saFastCubeCall;
+    bool saConeCall;
+    bool saFastConeCall;
+
+
 
     bool forceZeroElevator;
 };

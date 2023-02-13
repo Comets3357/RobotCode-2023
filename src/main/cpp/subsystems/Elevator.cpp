@@ -5,20 +5,32 @@
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorMotor.RestoreFactoryDefaults();
+    elevatorAbsoluteEncoder.SetInverted(robotData.configData.elevatorConfigData.invertAbosolute);
+    elevatorAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.absoluteConversionFactor);
+    elevatorAbsoluteEncoder.SetZeroOffset(robotData.configData.elevatorConfigData.absoluteZeroOffset);
+    
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    elevatorMotor.SetInverted(true);
-    elevatorMotor.EnableVoltageCompensation(10.5);
-    elevatorMotor.SetSmartCurrentLimit(55);
-    elevatorPIDController.SetP(0.3, 0); 
-    //elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+    elevatorMotor.SetInverted(robotData.configData.elevatorConfigData.invertRelative);
+    elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
+    elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
+
+    elevatorPIDController.SetP(robotData.configData.elevatorConfigData.pValue, 0); 
+    elevatorRelativeEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.relativeConversionFactor);
+    elevatorRelativeEncoder.SetPosition(10);
+
     elevatorMotor.BurnFlash();
-    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+
+    // elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+
     elevatorPIDController.SetOutputRange(-1,1);
-    elevatorRelativeEncoder.SetPosition(0);
+
+    // elevatorRelativeEncoder.SetPositionConversionFactor(0.51);
+    // elevatorRelativeEncoder.SetPosition(10);
+
+
 
     //FIND THESE VALUES THEN GOOD
-    // elevatorAbsoluteEncoder.SetPositionConversionFactor(0.1);
-    // elevatorAbsoluteEncoder.SetZeroOffset(0.1);
+    
     // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
     
 }
@@ -38,16 +50,13 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             break;
     }
 
-    // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != RELATIVE_RUN)
+    // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
     // {
     //     ZeroRelativePosition(elevatorData);
     // }
 
     frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
-
-
-    
-
+    frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
@@ -57,34 +66,46 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         EnableSoftLimits();
     }
 
-    // if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ABSOLUTE_RUN)
-    // {
-    //     runMode = RELATIVE_RUN;
-    //     elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
-    // }
-    if (elevatorForceZeroed && runMode != RELATIVE_RUN)
+    if (elevatorRelativeEncoder.GetPosition() > 40)
     {
-        runMode = RELATIVE_RUN;
+        elevatorData.drivebaseSlowMode = true;
+    }
+    else
+    {
+        elevatorData.drivebaseSlowMode = false;
+    }
+
+    if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
+    {
+        runMode = ELEVATOR_RELATIVE_RUN;
+        elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+    }
+    
+    if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)
+    {
+        runMode = ELEVATOR_RELATIVE_RUN;
         elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     }
-    runMode = RELATIVE_RUN;
-    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    // runMode = ELEVATOR_RELATIVE_RUN;
+    // elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
 
-    if (runMode != NONE)
+    if (runMode != ELEVATOR_NONE)
     {
         if (robotData.controlData.saHomePosition)
         {
-            MoveElevator(0, robotData, 0.5);
+            MoveElevator(10, robotData, 0);
         }
-
         else if (robotData.controlData.saPositionMid)
         {
-            MoveElevator(5, robotData, 0);
+            MoveElevator(25, robotData, 0);
         }
-
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(23.5, robotData, 0);
+            MoveElevator(48, robotData, 0);
+        }
+        else if (robotData.controlData.saSetUpPosition)
+        {
+            MoveElevator(40*0.496060877648, robotData, 0);
         }
     }
     else
@@ -92,7 +113,10 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         elevatorMotor.Set(0);
     }
 
-    
+    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // {
+    //     MoveElevator(10, robotData, 0.25);
+    // }
 
     if (elevatorProfileActive)
     {
@@ -106,6 +130,11 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             if (elevatorProfile.IsFinished(elapsedTime))
             {
                 elevatorProfileActive = false;
+                if (elevatorRelativeEncoder.GetPosition() < 0.25)
+                {
+                    elevatorMotor.Set(0);
+                    
+                }
             }
         }
     }
@@ -115,18 +144,21 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 
 void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
 {
+    elevatorData.drivebaseSlowMode = false;
     if (softLimitsEnabled) 
     {
         DisableSoftLimits();
     }
+    
     if (robotData.controlData.forceZeroElevator)
     {
         ForceZeroElevator();
     }
 
-    if (robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08)
+
+    if ((robotData.controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08) && !robotData.controlData.shift)
     {
-        elevatorMotor.Set(robotData.controllerData.sLYStick * 0.2);
+        elevatorMotor.Set(robotData.controllerData.sLYStick * 1);
     }
     else
     {
@@ -140,7 +172,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
     elevatorProfileActive = true;
     elevatorProfileStartTime = robotData.timerData.secSinceEnabled+timeOffset;
 
-    if (runMode == ABSOLUTE_RUN)
+    if (runMode == ELEVATOR_ABSOLUTE_RUN)
     {
         elevatorProfileStartPos = elevatorRelativeEncoder.GetPosition();
         elevatorProfileEndPos = targetPos;
@@ -153,7 +185,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
 
     elevatorProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{40_deg_per_s, 30_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{240_deg_per_s, 140_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{elevatorRelativeEncoder.GetVelocity()}}
     };
@@ -171,7 +203,7 @@ void Elevator::EnableSoftLimits()
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, true);
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
-    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 0.5);
+    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 0.05);
     elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 0.5);
 }
 
@@ -207,7 +239,7 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
     else 
     {
         elevatorData.elevatorAbsoluteEncoderInitialized = false;
-        runMode = NONE;
+        runMode = ELEVATOR_NONE;
     }
 
     return elevatorData.elevatorAbsoluteEncoderInitialized;
