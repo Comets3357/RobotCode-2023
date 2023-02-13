@@ -77,7 +77,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 
 // Limelight:
 
-    controlData.saResetOdometry = controllerData.sRCenterBtnToggled && controlData.shift;
+    controlData.saResetOdometry;
 
     
     

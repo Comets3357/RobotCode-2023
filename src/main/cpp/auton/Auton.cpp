@@ -1,8 +1,11 @@
 #include "auton/Auton.h"
 #include "RobotData.h"
 
-void Auton::RobotInit(AutonData &autonData) {
+void Auton::RobotInit(ControlData &controlData, AutonData &autonData) {
     sendAutonSelectionChooser();
+
+    controlData.saResetOdometry = false;
+    
 }
 
 // creates pathGroup vector (list of strings that are interpretted by drivebase)

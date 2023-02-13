@@ -17,7 +17,7 @@ void Robot::RobotInit() {
   driveBase.RobotInit();
   gyro.RobotInit();
   timer.RobotInit(robotData.timerData);
-  auton.RobotInit(robotData.autonData);
+  auton.RobotInit(robotData.controlData, robotData.autonData);
 
 
 
