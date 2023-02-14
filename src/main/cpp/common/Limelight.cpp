@@ -38,12 +38,28 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         limelightData.limelightPastOdometryX = limelightData.limelightOdometryX;
         limelightData.limelightPastOdometryY = limelightData.limelightOdometryY;
 
-        if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1))
-        {
+        // if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1))
+        // {
             
 
-            if (((distanceToClosestTag < 2) && (numberOfTagsInView >= 1)) || 
-                ((distanceToClosestTag > 4 && distanceToClosestTag < 7) && (numberOfTagsInView >= 2)))
+            // if (((distanceToClosestTag < 40) && (numberOfTagsInView >= 1)) || 
+            //     ((distanceToClosestTag > 40 && distanceToClosestTag < 80) && (numberOfTagsInView >= 2)))
+            // {
+            //     limelightData.limelightOdometryX = tempX;
+            //     limelightData.limelightOdometryY = tempY;
+            // }
+            // else
+            // {
+            //     limelightData.limelightOdometryX = 100;
+            //     limelightData.limelightOdometryY = 100;
+            // }
+
+            if ((numberOfTagsInView == 1) && tempX < 3.5)
+            {
+                limelightData.limelightOdometryX = tempX;
+                limelightData.limelightOdometryY = tempY;  
+            }
+            else if (numberOfTagsInView == 2)
             {
                 limelightData.limelightOdometryX = tempX;
                 limelightData.limelightOdometryY = tempY;
@@ -53,12 +69,12 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 limelightData.limelightOdometryX = 100;
                 limelightData.limelightOdometryY = 100;
             }
-        }
-        else 
-        {
-            limelightData.limelightOdometryX = 100;
-            limelightData.limelightOdometryY = 100;
-        }
+        // }
+        // else 
+        // {
+        //     limelightData.limelightOdometryX = 100;
+        //     limelightData.limelightOdometryY = 100;
+        // }
     }
 }
 

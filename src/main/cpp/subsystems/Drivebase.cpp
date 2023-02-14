@@ -36,12 +36,12 @@ void Drivebase::RobotInit()
     dbRF.SetSmartCurrentLimit(60);
 
     // PIDs for Mule bot 2023
-    dbLPIDController.SetP(0.027491 / mpsToRpm);
-    dbLPIDController.SetFF(0.07476 / mpsToRpm);
+    dbLPIDController.SetP(0.016746 / mpsToRpm);
+    dbLPIDController.SetFF(0.02774 / mpsToRpm);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.027491/mpsToRpm);
-    dbRPIDController.SetFF(0.07476/mpsToRpm);
+    dbRPIDController.SetP(0.016746/mpsToRpm);
+    dbRPIDController.SetFF(0.02774/mpsToRpm);
     dbRPIDController.SetD(0);
 
     dbL.BurnFlash();
@@ -295,8 +295,10 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
     drivebaseData.currentPose = odometry.GetPose();
 
-    if ((robotData.limelightData.limelightPastOdometryX != robotData.limelightData.limelightOdometryX || robotData.limelightData.limelightPastOdometryY != robotData.limelightData.limelightOdometryY) && 
-        (robotData.limelightData.limelightOdometryX < 50 || robotData.limelightData.limelightOdometryY < 50))
+    if ((robotData.limelightData.limelightPastOdometryX != robotData.limelightData.limelightOdometryX 
+    || robotData.limelightData.limelightPastOdometryY != robotData.limelightData.limelightOdometryY) && 
+        ((robotData.limelightData.limelightOdometryX < 50 && robotData.limelightData.limelightOdometryX > 0) 
+        && (robotData.limelightData.limelightOdometryY < 50 && robotData.limelightData.limelightOdometryX > 0)))
     {
         drivebaseData.odometryX = robotData.limelightData.limelightOdometryX;
         drivebaseData.odometryY = robotData.limelightData.limelightOdometryY;

@@ -142,6 +142,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 
 void Auton::driveLine(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData) 
 {
+    double sec = robotData.timerData.secSinceEnabled;
+
+    // controlData.saResetOdometry = true;
+
     
 }
 
