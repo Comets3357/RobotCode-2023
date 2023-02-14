@@ -146,6 +146,14 @@ void Robot::SimulationInit() {}
 
 void Robot::SimulationPeriodic() {}
 
+void Robot::UpdateData(const ControllerData &controllerData)
+{
+  frc::SmartDashboard::PutNumber("Battery Voltage", frc::DriverStation::GetBatteryVoltage());
+  frc::SmartDashboard::PutNumber("Match Timer", frc::DriverStation::GetMatchTime());
+  frc::SmartDashboard::PutBoolean("Alliance Color", frc::DriverStation::GetAlliance());
+  frc::SmartDashboard::PutBoolean("Semi-Auto", controllerData.driveTypeShuffleboard);
+}
+
 #ifndef RUNNING_FRC_TESTS
 int main() {
   return frc::StartRobot<Robot>();

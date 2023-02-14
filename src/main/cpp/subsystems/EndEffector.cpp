@@ -127,7 +127,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     //     endEffectorData.armRetractRequest = true;
     //     eject = false;
     // }
-    frc::SmartDashboard::PutNumber("BHASIUDGUISAD", endEffectorData.gamePieceType);
+    
 }
 
 void EndEffector::Manual(const RobotData &robotData, EndEffectorData &endEffectorData)
@@ -153,4 +153,16 @@ void EndEffector::Manual(const RobotData &robotData, EndEffectorData &endEffecto
 void EndEffector::SetEndEffectorRollerSpeed(double rollerSpeed)
 {
     endEffectorRollers.Set(rollerSpeed);
+}
+
+void UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData)
+{
+    if (endEffectorData.gamePieceType == CUBE)
+        endEffectorData.gamePieceShuffleboard = true;
+    else if (endEffectorData.gamePieceType == CONE)
+        endEffectorData.gamePieceShuffleboard = false;
+    frc::SmartDashboard::PutBoolean("Game Piece Type", endEffectorData.gamePieceShuffleboard);
+    frc::SmartDashboard::PutBoolean("Cone Beam Break", endEffectorData.gamePieceType == CONE);
+    frc::SmartDashboard::PutBoolean("Cube Beam Break", endEffectorData.gamePieceType == CUBE);
+
 }
