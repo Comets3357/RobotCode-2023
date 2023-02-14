@@ -2,20 +2,19 @@
 #include "RobotData.h"
 #include <cmath>
 
-void EndEffector::RobotInit()
+void EndEffector::RobotInit(const RobotData &robotData)
 {
     // End Effector Rollers
     endEffectorRollers.RestoreFactoryDefaults();
-    endEffectorRollers.SetInverted(true);
+    endEffectorRollers.SetInverted(robotData.configData.endEffectorConfigData.invertRollers);
     endEffectorRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    endEffectorRollers.SetSmartCurrentLimit(45);
-    endEffectorRollers.EnableVoltageCompensation(10.5);
+    endEffectorRollers.SetSmartCurrentLimit(robotData.configData.endEffectorConfigData.currentLimit);
+    endEffectorRollers.EnableVoltageCompensation(robotData.configData.endEffectorConfigData.voltageComp);
 
     coneLimitSwitch.EnableLimitSwitch(false);
     cubeLimitSwitch.EnableLimitSwitch(false);
     
     endEffectorRollers.BurnFlash();
-    
 
 }
 
@@ -34,6 +33,8 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             SemiAuto(robotData, endEffectorData);
             break;
     }
+
+    endEffectorData.pastReadOfGamePiece = endEffectorData.gamePieceType;
 
     if (coneLimitSwitch.Get())
     {
@@ -91,10 +92,10 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
                 break;
         }
-        if (endEffectorData.gamePieceType == NONE)
-        {
-            eject = true;
-        }
+        // if (endEffectorData.gamePieceType == NONE)
+        // {
+        //     eject = true;
+        // }
     }
     else if (robotData.controlData.saCubeIntake)
     {
@@ -121,11 +122,11 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 break;
         }
     }
-    if (eject == true)
-    {
-        endEffectorData.armRetractRequest = true;
-        eject = false;
-    }
+    // if (eject == true)
+    // {
+    //     endEffectorData.armRetractRequest = true;
+    //     eject = false;
+    // }
     frc::SmartDashboard::PutNumber("BHASIUDGUISAD", endEffectorData.gamePieceType);
 }
 

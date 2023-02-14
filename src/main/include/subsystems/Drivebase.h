@@ -64,7 +64,7 @@ class Drivebase
 {
 
 public:
-    void RobotInit();
+    void RobotInit(const RobotData &robotData);
     void TeleopInit(const RobotData &robotData);
     void AutonomousInit(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData);
     void RobotPeriodic(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData, ControlData &controlData);

@@ -2,7 +2,7 @@
 #include "RobotData.h"
 
 
-void Drivebase::RobotInit()
+void Drivebase::RobotInit(const RobotData &robotData)
 {
     dbL.RestoreFactoryDefaults();
     dbR.RestoreFactoryDefaults();
@@ -13,10 +13,10 @@ void Drivebase::RobotInit()
     dbRF.Follow(dbR);
     dbLF.Follow(dbL);
 
-    dbL.SetInverted(true);
-    dbLF.SetInverted(true);
-    dbR.SetInverted(false);
-    dbRF.SetInverted(false);
+    dbL.SetInverted(robotData.configData.drivebaseConfigData.leftInverted);
+    dbLF.SetInverted(robotData.configData.drivebaseConfigData.leftInverted);
+    dbR.SetInverted(robotData.configData.drivebaseConfigData.rightInverted);
+    dbRF.SetInverted(robotData.configData.drivebaseConfigData.rightInverted);
 
     dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
@@ -33,53 +33,17 @@ void Drivebase::RobotInit()
   *  Use supply current limits to prevent breakers from tripping
   *
   * enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
-    dbL.SetSmartCurrentLimit(60);
-    dbLF.SetSmartCurrentLimit(60);
-    dbR.SetSmartCurrentLimit(60);
-    dbRF.SetSmartCurrentLimit(60);
+    dbL.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
+    dbLF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
+    dbR.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
+    dbRF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-    // PIDs for blue db
-    /* dbL.Config_kF(0, 0.032514);
-    dbL.Config_kP(0, 0.038723);
-    dbL.Config_kD(0, 0);
-
-    dbR.Config_kF(0, 0.032514);
-    dbR.Config_kP(0, 0.038723);
-    dbR.Config_kD(0, 0); */
-
-    // PIDs for 2022 Calvin University
-    // dbL.Config_kF(0, 0.077626);
-    // dbL.Config_kP(0, 0.10352);
-    // dbL.Config_kD(0, 0);
-
-    // dbR.Config_kF(0, 0.077626);
-    // dbR.Config_kP(0, 0.10352);
-    // dbR.Config_kD(0, 0);
-
-    // Atlas 03.26.22 Morning
-    // dbL.Config_kF(0, 0.074655);
-    // dbL.Config_kP(0, 0.1079);
-    // dbL.Config_kD(0, 0);
-
-    // dbR.Config_kF(0, 0.074655);
-    // dbR.Config_kP(0, 0.1079);
-    // dbR.Config_kD(0, 0);
-
-    // Atlas 04.07.22 Final tread center drop but not fresh treads
-    // dbLPIDController.SetFF(0.071797);
-    // dbLPIDController.SetP(0.10814);
-    // dbLPIDController.SetD(0);
-
-    // dbRPIDController.SetFF(0.071797);
-    // dbRPIDController.SetP(0.10814);
-    // dbRPIDController.SetD(0);
-
-    dbLPIDController.SetP(0.3926);
-    dbLPIDController.SetFF(0.2688);
+    dbLPIDController.SetP(robotData.configData.drivebaseConfigData.leftP);
+    dbLPIDController.SetFF(robotData.configData.drivebaseConfigData.leftFF);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.3926);
-    dbRPIDController.SetFF(0.2688);
+    dbRPIDController.SetP(robotData.configData.drivebaseConfigData.rightP);
+    dbRPIDController.SetFF(robotData.configData.drivebaseConfigData.rightFF);
     dbRPIDController.SetD(0);
 
     setPercentOutput(0, 0);

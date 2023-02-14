@@ -64,14 +64,14 @@ private:
 
     bool absoluteEncoderFeedBackDevice = true;
 
-    rev::CANSparkMax elevatorMotor{21, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax elevatorMotor{elevatorID, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
     rev::SparkMaxRelativeEncoder elevatorRelativeEncoder = elevatorMotor.GetEncoder();
     rev::SparkMaxPIDController elevatorPIDController = elevatorMotor.GetPIDController();
     rev::SparkMaxAbsoluteEncoder elevatorAbsoluteEncoder = elevatorMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     // Encoder Min and Max Values 
-    double elevatorMaxPosition = elevatorMinPosition + 75; // TODO: fix this value when we get subsystem
-    double elevatorMinPosition = 0; // TODO: fix this value when we get subsystem
+    double elevatorMaxPosition = 48.25; // TODO: fix this value when we get subsystem
+    double elevatorMinPosition = 10; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;
     double elevatorDownwardSpeed = -0.4;

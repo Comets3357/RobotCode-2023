@@ -12,6 +12,8 @@
 #include <frc/DutyCycle.h>
 #include <frc/DigitalInput.h>
 #include <ctre/Phoenix.h>
+#include <frc/motorcontrol/PWMSparkMax.h>
+#include <ctre/Phoenix.h>
 
 struct RobotData;
 
@@ -34,7 +36,7 @@ class BullBar
 {
 public:
 
-    void RobotInit(BullBarData &bullBarData);
+    void RobotInit(const RobotData &robotData, BullBarData &bullBarData);
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData);
@@ -82,8 +84,8 @@ private:
     double bullBarRollerInwardSpeed = -0.9;
     
     // Bull Bar Roller Initialization
+    // ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};
     ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};
-
     // Bull Bar Slider Initialization
     rev::CANSparkMax bullBarSlider = rev::CANSparkMax(bullBarSliderID, rev::CANSparkMax::MotorType::kBrushless);
     rev::SparkMaxRelativeEncoder bullBarSliderRelativeEncoder = bullBarSlider.GetEncoder(); // Relative Encoder

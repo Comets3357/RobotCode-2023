@@ -8,23 +8,35 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <frc/DigitalInput.h>
+
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-timer.RobotInit(robotData.timerData);
+  frc::DigitalInput robotIndicator{9};
+frc::SmartDashboard::PutBoolean("PRACTICE BOT", robotIndicator.Get());
+  if (robotIndicator.Get())
+  {
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+  }
+  else
+  {
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
+  }
 
+  timer.RobotInit(robotData.timerData); 
+  driveBase.RobotInit(robotData);
+  endEffector.RobotInit(robotData);
 
+  bullBar.RobotInit(robotData, robotData.bullBarData);
 
-  driveBase.RobotInit();
-  endEffector.RobotInit();
-
-  bullBar.RobotInit(robotData.bullBarData);
-
-  arm.RobotInit(robotData.armData);
+  arm.RobotInit(robotData, robotData.armData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
+
+  // arduino.RobotInit();
   
 
   auton.RobotInit(robotData.autonData);
@@ -44,7 +56,11 @@ timer.RobotInit(robotData.timerData);
  */
 void Robot::RobotPeriodic() {
 
+  frc::SmartDashboard::PutNumber("bull bar config abs", robotData.configData.bullBarConfigData.absoluteConversion);
+
   controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+
+  // arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);

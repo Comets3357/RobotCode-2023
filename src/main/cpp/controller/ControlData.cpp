@@ -76,7 +76,16 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
         controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     }
 
-    if (robotData.endEffectorData.armRetractRequest)
+    // if (robotData.endEffectorData.armRetractRequest)
+    // {
+    //     controlData.saHomePosition = true;
+    // }
+    // else
+    // {
+    //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    // }
+
+    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
     {
         controlData.saHomePosition = true;
     }
@@ -107,5 +116,10 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
     controlData.mForceZeroBullBar = controllerData.sABtn && !controlData.shift;
+
+    controlData.saConeCall = (controllerData.sRCenterBtn) && !controlData.shift;
+    controlData.saCubeCall = (controllerData.sLCenterBtn) && !controlData.shift;
+    controlData.saFastConeCall = (controllerData.sRCenterBtn) && controlData.shift;
+    controlData.saFastCubeCall = (controllerData.sLCenterBtn) && controlData.shift;
 }
 
