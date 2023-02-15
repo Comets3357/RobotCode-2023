@@ -32,6 +32,8 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     //FIND THESE VALUES THEN GOOD
     
     // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
+
+    frc::SmartDashboard::PutBoolean("Elevator Force Zero", false);
     
 }
 
@@ -153,6 +155,7 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
     if (robotData.controlData.forceZeroElevator)
     {
         ForceZeroElevator();
+        
     }
 
 
@@ -217,6 +220,7 @@ void Elevator::ForceZeroElevator()
 {
     elevatorRelativeEncoder.SetPosition(10);
     elevatorForceZeroed = true;
+    forceZeroElevator = false;
 }
 
 
@@ -248,6 +252,5 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
 void Elevator::UpdateData(const RobotData &robotData, ElevatorData elevatorData)
 {
     frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
-    if (frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true || frc::SmartDashboard::GetBoolean("Force Zero All", false) == true)
-        ForceZeroElevator();
+    forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true || frc::SmartDashboard::GetBoolean("Force Zero All", false) == true;
 }

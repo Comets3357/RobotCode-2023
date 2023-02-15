@@ -52,6 +52,9 @@ void Arm::RobotInit(const RobotData &robotData, ArmData &armData)
     ZeroRelativePositionWrist(armData);
     ZeroRelativePositionPivot(armData);
 
+    frc::SmartDashboard::PutBoolean("Force Zero Pivot", false);
+    frc::SmartDashboard::GetBoolean("Force Zero Wrist", false);
+
 
     //Trapezoid Profile
 
@@ -90,6 +93,10 @@ void Arm::RobotPeriodic(const RobotData &robotData, ArmData &armData)
     //     ZeroRelativePositionWrist(armData);
     // }
 
+    if (forceZeroPivot == true)
+        ForceZeroPivot();
+    if (forceZeroWrist == true)
+        ForceZeroWrist();
 }
 
 void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
@@ -585,15 +592,8 @@ void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {
     frc::SmartDashboard::PutBoolean("Arm Pivot Initialized", robotData.armData.pivotAbsoluteInitialized);
     frc::SmartDashboard::PutBoolean("Arm Wrist Initialized", robotData.armData.wristAbsoluteInitialized);
-    if (frc::SmartDashboard::GetBoolean("Force Zero Arm Pivot", false) == true)
-        ForceZeroPivot();
-    if (frc::SmartDashboard::GetBoolean("Force Zero Arm Wrist", false) == true)
-        ForceZeroWrist();
-    if (frc::SmartDashboard::GetBoolean("Force Zero All", false) == true)
-    {
-        ForceZeroPivot();
-        ForceZeroWrist();
-    }
+    forceZeroPivot = frc::SmartDashboard::GetBoolean("Force Zero Pivot", false) || frc::SmartDashboard::GetBoolean("Force Zero All", false);
+    forceZeroWrist = frc::SmartDashboard::GetBoolean("Force Zero Wrist", false) || frc::SmartDashboard::GetBoolean("Force Zero All", false);
 }
 
 void Arm::DisableWristSoftLimits()
@@ -640,10 +640,12 @@ void Arm::ForceZeroPivot()
 {
     armPivotRelativeEncoder.SetPosition(armPivotMinPosition);
     pivotForceZeroed = true;
+    forceZeroWrist = false;
 }
 
 void Arm::ForceZeroWrist()
 {
     armWristRelativeEncoder.SetPosition(armWristMinPosition);
     wristForceZeroed = true;
+    forceZeroWrist = false;
 }

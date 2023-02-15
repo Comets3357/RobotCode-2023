@@ -41,9 +41,7 @@ void Robot::RobotInit() {
 
   auton.RobotInit(robotData.autonData);
 
-
-
-
+  frc::SmartDashboard::PutBoolean("Force Zero All", false);
 }
 
 /**

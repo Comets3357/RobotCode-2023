@@ -38,7 +38,8 @@ void BullBar::RobotInit(const RobotData &robotData, BullBarData &bullBarData)
     ZeroRelativePosition(bullBarData);
     EnableSoftLimits(bullBarData);
 
-    frc::SmartDashboard::PutBoolean("FORCE ZERO BULL BAR", 0);
+    frc::SmartDashboard::PutBoolean("Bullbar Force Zero", false);
+
     frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
 }
 
@@ -241,8 +242,7 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 void BullBar::UpdateData(const RobotData &robotData, BullBarData &bullBarData)
 {
     frc::SmartDashboard::PutBoolean("Bullbar Initialized", robotData.bullBarData.bullBarAbsoluteEncoderInitialized);
-    if (frc::SmartDashboard::GetBoolean("Bullbar Force Zero", false) == true || frc::SmartDashboard::GetBoolean("Force Zero All", false) == true)
-        ForceZeroBullBar();
+    forceZero = frc::SmartDashboard::GetBoolean("Bullbar Force Zero", false) || frc::SmartDashboard::GetBoolean("Force Zero All", false);
 }
 
 /*
