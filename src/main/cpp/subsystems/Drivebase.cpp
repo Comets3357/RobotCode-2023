@@ -276,7 +276,7 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 {
 
     // library's odometry
-    units::radian_t currentRadians{(robotData.gyroData.rawYaw / 180) * M_PI};
+    units::radian_t currentRadians{(robotData.gyroData.rawYaw / 180.0) * M_PI};
     frc::Rotation2d currentRotation{currentRadians};
 
     // NEGATIVE because left motor/encoder should be inverted

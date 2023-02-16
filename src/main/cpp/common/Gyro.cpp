@@ -2,11 +2,19 @@
 
 void Gyro::RobotInit() {
     // gyro.Calibrate();
-    gyro.ZeroYaw();
+    // gyro.Reset();
+    //gyro.Calibrate();
+
+    //while (gyro.IsCalibrating());
+
+    //gyro.ZeroYaw();
+
+    frc::SmartDashboard::PutNumber("angle offset",gyro.GetAngleAdjustment());
+
 }
 
 void Gyro::TeleopInit(GyroData &gyroData) {
-    // gyro.ZeroYaw();
+    gyro.ZeroYaw();
     // gyroData.rawYaw = 0;
     // gyroData.rawPitch = 0;
     // gyroData.rawRoll = 0;
