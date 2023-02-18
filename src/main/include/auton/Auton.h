@@ -30,19 +30,16 @@ public:
     void AutonomousInit(AutonData &autonData);
     void AutonomousPeriodic(const RobotData &robotData, AutonData &autonData, ControlData &controlData, ControllerData &controllerData);
     void DisabledInit();
-
-    void DisabledPeriodic();
 private:
     void sendAutonSelectionChooser();
 
     frc::SendableChooser<std::string> autonChooser;
 
     int step = 0;
-    void driveLine(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
 
     // secondary controls:
-    // void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void citrus(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 

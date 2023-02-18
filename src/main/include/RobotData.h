@@ -5,7 +5,6 @@
 #include "common/Gyro.h"
 #include "common/Timer.h"
 #include "common/Arduino.h"
-#include "common/ConfigurationFiles.h"
 
 #include "auton/Auton.h"
 
@@ -19,8 +18,6 @@
 //commented out variables are not in use
 struct RobotData
 {
-    ConfigData configData;
-
     ControllerData controllerData;
     ControlData controlData;
     GyroData gyroData;

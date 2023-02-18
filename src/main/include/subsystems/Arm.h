@@ -50,7 +50,7 @@ enum ArmRunMode
 class Arm 
 {
 public:
-    void RobotInit(const RobotData &robotData, ArmData &armData);
+    void RobotInit(ArmData &armData);
     void RobotPeriodic(const RobotData &robotData, ArmData &armData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, ArmData &armData);

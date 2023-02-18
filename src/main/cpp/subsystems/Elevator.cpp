@@ -5,17 +5,20 @@
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorMotor.RestoreFactoryDefaults();
-    elevatorAbsoluteEncoder.SetInverted(robotData.configData.elevatorConfigData.invertAbosolute);
-    elevatorAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.absoluteConversionFactor);
-    elevatorAbsoluteEncoder.SetZeroOffset(robotData.configData.elevatorConfigData.absoluteZeroOffset);
+    elevatorAbsoluteEncoder.SetInverted(true);
+    elevatorAbsoluteEncoder.SetPositionConversionFactor(72.75406740074442);
+    elevatorAbsoluteEncoder.SetZeroOffset(72.75406740074442 * 0.3201195593878466);
+
+    
+
     
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    elevatorMotor.SetInverted(robotData.configData.elevatorConfigData.invertRelative);
-    elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
-    elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
+    elevatorMotor.SetInverted(true);
+    elevatorMotor.EnableVoltageCompensation(10.5);
+    elevatorMotor.SetSmartCurrentLimit(50);
 
-    elevatorPIDController.SetP(robotData.configData.elevatorConfigData.pValue, 0); 
-    elevatorRelativeEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.relativeConversionFactor);
+    elevatorPIDController.SetP(0.153, 0); 
+    elevatorRelativeEncoder.SetPositionConversionFactor(0.496060877648);
     elevatorRelativeEncoder.SetPosition(10);
 
     elevatorMotor.BurnFlash();
@@ -130,11 +133,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             if (elevatorProfile.IsFinished(elapsedTime))
             {
                 elevatorProfileActive = false;
-                if (elevatorRelativeEncoder.GetPosition() < 0.25)
-                {
-                    elevatorMotor.Set(0);
-                    
-                }
+                
             }
         }
     }
@@ -187,7 +186,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
     {
         frc::TrapezoidProfile<units::degrees>::Constraints{240_deg_per_s, 140_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
-        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{elevatorRelativeEncoder.GetVelocity()}}
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };
 
 }

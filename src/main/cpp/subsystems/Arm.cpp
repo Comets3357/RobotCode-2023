@@ -1,48 +1,48 @@
 #include "subsystems/Arm.h"
 #include "RobotData.h"
 
-void Arm::RobotInit(const RobotData &robotData, ArmData &armData)
+void Arm::RobotInit(ArmData &armData)
 {
     // Wrist Initialization
-    armWristPIDController.SetP(robotData.configData.armConfigData.wristP, 0); // 0.35
+    armWristPIDController.SetP(0.1, 0); // 0.35
     armWristPIDController.SetI(0, 0);
     armWristPIDController.SetD(0, 0);
     armWristPIDController.SetIZone(0, 0);
     armWristPIDController.SetFF(0, 0);
     armWristPIDController.SetOutputRange(-1, 1, 0);
     
-    armWrist.EnableVoltageCompensation(robotData.configData.armConfigData.voltageComp);
-    armWrist.SetSmartCurrentLimit(robotData.configData.armConfigData.wristCurrentLimit);
-    armWrist.SetInverted(robotData.configData.armConfigData.wristRelativeInverted); 
+    armWrist.EnableVoltageCompensation(10.5);
+    armWrist.SetSmartCurrentLimit(20);
+    armWrist.SetInverted(false);
     armWrist.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armWristAbsoluteEncoder.SetInverted(robotData.configData.armConfigData.wristAbsoluteInverted);
-    armWristAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.wristAbsoluteConversion);
-    armWristAbsoluteEncoder.SetZeroOffset(robotData.configData.armConfigData.wristAbsoluteOffset);
+    armWristAbsoluteEncoder.SetInverted(false);
+    armWristAbsoluteEncoder.SetPositionConversionFactor(360);
+    armWristAbsoluteEncoder.SetZeroOffset(255.9);
 
-    armWristRelativeEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.wristRelativeConversion);
+    armWristRelativeEncoder.SetPositionConversionFactor(360.0/82.09);
     armWristRelativeEncoder.SetPosition(10);
 
-    // armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
+    armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
 
     armWrist.BurnFlash();
 
-    armPivotPIDController.SetP(robotData.configData.armConfigData.pivotP, 0);
+    armPivotPIDController.SetP(0.04833*2, 0);
     armPivotPIDController.SetI(0, 0);
     armPivotPIDController.SetD(0, 0);
     armPivotPIDController.SetIZone(0, 0);
     armPivotPIDController.SetFF(0, 0);
 
     armPivotPIDController.SetOutputRange(-1, 1, 0);
-    armPivot.EnableVoltageCompensation(robotData.configData.armConfigData.voltageComp);
-    armPivot.SetSmartCurrentLimit(robotData.configData.armConfigData.pivotCurrentLimit);
-    armPivot.SetInverted(robotData.configData.armConfigData.pivotRelativeInverted);
+    armPivot.EnableVoltageCompensation(10.5);
+    armPivot.SetSmartCurrentLimit(45);
+    armPivot.SetInverted(true);
     armPivot.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armPivotAbsoluteEncoder.SetInverted(robotData.configData.armConfigData.pivotAbsoluteInverted);
-    armPivotAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.pivotAbsoluteConversion);
-    armPivotAbsoluteEncoder.SetZeroOffset(robotData.configData.armConfigData.pivotAbsoluteOffset);
-    armPivotRelativeEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.pivotRelativeConversion);
+    armPivotAbsoluteEncoder.SetInverted(true);
+    armPivotAbsoluteEncoder.SetPositionConversionFactor(360);
+    armPivotAbsoluteEncoder.SetZeroOffset(163.1);
+    armPivotRelativeEncoder.SetPositionConversionFactor(1.565569);
     armPivotRelativeEncoder.SetPosition(10);
 
     armPivotPIDController.SetFeedbackDevice(armPivotAbsoluteEncoder);
@@ -212,7 +212,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(18, robotData, 0);
-                    RotatePivot(135, robotData, 0);
+                    RotatePivot(120, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -340,7 +340,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (cubeIntakeToggle != armData.cubeIntakeRunning)
             {
-                RotatePivot(39, robotData, 0);
+                RotatePivot(43, robotData, 0);
                 RotateWrist(199.5+3, robotData, 0);
             }
             readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
