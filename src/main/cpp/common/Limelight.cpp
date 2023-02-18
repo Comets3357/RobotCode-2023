@@ -54,21 +54,24 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
             //     limelightData.limelightOdometryY = 100;
             // }
 
-            if ((numberOfTagsInView == 1) && tempX < 3.5)
-            {
-                limelightData.limelightOdometryX = tempX;
-                limelightData.limelightOdometryY = tempY;  
-            }
-            else if (numberOfTagsInView == 2)
-            {
+            // if ((numberOfTagsInView == 1) && tempX < 5)
+            // {
+            //     limelightData.limelightOdometryX = tempX;
+            //     limelightData.limelightOdometryY = tempY;  
+            // }
+            // else if (numberOfTagsInView == 2)
+            // {
+            //     limelightData.limelightOdometryX = tempX;
+            //     limelightData.limelightOdometryY = tempY;
+            // }
+            // else
+            // {
+            //     limelightData.limelightOdometryX = 100;
+            //     limelightData.limelightOdometryY = 100;
+            // }
+
                 limelightData.limelightOdometryX = tempX;
                 limelightData.limelightOdometryY = tempY;
-            }
-            else
-            {
-                limelightData.limelightOdometryX = 100;
-                limelightData.limelightOdometryY = 100;
-            }
         // }
         // else 
         // {

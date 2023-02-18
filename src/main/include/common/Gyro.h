@@ -13,6 +13,8 @@ struct GyroData
     double rawRoll = 0;
     double angularMomentum;
     double rotationalRate;
+
+    frc::Rotation2d gyroRot2d;
 };
 
 class Gyro

@@ -144,7 +144,17 @@ void Auton::driveLine(const RobotData &robotData, ControlData &controlData, Cont
 {
     double sec = robotData.timerData.secSinceEnabled;
 
-    // controlData.saResetOdometry = true;
+    if ((sec > 0.85 && sec < 0.95) || (sec > 3 && sec < 3.5) || (sec > 8.2 && sec < 8.3) || (sec > 9.4 && sec < 9.5))
+    {
+        controlData.saResetOdometry = true;
+    }
+    else 
+    {
+        controlData.saResetOdometry = false;
+    }
+
+
+
 
     
 }

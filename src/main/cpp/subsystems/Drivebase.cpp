@@ -287,30 +287,36 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
     frc::SmartDashboard::PutNumber("UPDATE LEFT", (double)leftDistance);
     frc::SmartDashboard::PutNumber("UPDATE RIGHT", (double)rightDistance);
-    odometry.Update(currentRotation, leftDistance, rightDistance);
 
+
+    if ((robotData.limelightData.limelightPastOdometryX != robotData.limelightData.limelightOdometryX 
+    || robotData.limelightData.limelightPastOdometryY != robotData.limelightData.limelightOdometryY) && 
+        ((robotData.limelightData.limelightOdometryX < 50 && robotData.limelightData.limelightOdometryX > 0) 
+        && (robotData.limelightData.limelightOdometryY < 50 && robotData.limelightData.limelightOdometryX > 0)))
+    {
+        resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>(), robotData);
+    }
+    else
+    {
+        odometry.Update(currentRotation, leftDistance, rightDistance);
+    }
+
+    // odometry.Update(currentRotation, leftDistance, rightDistance);
+    
     field.SetRobotPose(odometry.GetPose());
     frc::SmartDashboard::PutData("Field", &field);
 
-
     drivebaseData.currentPose = odometry.GetPose();
 
-    // if ((robotData.limelightData.limelightPastOdometryX != robotData.limelightData.limelightOdometryX 
-    // || robotData.limelightData.limelightPastOdometryY != robotData.limelightData.limelightOdometryY) && 
-    //     ((robotData.limelightData.limelightOdometryX < 50 && robotData.limelightData.limelightOdometryX > 0) 
-    //     && (robotData.limelightData.limelightOdometryY < 50 && robotData.limelightData.limelightOdometryX > 0)))
-    // {
-    //     drivebaseData.odometryX = robotData.limelightData.limelightOdometryX;
-    //     drivebaseData.odometryY = robotData.limelightData.limelightOdometryY;
-    // }
-    // else
-    // {
-    //     drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
-    //     drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
-    // }
+    drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
+    drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
+    
 
-        drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
-        drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
+    // drivebaseData.odometryX = robotData.limelightData.limelightOdometryX;
+    // drivebaseData.odometryY = robotData.limelightData.limelightOdometryY;
+
+        // drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
+        // drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
 
     drivebaseData.odometryYaw = drivebaseData.currentPose.Rotation().Degrees().to<double>();
     // drivebaseData.odometryYaw = (drivebaseData.odometryYaw / M_PI * 180); // convert from radians [-pi, pi] to degrees [0, 360]
@@ -333,7 +339,7 @@ void Drivebase::resetOdometry(const frc::Pose2d &pose, double gyroAngle)
     frc::Rotation2d gyroRotation{gyroRadians};
 
     odometry.ResetPosition(gyroRotation, units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  pose);
-    zeroEncoders();
+    // zeroEncoders();
 }
 
 // reset odometry to any double x, y, deg
@@ -351,9 +357,11 @@ void Drivebase::resetOdometry(double x, double y, double radians, const RobotDat
 
     const frc::Rotation2d gyroRotation{gyroRadians};
     const frc::Pose2d resetPose{meterX, meterY, radianYaw};
-    odometry.ResetPosition(gyroRotation, units::meter_t{-getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  resetPose);
+    // zeroEncoders();
+    odometry.ResetPosition(gyroRotation, units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meter_t{getEncoderDistance(dbREncoder.GetPosition())},  resetPose);
+    // odometry.ResetPosition(gyroRotation, )
 
-    zeroEncoders();
+    // zeroEncoders();
 }
 
 double Drivebase::getEncoderDistance(double encoderPosition)
