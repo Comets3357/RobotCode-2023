@@ -2,7 +2,7 @@
 VoltageCompensation = 10.5
 
 # BULL BAR VALUES #
-BullBarRollerInverted = true
+BullBarRollerInverted = false
 BullBarAbsoluteConversionFactor = 108.43
 BullBarAbsoluteZeroOffset = 53
 BullBarRelativeConversionFactor = 0.1904800000000000104
@@ -25,8 +25,8 @@ ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
 # DRIVEBASE VALUES #
-DrivebaseRightInverted = true
-DrivebaseLeftInverted = false
+DrivebaseRightInverted = false
+DrivebaseLeftInverted = true
 DriveBaseCurrentLimit = 60
 DrivebaseLeftPValue = 0.3926
 DrivebaseLeftFFValue = 0.2688

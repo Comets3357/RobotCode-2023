@@ -212,7 +212,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(18, robotData, 0);
-                    RotatePivot(123, robotData, 0);
+                    RotatePivot(140, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -467,7 +467,7 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
 
     if (robotData.controlData.mMovePivot)
     {
-        armPivot.Set(robotData.controllerData.sLYStick * 0.3);
+        armPivot.Set(robotData.controllerData.sRYStick * 0.3);
     }
     else
     {
@@ -476,11 +476,11 @@ void Arm::Manual(const RobotData &robotData, ArmData &armData)
 
     if (robotData.controlData.mMoveWrist)
     {
-        armWrist.Set(robotData.controllerData.sRYStick * 0.25);
+        armWrist.Set(robotData.controllerData.sLYStick * 0.25);
     }
     else
     {
-        armWrist .Set(0);
+        armWrist.Set(0);
     }
 
     if (robotData.controlData.mForceZeroPivot)
