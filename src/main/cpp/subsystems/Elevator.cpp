@@ -149,7 +149,7 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
         DisableSoftLimits();
     }
     
-    if (robotData.controlData.forceZeroElevator)
+    if (robotData.controlData.forceZeroElevator || robotData.controlData.mForceZeroElevator)
     {
         ForceZeroElevator();
     }

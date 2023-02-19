@@ -219,6 +219,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                     RotateWrist(30, robotData, 0);
                     RotatePivot(11, robotData, 0);
                 }
+                else if (robotData.controlData.saPositionLow)
+                {
+                    RotatePivot(16, robotData, 0);
+                    RotateWrist(130, robotData, 0);
+                }
                 break;
 
             case CUBE:
@@ -240,6 +245,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                     RotateWrist(30, robotData, 0);
                     RotatePivot(11, robotData, 0);  
                 }
+                else if (robotData.controlData.saPositionLow)
+                {
+                    RotatePivot(16, robotData, 0);
+                    RotateWrist(130, robotData, 0);
+                }
                 break;
 
             case NONE:
@@ -259,6 +269,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                     RotateWrist(30, robotData, 0);
                     RotatePivot(11, robotData, 0);
                 }
+                else if (robotData.controlData.saPositionLow)
+                {
+                    RotatePivot(16, robotData, 0);
+                    RotateWrist(130, robotData, 0);
+                }
                 break;
 
             default:
@@ -277,6 +292,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
                     RotateWrist(30, robotData, 0);
                     RotatePivot(11, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionLow)
+                {
+                    RotatePivot(16, robotData, 0);
+                    RotateWrist(130, robotData, 0);
                 }
                 break;
         }

@@ -148,7 +148,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             {
                 bullBarSliderPIDController.SetReference(bullBarConeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
             }
-            if (robotData.controllerData.sRBumper)
+            if (robotData.controlData.shift)
             {
                 bullBarRollers.Set(-bullBarRollerExtendedSpeed);
             }
@@ -173,7 +173,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             {
                 bullBarSliderPIDController.SetReference(bullBarCubeIntakePosition, rev::CANSparkMax::ControlType::kPosition, 0);
             }
-            if (robotData.controllerData.sRBumper)
+            if (robotData.controlData.shift)
             {
                 bullBarRollers.Set(-bullBarRollerExtendedSpeed); 
             }
@@ -210,7 +210,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 {
 
-    frc::SmartDashboard::PutBoolean("manual working", true);
+    frc::SmartDashboard::PutBoolean("l working", true);
     if (softLimitsToggled)
     {
         DisableSoftLimits();
