@@ -18,14 +18,16 @@ void Robot::RobotInit() {
   frc::DigitalInput robotIndicator{9};
 timer.RobotInit(robotData.timerData); 
 
-  if (robotIndicator.Get())
-  {
+  // if (robotIndicator.Get())
+  // {
+  //   configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+  // }
+  // else
+  // {
+  //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
+  // }
     configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
-  }
-  else
-  {
-    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
-  }
+
 
 
   driveBase.RobotInit(robotData);
@@ -41,7 +43,7 @@ timer.RobotInit(robotData.timerData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  arduino.RobotInit();
+  //arduino.RobotInit();
   
 
   auton.RobotInit(robotData.autonData);
@@ -62,7 +64,7 @@ timer.RobotInit(robotData.timerData);
 void Robot::RobotPeriodic() {
 
   
-  arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  //arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
