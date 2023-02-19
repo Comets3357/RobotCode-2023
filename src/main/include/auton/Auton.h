@@ -39,7 +39,7 @@ private:
 
 
     // secondary controls:
-    // void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void citrus(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
@@ -54,6 +54,7 @@ private:
     // void fourBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     
     void placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void TwoBlueRightClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void sixBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 };

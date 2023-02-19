@@ -78,7 +78,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
     if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
     {
         runMode = ELEVATOR_RELATIVE_RUN;
-        elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+        elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     }
     
     if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)
@@ -130,11 +130,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             if (elevatorProfile.IsFinished(elapsedTime))
             {
                 elevatorProfileActive = false;
-                if (elevatorRelativeEncoder.GetPosition() < 0.25)
-                {
-                    elevatorMotor.Set(0);
-                    
-                }
+                
             }
         }
     }
@@ -150,7 +146,7 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
         DisableSoftLimits();
     }
     
-    if (robotData.controlData.forceZeroElevator)
+    if (robotData.controlData.forceZeroElevator || robotData.controlData.mForceZeroElevator)
     {
         ForceZeroElevator();
     }
@@ -187,7 +183,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
     {
         frc::TrapezoidProfile<units::degrees>::Constraints{240_deg_per_s, 140_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
-        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{elevatorRelativeEncoder.GetVelocity()}}
+        frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };
 
 }
