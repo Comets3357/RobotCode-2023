@@ -28,8 +28,8 @@ timer.RobotInit(robotData.timerData);
   }
 
 
-  driveBase.RobotInit();
-  endEffector.RobotInit();
+  driveBase.RobotInit(robotData);
+  endEffector.RobotInit(robotData);
 
   timer.RobotInit(robotData.timerData); 
   driveBase.RobotInit(robotData);
