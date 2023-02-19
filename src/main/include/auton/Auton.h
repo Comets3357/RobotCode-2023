@@ -54,6 +54,7 @@ private:
     // void fourBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     
     void placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void TwoBlueRightClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void sixBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 };

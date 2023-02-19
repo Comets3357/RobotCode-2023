@@ -68,7 +68,7 @@ void Auton::sendAutonSelectionChooser() {
     
     autonChooser.AddOption("driveLine", "driveLine");
     autonChooser.AddOption("TwoBlueLeftNoClimb", "TwoBlueLeftNoClimb");
-    autonChooser.AddOption("PlaceCone", "PlaceCone");
+    autonChooser.AddOption("OneCone", "OneCone");
     // autonChooser.AddOption("fiveBallCAlt", "fiveBallCAlt");
 
     // autonChooser.AddOption("citrus", "citrus");
@@ -92,13 +92,13 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 
     if (autonData.autonRoutineName == "TwoBlueRightClimb")
     {
-        placeCone(robotData, controlData, controllerData);
+        TwoBlueRightClimb(robotData, controlData, controllerData);
     }
     else if (autonData.autonRoutineName == "Straight")
     {
         potato(robotData, controlData, controllerData);
     }
-    else if (autonData.autonRoutineName == "Arm")
+    else if (autonData.autonRoutineName == "OneCone")
     {
         placeCone(robotData, controlData, controllerData);
     }
@@ -282,10 +282,41 @@ void Auton::potato(const RobotData &robotData, ControlData &controlData, Control
 //         controlData.saFinalShoot = false;
 //     }
 // }
-
 void Auton::placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled + 1.5;
+    double sec = robotData.timerData.secSinceEnabled;
+
+    
+
+    switch (step)
+    {
+    case (0):
+        
+        controlData.saPositionHigh = true;
+        step++;
+        break;
+    
+    case(1):
+        controlData.saPositionHigh = false;
+        if (sec > 3) step++;
+        break;
+    case(2):
+        controlData.saIntakeBackwards = true;
+        if (sec > 5) step++;
+        break;
+    case(3):
+        controlData.saIntakeBackwards = false;
+        controlData.saHomePosition = true;
+        step++;
+        break;
+    case(4):
+        controlData.saHomePosition = false;
+    }
+}
+
+void Auton::TwoBlueRightClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
+{
+    double sec = robotData.timerData.secSinceEnabled;
 
     
 
