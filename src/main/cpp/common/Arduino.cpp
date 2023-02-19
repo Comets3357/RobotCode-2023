@@ -69,7 +69,7 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
         {
             colorCode = 'f';
         }
-        else if (robotData.armData.coneIntakeRunning)//intaking cone
+        else if (robotData.armData.coneIntakeRunning || robotData.controlData.saConeFlipPosition || robotData.controlData.saUprightConeIntake || robotData.controlData.saPositionHumanPlayer)//intaking cone
         {
             colorCode = 'j';
         }

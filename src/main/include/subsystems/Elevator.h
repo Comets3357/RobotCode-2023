@@ -60,7 +60,7 @@ private:
     void MoveElevator(double targetDegree, const RobotData& robotData, double timeOffset);
 
     bool softLimitsEnabled = false;
-    bool elevatorForceZeroed = false;
+    bool elevatorForceZeroed = true;
 
     bool forceZeroElevator = false;
 

@@ -2,10 +2,10 @@
 VoltageCompensation = 10.5
 
 # BULL BAR VALUES #
-BullBarRollerInverted = true
+BullBarRollerInverted = false
 BullBarAbsoluteConversionFactor = 108.43
 BullBarAbsoluteZeroOffset = 53
-BullBarRelativeConversionFactor = 0.146958469
+BullBarRelativeConversionFactor = 0.1904800000000000104
 BullBarPValue = 0.5
 BullBarSmartCurrentLimit = 20
 BullBarSliderInvertedRelative = true
@@ -25,8 +25,8 @@ ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
 # DRIVEBASE VALUES #
-DrivebaseRightInverted = true
-DrivebaseLeftInverted = false
+DrivebaseRightInverted = false
+DrivebaseLeftInverted = true
 DriveBaseCurrentLimit = 60
 DrivebaseLeftPValue = 0.3926
 DrivebaseLeftFFValue = 0.2688
@@ -42,10 +42,10 @@ WristAbsoluteConversion = 360
 WristAbsoluteZeroOffset = 9.299444
 WristRelativeConversion = 4.385430624923864151
 
-PivotPValue = 0.04832999999999999796
+PivotPValue = 0.08
 PivotCurrentLimit = 45
-PivotRelativeInverted = true
-PivotAbsoluteInverted = true
+PivotRelativeInverted = false
+PivotAbsoluteInverted = false
 PivotAbsoluteConversion = 360
-PivotAbsoluteZeroOffset = 103.826942
-PivotRelativeConversion = 1.565569
+PivotAbsoluteZeroOffset = 70.3962
+PivotRelativeConversion = 1.5428571428

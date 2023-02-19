@@ -72,8 +72,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     else 
     {
         controlData.saUprightConeIntake = (controllerData.sXBtn) && controlData.shift;
-        controlData.saCubeIntake = (controllerData.sRTrigger > 0.5) && controlData.shift;
-        controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
+        controlData.saCubeIntake = (controllerData.sLTrigger > 0.5);
+        controlData.saConeIntake = (controllerData.sRTrigger > 0.5);
     }
 
     // if (robotData.endEffectorData.armRetractRequest)
@@ -94,7 +94,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
         controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     }
 
-    controlData.saIntakeBackwards = (controllerData.sLTrigger > 0.5) && !controlData.shift;
+    controlData.saIntakeBackwards = (controllerData.sRBumper) && controlData.shift;
     // MANUAL:
     controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;
     controlData.mEndEffectorRollersOut = controllerData.sYBtn && !controlData.shift;
@@ -103,23 +103,31 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     // SEMI AUTO:
     
     controlData.saPositionHumanPlayer = (controllerData.sABtn) && controlData.shift;
+    controlData.saPositionLow = (controllerData.sXBtn) && !controlData.shift;
     controlData.saPositionMid = (controllerData.sBBtn) && !controlData.shift;
     controlData.saPositionHigh = (controllerData.sYBtn) && !controlData.shift;
     controlData.saSetUpPosition = (controllerData.sBBtn) && controlData.shift;
     controlData.saConeFlipPosition = (controllerData.sYBtn) && controlData.shift;
 
     // MANUAL:
-    controlData.mMovePivot = (controllerData.sLYStick > 0.2 || controllerData.sLYStick < -0.2) && controlData.shift;
-    controlData.mMoveWrist = (controllerData.sRYStick > 0.2 || controllerData.sRYStick < -0.2) && controlData.shift;
-    // controlData.mForceZeroWrist = (controllerData.sABtn) && !controlData.shift;
-    controlData.mBullBarExtension = (controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08) && !controlData.shift;
+    controlData.mMovePivot = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && controlData.shift;
+    controlData.mMoveWrist = (controllerData.sLYStick > 0.08 || controllerData.sLYStick < -0.08) && controlData.shift;
+    controlData.mForceZeroWrist = (controllerData.sLStickBtn) && controlData.shift;
+    controlData.mBullBarExtension = (controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08) && !controlData.shift;
     controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
-    controlData.mForceZeroBullBar = controllerData.sABtn && !controlData.shift;
+    controlData.mForceZeroBullBar = (controllerData.sLStickBtn) && !controlData.shift;
+    controlData.mForceZeroPivot = (controllerData.sRStickBtn) && controlData.shift;
 
     controlData.saConeCall = (controllerData.sRCenterBtn) && !controlData.shift;
     controlData.saCubeCall = (controllerData.sLCenterBtn) && !controlData.shift;
     controlData.saFastConeCall = (controllerData.sRCenterBtn) && controlData.shift;
     controlData.saFastCubeCall = (controllerData.sLCenterBtn) && controlData.shift;
+// ELEVATOR:
+    //MANUAL:
+    controlData.mMoveElevator = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && controlData.shift;
+    controlData.mForceZeroElevator = (controllerData.sRStickBtn) && !controlData.shift;
 }
+
+
 
