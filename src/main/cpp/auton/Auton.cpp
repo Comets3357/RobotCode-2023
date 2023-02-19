@@ -285,7 +285,7 @@ void Auton::potato(const RobotData &robotData, ControlData &controlData, Control
 
 void Auton::placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled + 1.5;
 
     
 
@@ -321,7 +321,7 @@ void Auton::placeCone(const RobotData &robotData, ControlData &controlData, Cont
         break;
         case(6):
         controlData.saCubeIntake = false;
-        if (sec > 6.35) step++;
+        if (sec > 6.5) step++;
         break;
 
 
@@ -334,11 +334,11 @@ void Auton::placeCone(const RobotData &robotData, ControlData &controlData, Cont
     
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7.75) step++;
+        if (sec > 7.5) step++;
         break;
     case(9):
         controlData.saIntakeBackwards = true;
-        if (sec > 8) step++;
+        if (sec > 7.75) step++;
         break;
     case(10):
         controlData.saIntakeBackwards = false;

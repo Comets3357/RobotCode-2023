@@ -81,7 +81,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
     if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
     {
         runMode = ELEVATOR_RELATIVE_RUN;
-        elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
+        elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     }
     
     if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)

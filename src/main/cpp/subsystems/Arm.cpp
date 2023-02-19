@@ -18,7 +18,7 @@ void Arm::RobotInit(ArmData &armData)
 
     armWristAbsoluteEncoder.SetInverted(false);
     armWristAbsoluteEncoder.SetPositionConversionFactor(360);
-    armWristAbsoluteEncoder.SetZeroOffset(255.9);
+    armWristAbsoluteEncoder.SetZeroOffset(256.7);
 
     armWristRelativeEncoder.SetPositionConversionFactor(360.0/82.09);
     armWristRelativeEncoder.SetPosition(10);
@@ -41,7 +41,7 @@ void Arm::RobotInit(ArmData &armData)
 
     armPivotAbsoluteEncoder.SetInverted(true);
     armPivotAbsoluteEncoder.SetPositionConversionFactor(360);
-    armPivotAbsoluteEncoder.SetZeroOffset(163.1);
+    armPivotAbsoluteEncoder.SetZeroOffset(160.1);
     armPivotRelativeEncoder.SetPositionConversionFactor(1.565569);
     armPivotRelativeEncoder.SetPosition(10);
 
@@ -212,7 +212,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(18, robotData, 0);
-                    RotatePivot(120, robotData, 0);
+                    RotatePivot(123, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -232,7 +232,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
 
                     RotateWrist(45, robotData, 0);
-                    RotatePivot(140, robotData, 0);
+                    RotatePivot(132, robotData, 0);
 
                 }
                 else if (robotData.controlData.saHomePosition)
@@ -265,13 +265,13 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
                 if (robotData.controlData.saPositionMid)
                 {
-                    RotateWrist(10, robotData, 0);
-                    RotatePivot(120, robotData, 0);
+                    RotateWrist(30, robotData, 0);
+                    RotatePivot(146, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    RotateWrist(10, robotData, 0);
-                    RotatePivot(148, robotData, 0);
+                    RotateWrist(30, robotData, 0.2);
+                    RotatePivot(146, robotData, 0.2);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
