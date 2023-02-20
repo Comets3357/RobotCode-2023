@@ -197,7 +197,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         if (robotData.controlData.saSetUpPosition)
         {
             RotateWrist(30, robotData, 0);
-            RotatePivot(120, robotData, 0);
+            RotatePivot(80, robotData, 0);
         }
         switch (robotData.endEffectorData.gamePieceType)
         {
@@ -207,12 +207,12 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 if (robotData.controlData.saPositionMid)
                 {
                     RotateWrist(10, robotData, 0);
-                    RotatePivot(140, robotData, 0);
+                    RotatePivot(145, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(18, robotData, 0);
-                    RotatePivot(140, robotData, 0);
+                    RotatePivot(145, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -360,7 +360,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (cubeIntakeToggle != armData.cubeIntakeRunning)
             {
-                RotatePivot(43, robotData, 0);
+                RotatePivot(40, robotData, 0);
                 RotateWrist(199.5+3, robotData, 0);
             }
             readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;
