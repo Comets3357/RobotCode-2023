@@ -34,6 +34,7 @@ enum DriveMode {
     DRIVEMODE_BREAK,
     DRIVEMODE_TRAJECTORY,
     DRIVEMODE_VECTOR,
+    DRIVEMODE_CHARGE_STATION_TRAVERSE,
     DRIVEMODE_AUTO_BALANCE
 };
 
@@ -151,5 +152,7 @@ private:
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
 
     double drivebaseMultiplier = 1;
+
+    int ChargeStationTraverseStep = 0;
 
 };

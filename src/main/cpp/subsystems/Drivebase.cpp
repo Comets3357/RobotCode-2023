@@ -238,6 +238,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         //set as percent vbus
         setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
     }
+    
     else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
     {
         //turnInPlaceTeleop(-robotData.limelightData.angleOffset, robotData);
@@ -314,6 +315,20 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
         frc::SmartDashboard::PutNumber("rightWheelSpeed", rightWheelSpeed);
 
         setVelocity(leftWheelSpeed, rightWheelSpeed);
+    }
+    else if (drivebaseData.driveMode == DRIVEMODE_CHARGE_STATION_TRAVERSE)
+    {
+        setVelocity(-3000, -3000);
+
+        if (robotData.gyroData.rawRoll < -20)
+        {
+            ChargeStationTraverseStep = 1;
+        }
+        if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll > -20)
+        {
+            setVelocity(0,0);
+            getNextAutonStep(robotData, drivebaseData, autonData);
+        }
     }
 }
 
@@ -452,6 +467,12 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
         {
             drivebaseData.driveMode = DRIVEMODE_BREAK;
             breakEndSec = std::stod(trajectoryName.substr(6, trajectoryName.length())) + robotData.timerData.secSinceEnabled;
+            return;
+        }
+
+        else if (trajectoryName.substr(0,21) == "chargeStationTraverse")
+        {
+            drivebaseData.driveMode = DRIVEMODE_CHARGE_STATION_TRAVERSE;
             return;
         }
 
