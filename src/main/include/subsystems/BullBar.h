@@ -13,7 +13,6 @@
 #include <frc/DigitalInput.h>
 #include <ctre/Phoenix.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
-#include <ctre/Phoenix.h>
 
 struct RobotData;
 
@@ -85,6 +84,7 @@ private:
     
     // Bull Bar Roller Initialization
     // ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};
+    //frc::PWMSparkMax bullBarRollers{bullBarRollerPWMID};
     ctre::phoenix::motorcontrol::can::VictorSPX bullBarRollers{bullBarRollerID};
     // Bull Bar Slider Initialization
     rev::CANSparkMax bullBarSlider = rev::CANSparkMax(bullBarSliderID, rev::CANSparkMax::MotorType::kBrushless);

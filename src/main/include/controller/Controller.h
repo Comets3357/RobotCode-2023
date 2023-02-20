@@ -56,6 +56,7 @@ struct ControlData
 
     bool saMoveArm;
     bool saHomePosition;
+    bool saPositionLow;
     bool saPositionMid;
     bool saPositionHigh;
     bool saSetUpPosition;
@@ -76,11 +77,17 @@ struct ControlData
     bool saElevatorSetHighPosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
     bool saElevatorSetIntakePosition; // Copy and change name for more set positions, go to ControlData.cpp to set controls.
 
+    // Elevator
+    bool mMoveElevator;
+    bool mForceZeroElevator;
+
     //piece call
     bool saCubeCall;
     bool saFastCubeCall;
     bool saConeCall;
     bool saFastConeCall;
+
+    
 
 
 
