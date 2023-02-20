@@ -2,7 +2,7 @@
 #include "RobotData.h"
 
 
-void Drivebase::RobotInit()
+void Drivebase::RobotInit(const RobotData &robotData)
 {
     dbL.RestoreFactoryDefaults();
     dbR.RestoreFactoryDefaults();
@@ -13,41 +13,37 @@ void Drivebase::RobotInit()
     dbRF.Follow(dbR);
     dbLF.Follow(dbL);
 
-    dbL.SetInverted(true);
-    dbLF.SetInverted(true);
-    dbR.SetInverted(false);
-    dbRF.SetInverted(false);
+    dbL.SetInverted(robotData.configData.drivebaseConfigData.leftInverted);
+    dbLF.SetInverted(robotData.configData.drivebaseConfigData.leftInverted);
+    dbR.SetInverted(robotData.configData.drivebaseConfigData.rightInverted);
+    dbRF.SetInverted(robotData.configData.drivebaseConfigData.rightInverted);
 
     dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    // dbL.EnableVoltageCompensation(10.5);
-    // dbLF.EnableVoltageCompensation(10.5);
-    // dbR.EnableVoltageCompensation(10.5);
-    // dbRF.EnableVoltageCompensation(10.5);
- 
-  
-  /* enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
-    dbL.SetSmartCurrentLimit(60);
-    dbLF.SetSmartCurrentLimit(60);
-    dbR.SetSmartCurrentLimit(60);
-    dbRF.SetSmartCurrentLimit(60);
 
-    dbL.EnableVoltageCompensation(10.5);
-    dbLF.EnableVoltageCompensation(10.5);
-    dbR.EnableVoltageCompensation(10.5);
-    dbRF.EnableVoltageCompensation(10.5);
+    // NEED TO SET CURRENT LIMIT
+    /**
+  * Configure the current limits that will be used
+  * Stator Current is the current that passes through the motor stators.
+  *  Use stator current limits to limit rotor acceleration/heat production
+  * Supply Current is the current that passes into the controller from the supply
+  *  Use supply current limits to prevent breakers from tripping
+  *
+  * enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
+    dbL.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
+    dbLF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
+    dbR.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
+    dbRF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-
-    // PIDs for Mule bot 2023
-    dbLPIDController.SetP(0.027491 / mpsToRpm);
-    dbLPIDController.SetFF(0.07476 / mpsToRpm);
+    dbLPIDController.SetP(robotData.configData.drivebaseConfigData.leftP);
+    dbLPIDController.SetFF(robotData.configData.drivebaseConfigData.leftFF);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.027491/mpsToRpm);
-    dbRPIDController.SetFF(0.07476/mpsToRpm);
+    dbRPIDController.SetP(robotData.configData.drivebaseConfigData.rightP);
+    dbRPIDController.SetFF(robotData.configData.drivebaseConfigData.rightFF);
     dbRPIDController.SetD(0);
 
     dbL.BurnFlash();
@@ -164,6 +160,15 @@ void Drivebase::updateData(const RobotData &robotData, DrivebaseData &drivebaseD
 // adjusts for the deadzone and converts joystick input to velocity values for PID
 void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData, ControlData &controlData)
 {
+
+    if (robotData.elevatorData.drivebaseSlowMode)
+    {
+        drivebaseMultiplier = 0.45;
+    }
+    else
+    {
+        drivebaseMultiplier = 1;
+    }
     // frc::SmartDashboard::PutNumber("DRIVE MODE", robotData.drivebaseData.driveMode);
     // frc::SmartDashboard::PutNumber("SHOOT MODE", robotData.controlData.shootMode);
     // assign drive mode
@@ -198,7 +203,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
         else
         {
-            tempLDrive = 0;
+            tempLDrive = 0; 
         }
 
         if (tempRDrive <= -0.08 || tempRDrive >= 0.08)
@@ -210,28 +215,28 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             tempRDrive = 0;
         }
 
-        if (robotData.controlData.mode == MODE_AUTO_BALANCE)
-        {
-            if (gyroData.rawPitch > 2.5)
-            {
-                tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
-                tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+        // if (robotData.controlData.mode == MODE_AUTO_BALANCE)
+        // {
+        //     if (gyroData.rawPitch > 2.5)
+        //     {
+        //         tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+        //         tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
 
-            }
-            else if (gyroData.rawPitch < -2.5)
-            {
-                tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
-                tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
-            }
-            else
-            {
-                tempLDrive = 0;
-                tempRDrive = 0;
-            }
-        }
+        //     }
+        //     else if (gyroData.rawPitch < -2.5)
+        //     {
+        //         tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+        //         tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
+        //     }
+        //     else
+        //     {
+        //         tempLDrive = 0;
+        //         tempRDrive = 0;
+        //     }
+        // }
 
         //set as percent vbus
-        setPercentOutput(tempLDrive , tempRDrive);
+        setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
     }
     else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
     {

@@ -35,7 +35,7 @@ class BullBar
 {
 public:
 
-    void RobotInit(BullBarData &bullBarData);
+    void RobotInit(const RobotData &robotData, BullBarData &bullBarData);
     void RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData);

@@ -35,7 +35,7 @@ class EndEffector
 {
 public:
 
-    void RobotInit();
+    void RobotInit(const RobotData &robotData);
     void RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
     void DisabledInit();
     void DisabledPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);

@@ -8,25 +8,42 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <frc/DigitalInput.h>
+
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
+  frc::DigitalInput robotIndicator{9};
 timer.RobotInit(robotData.timerData); 
 
+  // if (robotIndicator.Get())
+  // {
+  //   configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+  // }
+  // else
+  // {
+  //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
+  // }
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
 
 
-  driveBase.RobotInit();
-  endEffector.RobotInit();
 
-  bullBar.RobotInit(robotData.bullBarData);
+  driveBase.RobotInit(robotData);
+  endEffector.RobotInit(robotData);
 
-  arm.RobotInit(robotData.armData);
+  timer.RobotInit(robotData.timerData); 
+  driveBase.RobotInit(robotData);
+  endEffector.RobotInit(robotData);
+
+  bullBar.RobotInit(robotData, robotData.bullBarData);
+
+  arm.RobotInit(robotData, robotData.armData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  arduino.RobotInit();
+  //arduino.RobotInit();
   
 
   auton.RobotInit(robotData.autonData);
@@ -47,7 +64,7 @@ timer.RobotInit(robotData.timerData);
 void Robot::RobotPeriodic() {
 
   
-  arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  //arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
