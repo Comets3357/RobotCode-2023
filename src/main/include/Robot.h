@@ -27,6 +27,7 @@ class Robot : public frc::TimedRobot {
   void SimulationPeriodic() override;
 
  private:
+  void UpdateData(const ControllerData &controllerData);
   frc::SendableChooser<std::string> m_chooser;
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";

@@ -29,6 +29,7 @@ struct EndEffectorData
     GamePiece pastReadOfGamePiece = NONE;
 
     bool armRetractRequest = false;
+    bool gamePieceShuffleboard = false;
 };
 
 class EndEffector
@@ -58,6 +59,7 @@ private:
 
     double EndEffectorRollerCubeInwardSpeed = 0.3;
 
+ 
     bool eject = false;
 
 

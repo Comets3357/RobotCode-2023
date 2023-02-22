@@ -116,6 +116,12 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
     {
         failedTransfers++;
     }
-
+    UpdateData();
 }
 
+void Arduino::UpdateData()
+{
+    frc::SmartDashboard::PutBoolean("System Fault", colorCode == 'b');
+    frc::SmartDashboard::PutBoolean("Call for Piece", colorCode == 'g' || colorCode == 'e' || colorCode == 'h' || colorCode == 'f');
+    frc::SmartDashboard::PutBoolean("Have Gamepiece", colorCode == 'k');
+}

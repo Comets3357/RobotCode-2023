@@ -158,6 +158,9 @@ struct ControllerData
     bool testYButton = false;
     bool testRBumper = false;
     bool testLBumper = false;
+
+    // Shuffleboard
+    bool driveTypeShuffleboard = false;
 };
 
 class Controller
@@ -176,6 +179,7 @@ class Controller
         void updateBtnData(ControllerData &controllerData);
         void updateControlData(const RobotData &robotData, const ControllerData &controllerData, ControlData &controlData);
         void updateShootMode(const RobotData &robotData, ControlData &controlData);
+        void updateData(const RobotData &robotData, ControllerData &controllerData, ControlData &controlData);
 
         // basic btn getters:
         bool getBtn(int js, int index);

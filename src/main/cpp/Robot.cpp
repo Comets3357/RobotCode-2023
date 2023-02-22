@@ -13,7 +13,7 @@
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   frc::DigitalInput robotIndicator{9};
 timer.RobotInit(robotData.timerData); 
@@ -26,7 +26,7 @@ timer.RobotInit(robotData.timerData);
   // {
   //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
   // }
-    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
 
 
 
@@ -48,9 +48,7 @@ timer.RobotInit(robotData.timerData);
 
   auton.RobotInit(robotData.autonData);
 
-
-
-
+  // frc::SmartDashboard::PutBoolean("Force Zero All", false);
 }
 
 /**
@@ -61,7 +59,8 @@ timer.RobotInit(robotData.timerData);
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {
+void Robot::RobotPeriodic() 
+{
 
   
   //arduino.RobotPeriodic(robotData, robotData.arduinoData);
@@ -73,8 +72,8 @@ void Robot::RobotPeriodic() {
   endEffector.RobotPeriodic(robotData, robotData.endEffectorData);
   arm.RobotPeriodic(robotData, robotData.armData); //0.01
   elevator.RobotPeriodic(robotData, robotData.elevatorData);
-  
-  
+
+  UpdateData(robotData.controllerData);
 }
 
 /**
@@ -151,6 +150,13 @@ void Robot::TestPeriodic() {}
 void Robot::SimulationInit() {}
 
 void Robot::SimulationPeriodic() {}
+
+void Robot::UpdateData(const ControllerData &controllerData)
+{
+  frc::SmartDashboard::PutNumber("Battery Voltage", frc::DriverStation::GetBatteryVoltage());
+  frc::SmartDashboard::PutNumber("Match Timer", frc::DriverStation::GetMatchTime());
+  frc::SmartDashboard::PutBoolean("Semi-Auto", controllerData.driveTypeShuffleboard);
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
