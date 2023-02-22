@@ -116,6 +116,9 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
     bool pivotForceZeroed;
     bool wristForceZeroed;
 
+    bool pivotZeroed;
+    bool wristZeroed;
+
     bool forceZeroWrist;
     bool forceZeroPivot;
 

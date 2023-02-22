@@ -18,7 +18,7 @@ void Timer::EnabledInit(TimerData &timerData) {
 void Timer::EnabledPeriodic(TimerData &timerData)
 {
     timerData.secSinceEnabled = timer.Get().to<double>();
-    frc::SmartDashboard::PutNumber("timerData.secSinceEnabled", timerData.secSinceEnabled);
+    // frc::SmartDashboard::PutNumber("timerData.secSinceEnabled", timerData.secSinceEnabled);
 }
 
 void Timer::DisabledInit(TimerData &timerData)
@@ -32,5 +32,5 @@ void Timer::DisabledPeriodic(TimerData &timerData) {
     timerData.secSinceInit = initTimer.Get().to<double>();
     timerData.secSinceEnabled = timer.Get().to<double>();
 
-    frc::SmartDashboard::PutNumber("TIUNASDIJFKSJDF", timerData.secSinceInit);
+    // frc::SmartDashboard::PutNumber("TIUNASDIJFKSJDF", timerData.secSinceInit);
 }

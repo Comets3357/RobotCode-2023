@@ -54,8 +54,7 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
         
         endEffectorData.gamePieceType = NONE;
     }
-
-
+    UpdateData(robotData, endEffectorData);
 }
 
 void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData)
@@ -155,7 +154,7 @@ void EndEffector::SetEndEffectorRollerSpeed(double rollerSpeed)
     endEffectorRollers.Set(rollerSpeed);
 }
 
-void UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData)
+void EndEffector::UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
     if (endEffectorData.gamePieceType == CUBE)
         endEffectorData.gamePieceShuffleboard = true;

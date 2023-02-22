@@ -34,7 +34,6 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
 
     frc::SmartDashboard::PutBoolean("Elevator Force Zero", false);
-    
 }
 
 void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorData)
@@ -57,8 +56,10 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
     //     ZeroRelativePosition(elevatorData);
     // }
 
-    frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
-    frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
+    // frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
+    // frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
+
+    UpdateData(robotData, elevatorData);
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
@@ -128,7 +129,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             auto setpoint = elevatorProfile.Calculate(elapsedTime);
 
             elevatorPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
-            frc::SmartDashboard::PutNumber("elevatorPos TRAP", setpoint.position.value());
+            // frc::SmartDashboard::PutNumber("elevatorPos TRAP", setpoint.position.value());
             if (elevatorProfile.IsFinished(elapsedTime))
             {
                 elevatorProfileActive = false;
@@ -248,5 +249,6 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
 void Elevator::UpdateData(const RobotData &robotData, ElevatorData elevatorData)
 {
     frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
-    forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true || frc::SmartDashboard::GetBoolean("Force Zero All", false) == true;
+    forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true;
+    frc::SmartDashboard::PutBoolean("Elevator Zeroed", elevatorForceZeroed);
 }

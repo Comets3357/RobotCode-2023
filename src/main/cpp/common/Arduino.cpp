@@ -116,7 +116,7 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
     {
         failedTransfers++;
     }
-
+    UpdateData();
 }
 
 void Arduino::UpdateData()

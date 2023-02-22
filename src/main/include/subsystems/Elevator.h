@@ -64,6 +64,8 @@ private:
 
     bool forceZeroElevator = false;
 
+    bool elevatorZeroed;
+
     bool absoluteEncoderFeedBackDevice = true;
 
     rev::CANSparkMax elevatorMotor{elevatorID, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
