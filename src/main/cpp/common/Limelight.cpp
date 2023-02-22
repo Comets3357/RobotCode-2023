@@ -38,46 +38,60 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         limelightData.limelightPastOdometryX = limelightData.limelightOdometryX;
         limelightData.limelightPastOdometryY = limelightData.limelightOdometryY;
 
-        // if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1))
-        // {
-            
-
-            // if (((distanceToClosestTag < 40) && (numberOfTagsInView >= 1)) || 
-            //     ((distanceToClosestTag > 40 && distanceToClosestTag < 80) && (numberOfTagsInView >= 2)))
-            // {
-            //     limelightData.limelightOdometryX = tempX;
-            //     limelightData.limelightOdometryY = tempY;
-            // }
-            // else
-            // {
-            //     limelightData.limelightOdometryX = 100;
-            //     limelightData.limelightOdometryY = 100;
-            // }
-
-            // if ((numberOfTagsInView == 1) && tempX < 5)
-            // {
-            //     limelightData.limelightOdometryX = tempX;
-            //     limelightData.limelightOdometryY = tempY;  
-            // }
-            // else if (numberOfTagsInView == 2)
-            // {
-            //     limelightData.limelightOdometryX = tempX;
-            //     limelightData.limelightOdometryY = tempY;
-            // }
-            // else
-            // {
-            //     limelightData.limelightOdometryX = 100;
-            //     limelightData.limelightOdometryY = 100;
-            // }
-
-                limelightData.limelightOdometryX = tempX;
-                limelightData.limelightOdometryY = tempY;
-        // }
-        // else 
-        // {
-        //     limelightData.limelightOdometryX = 100;
-        //     limelightData.limelightOdometryY = 100;
-        // }
+        if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1))
+        {
+            if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed)
+            {
+                if ((numberOfTagsInView == 1) && (tempX > 13.3))
+                {
+                    limelightData.limelightOdometryY = tempY;
+                    limelightData.limelightOdometryX = tempX;
+                }
+                else if ((numberOfTagsInView == 2) && (tempX > 9.5)) 
+                {
+                    limelightData.limelightOdometryY = tempY;
+                    limelightData.limelightOdometryX = tempX;
+                }
+                else if (numberOfTagsInView == 3)
+                {
+                    limelightData.limelightOdometryY = tempY;
+                    limelightData.limelightOdometryX = tempX;
+                }
+                else
+                {
+                    limelightData.limelightOdometryY = 100;
+                    limelightData.limelightOdometryX = 100;
+                }
+            }
+            else
+            {
+                if ((numberOfTagsInView == 1) && (tempX < 3.2))
+                {
+                    limelightData.limelightOdometryY = tempY;
+                    limelightData.limelightOdometryX = tempX;
+                }
+                else if ((numberOfTagsInView == 2) && (tempX < 7.1)) 
+                {
+                    limelightData.limelightOdometryY = tempY;
+                    limelightData.limelightOdometryX = tempX;
+                }
+                else if (numberOfTagsInView == 3)
+                {
+                    limelightData.limelightOdometryY = tempY;
+                    limelightData.limelightOdometryX = tempX;
+                }
+                else
+                {
+                    limelightData.limelightOdometryY = 100;
+                    limelightData.limelightOdometryX = 100;
+                }
+            }
+        }
+        else 
+        {
+            limelightData.limelightOdometryX = 100;
+            limelightData.limelightOdometryY = 100;
+        }
     }
 }
 
