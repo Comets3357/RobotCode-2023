@@ -212,7 +212,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(18, robotData, 0);
-                    RotatePivot(145, robotData, 0);
+                    RotatePivot(135, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {

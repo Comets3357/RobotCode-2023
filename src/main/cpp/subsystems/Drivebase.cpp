@@ -38,12 +38,20 @@ void Drivebase::RobotInit(const RobotData &robotData)
     dbR.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
     dbRF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-    dbLPIDController.SetP(robotData.configData.drivebaseConfigData.leftP);
-    dbLPIDController.SetFF(robotData.configData.drivebaseConfigData.leftFF);
+    // dbLPIDController.SetP(robotData.configData.drivebaseConfigData.leftP);
+    // dbLPIDController.SetFF(robotData.configData.drivebaseConfigData.leftFF);
+    // dbLPIDController.SetD(0);
+
+    // dbRPIDController.SetP(robotData.configData.drivebaseConfigData.rightP);
+    // dbRPIDController.SetFF(robotData.configData.drivebaseConfigData.rightFF);
+    // dbRPIDController.SetD(0);
+
+     dbLPIDController.SetP(0.027491 / mpsToRpm);
+    dbLPIDController.SetFF(0.07476 / mpsToRpm);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(robotData.configData.drivebaseConfigData.rightP);
-    dbRPIDController.SetFF(robotData.configData.drivebaseConfigData.rightFF);
+    dbRPIDController.SetP(0.027491/mpsToRpm);
+    dbRPIDController.SetFF(0.07476/mpsToRpm);
     dbRPIDController.SetD(0);
 
     dbL.BurnFlash();
@@ -215,25 +223,25 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             tempRDrive = 0;
         }
 
-        // if (robotData.controlData.mode == MODE_AUTO_BALANCE)
-        // {
-        //     if (gyroData.rawPitch > 2.5)
-        //     {
-        //         tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
-        //         tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.1, 0.3);
+        if (robotData.controlData.mode == MODE_AUTO_BALANCE)
+        {
+            if (gyroData.rawPitch > 2.5)
+            {
+                tempLDrive = std::max((gyroData.rawPitch - 2.5)*0.05, 0.3);
+                tempRDrive = std::max((gyroData.rawPitch - 2.5)*0.05, 0.3);
 
-        //     }
-        //     else if (gyroData.rawPitch < -2.5)
-        //     {
-        //         tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
-        //         tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.1, 0.3);
-        //     }
-        //     else
-        //     {
-        //         tempLDrive = 0;
-        //         tempRDrive = 0;
-        //     }
-        // }
+            }
+            else if (gyroData.rawPitch < -2.5)
+            {
+                tempLDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.05, 0.3);
+                tempRDrive = std::max((-(gyroData.rawPitch) + 2.5)*0.05, 0.3);
+            }
+            else
+            {
+                tempLDrive = 0;
+                tempRDrive = 0;
+            }
+        }
 
         //set as percent vbus
         setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
@@ -259,7 +267,8 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
     // translate chassis speeds to wheel speeds w/ toWheelSPeeds from kinematics using rate of turn and linear speed
     // feed wheel speeds to PID
     // check if done with current path by either checking TotalTime() or checking in vicinity of final target point
-
+double tempLDrive = 0;
+    double tempRDrive = 0;
     // frc::smartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
     frc::SmartDashboard::PutNumber("MODE",(int) drivebaseData.driveMode);
 
@@ -318,18 +327,58 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
     }
     else if (drivebaseData.driveMode == DRIVEMODE_CHARGE_STATION_TRAVERSE)
     {
-        setVelocity(-3000, -3000);
+        if (forward)
+        {
+            setVelocity(5, 5);
 
-        if (robotData.gyroData.rawRoll < -20)
+        if (robotData.gyroData.rawRoll > 3)
         {
             ChargeStationTraverseStep = 1;
         }
-        if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll > -20)
+        if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
+        {
+            setVelocity(1,1);
+            ChargeStationTraverseStep = 2;
+        }
+        if (ChargeStationTraverseStep == 2 && robotData.gyroData.rawRoll < -5)
+        {
+            ChargeStationTraverseStep = 3;
+        }
+        if (ChargeStationTraverseStep == 3 && robotData.gyroData.rawRoll > -3)
         {
             setVelocity(0,0);
+                zeroEncoders();
             getNextAutonStep(robotData, drivebaseData, autonData);
         }
+        }
+        else
+        {
+            setVelocity(-5, -5);
+
+            if (robotData.gyroData.rawRoll > 5)
+            {
+                ChargeStationTraverseStep = 1;
+            }
+            if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
+            {
+                setVelocity(0,0);
+                zeroEncoders();
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+        }
+        
     }
+    
+
+    else if (drivebaseData.driveMode == DRIVEMODE_AUTO_BALANCE)
+        {
+            tempLDrive = gyroData.rawRoll*-0.01;
+            tempRDrive = gyroData.rawRoll*-0.01;
+            setPercentOutput(tempLDrive, tempRDrive);
+
+        }
+
+        //set as percent vbus
 }
 
 void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &drivebaseData) 
@@ -470,10 +519,23 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
             return;
         }
 
-        else if (trajectoryName.substr(0,21) == "chargeStationTraverse")
+        else if (trajectoryName.substr(0,28) == "chargeStationTraverseForward")
         {
+            ChargeStationTraverseStep = 0;
+            forward = true;
             drivebaseData.driveMode = DRIVEMODE_CHARGE_STATION_TRAVERSE;
             return;
+        }
+        else if (trajectoryName.substr(0,29) == "chargeStationTraverseBackward")
+        {
+            ChargeStationTraverseStep = 0;
+            forward = false;
+            drivebaseData.driveMode = DRIVEMODE_CHARGE_STATION_TRAVERSE;
+            return;
+        }
+        else if (trajectoryName.substr(0,7) == "balance")
+        {
+            drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
         }
 
         else 
@@ -482,7 +544,7 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
 
             fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
 
-            fs::path pathDirectory = deployDirectory / "output" / (trajectoryName + ".wpilib.json");
+            fs::path pathDirectory = deployDirectory / "Paths" / "output" / (trajectoryName + ".wpilib.json");
 
             frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
 
@@ -556,8 +618,8 @@ void Drivebase::turnInPlaceAuton(double degrees, const RobotData &robotData, Dri
     } else 
     {
         // profile that adjusts aggressiveness of turn based on the amount of degrees left to turn. has been tuned for speed & accuracy on both small and large turns
-        leftOutput = std::pow(std::abs(degrees / 400), 1.5) + 0.13;
-        rightOutput = std::pow(std::abs(degrees / 400), 1.5) + 0.13;
+        leftOutput = (std::pow(std::abs(degrees / 400), 1.5) + 0.13) * 4.0;
+        rightOutput = (std::pow(std::abs(degrees / 400), 1.5) + 0.13) * 4.0;
     }
     
 
@@ -632,8 +694,15 @@ void Drivebase::sendStartPointChooser()
 }
 
 
-void Drivebase::DisabledPeriodic()
+void Drivebase::DisabledPeriodic(const RobotData &robotData)
 {
     frc::SmartDashboard::PutNumber("LEFT DISTANCE", dbLEncoder.GetPosition());
+    if (robotData.controllerData.sABtn)
+    {
+            dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    }
 }
 

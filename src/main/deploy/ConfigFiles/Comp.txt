@@ -2,7 +2,7 @@
 VoltageCompensation = 10.5
 
 # BULL BAR VALUES #
-BullBarRollerInverted = false
+BullBarRollerInverted = true
 BullBarAbsoluteConversionFactor = 102.9166
 BullBarAbsoluteZeroOffset = 63.9
 BullBarRelativeConversionFactor = 0.25288

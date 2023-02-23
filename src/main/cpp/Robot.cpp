@@ -26,7 +26,7 @@ timer.RobotInit(robotData.timerData);
   // {
   //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
   // }
-    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
 
 
 
@@ -139,9 +139,12 @@ void Robot::DisabledInit() {
 }
 
 void Robot::DisabledPeriodic() {
+    controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+
   bullBar.DisabledPeriodic(robotData, robotData.bullBarData);
   arm.DisabledPeriodic(robotData, robotData.armData);
-  driveBase.DisabledPeriodic();
+  driveBase.DisabledPeriodic(robotData);
+  
 }
 
 void Robot::TestInit() {}
