@@ -329,31 +329,7 @@ double tempLDrive = 0;
     {
         if (forward)
         {
-            setVelocity(5, 5);
-
-        if (robotData.gyroData.rawRoll > 3)
-        {
-            ChargeStationTraverseStep = 1;
-        }
-        if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
-        {
-            setVelocity(1,1);
-            ChargeStationTraverseStep = 2;
-        }
-        if (ChargeStationTraverseStep == 2 && robotData.gyroData.rawRoll < -5)
-        {
-            ChargeStationTraverseStep = 3;
-        }
-        if (ChargeStationTraverseStep == 3 && robotData.gyroData.rawRoll > -3)
-        {
-            setVelocity(0,0);
-                zeroEncoders();
-            getNextAutonStep(robotData, drivebaseData, autonData);
-        }
-        }
-        else
-        {
-            setVelocity(-5, -5);
+            setVelocity(5+(gyroData.rawYaw*0.01), 5-(gyroData.rawYaw*0.01));
 
             if (robotData.gyroData.rawRoll > 5)
             {
@@ -361,8 +337,41 @@ double tempLDrive = 0;
             }
             if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
             {
+                setVelocity(0.1,0.1);
+                ChargeStationTraverseStep = 2;
+            }
+            if (ChargeStationTraverseStep == 2 && robotData.gyroData.rawRoll < -5)
+            {
+                ChargeStationTraverseStep = 3;
+            }
+            if (ChargeStationTraverseStep == 3 && robotData.gyroData.rawRoll > -3)
+            {
                 setVelocity(0,0);
-                zeroEncoders();
+                    zeroEncoders();
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+        }
+        else
+        {
+            setVelocity(-5+(gyroData.rawYaw*0.01), -5-(gyroData.rawYaw*0.01));
+
+            if (robotData.gyroData.rawRoll < -5)
+            {
+                ChargeStationTraverseStep = 1;
+            }
+            if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll > -3)
+            {
+                setVelocity(0.1,0.1);
+                ChargeStationTraverseStep = 2;
+            }
+            if (ChargeStationTraverseStep == 2 && robotData.gyroData.rawRoll > 5)
+            {
+                ChargeStationTraverseStep = 3;
+            }
+            if (ChargeStationTraverseStep == 3 && robotData.gyroData.rawRoll < 3)
+            {
+                setVelocity(0,0);
+                    zeroEncoders();
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
         }
