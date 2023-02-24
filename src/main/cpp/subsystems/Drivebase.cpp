@@ -256,7 +256,12 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
         frc::SmartDashboard::PutNumber("TARGET TIEM", 6);
         
         frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
+
+        // trajectoryState.pose.Y() = units::meter_t(trajectoryState.pose.Y().to<double>() + 2);
+
         frc::Pose2d desiredPose = trajectoryState.pose;
+
+        // trajectoryState.pose.Y() = units::meter(desiredPose.Y().to<double>() + 1);
 
         double trajX = desiredPose.X().to<double>();
         double trajY = desiredPose.Y().to<double>();
@@ -299,14 +304,16 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     if ((robotData.limelightData.limelightPastOdometryX != robotData.limelightData.limelightOdometryX 
     || robotData.limelightData.limelightPastOdometryY != robotData.limelightData.limelightOdometryY) && 
         ((robotData.limelightData.limelightOdometryX < 50 && robotData.limelightData.limelightOdometryX > 0) 
-        && (robotData.limelightData.limelightOdometryY < 50 && robotData.limelightData.limelightOdometryX > 0)) && (robotData.controlData.saResetOdometry))
+        && (robotData.limelightData.limelightOdometryY < 50 && robotData.limelightData.limelightOdometryY > 0)))
     {
         if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
         {
+            zeroEncoders();
             resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>(), robotData);
         }
         else
         {
+            zeroEncoders();
             resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>() + M_PI, robotData);
         }
     }

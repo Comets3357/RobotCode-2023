@@ -15,6 +15,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         distanceToClosestTag = GetDistance();
         frc::SmartDashboard::PutNumber("something useful", -distanceToClosestTag);
         frc::SmartDashboard::PutBoolean("limelight up", true);
+        frc::SmartDashboard::PutNumber("ll latency", LimelightHelpers::getLatency_Pipeline());
     }
     catch (...)
     {

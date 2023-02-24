@@ -12,6 +12,7 @@
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
+#include <frc/kinematics/DifferentialDrivePoseEstimator.h>
 #include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/controller/RamseteController.h>
