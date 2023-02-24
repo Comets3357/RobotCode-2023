@@ -44,8 +44,8 @@ WristRelativeConversion = 4.385430624923864151
 
 PivotPValue = 0.08
 PivotCurrentLimit = 45
-PivotRelativeInverted = true
+PivotRelativeInverted = false
 PivotAbsoluteInverted = true
 PivotAbsoluteConversion = 360
-PivotAbsoluteZeroOffset = 160.1
+PivotAbsoluteZeroOffset = 161.06
 PivotRelativeConversion = 1.5428571428

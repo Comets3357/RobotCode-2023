@@ -33,8 +33,8 @@ void Gyro::RobotPeriodic(GyroData &gyroData) {
     // frc::smartDashboard::PutNumber("pitch",gyroData.rawPitch);
     // frc::smartDashboard::PutNumber("roll",gyroData.rawRoll);
 
-    // frc::SmartDashboard::PutNumber("rawYaw", gyroData.rawYaw);
-    // frc::SmartDashboard::PutNumber("rawPitch", gyroData.rawPitch);
-    // frc::SmartDashboard::PutNumber("rawRoll", gyroData.rawRoll);
+    frc::SmartDashboard::PutNumber("rawYaw", gyroData.rawYaw);
+    frc::SmartDashboard::PutNumber("rawPitch", gyroData.rawPitch);
+    frc::SmartDashboard::PutNumber("rawRoll", gyroData.rawRoll);
 
 }

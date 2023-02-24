@@ -327,9 +327,9 @@ double tempLDrive = 0;
     }
     else if (drivebaseData.driveMode == DRIVEMODE_CHARGE_STATION_TRAVERSE)
     {
-        if (forward)
+        if (!forward)
         {
-            setVelocity(5+(gyroData.rawYaw*0.01), 5-(gyroData.rawYaw*0.01));
+            setVelocity(-5+(gyroData.rawYaw*0.05), -5-(gyroData.rawYaw*0.05));
 
             if (robotData.gyroData.rawRoll > 5)
             {
@@ -337,42 +337,29 @@ double tempLDrive = 0;
             }
             if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
             {
-                setVelocity(0.1,0.1);
-                ChargeStationTraverseStep = 2;
-            }
-            if (ChargeStationTraverseStep == 2 && robotData.gyroData.rawRoll < -5)
-            {
-                ChargeStationTraverseStep = 3;
-            }
-            if (ChargeStationTraverseStep == 3 && robotData.gyroData.rawRoll > -3)
-            {
                 setVelocity(0,0);
                     zeroEncoders();
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
+            
         }
         else
         {
-            setVelocity(-5+(gyroData.rawYaw*0.01), -5-(gyroData.rawYaw*0.01));
+            setVelocity(5+(gyroData.rawYaw*0.05), 5-(gyroData.rawYaw*0.05));
 
+            
             if (robotData.gyroData.rawRoll < -5)
             {
                 ChargeStationTraverseStep = 1;
             }
             if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll > -3)
             {
-                setVelocity(0.1,0.1);
-                ChargeStationTraverseStep = 2;
-            }
-            if (ChargeStationTraverseStep == 2 && robotData.gyroData.rawRoll > 5)
-            {
-                ChargeStationTraverseStep = 3;
-            }
-            if (ChargeStationTraverseStep == 3 && robotData.gyroData.rawRoll < 3)
-            {
-                setVelocity(0,0);
-                    zeroEncoders();
+               setVelocity(0,0);
+                    //zeroEncoders();
+                resetOdometry(14.392, 2.717, gyroData.rawYaw * 3.14159/180.0, robotData);
                 getNextAutonStep(robotData, drivebaseData, autonData);
+                
+                
             }
         }
         
