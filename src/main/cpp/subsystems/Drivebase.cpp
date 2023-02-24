@@ -268,7 +268,7 @@ void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebas
         frc::SmartDashboard::PutNumber("trajX", trajX);
         frc::SmartDashboard::PutNumber("trajY", trajY);
 
-        frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetPose(), trajectoryState);
+        frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetEstimatedPosition(), trajectoryState);
 
         frc::DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.ToWheelSpeeds(chassisSpeeds);
 
@@ -300,34 +300,35 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     frc::SmartDashboard::PutNumber("UPDATE LEFT", (double)leftDistance);
     frc::SmartDashboard::PutNumber("UPDATE RIGHT", (double)rightDistance);
 
+    frc::SmartDashboard::PutBoolean("vision able to reset path", robotData.limelightData.limelightAllowedToReset);
 
-    if ((robotData.limelightData.limelightPastOdometryX != robotData.limelightData.limelightOdometryX 
-    || robotData.limelightData.limelightPastOdometryY != robotData.limelightData.limelightOdometryY) && 
-        ((robotData.limelightData.limelightOdometryX < 50 && robotData.limelightData.limelightOdometryX > 0) 
-        && (robotData.limelightData.limelightOdometryY < 50 && robotData.limelightData.limelightOdometryY > 0)))
+    if (robotData.limelightData.limelightAllowedToReset)
     {
         if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
         {
-            zeroEncoders();
-            resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>(), robotData);
+            // resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>(), robotData);
+            // odometry.AddVisionMeasurement(robotData.limelightData.Odometry, )
+
+            odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
         }
         else
         {
-            zeroEncoders();
-            resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>() + M_PI, robotData);
+            // zeroEncoders();
+            // resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>() + M_PI, robotData);
+            odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
         }
     }
-    else
-    {
-        odometry.Update(currentRotation, leftDistance, rightDistance);
-    }
+    // else
+    // {
+    //     odometry.Update(currentRotation, leftDistance, rightDistance);
+    // }
 
-    // odometry.Update(currentRotation, leftDistance, rightDistance);
+    odometry.Update(currentRotation, leftDistance, rightDistance);
     
-    field.SetRobotPose(odometry.GetPose());
+    field.SetRobotPose(odometry.GetEstimatedPosition());
     frc::SmartDashboard::PutData("Field", &field);
 
-    drivebaseData.currentPose = odometry.GetPose();
+    drivebaseData.currentPose = odometry.GetEstimatedPosition();
 
     drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
     drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
@@ -612,6 +613,6 @@ void Drivebase::sendStartPointChooser()
 
 void Drivebase::DisabledPeriodic()
 {
-    frc::SmartDashboard::PutNumber("LEFT DISTANCE", dbLEncoder.GetPosition() * ticksToMeters);
+    frc::SmartDashboard::PutNumber("LEFT DISTANCE", dbLEncoder.GetPosition());
 }
 

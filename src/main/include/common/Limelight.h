@@ -17,11 +17,11 @@ struct RobotData;
 
 struct LimelightData
 {
-    double limelightPastOdometryX = 0;
-    double limelightPastOdometryY = 0;
 
-    double limelightOdometryX = 0;
-    double limelightOdometryY = 0;
+    bool limelightAllowedToReset = false;
+    double latency = 0;
+    
+    frc::Pose2d Odometry;
 };
 
 class Limelight
@@ -40,6 +40,10 @@ private:
 
     double tempX = 0;
     double tempY = 0;
+
+    double pastX = 0;
+    double pastY = 0;
+
     int numberOfTagsInView = 0;
 
     double distanceToClosestTag = 0;
@@ -50,6 +54,9 @@ private:
     double limelightAngle = 11.6;
 
     double inchesToMeters = 0.0254;
+
+    units::radian_t gyroRadians{0};
+    frc::Rotation2d gyroRotation{gyroRadians};
 
 
 };

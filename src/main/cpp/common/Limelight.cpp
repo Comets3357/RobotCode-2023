@@ -2,33 +2,28 @@
 
 void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelightData)
 {
-    // frc::SmartDashboard::PutNumber("odometry x place", table->GetNumber("tid", 0.0));
-
-    // if (frc::DriverStation::IsEnabled())
-    // {
-    //     llresults = LimelightHelpers::getLatestResults();
-    // }
 
     try 
     {
         llresults = LimelightHelpers::getLatestResults();
         distanceToClosestTag = GetDistance();
-        frc::SmartDashboard::PutNumber("something useful", -distanceToClosestTag);
-        frc::SmartDashboard::PutBoolean("limelight up", true);
-        frc::SmartDashboard::PutNumber("ll latency", LimelightHelpers::getLatency_Pipeline());
+        frc::SmartDashboard::PutBoolean("limelight active", true);
     }
     catch (...)
     {
-        frc::SmartDashboard::PutBoolean("limelight up", false);
+        frc::SmartDashboard::PutBoolean("limelight active", false);
     }
     
     if (robotData.controlData.saResetOdometry)
     {
-
-        frc::SmartDashboard::PutBoolean("I am here cause limelight", true);
         limelightOdometry.clear();
+
         limelightOdometry = llresults.targetingResults.botPose_wpiblue;
         numberOfTagsInView = llresults.targetingResults.FiducialResults.size();
+        limelightData.latency = LimelightHelpers::getLatency_Pipeline() + LimelightHelpers::getLatency_Capture();
+
+        pastX = tempX;
+        pastY = tempY;
 
         tempX = limelightOdometry.at(0);
         tempY = limelightOdometry.at(1);
@@ -36,62 +31,66 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         frc::SmartDashboard::PutNumber("ll x", tempX);
         frc::SmartDashboard::PutNumber("ll y", tempY);
 
-        limelightData.limelightPastOdometryX = limelightData.limelightOdometryX;
-        limelightData.limelightPastOdometryY = limelightData.limelightOdometryY;
-
-        if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1))
+        if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1) 
+        && (pastX != tempX) && (pastY != tempY))
         {
             if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed)
             {
+
+                gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
+                gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
+
+
                 if ((numberOfTagsInView == 1) && (tempX > 13.3))
                 {
-                    limelightData.limelightOdometryY = tempY;
-                    limelightData.limelightOdometryX = tempX;
+                    limelightData.limelightAllowedToReset = true;
+                    limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
                 }
                 else if ((numberOfTagsInView == 2) && (tempX > 9.5)) 
                 {
-                    limelightData.limelightOdometryY = tempY;
-                    limelightData.limelightOdometryX = tempX;
+                    limelightData.limelightAllowedToReset = true;
+                    limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation };
                 }
                 else if (numberOfTagsInView == 3)
                 {
-                    limelightData.limelightOdometryY = tempY;
-                    limelightData.limelightOdometryX = tempX;
+                    limelightData.limelightAllowedToReset = true;
+                    limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
                 }
                 else
                 {
-                    limelightData.limelightOdometryY = 100;
-                    limelightData.limelightOdometryX = 100;
+                    limelightData.limelightAllowedToReset = false;
                 }
             }
             else
             {
+
+                gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
+                gyroRotation = frc::Rotation2d{gyroRadians};
+
                 if ((numberOfTagsInView == 1) && (tempX < 3.2))
                 {
-                    limelightData.limelightOdometryY = tempY;
-                    limelightData.limelightOdometryX = tempX;
+                    limelightData.limelightAllowedToReset = true;
+                    limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
                 }
                 else if ((numberOfTagsInView == 2) && (tempX < 7.1)) 
                 {
-                    limelightData.limelightOdometryY = tempY;
-                    limelightData.limelightOdometryX = tempX;
+                    limelightData.limelightAllowedToReset = true;
+                    limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
                 }
                 else if (numberOfTagsInView == 3)
                 {
-                    limelightData.limelightOdometryY = tempY;
-                    limelightData.limelightOdometryX = tempX;
+                    limelightData.limelightAllowedToReset = true;
+                    limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
                 }
                 else
                 {
-                    limelightData.limelightOdometryY = 100;
-                    limelightData.limelightOdometryX = 100;
+                    limelightData.limelightAllowedToReset = false;
                 }
             }
         }
         else 
         {
-            limelightData.limelightOdometryX = 100;
-            limelightData.limelightOdometryY = 100;
+            limelightData.limelightAllowedToReset = false;
         }
     }
 }

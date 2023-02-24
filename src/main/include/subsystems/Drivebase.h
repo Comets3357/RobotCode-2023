@@ -12,7 +12,8 @@
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
-#include <frc/kinematics/DifferentialDrivePoseEstimator.h>
+// #include <frc/kinematics/DifferentialDrivePoseEstimator.h>
+#include <frc/estimator/DifferentialDrivePoseEstimator.h>
 #include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/controller/RamseteController.h>
@@ -79,7 +80,7 @@ private:
 
     // odometry
     void updateOdometry(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void resetOdometry(const frc::Pose2d &pose, double resetAngle);
+    void resetOdometry(const frc::Pose2d &pose, double gyroAngle);
     void resetOdometry(double x, double y, double radians, const RobotData &robotData);
     // void resetOdometry(double x, double y, double tanX, double tanY, const RobotData &robotData);
     void zeroEncoders();
@@ -112,9 +113,10 @@ private:
     units::radian_t zeroRadians{0};
     const frc::Rotation2d testRot{zeroRadians};
     const frc::Pose2d kZeroPose{testTrans, testRot};
-    frc::DifferentialDriveOdometry odometry{testRot, units::meter_t{0.0}, units::meter_t{0.0}};
+    // frc::DifferentialDrivePoseEstimator odometry{testRot, units::meter_t{0.0}, units::meter_t{0.0}};
     const units::meter_t kTrackWidth{0.55};
     frc::DifferentialDriveKinematics kinematics{kTrackWidth};
+    frc::DifferentialDrivePoseEstimator odometry{kinematics, testRot, units::meter_t{0.0}, units::meter_t{0.0}, kZeroPose};    
     frc::Trajectory trajectory{};
     frc::RamseteController ramseteController{};
 
@@ -134,8 +136,8 @@ private:
 
     // meters per second to ticks per decisecond converstion factor for 4 in wheels
     // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
-    const double mpsToRpm = ((60.0/1.0)*(39.3701/1.0)*(1.0/(4.25*M_PI))*(4.0/1.0) * 1.2); // 40:10 for actual comp bot
-    const double ticksToMeters = ((1.0/4.0)*(4.0*M_PI/1.0)*(1.0/39.3701)*(39.3701/42.3701) * 1.2);
+    const double mpsToRpm = (705.71022 * 1.1);//((60.0/1.0)*(39.3701/1.0)*(1.0/(4.25*M_PI))*(4.0/1.0) * 1.2); // 40:10 for actual comp bot
+    const double ticksToMeters = 1.0/(11.761837 * 1.1);//((1.0/4.0)*(4.0*M_PI/1.0)*(1.0/39.3701)*(39.3701/42.3701) * 1.2);
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};
