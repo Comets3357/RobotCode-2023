@@ -1,8 +1,8 @@
 break 1.5
 TwoRedLoadingOne
 TwoRedLoadingTwo
-break 1.25
+break 0.75
 TwoRedLoadingThree
-turnInPlace -55
+turnInPlace -65
 TwoRedLoadingFour
 balance

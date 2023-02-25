@@ -63,6 +63,8 @@ void Auton::sendAutonSelectionChooser() {
     autonChooser.AddOption("TwoRedLeftClimb", "TwoRedLeftClimb");
     autonChooser.AddOption("TwoRedLeftNoClimb", "TwoRedLeftNoClimb");
     autonChooser.AddOption("OneCone", "OneCone");
+
+    autonChooser.AddOption("Line", "Line");
     // autonChooser.AddOption("fiveBallCAlt", "fiveBallCAlt");
 
     // autonChooser.AddOption("citrus", "citrus");
@@ -99,6 +101,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     else if (autonData.autonRoutineName == "OneCone")
     {
         placeCone(robotData, controlData, controllerData);
+    }
+    else if (autonData.autonRoutineName == "ChargeStation")
+    {
+        TwoMiddleClimb(robotData, controlData, controllerData);
     }
 
 
@@ -329,6 +335,28 @@ void Auton::placeCone(const RobotData &robotData, ControlData &controlData, Cont
     }
 }
 
+void Auton::TwoMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
+{
+double sec = robotData.timerData.secSinceEnabled;
+
+switch (step)
+{
+    case 0:
+
+    if (sec > 9.5) step = 1;
+    break;
+    case 1:
+    controlData.saResetOdometry = true;
+    if (sec > 10.7) step = 2;
+
+    break;
+    case 2:
+    controlData.saResetOdometry = false;
+    break;
+
+}
+}
+
 void Auton::TwoBlueRightClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
     double sec = robotData.timerData.secSinceEnabled;
@@ -367,7 +395,7 @@ void Auton::TwoBlueRightClimb(const RobotData &robotData, ControlData &controlDa
         break;
         case(6):
         controlData.saCubeIntake = false;
-        if (sec > 6.5) step++;
+        if (sec > 6) step++;
         break;
 
 
@@ -380,11 +408,11 @@ void Auton::TwoBlueRightClimb(const RobotData &robotData, ControlData &controlDa
     
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7.25) step++;
+        if (sec > 7) step++;
         break;
     case(9):
         controlData.saIntakeBackwards = true;
-        if (sec > 7.5) step++;
+        if (sec > 7.25) step++;
         break;
     case(10):
         controlData.saIntakeBackwards = false;
@@ -393,11 +421,11 @@ void Auton::TwoBlueRightClimb(const RobotData &robotData, ControlData &controlDa
         break;
     case(11):
         controlData.saHomePosition = false;
-        if (sec > 8.5)step++;
+        if (sec > 8)step++;
         break;
         case(12):
         controlData.saConeIntake = true;
-        if (sec > 11.5) step++;
+        if (sec > 11) step++;
         break;
         case(13):
         controlData.saConeIntake = false;

@@ -111,14 +111,14 @@ private:
     frc::SendableChooser<frc::Pose2d> startPointChooser;
 
     const units::radian_t kZeroAngle{0.0};
-    units::meter_t meterX{3.167};
-    units::meter_t meterY{7.492};
+    units::meter_t meterX{12.429};
+    units::meter_t meterY{5.243};
     const frc::Translation2d testTrans{meterX, meterY};
     units::radian_t zeroRadians{0};
     const frc::Rotation2d testRot{zeroRadians};
     const frc::Pose2d kZeroPose{testTrans, testRot};
     // frc::DifferentialDrivePoseEstimator odometry{testRot, units::meter_t{0.0}, units::meter_t{0.0}};
-    const units::meter_t kTrackWidth{0.55};
+    const units::meter_t kTrackWidth{0.48};
     frc::DifferentialDriveKinematics kinematics{kTrackWidth};
     frc::DifferentialDrivePoseEstimator odometry{kinematics, testRot, units::meter_t{0.0}, units::meter_t{0.0}, kZeroPose};    
     frc::Trajectory trajectory{};

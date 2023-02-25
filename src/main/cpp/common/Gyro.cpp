@@ -1,8 +1,11 @@
 #include "common/Gyro.h"
+#include "frc/DriverStation.h"
 
 void Gyro::RobotInit() {
     //gyro.Calibrate();
     gyro.ZeroYaw();
+    // if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed)
+    gyro.SetAngleAdjustment(0);
 }
 
 void Gyro::TeleopInit(GyroData &gyroData) {

@@ -46,14 +46,14 @@ void Drivebase::RobotInit(const RobotData &robotData)
     // dbRPIDController.SetFF(robotData.configData.drivebaseConfigData.rightFF);
     // dbRPIDController.SetD(0);
 
-     dbLPIDController.SetP(0.027491 / mpsToRpm);
+      dbLPIDController.SetP(0.027491 / mpsToRpm);
     dbLPIDController.SetFF(0.07476 / mpsToRpm);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.016746/mpsToRpm);
-    dbRPIDController.SetFF(0.02774/mpsToRpm);
+    dbRPIDController.SetP(0.027491/mpsToRpm);
+    dbRPIDController.SetFF(0.07476/mpsToRpm);
     dbRPIDController.SetD(0);
-
+    
     dbL.BurnFlash();
     dbLF.BurnFlash();
     dbR.BurnFlash();
@@ -341,6 +341,7 @@ double tempLDrive = 0;
     {
         if (!forward)
         {
+            
             setVelocity(-5+(gyroData.rawYaw*0.05), -5-(gyroData.rawYaw*0.05));
 
             if (robotData.gyroData.rawRoll > 5)
@@ -350,7 +351,7 @@ double tempLDrive = 0;
             if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
             {
                 setVelocity(0,0);
-                    zeroEncoders();
+                odometryInitialized = false;
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
             
@@ -368,7 +369,8 @@ double tempLDrive = 0;
             {
                setVelocity(0,0);
                     //zeroEncoders();
-                resetOdometry(14.392, 2.717, gyroData.rawYaw * 3.14159/180.0, robotData);
+                //resetOdometry(14.392, 2.717, gyroData.rawYaw * 3.14159/180.0, robotData);
+                //odometryInitialized = false;
                 getNextAutonStep(robotData, drivebaseData, autonData);
                 
                 
@@ -407,7 +409,7 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
     frc::SmartDashboard::PutBoolean("vision able to reset path", robotData.limelightData.limelightAllowedToReset);
 
-    if (robotData.limelightData.limelightAllowedToReset)
+    if (robotData.limelightData.limelightAllowedToReset && robotData.controlData.saResetOdometry)
     {
         if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
         {

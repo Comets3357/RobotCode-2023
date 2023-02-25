@@ -55,6 +55,7 @@ private:
     
     void placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     void TwoBlueRightClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void TwoMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void sixBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 };

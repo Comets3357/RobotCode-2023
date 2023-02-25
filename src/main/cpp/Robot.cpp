@@ -43,10 +43,10 @@ timer.RobotInit(robotData.timerData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  //arduino.RobotInit();
+  arduino.RobotInit();
   
 
-  auton.RobotInit(robotData.autonData);
+  auton.RobotInit(robotData.controlData, robotData.autonData);
 
 
 
@@ -64,7 +64,7 @@ timer.RobotInit(robotData.timerData);
 void Robot::RobotPeriodic() {
 
   
-  //arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
