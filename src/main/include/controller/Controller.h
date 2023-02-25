@@ -52,6 +52,7 @@ struct ControlData
     bool saUprightConeIntake;
     bool saConeFlipPosition;
 
+    bool saResetOdometry;
     //arm:
 
     bool saMoveArm;

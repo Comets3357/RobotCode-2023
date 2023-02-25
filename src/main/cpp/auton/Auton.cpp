@@ -1,8 +1,11 @@
 #include "auton/Auton.h"
 #include "RobotData.h"
 
-void Auton::RobotInit(AutonData &autonData) {
+void Auton::RobotInit(ControlData &controlData, AutonData &autonData) {
     sendAutonSelectionChooser();
+
+    controlData.saResetOdometry = false;
+    
 }
 
 // creates pathGroup vector (list of strings that are interpretted by drivebase)
@@ -145,6 +148,23 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 void Auton::potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
     // controlData.saIntake = false;
+    double sec = robotData.timerData.secSinceEnabled;
+
+    // if ((sec > 0 && sec < 3) || (sec > 5 && sec < 8 ))
+    // {
+    //     controlData.saResetOdometry = true;
+    // }
+    // else 
+    // {
+    //     controlData.saResetOdometry = false;
+    // }
+
+    controlData.saResetOdometry = true;
+
+
+
+
+    
 }
 
 

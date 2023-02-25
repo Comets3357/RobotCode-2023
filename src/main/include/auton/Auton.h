@@ -26,7 +26,7 @@ struct AutonData
 class Auton
 {
 public:
-    void RobotInit(AutonData &autonData);
+    void RobotInit(ControlData &controlData, AutonData &autonData);
     void AutonomousInit(AutonData &autonData);
     void AutonomousPeriodic(const RobotData &robotData, AutonData &autonData, ControlData &controlData, ControllerData &controllerData);
     void DisabledInit();

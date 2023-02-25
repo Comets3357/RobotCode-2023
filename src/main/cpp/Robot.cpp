@@ -68,6 +68,7 @@ void Robot::RobotPeriodic() {
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
+  limelight.RobotPeriodic(robotData, robotData.limelightData);
   driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
   bullBar.RobotPeriodic(robotData, robotData.bullBarData); //0.002
   endEffector.RobotPeriodic(robotData, robotData.endEffectorData);

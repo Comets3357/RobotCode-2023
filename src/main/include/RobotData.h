@@ -8,6 +8,7 @@
 #include "common/ConfigurationFiles.h"
 
 #include "auton/Auton.h"
+#include "common/Limelight.h"
 
 #include "subsystems/Drivebase.h"
 #include "subsystems/Elevator.h"
@@ -35,4 +36,5 @@ struct RobotData
     ElevatorData elevatorData;
     EndEffectorData endEffectorData;
     BullBarData bullBarData;
+    LimelightData limelightData;
 };

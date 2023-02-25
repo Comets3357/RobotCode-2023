@@ -102,6 +102,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 // ARM:
     // SEMI AUTO:
     
+    controlData.saResetOdometry;
     controlData.saPositionHumanPlayer = (controllerData.sABtn) && controlData.shift;
     controlData.saPositionLow = (controllerData.sXBtn) && !controlData.shift;
     controlData.saPositionMid = (controllerData.sBBtn) && !controlData.shift;

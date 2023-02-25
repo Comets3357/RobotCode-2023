@@ -13,6 +13,8 @@
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
+// #include <frc/kinematics/DifferentialDrivePoseEstimator.h>
+#include <frc/estimator/DifferentialDrivePoseEstimator.h>
 #include <frc/kinematics/DifferentialDriveWheelSpeeds.h>
 #include <frc/trajectory/Trajectory.h>
 #include <frc/controller/RamseteController.h>
@@ -82,7 +84,7 @@ private:
 
     // odometry
     void updateOdometry(const RobotData &robotData, DrivebaseData &drivebaseData);
-    void resetOdometry(const frc::Pose2d &pose, double resetAngle);
+    void resetOdometry(const frc::Pose2d &pose, double gyroAngle);
     void resetOdometry(double x, double y, double radians, const RobotData &robotData);
     // void resetOdometry(double x, double y, double tanX, double tanY, const RobotData &robotData);
     void zeroEncoders();
@@ -115,9 +117,10 @@ private:
     units::radian_t zeroRadians{0};
     const frc::Rotation2d testRot{zeroRadians};
     const frc::Pose2d kZeroPose{testTrans, testRot};
-    frc::DifferentialDriveOdometry odometry{testRot, units::meter_t{0.0}, units::meter_t{0.0}};
+    // frc::DifferentialDrivePoseEstimator odometry{testRot, units::meter_t{0.0}, units::meter_t{0.0}};
     const units::meter_t kTrackWidth{0.55};
     frc::DifferentialDriveKinematics kinematics{kTrackWidth};
+    frc::DifferentialDrivePoseEstimator odometry{kinematics, testRot, units::meter_t{0.0}, units::meter_t{0.0}, kZeroPose};    
     frc::Trajectory trajectory{};
     frc::RamseteController ramseteController{};
 
