@@ -80,7 +80,7 @@ private:
     double GetTurnMax();
     void updateData(const RobotData &robotData, DrivebaseData &drivebaseData);
     void teleopControl(const RobotData &robotData, DrivebaseData &drivebaseData, GyroData &gyroData, ControlData &controlData);
-    void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData);
+    void autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData, ControlData &controlData);
 
     // odometry
     void updateOdometry(const RobotData &robotData, DrivebaseData &drivebaseData);

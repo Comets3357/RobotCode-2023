@@ -108,7 +108,7 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
     }
     else if (frc::DriverStation::IsAutonomous())
     {
-        autonControl(robotData, drivebaseData, autonData, gyroData);
+        autonControl(robotData, drivebaseData, autonData, gyroData, controlData);
     }
 }
 
@@ -261,7 +261,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
 }
 
-void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData) 
+void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData, ControlData &controlData) 
 {
 
     double temporaryX;
@@ -351,7 +351,8 @@ double tempLDrive = 0;
             if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
             {
                 setVelocity(0,0);
-                odometryInitialized = false;
+                // odometryInitialized = false;
+                controlData.saResetOdometry = true;
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
             

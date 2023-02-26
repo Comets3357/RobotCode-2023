@@ -54,8 +54,11 @@ private:
     // void fourBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     
     void placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
-    void TwoBlueRightClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void Loading(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     void TwoMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void Bump(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void LoadingNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void BumpNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void sixBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 };
