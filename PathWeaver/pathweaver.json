@@ -5,5 +5,5 @@
   "maxAcceleration": 2.8,
   "trackWidth": 0.48,
   "gameName": "Charged Up",
-  "outputDir": "../src/main/deploy/Paths"
+  "outputDir": "../src/main/deploy"
 }
