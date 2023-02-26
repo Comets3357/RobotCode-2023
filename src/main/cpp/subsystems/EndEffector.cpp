@@ -36,18 +36,18 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 
     endEffectorData.pastReadOfGamePiece = endEffectorData.gamePieceType;
 
-    if (coneLimitSwitch.Get())
-    {
-        endEffectorData.lastPieceType = CONE;
-        endEffectorData.gamePieceType = CONE;
-    }
-    else if (cubeLimitSwitch.Get())
+    if (cubeLimitSwitch.Get())
     {
         if (robotData.armData.wristSafeCubeDetectionPosition)
         {
             endEffectorData.lastPieceType = CUBE;
             endEffectorData.gamePieceType = CUBE;
         }
+    }
+    else if (coneLimitSwitch.Get())
+    {
+        endEffectorData.lastPieceType = CONE;
+        endEffectorData.gamePieceType = CONE;
     }
     else if (!robotData.controlData.saConeIntake || !robotData.controlData.saCubeIntake || !robotData.controlData.saElevatorSetHumanPlayerPosition || !robotData.controlData.saUprightConeIntake)
     {
@@ -112,7 +112,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 SetEndEffectorRollerSpeed(-0.05);
                 break;
             case CUBE:
-                SetEndEffectorRollerSpeed(0.05);
+                SetEndEffectorRollerSpeed(0.08);
                 break;
             case NONE:
                 SetEndEffectorRollerSpeed(0.0);
@@ -121,6 +121,15 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 SetEndEffectorRollerSpeed(0.0);
                 break;
         }
+    }
+
+    if (robotData.controllerData.sLYStick > 0.9)
+    {
+        SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
+    }
+    else if (robotData.controllerData.sLYStick < -0.9)
+    {
+        SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
     }
     // if (eject == true)
     // {

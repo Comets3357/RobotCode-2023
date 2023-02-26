@@ -166,6 +166,15 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     wristInPositionForArmPastRead = wristInPositionForArm;
     wristInPositionForArm = armWristRelativeEncoder.GetPosition() < 100;
 
+    if ((std::abs(armWristRelativeEncoder.GetPosition() - 202.5) < 1.5) && (std::abs(armPivotRelativeEncoder.GetPosition() - 40) < 1.5))
+    {
+        armData.wristAndArmInPositionForBullBarIntake = true;
+    }
+    else
+    {
+        armData.wristAndArmInPositionForBullBarIntake = false;
+    }
+
     if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
     {
         endEffectorGamePiece = true;
@@ -212,7 +221,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(18, robotData, 0);
-                    RotatePivot(135, robotData, 0);
+                    RotatePivot(140, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -262,7 +271,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(30, robotData, 0.2);
-                    RotatePivot(146, robotData, 0.2);
+                    RotatePivot(140, robotData, 0.2);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -286,7 +295,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(30, robotData, 0.2);
-                    RotatePivot(146, robotData, 0.2);
+                    RotatePivot(140, robotData, 0.2);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {

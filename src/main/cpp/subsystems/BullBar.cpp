@@ -171,7 +171,10 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
             }
             else
             {
-                bullBarRollers.Set(bullBarRollerExtendedSpeed); 
+                if (robotData.armData.wristAndArmInPositionForBullBarIntake)
+                {
+                    bullBarRollers.Set(bullBarRollerExtendedSpeed); 
+                }
             }  
         }
         else

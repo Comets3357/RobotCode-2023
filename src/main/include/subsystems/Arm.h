@@ -38,6 +38,8 @@ struct ArmData
     bool humanPlayerConeIntakeRunning = false;
     bool uprightConeIntakeRunning = false;
 
+    bool wristAndArmInPositionForBullBarIntake = false;
+
 };
 
 enum ArmRunMode
