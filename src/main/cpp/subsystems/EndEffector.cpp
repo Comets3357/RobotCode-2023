@@ -43,6 +43,15 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             endEffectorData.lastPieceType = CUBE;
             endEffectorData.gamePieceType = CUBE;
         }
+        else if (!robotData.armData.wristSafeCubeDetectionPosition && coneLimitSwitch.Get())
+        {
+            endEffectorData.lastPieceType = CONE;
+            endEffectorData.gamePieceType = CONE;            
+        }
+        else
+        {
+            endEffectorData.gamePieceType = NONE;
+        }
     }
     else if (coneLimitSwitch.Get())
     {

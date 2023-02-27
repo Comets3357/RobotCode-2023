@@ -165,15 +165,22 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     wristInPositionForArmPastRead = wristInPositionForArm;
     wristInPositionForArm = armWristRelativeEncoder.GetPosition() < 100;
-
-    if ((std::abs(armWristRelativeEncoder.GetPosition() - 202.5) < 1.5) && (std::abs(armPivotRelativeEncoder.GetPosition() - 40) < 1.5))
+    if (frc::DriverStation::IsTeleop())
     {
-        armData.wristAndArmInPositionForBullBarIntake = true;
+        if ((std::abs(armWristRelativeEncoder.GetPosition() - 202.5) < 15) && (std::abs(armPivotRelativeEncoder.GetPosition() - 42) < 7))
+        {
+            armData.wristAndArmInPositionForBullBarIntake = true;
+        }
+        else
+        {
+            armData.wristAndArmInPositionForBullBarIntake = false;
+        }
     }
     else
     {
-        armData.wristAndArmInPositionForBullBarIntake = false;
+        armData.wristAndArmInPositionForBullBarIntake = true;
     }
+
 
     if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
     {
@@ -369,7 +376,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (cubeIntakeToggle != armData.cubeIntakeRunning)
             {
-                RotatePivot(40, robotData, 0);
+                RotatePivot(42, robotData, 0);
                 RotateWrist(199.5+3, robotData, 0);
             }
             readyRunBasedOffBullBar = robotData.bullBarData.bullBarSafePosition;

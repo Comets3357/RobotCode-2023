@@ -351,8 +351,8 @@ double tempLDrive = 0;
             if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
             {
                 setVelocity(0,0);
-                // odometryInitialized = false;
-                controlData.saResetOdometry = true;
+                odometryInitialized = false;
+                // controlData.saResetOdometry = true;
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
             
@@ -587,7 +587,7 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
 
             fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
 
-            fs::path pathDirectory = deployDirectory / "Paths" / "output" / (trajectoryName + ".wpilib.json");
+            fs::path pathDirectory = deployDirectory / "output" / (trajectoryName + ".wpilib.json");
 
             frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
 
@@ -741,12 +741,12 @@ void Drivebase::sendStartPointChooser()
 void Drivebase::DisabledPeriodic(const RobotData &robotData)
 {
     frc::SmartDashboard::PutNumber("LEFT DISTANCE", dbLEncoder.GetPosition());
-    if (robotData.controllerData.sABtn)
-    {
-            dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    }
+    // if (robotData.controllerData.sABtn)
+    // {
+    //         dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+    // }
 }
 

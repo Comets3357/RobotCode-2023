@@ -199,6 +199,11 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
         bullBarSlider.Set(0);
         bullBarRollers.Set(0);
     }
+
+    // if (robotData.controlData.saForceRunBullBar && robotData.endEffectorData.gamePieceType != NONE)
+    // {
+    //     bullBarRollers.Set(bullBarRollerExtendedSpeed); 
+    // }
     
 }
 

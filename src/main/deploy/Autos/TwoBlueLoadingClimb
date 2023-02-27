@@ -1,7 +1,8 @@
 break 1.5
-TwoBlueRightOne
-TwoBlueRightTwo
-break 1.5
-TwoBlueRightThree
-break 0.5
-TwoBlueRightFour
+TwoBlueLoadingOne
+TwoBlueLoadingTwo
+break 0.75
+TwoBlueLoadingThree
+turnInPlace 75
+TwoBlueLoadingFour
+balance

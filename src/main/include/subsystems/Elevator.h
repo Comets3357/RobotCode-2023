@@ -69,8 +69,11 @@ private:
     rev::SparkMaxPIDController elevatorPIDController = elevatorMotor.GetPIDController();
     rev::SparkMaxAbsoluteEncoder elevatorAbsoluteEncoder = elevatorMotor.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
+    rev::SparkMaxLimitSwitch extendedLimitSwitch = elevatorMotor.GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen);
+    rev::SparkMaxLimitSwitch retractedLimitSwitch = elevatorMotor.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen);
+
     // Encoder Min and Max Values 
-    double elevatorMaxPosition = 48.25; // TODO: fix this value when we get subsystem
+    double elevatorMaxPosition = 47.05; // TODO: fix this value when we get subsystem
     double elevatorMinPosition = 10; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;

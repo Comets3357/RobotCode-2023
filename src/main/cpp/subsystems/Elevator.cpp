@@ -1,7 +1,5 @@
 #include "RobotData.h"
 
-
-
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorMotor.RestoreFactoryDefaults();
@@ -13,6 +11,9 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     elevatorMotor.SetInverted(robotData.configData.elevatorConfigData.invertRelative);
     elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
     elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
+
+    extendedLimitSwitch.EnableLimitSwitch(false);
+    retractedLimitSwitch.EnableLimitSwitch(false);
 
     elevatorPIDController.SetP(robotData.configData.elevatorConfigData.pValue, 0); 
     elevatorRelativeEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.relativeConversionFactor);
@@ -49,6 +50,8 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             SemiAuto(robotData, elevatorData);
             break;
     }
+
+    frc::SmartDashboard::PutNumber("elevator output current", elevatorMotor.GetOutputCurrent());
 
     // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
     // {
@@ -101,7 +104,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(48, robotData, 0);
+            MoveElevator(47, robotData, 0);
         }
         else if (robotData.controlData.saSetUpPosition)
         {
@@ -200,7 +203,7 @@ void Elevator::EnableSoftLimits()
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
     elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 0.05);
-    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 0.5);
+    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 0.1);
 }
 
 void Elevator::DisableSoftLimits() 

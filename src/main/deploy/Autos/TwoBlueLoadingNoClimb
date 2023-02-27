@@ -1,6 +1,7 @@
 break 1.5
-TwoBlueLeftOne
-break 1
-TwoBlueLeftTwo
-break 1
-TwoBlueLeftThree
+TwoBlueLoadingOne
+TwoBlueLoadingTwo
+break 0.75
+TwoBlueLoadingThree
+turnInPlace 20
+TwoBlueLoadingFive

@@ -52,6 +52,8 @@ struct ControlData
     bool saUprightConeIntake;
     bool saConeFlipPosition;
 
+    bool saForceRunBullBar;
+
     bool saResetOdometry;
     //arm:
 
