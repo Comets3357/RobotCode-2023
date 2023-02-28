@@ -46,12 +46,12 @@ void Drivebase::RobotInit(const RobotData &robotData)
     // dbRPIDController.SetFF(robotData.configData.drivebaseConfigData.rightFF);
     // dbRPIDController.SetD(0);
 
-      dbLPIDController.SetP(0.027491 / mpsToRpm);
-    dbLPIDController.SetFF(0.07476 / mpsToRpm);
+      dbLPIDController.SetP(0.077396 / mpsToRpm);
+    dbLPIDController.SetFF(0.051094 / mpsToRpm);
     dbLPIDController.SetD(0);
 
-    dbRPIDController.SetP(0.027491/mpsToRpm);
-    dbRPIDController.SetFF(0.07476/mpsToRpm);
+    dbRPIDController.SetP(0.077396/mpsToRpm);
+    dbRPIDController.SetFF(0.051094/mpsToRpm);
     dbRPIDController.SetD(0);
     
     dbL.BurnFlash();

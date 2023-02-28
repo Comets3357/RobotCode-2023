@@ -78,6 +78,7 @@ void Auton::sendAutonSelectionChooser() {
     //autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
 
     autonChooser.AddOption("RedChargeStation", "RedChargeStation"); // 12
+    autonChooser.AddOption("RedChargeStation1.5", "RedChargeStation1.5"); //13
 
     frc::SmartDashboard::PutData("Select Auton:", &autonChooser);
 }
@@ -94,6 +95,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     if (autonData.autonRoutineName == "TwoRedLoadingClimb" || autonData.autonRoutineName == "TwoBlueLoadingClimb") // 2 - TEST BLUE
     {
         Loading(robotData, controlData, controllerData);
+    }
+    if (autonData.autonRoutineName == "RedChargeStation1.5" || autonData.autonRoutineName == "BlueChargeStation1.5") // 2 - TEST BLUE
+    {
+        OneMiddleClimb(robotData, controlData, controllerData);
     }
     else if (autonData.autonRoutineName == "SinglePlace") // 3 - TEST
     {
@@ -295,6 +300,90 @@ void Auton::TwoMiddleClimb(const RobotData &robotData, ControlData &controlData,
                 controlData.saHomePosition = false;
                 break;
         }
+    }
+}
+
+void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
+{
+    double sec = robotData.timerData.secSinceEnabled;
+
+ 
+
+    if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed)
+    {
+        switch (step)
+        {
+            case (0):
+            
+            controlData.saPositionHigh = true;
+            step++;
+            break;
+        
+            case(1):
+                controlData.saPositionHigh = false;
+                if (sec > 1.0) step++;
+                break;
+            case(2):
+                controlData.saIntakeBackwards = true;
+                if (sec > 1.2) step++;
+                break;
+            case(3):
+                controlData.saIntakeBackwards = false;
+                controlData.saHomePosition = true;
+                step++;
+                break;
+            case(4):
+                controlData.saHomePosition = false;
+                if (sec > 4.0) step++;
+                break;
+            case 5:
+                controlData.saCubeIntake = true;
+                if (sec > 6.5) step++;
+                break;
+            case 6:
+                controlData.saCubeIntake = false;
+                if (sec > 10.0) step++;
+                break;
+            
+        }   
+    }
+    else
+    {
+            switch (step)
+        {
+            case (0):
+            
+            controlData.saPositionHigh = true;
+            step++;
+            break;
+        
+            case(1):
+                controlData.saPositionHigh = false;
+                if (sec > 1.0) step++;
+                break;
+            case(2):
+                controlData.saIntakeBackwards = true;
+                if (sec > 1.2) step++;
+                break;
+            case(3):
+                controlData.saIntakeBackwards = false;
+                controlData.saHomePosition = true;
+                step++;
+                break;
+            case(4):
+                controlData.saHomePosition = false;
+                if (sec > 4.0) step++;
+                break;
+            case 5:
+                controlData.saConeIntake = true;
+                if (sec > 6.5) step++;
+                break;
+            case 6:
+                controlData.saConeIntake = false;
+                if (sec > 10.0) step++;
+                break;
+            
+        }   
     }
 }
 

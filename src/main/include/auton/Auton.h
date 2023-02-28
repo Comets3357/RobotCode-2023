@@ -55,6 +55,8 @@ private:
     
     void placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     void Loading(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+        void OneMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+
     void TwoMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     void Bump(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     void LoadingNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
