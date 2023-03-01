@@ -73,7 +73,7 @@ private:
     rev::SparkMaxLimitSwitch retractedLimitSwitch = elevatorMotor.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyOpen);
 
     // Encoder Min and Max Values 
-    double elevatorMaxPosition = 47.05; // TODO: fix this value when we get subsystem
+    double elevatorMaxPosition = 51.05; // TODO: fix this value when we get subsystem
     double elevatorMinPosition = 10; // TODO: fix this value when we get subsystem
 
     double elevatorUpwardSpeed = 0.4;

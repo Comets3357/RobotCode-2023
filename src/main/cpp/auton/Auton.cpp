@@ -403,7 +403,7 @@ void Auton::Loading(const RobotData &robotData, ControlData &controlData, Contro
         break;
     case(2):
         controlData.saIntakeBackwards = true;
-        if (sec > 1.2) step++;
+        if (sec > 1.3) step++;
         break;
     case(3): 
         controlData.saHomePosition = true;
@@ -428,18 +428,23 @@ void Auton::Loading(const RobotData &robotData, ControlData &controlData, Contro
         break;
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7) step++;
+        if (sec > 7.2) step++;
         break;
     case(9):
         controlData.saIntakeBackwards = true;
         if (sec > 7.25) step++;
         break;
     case(10):
-        controlData.saIntakeBackwards = false;
+
+        
         controlData.saHomePosition = true;
         step++;
         break;
     case(11):
+        if (sec > 7.5)
+        {
+            controlData.saIntakeBackwards = false;
+        }
         controlData.saHomePosition = false;
         if (sec > 8)step++;
         break;
@@ -538,7 +543,7 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         break;
     case(2):
         controlData.saIntakeBackwards = true;
-        if (sec > 1.2) step++;
+        if (sec > 1.3) step++;
         break;
     case(3): 
         controlData.saHomePosition = true;
@@ -563,18 +568,23 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         break;
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7) step++;
+        if (sec > 7.2) step++;
         break;
     case(9):
         controlData.saIntakeBackwards = true;
         if (sec > 7.25) step++;
         break;
     case(10):
-        controlData.saIntakeBackwards = false;
+
+        
         controlData.saHomePosition = true;
         step++;
         break;
     case(11):
+        if (sec > 7.5)
+        {
+            controlData.saIntakeBackwards = false;
+        }
         controlData.saHomePosition = false;
         if (sec > 8)step++;
         break;

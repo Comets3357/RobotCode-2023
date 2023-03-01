@@ -263,6 +263,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
 void Drivebase::autonControl(const RobotData &robotData, DrivebaseData &drivebaseData, AutonData &autonData, GyroData &gyroData, ControlData &controlData) 
 {
+    
 
     double temporaryX;
     double temporaryY;
@@ -383,8 +384,8 @@ double tempLDrive = 0;
 
     else if (drivebaseData.driveMode == DRIVEMODE_AUTO_BALANCE)
         {
-            tempLDrive = gyroData.rawRoll*-0.01;
-            tempRDrive = gyroData.rawRoll*-0.01;
+            tempLDrive = gyroData.rawRoll*-0.008;
+            tempRDrive = gyroData.rawRoll*-0.008;
             setPercentOutput(tempLDrive, tempRDrive);
 
         }

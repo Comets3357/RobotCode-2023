@@ -53,8 +53,8 @@ private:
     rev::SparkMaxLimitSwitch coneLimitSwitch = endEffectorRollers.GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
     rev::SparkMaxLimitSwitch cubeLimitSwitch = endEffectorRollers.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
 
-    double EndEffectorRollerOutwardSpeed = 0.6;
-    double EndEffectorRollerInwardSpeed = -0.6;
+    double EndEffectorRollerOutwardSpeed = 0.8;
+    double EndEffectorRollerInwardSpeed = -0.8;
 
     double EndEffectorRollerCubeInwardSpeed = 0.3;
 

@@ -157,4 +157,6 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
 
     bool wristInPositionForArm = false;
     bool wristInPositionForArmPastRead = false;
+
+    bool inAuton = false;
 };

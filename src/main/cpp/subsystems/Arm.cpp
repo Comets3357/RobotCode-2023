@@ -122,6 +122,11 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     wristRunMode = ARM_RELATIVE_RUN;
     armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
 
+    if (robotData.controllerData.sLStickBtn)
+    {
+        ZeroRelativePositionPivot(armData);
+    }
+
 /* -----------------------------------------------------------------------------------------------------------------------------
 *                                   PIVOT SEMI AUTO FEEDBACK DEVICES
 *  -----------------------------------------------------------------------------------------------------------------------------
@@ -167,6 +172,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     wristInPositionForArm = armWristRelativeEncoder.GetPosition() < 100;
     if (frc::DriverStation::IsTeleop())
     {
+        inAuton = false;
         if ((std::abs(armWristRelativeEncoder.GetPosition() - 202.5) < 15) && (std::abs(armPivotRelativeEncoder.GetPosition() - 42) < 7))
         {
             armData.wristAndArmInPositionForBullBarIntake = true;
@@ -179,6 +185,10 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     else
     {
         armData.wristAndArmInPositionForBullBarIntake = true;
+        if (frc::DriverStation::IsAutonomous())
+        {
+            inAuton = true;
+        }
     }
 
 
@@ -228,7 +238,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 else if (robotData.controlData.saPositionHigh)
                 {
                     RotateWrist(18, robotData, 0);
-                    RotatePivot(140, robotData, 0);
+                    RotatePivot(145, robotData, 0);
                 }
                 else if (robotData.controlData.saHomePosition)
                 {
@@ -253,7 +263,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
 
                     RotateWrist(45, robotData, 0);
-                    RotatePivot(136, robotData, 0);
+                    RotatePivot(146, robotData, 0);
 
                 }
                 else if (robotData.controlData.saHomePosition)
@@ -614,8 +624,12 @@ void Arm::DisabledInit()
 
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
-    ZeroRelativePositionPivot(armData);
+    if (inAuton)
+    {
+        ZeroRelativePositionPivot(armData);
     ZeroRelativePositionWrist(armData);
+    }
+    
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
 {

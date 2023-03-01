@@ -37,4 +37,6 @@ struct RobotData
     EndEffectorData endEffectorData;
     BullBarData bullBarData;
     LimelightData limelightData;
+
+    
 };
