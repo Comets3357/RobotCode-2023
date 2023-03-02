@@ -145,6 +145,8 @@ void Robot::DisabledPeriodic() {
   bullBar.DisabledPeriodic(robotData, robotData.bullBarData);
   arm.DisabledPeriodic(robotData, robotData.armData);
   driveBase.DisabledPeriodic(robotData);
+  elevator.DisabledPeriodic();
+  endEffector.DisabledPeriodic();
   
 }
 

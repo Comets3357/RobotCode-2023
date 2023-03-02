@@ -172,3 +172,8 @@ void EndEffector::SetEndEffectorRollerSpeed(double rollerSpeed)
 {
     endEffectorRollers.Set(rollerSpeed);
 }
+
+void EndEffector::DisabledPeriodic()
+{
+    frc::SmartDashboard::PutBoolean("End Effector Inverted", endEffectorRollers.GetInverted());
+}

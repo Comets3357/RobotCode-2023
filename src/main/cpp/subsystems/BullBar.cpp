@@ -332,5 +332,6 @@ void BullBar::DisabledInit()
 
 void BullBar::DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData)
 {
-
+    frc::SmartDashboard::PutBoolean("Bull Bar Relative Inverted", bullBarSlider.GetInverted());
+    frc::SmartDashboard::PutBoolean("Bull Bar Absolute Inverted", bullBarSliderAbsoluteEncoder.GetInverted());
 }

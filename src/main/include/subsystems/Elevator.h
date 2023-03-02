@@ -41,7 +41,7 @@ public:
     void RobotInit(const RobotData &robotData, ElevatorData &elevatorData);
     void RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorData);
     void DisabledInit();
-    void DisabledPeriodic(const RobotData &robotData, ElevatorData elevatorData);
+    void DisabledPeriodic();
     void UpdateData(const RobotData &robotData, ElevatorData elevatorData);
 
 private:

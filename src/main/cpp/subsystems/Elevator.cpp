@@ -243,3 +243,8 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
 
     return elevatorData.elevatorAbsoluteEncoderInitialized;
 }
+
+void Elevator::DisabledPeriodic()
+{
+    frc::SmartDashboard::PutBoolean("Elevator Inverted Relative", elevatorMotor.GetInverted());
+}
