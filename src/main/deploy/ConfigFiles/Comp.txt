@@ -1,0 +1,51 @@
+# ENTIRE BOT VOLTAGE COMPENSATION #
+VoltageCompensation = 10.5
+
+# BULL BAR VALUES #
+BullBarRollerInverted = true
+BullBarAbsoluteConversionFactor = 102.9166
+BullBarAbsoluteZeroOffset = 63.9
+BullBarRelativeConversionFactor = 0.25288
+BullBarPValue = 0.5
+BullBarSmartCurrentLimit = 20
+BullBarSliderInvertedRelative = true
+BullBarSliderInvertedAbsolute = true
+
+# END EFFECTOR VALUES #
+EndEffectorInvertRollers = true
+EndEffectorCurrentLimit = 45
+
+# ELEVATOR VALUES #
+ElevatorInvertedAbsolute = true
+ElevatorInvertedRelative = true
+ElevatorCurrentLimit = 50
+ElevatorPValue = 0.153
+ElevatorRelativeConversionFactor = 0.496060877648
+ElevatorAbsoluteConversionFactor = 72.75406740074442
+ElevatorAbsoluteZeroOffset = 23.29
+
+# DRIVEBASE VALUES #
+DrivebaseRightInverted = false
+DrivebaseLeftInverted = true
+DriveBaseCurrentLimit = 60
+DrivebaseLeftPValue = 0.035034
+DrivebaseLeftFFValue = 0.095273596176822
+DrivebaseRightPValue = 0.035034
+DrivebaseRightFFValue = 0.095273596176822
+
+# ARM VALUES #
+WristPValue = 0.1
+WristCurrentLimit = 20
+WristRelativeInverted = false
+WristAbsoluteInverted = false
+WristAbsoluteConversion = 360
+WristAbsoluteZeroOffset = 256.7
+WristRelativeConversion = 4.385430624923864151
+
+PivotPValue = 0.08
+PivotCurrentLimit = 45
+PivotRelativeInverted = false
+PivotAbsoluteInverted = true
+PivotAbsoluteConversion = 360
+PivotAbsoluteZeroOffset = 161.06
+PivotRelativeConversion = 1.5428571428
