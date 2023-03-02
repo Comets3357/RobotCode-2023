@@ -325,7 +325,7 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
                 break;
             case(2):
                 controlData.saIntakeBackwards = true;
-                if (sec > 1.2) step++;
+                if (sec > 1.3) step++;
                 break;
             case(3):
                 controlData.saIntakeBackwards = false;
@@ -363,7 +363,7 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
                 break;
             case(2):
                 controlData.saIntakeBackwards = true;
-                if (sec > 1.2) step++;
+                if (sec > 1.3) step++;
                 break;
             case(3):
                 controlData.saIntakeBackwards = false;
@@ -375,11 +375,11 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
                 if (sec > 4.0) step++;
                 break;
             case 5:
-                controlData.saConeIntake = true;
+                controlData.saCubeIntake = true;
                 if (sec > 6.5) step++;
                 break;
             case 6:
-                controlData.saConeIntake = false;
+                controlData.saCubeIntake = false;
                 if (sec > 10.0) step++;
                 break;
             
