@@ -41,6 +41,7 @@ private:
     // secondary controls:
     void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
+    void testplace(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     // void citrus(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void nearFieldOne(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);

@@ -13,10 +13,10 @@ void Arm::RobotInit(const RobotData &robotData, ArmData &armData)
     
     armWrist.EnableVoltageCompensation(robotData.configData.armConfigData.voltageComp);
     armWrist.SetSmartCurrentLimit(robotData.configData.armConfigData.wristCurrentLimit);
-    armWrist.SetInverted(robotData.configData.armConfigData.wristRelativeInverted); 
+    armWrist.SetInverted(false);//robotData.configData.armConfigData.wristRelativeInverted); 
     armWrist.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armWristAbsoluteEncoder.SetInverted(robotData.configData.armConfigData.wristAbsoluteInverted);
+    armWristAbsoluteEncoder.SetInverted(false);//robotData.configData.armConfigData.wristAbsoluteInverted);
     armWristAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.wristAbsoluteConversion);
     armWristAbsoluteEncoder.SetZeroOffset(robotData.configData.armConfigData.wristAbsoluteOffset);
 
@@ -36,10 +36,10 @@ void Arm::RobotInit(const RobotData &robotData, ArmData &armData)
     armPivotPIDController.SetOutputRange(-1, 1, 0);
     armPivot.EnableVoltageCompensation(robotData.configData.armConfigData.voltageComp);
     armPivot.SetSmartCurrentLimit(robotData.configData.armConfigData.pivotCurrentLimit);
-    armPivot.SetInverted(robotData.configData.armConfigData.pivotRelativeInverted);
+    armPivot.SetInverted(false);//robotData.configData.armConfigData.pivotRelativeInverted);
     armPivot.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
 
-    armPivotAbsoluteEncoder.SetInverted(robotData.configData.armConfigData.pivotAbsoluteInverted);
+    armPivotAbsoluteEncoder.SetInverted(true);//robotData.configData.armConfigData.pivotAbsoluteInverted);
     armPivotAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.pivotAbsoluteConversion);
     armPivotAbsoluteEncoder.SetZeroOffset(robotData.configData.armConfigData.pivotAbsoluteOffset);
     armPivotRelativeEncoder.SetPositionConversionFactor(robotData.configData.armConfigData.pivotRelativeConversion);
@@ -215,7 +215,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (humanPlayerIntakeToggle != armData.humanPlayerConeIntakeRunning)
             {
-                RotateWrist(10, robotData, 0);
+                RotateWrist(29, robotData, 0);
                 RotatePivot(10, robotData, 0);
             }
             
@@ -624,10 +624,10 @@ void Arm::DisabledInit()
 
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
-    if (inAuton)
+    if (!inAuton)
     {
         ZeroRelativePositionPivot(armData);
-    ZeroRelativePositionWrist(armData);
+        ZeroRelativePositionWrist(armData);
     }
 
     frc::SmartDashboard::PutBoolean("Pivot Relative Inverted", !armPivot.GetInverted());

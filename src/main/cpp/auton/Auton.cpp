@@ -74,6 +74,8 @@ void Auton::sendAutonSelectionChooser() {
     autonChooser.AddOption("TwoRedLoadingClimb", "TwoRedLoadingClimb"); // 8
     autonChooser.AddOption("TwoRedLoadingNoClimb", "TwoRedLoadingNoClimb"); // 9
 
+    autonChooser.AddOption("testplace", "testplace");
+
     //autonChooser.AddOption("TwoRedBumpClimb", "TwoRedBumpClimb"); // 10
     //autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
 
@@ -124,6 +126,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     {
         BumpNoClimb(robotData, controlData, controllerData);
     }
+    else if (autonData.autonRoutineName == "testplace")
+    {
+        testplace(robotData, controlData, controllerData);
+    }
 
 
     if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
@@ -133,6 +139,35 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
         controlData.saUprightConeIntake = false;
     }
 
+}
+
+void Auton::testplace(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
+{
+    double sec = robotData.timerData.secSinceEnabled-0.1;
+
+    switch (step)
+    {
+    case (0):   
+        controlData.saPositionHigh = true;
+        step++;
+        break;
+    case(1):
+        controlData.saPositionHigh = false;
+        if (sec > 1.0) step++;
+        break;
+    case(2):
+        controlData.saIntakeBackwards = true;
+        if (sec > 1.3) step++;
+        break;
+    case(3): 
+        controlData.saHomePosition = true;
+        step++;
+        break;
+    case(4):
+        controlData.saHomePosition = false;
+        if (sec > 1.5) controlData.saIntakeBackwards = false;
+        break;
+    }    
 }
 
 
@@ -176,7 +211,7 @@ void Auton::placeCone(const RobotData &robotData, ControlData &controlData, Cont
 
 void Auton::TwoMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled -0.1;
 
     if ((sec > 9.5) && (sec < 10.7))
     {
@@ -305,7 +340,7 @@ void Auton::TwoMiddleClimb(const RobotData &robotData, ControlData &controlData,
 
 void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled - 0.1;
 
  
 
@@ -321,11 +356,11 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
         
             case(1):
                 controlData.saPositionHigh = false;
-                if (sec > 1.0) step++;
+                if (sec > 2.0) step++;
                 break;
             case(2):
                 controlData.saIntakeBackwards = true;
-                if (sec > 1.3) step++;
+                if (sec > 3.0) step++;
                 break;
             case(3):
                 controlData.saIntakeBackwards = false;
@@ -334,16 +369,16 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
                 break;
             case(4):
                 controlData.saHomePosition = false;
-                if (sec > 4.0) step++;
+                //if (sec > 4.0) step++;
                 break;
-            case 5:
+            /*case 5:
                 controlData.saCubeIntake = true;
                 if (sec > 6.5) step++;
                 break;
             case 6:
                 controlData.saCubeIntake = false;
                 if (sec > 10.0) step++;
-                break;
+                break;*/
             
         }   
     }
@@ -359,11 +394,11 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
         
             case(1):
                 controlData.saPositionHigh = false;
-                if (sec > 1.0) step++;
+                if (sec > 2.0) step++;
                 break;
             case(2):
                 controlData.saIntakeBackwards = true;
-                if (sec > 1.3) step++;
+                if (sec > 3.0) step++;
                 break;
             case(3):
                 controlData.saIntakeBackwards = false;
@@ -372,16 +407,16 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
                 break;
             case(4):
                 controlData.saHomePosition = false;
-                if (sec > 4.0) step++;
+                //if (sec > 4.0) step++;
                 break;
-            case 5:
+            /*case 5:
                 controlData.saCubeIntake = true;
                 if (sec > 6.5) step++;
                 break;
             case 6:
                 controlData.saCubeIntake = false;
                 if (sec > 10.0) step++;
-                break;
+                break;*/
             
         }   
     }
@@ -389,7 +424,7 @@ void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData,
 
 void Auton::Loading(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled-0.1;
 
     switch (step)
     {
@@ -461,7 +496,7 @@ void Auton::Loading(const RobotData &robotData, ControlData &controlData, Contro
 
 void Auton::Bump(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled-0.1;
 
     controlData.saResetOdometry = true;
 
@@ -529,7 +564,7 @@ void Auton::Bump(const RobotData &robotData, ControlData &controlData, Controlle
 
 void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled-0.1;
 
     switch (step)
     {
@@ -611,7 +646,7 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
 
 void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled-0.1;
 
     controlData.saResetOdometry = true;
 

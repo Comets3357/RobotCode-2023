@@ -6,7 +6,7 @@ void EndEffector::RobotInit(const RobotData &robotData)
 {
     // End Effector Rollers
     endEffectorRollers.RestoreFactoryDefaults();
-    endEffectorRollers.SetInverted(robotData.configData.endEffectorConfigData.invertRollers);
+    endEffectorRollers.SetInverted(true);//robotData.configData.endEffectorConfigData.invertRollers);
     endEffectorRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
     endEffectorRollers.SetSmartCurrentLimit(robotData.configData.endEffectorConfigData.currentLimit);
     endEffectorRollers.EnableVoltageCompensation(robotData.configData.endEffectorConfigData.voltageComp);

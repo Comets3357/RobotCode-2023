@@ -6,10 +6,11 @@ void BullBar::RobotInit(const RobotData &robotData, BullBarData &bullBarData)
 { // check current vals and then burn flash if they are different
     // BullBar Rollers
 
-    bullBarRollers.SetInverted(robotData.configData.bullBarConfigData.invertRollers);
+    bullBarRollers.SetInverted(true);//robotData.configData.bullBarConfigData.invertRollers);
 
 
-    bullBarSliderAbsoluteEncoder.SetInverted(robotData.configData.bullBarConfigData.invertSliderAbsolute);
+    bullBarSliderAbsoluteEncoder.SetInverted(true);//robotData.configData.bullBarConfigData.invertSliderAbsolute);
+    frc::SmartDashboard::PutBoolean("BullBarSliderAbsInverted Config",robotData.configData.bullBarConfigData.invertSliderAbsolute );
     bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.bullBarConfigData.absoluteConversion);
     bullBarSliderAbsoluteEncoder.SetZeroOffset(robotData.configData.bullBarConfigData.absoluteOffset);
 
@@ -30,7 +31,7 @@ void BullBar::RobotInit(const RobotData &robotData, BullBarData &bullBarData)
 
     bullBarSlider.EnableVoltageCompensation(robotData.configData.bullBarConfigData.voltageComp);
     bullBarSlider.SetSmartCurrentLimit(robotData.configData.bullBarConfigData.currentLimit);
-    bullBarSlider.SetInverted(robotData.configData.bullBarConfigData.invertSliderRelative);
+    bullBarSlider.SetInverted(true);//robotData.configData.bullBarConfigData.invertSliderRelative);
     bullBarSlider.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     bullBarSlider.BurnFlash();
     

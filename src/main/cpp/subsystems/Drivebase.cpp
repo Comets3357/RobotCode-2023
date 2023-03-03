@@ -13,10 +13,10 @@ void Drivebase::RobotInit(const RobotData &robotData)
     dbRF.Follow(dbR);
     dbLF.Follow(dbL);
 
-    dbL.SetInverted(robotData.configData.drivebaseConfigData.leftInverted);
-    dbLF.SetInverted(robotData.configData.drivebaseConfigData.leftInverted);
-    dbR.SetInverted(robotData.configData.drivebaseConfigData.rightInverted);
-    dbRF.SetInverted(robotData.configData.drivebaseConfigData.rightInverted);
+    dbL.SetInverted(true);//robotData.configData.drivebaseConfigData.leftInverted);
+    dbLF.SetInverted(true);//robotData.configData.drivebaseConfigData.leftInverted);
+    dbR.SetInverted(false);//robotData.configData.drivebaseConfigData.rightInverted);
+    dbRF.SetInverted(false);//robotData.configData.drivebaseConfigData.rightInverted);
 
     dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
     dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);

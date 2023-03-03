@@ -3,12 +3,12 @@
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorMotor.RestoreFactoryDefaults();
-    elevatorAbsoluteEncoder.SetInverted(robotData.configData.elevatorConfigData.invertAbosolute);
+    elevatorAbsoluteEncoder.SetInverted(true);//robotData.configData.elevatorConfigData.invertAbosolute);
     elevatorAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.absoluteConversionFactor);
     elevatorAbsoluteEncoder.SetZeroOffset(robotData.configData.elevatorConfigData.absoluteZeroOffset);
     
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    elevatorMotor.SetInverted(robotData.configData.elevatorConfigData.invertRelative);
+    elevatorMotor.SetInverted(true);//robotData.configData.elevatorConfigData.invertRelative);
     elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
     elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
 
