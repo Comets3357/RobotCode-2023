@@ -26,7 +26,7 @@ struct AutonData
 class Auton
 {
 public:
-    void RobotInit(AutonData &autonData);
+    void RobotInit(ControlData &controlData, AutonData &autonData);
     void AutonomousInit(AutonData &autonData);
     void AutonomousPeriodic(const RobotData &robotData, AutonData &autonData, ControlData &controlData, ControllerData &controllerData);
     void DisabledInit();
@@ -41,6 +41,7 @@ private:
     // secondary controls:
     void potato(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
+    void testplace(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     // void citrus(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void nearFieldOne(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
@@ -54,7 +55,13 @@ private:
     // void fourBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     
     void placeCone(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
-    void TwoBlueRightClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void Loading(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+        void OneMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+
+    void TwoMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void Bump(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void LoadingNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void BumpNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void sixBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 };

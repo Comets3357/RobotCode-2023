@@ -48,11 +48,8 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
             colorCode = 'l';
         }
         
- if (robotData.endEffectorData.gamePieceType != NONE)//have game piece
-        {
-            colorCode = 'k';
-        }
-        else if (robotData.controlData.saConeCall)//cone call
+ 
+        if (robotData.controlData.saConeCall)//cone call
         {
             colorCode = 'g';
         }
@@ -68,6 +65,10 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
         else if (robotData.controlData.saFastCubeCall)//fast cube call
         {
             colorCode = 'f';
+        }
+        else if (robotData.endEffectorData.gamePieceType != NONE)//have game piece
+        {
+            colorCode = 'k';
         }
         else if (robotData.armData.coneIntakeRunning || robotData.controlData.saConeFlipPosition || robotData.controlData.saUprightConeIntake || robotData.controlData.saPositionHumanPlayer)//intaking cone
         {
@@ -116,12 +117,6 @@ void Arduino::RobotPeriodic(const RobotData &robotData, ArduinoData arduinoData)
     {
         failedTransfers++;
     }
-    UpdateData();
+
 }
 
-void Arduino::UpdateData()
-{
-    frc::SmartDashboard::PutBoolean("System Fault", colorCode == 'b');
-    frc::SmartDashboard::PutBoolean("Call for Piece", colorCode == 'g' || colorCode == 'e' || colorCode == 'h' || colorCode == 'f');
-    frc::SmartDashboard::PutBoolean("Have Gamepiece", colorCode == 'k');
-}

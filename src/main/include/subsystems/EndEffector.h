@@ -29,7 +29,6 @@ struct EndEffectorData
     GamePiece pastReadOfGamePiece = NONE;
 
     bool armRetractRequest = false;
-    bool gamePieceShuffleboard = false;
 };
 
 class EndEffector
@@ -39,7 +38,7 @@ public:
     void RobotInit(const RobotData &robotData);
     void RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
     void DisabledInit();
-    void DisabledPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
+    void DisabledPeriodic();
 
 private:
 
@@ -54,12 +53,11 @@ private:
     rev::SparkMaxLimitSwitch coneLimitSwitch = endEffectorRollers.GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
     rev::SparkMaxLimitSwitch cubeLimitSwitch = endEffectorRollers.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
 
-    double EndEffectorRollerOutwardSpeed = 0.5;
-    double EndEffectorRollerInwardSpeed = -0.5;
+    double EndEffectorRollerOutwardSpeed = 0.8;
+    double EndEffectorRollerInwardSpeed = -0.8;
 
     double EndEffectorRollerCubeInwardSpeed = 0.3;
 
- 
     bool eject = false;
 
 

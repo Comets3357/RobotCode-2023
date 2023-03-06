@@ -145,12 +145,3 @@ void Controller::updateBtnData(ControllerData &controllerData)
     controllerData.testLBumper = getBtnToggled(2, 5);
     controllerData.testRBumper = getBtnToggled(2, 6);
 }
-
-void Controller::updateData(const RobotData &robotData, ControllerData &controllerData, ControlData &controlData)
-{
-    if (controlData.mode == MODE_TELEOP_SA)
-        controllerData.driveTypeShuffleboard = true;
-    if (controlData.mode == MODE_TELEOP_MANUAL)
-        controllerData.driveTypeShuffleboard = false;
-    
-}

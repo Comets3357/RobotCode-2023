@@ -13,7 +13,7 @@
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
-  // frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   frc::DigitalInput robotIndicator{9};
 timer.RobotInit(robotData.timerData); 
@@ -26,7 +26,7 @@ timer.RobotInit(robotData.timerData);
   // {
   //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
   // }
-    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
 
 
 
@@ -43,12 +43,14 @@ timer.RobotInit(robotData.timerData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  //arduino.RobotInit();
+  arduino.RobotInit();
   
 
-  auton.RobotInit(robotData.autonData);
+  auton.RobotInit(robotData.controlData, robotData.autonData);
 
-  // frc::SmartDashboard::PutBoolean("Force Zero All", false);
+
+
+
 }
 
 /**
@@ -59,21 +61,28 @@ timer.RobotInit(robotData.timerData);
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() 
-{
+void Robot::RobotPeriodic() {
 
   
-  //arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
+  try 
+  {
+    limelight.RobotPeriodic(robotData, robotData.limelightData);
+  }
+  catch (...)
+  {
+
+  }
   driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
   bullBar.RobotPeriodic(robotData, robotData.bullBarData); //0.002
   endEffector.RobotPeriodic(robotData, robotData.endEffectorData);
   arm.RobotPeriodic(robotData, robotData.armData); //0.01
   elevator.RobotPeriodic(robotData, robotData.elevatorData);
-
-  UpdateData(robotData.controllerData);
+  
+  
 }
 
 /**
@@ -138,9 +147,14 @@ void Robot::DisabledInit() {
 }
 
 void Robot::DisabledPeriodic() {
+    controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+
   bullBar.DisabledPeriodic(robotData, robotData.bullBarData);
   arm.DisabledPeriodic(robotData, robotData.armData);
-  driveBase.DisabledPeriodic();
+  driveBase.DisabledPeriodic(robotData);
+  elevator.DisabledPeriodic();
+  endEffector.DisabledPeriodic();
+  
 }
 
 void Robot::TestInit() {}
@@ -150,13 +164,6 @@ void Robot::TestPeriodic() {}
 void Robot::SimulationInit() {}
 
 void Robot::SimulationPeriodic() {}
-
-void Robot::UpdateData(const ControllerData &controllerData)
-{
-  frc::SmartDashboard::PutNumber("Battery Voltage", frc::DriverStation::GetBatteryVoltage());
-  frc::SmartDashboard::PutNumber("Match Timer", frc::DriverStation::GetMatchTime());
-  frc::SmartDashboard::PutBoolean("Semi-Auto", controllerData.driveTypeShuffleboard);
-}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {

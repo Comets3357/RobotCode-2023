@@ -1,18 +1,19 @@
 #include "RobotData.h"
 
-
-
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
     elevatorMotor.RestoreFactoryDefaults();
-    elevatorAbsoluteEncoder.SetInverted(robotData.configData.elevatorConfigData.invertAbosolute);
+    elevatorAbsoluteEncoder.SetInverted(true);//robotData.configData.elevatorConfigData.invertAbosolute);
     elevatorAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.absoluteConversionFactor);
     elevatorAbsoluteEncoder.SetZeroOffset(robotData.configData.elevatorConfigData.absoluteZeroOffset);
     
     elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    elevatorMotor.SetInverted(robotData.configData.elevatorConfigData.invertRelative);
+    elevatorMotor.SetInverted(true);//robotData.configData.elevatorConfigData.invertRelative);
     elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
     elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
+
+    extendedLimitSwitch.EnableLimitSwitch(false);
+    retractedLimitSwitch.EnableLimitSwitch(false);
 
     elevatorPIDController.SetP(robotData.configData.elevatorConfigData.pValue, 0); 
     elevatorRelativeEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.relativeConversionFactor);
@@ -32,8 +33,7 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     //FIND THESE VALUES THEN GOOD
     
     // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
-
-    frc::SmartDashboard::PutBoolean("Elevator Force Zero", false);
+    
 }
 
 void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorData)
@@ -51,15 +51,15 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             break;
     }
 
+    frc::SmartDashboard::PutNumber("elevator output current", elevatorMotor.GetOutputCurrent());
+
     // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
     // {
     //     ZeroRelativePosition(elevatorData);
     // }
 
-    // frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
-    // frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
-
-    UpdateData(robotData, elevatorData);
+    frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
@@ -100,11 +100,11 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         }
         else if (robotData.controlData.saPositionMid)
         {
-            MoveElevator(25, robotData, 0);
+            MoveElevator(24, robotData, 0);
         }
         else if (robotData.controlData.saPositionHigh)
         {
-            MoveElevator(48, robotData, 0);
+            MoveElevator(50, robotData, 0);
         }
         else if (robotData.controlData.saSetUpPosition)
         {
@@ -129,7 +129,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             auto setpoint = elevatorProfile.Calculate(elapsedTime);
 
             elevatorPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
-            // frc::SmartDashboard::PutNumber("elevatorPos TRAP", setpoint.position.value());
+            frc::SmartDashboard::PutNumber("elevatorPos TRAP", setpoint.position.value());
             if (elevatorProfile.IsFinished(elapsedTime))
             {
                 elevatorProfileActive = false;
@@ -152,7 +152,6 @@ void Elevator::Manual(const RobotData &robotData, ElevatorData &elevatorData)
     if (robotData.controlData.forceZeroElevator || robotData.controlData.mForceZeroElevator)
     {
         ForceZeroElevator();
-        
     }
 
 
@@ -204,7 +203,7 @@ void Elevator::EnableSoftLimits()
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, true);
 
     elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 0.05);
-    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 0.5);
+    elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 0.1);
 }
 
 void Elevator::DisableSoftLimits() 
@@ -217,7 +216,6 @@ void Elevator::ForceZeroElevator()
 {
     elevatorRelativeEncoder.SetPosition(10);
     elevatorForceZeroed = true;
-    forceZeroElevator = false;
 }
 
 
@@ -246,9 +244,7 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
     return elevatorData.elevatorAbsoluteEncoderInitialized;
 }
 
-void Elevator::UpdateData(const RobotData &robotData, ElevatorData elevatorData)
+void Elevator::DisabledPeriodic()
 {
-    frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
-    forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true;
-    frc::SmartDashboard::PutBoolean("Elevator Zeroed", elevatorForceZeroed);
+    frc::SmartDashboard::PutBoolean("Elevator Inverted Relative", elevatorMotor.GetInverted());
 }

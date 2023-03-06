@@ -38,6 +38,8 @@ struct ArmData
     bool humanPlayerConeIntakeRunning = false;
     bool uprightConeIntakeRunning = false;
 
+    bool wristAndArmInPositionForBullBarIntake = false;
+
 };
 
 enum ArmRunMode
@@ -116,12 +118,6 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
     bool pivotForceZeroed;
     bool wristForceZeroed;
 
-    bool pivotZeroed;
-    bool wristZeroed;
-
-    bool forceZeroWrist;
-    bool forceZeroPivot;
-
     ArmRunMode pivotRunMode = ARM_NONE;
     ArmRunMode wristRunMode = ARM_NONE;
     
@@ -161,4 +157,6 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
 
     bool wristInPositionForArm = false;
     bool wristInPositionForArmPastRead = false;
+
+    bool inAuton = false;
 };

@@ -20,7 +20,6 @@ public:
     int failedTransfers = 0;
 private:
 
-    void UpdateData();
     bool arduinoWorking = false;
     int attemptsToConnectToArduino = 0;
     int colorCode;
