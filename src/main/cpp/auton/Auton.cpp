@@ -564,7 +564,7 @@ void Auton::Bump(const RobotData &robotData, ControlData &controlData, Controlle
 
 void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled-0.1;
+    double sec = robotData.timerData.secSinceEnabled-1.0;
 
     switch (step)
     {
@@ -574,7 +574,7 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         break;
     case(1):
         controlData.saPositionHigh = false;
-        if (sec > 1.0) step++;
+        if (sec > 0.75) step++;
         break;
     case(2):
         controlData.saIntakeBackwards = true;
@@ -591,7 +591,7 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         break;
     case(5):
         controlData.saCubeIntake = true;
-        if (sec > 5) step++;
+        if (sec > 4.5) step++;
         break;
         case(6):
         controlData.saCubeIntake = false;
@@ -607,7 +607,7 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         break;
     case(9):
         controlData.saIntakeBackwards = true;
-        if (sec > 7.25) step++;
+        if (sec > 7.4) step++;
         break;
     case(10):
 
@@ -616,27 +616,27 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         step++;
         break;
     case(11):
-        if (sec > 7.5)
+        if (sec > 7.65)
         {
             controlData.saIntakeBackwards = false;
         }
         controlData.saHomePosition = false;
-        if (sec > 8)step++;
+        if (sec > 8.15)step++;
         break;
     case(12):
         controlData.saConeIntake = true;
-        if (sec > 11) step++;
+        if (sec > 11.15) step++;
         break;
     case(13):
         controlData.saConeIntake = false;
-        if (sec > 13.6) step++;
+        if (sec > 13.75) step++;
         break;
     case 14:
-        controlData.saPositionHigh = true;
+        //controlData.saPositionHigh = true;
         step++;
         break;
     case 15:
-        controlData.saPositionHigh = false;
+        //controlData.saPositionHigh = false;
         step++;
         break;
     case 16:
