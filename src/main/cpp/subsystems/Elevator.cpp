@@ -37,6 +37,8 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 
     extendedLimitSwitch.EnableLimitSwitch(false);
     retractedLimitSwitch.EnableLimitSwitch(false);
+
+    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     
 }
 
