@@ -5,16 +5,23 @@
 void EndEffector::RobotInit(const RobotData &robotData)
 {
     // End Effector Rollers
-    endEffectorRollers.RestoreFactoryDefaults();
-    endEffectorRollers.SetInverted(true);//robotData.configData.endEffectorConfigData.invertRollers);
-    endEffectorRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
-    endEffectorRollers.SetSmartCurrentLimit(robotData.configData.endEffectorConfigData.currentLimit);
-    endEffectorRollers.EnableVoltageCompensation(robotData.configData.endEffectorConfigData.voltageComp);
+    if (
+        endEffectorRollers.GetInverted() != robotData.configData.endEffectorConfigData.invertRollers ||
+        endEffectorRollers.GetIdleMode() != rev::CANSparkMax::IdleMode::kCoast
+
+    )
+    {
+        endEffectorRollers.RestoreFactoryDefaults();
+        endEffectorRollers.SetInverted(robotData.configData.endEffectorConfigData.invertRollers);
+        endEffectorRollers.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);
+        endEffectorRollers.SetSmartCurrentLimit(robotData.configData.endEffectorConfigData.currentLimit);
+        endEffectorRollers.EnableVoltageCompensation(robotData.configData.endEffectorConfigData.voltageComp);
+        
+        endEffectorRollers.BurnFlash();
+    }
 
     coneLimitSwitch.EnableLimitSwitch(false);
     cubeLimitSwitch.EnableLimitSwitch(false);
-    
-    endEffectorRollers.BurnFlash();
 
 }
 

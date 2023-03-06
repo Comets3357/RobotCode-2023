@@ -6,35 +6,44 @@ void BullBar::RobotInit(const RobotData &robotData, BullBarData &bullBarData)
 { // check current vals and then burn flash if they are different
     // BullBar Rollers
 
+   
     bullBarRollers.SetInverted(true);//robotData.configData.bullBarConfigData.invertRollers);
 
 
-    bullBarSliderAbsoluteEncoder.SetInverted(true);//robotData.configData.bullBarConfigData.invertSliderAbsolute);
-    frc::SmartDashboard::PutBoolean("BullBarSliderAbsInverted Config",robotData.configData.bullBarConfigData.invertSliderAbsolute );
-    bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.bullBarConfigData.absoluteConversion);
-    bullBarSliderAbsoluteEncoder.SetZeroOffset(robotData.configData.bullBarConfigData.absoluteOffset);
+    if (
+        bullBarSliderAbsoluteEncoder.GetInverted() != robotData.configData.bullBarConfigData.invertSliderAbsolute ||
+        bullBarSliderAbsoluteEncoder.GetPositionConversionFactor() != robotData.configData.bullBarConfigData.absoluteConversion ||
+        bullBarSliderAbsoluteEncoder.GetZeroOffset() != robotData.configData.bullBarConfigData.absoluteOffset ||
 
-    bullBarSliderRelativeEncoder.SetPositionConversionFactor(robotData.configData.bullBarConfigData.relativeConversion);
-    bullBarSliderRelativeEncoder.SetPosition(10);
+        bullBarSliderRelativeEncoder.GetPositionConversionFactor() != robotData.configData.bullBarConfigData.absoluteConversion ||
+        bullBarSliderPIDController.GetP() != robotData.configData.bullBarConfigData.pValue || 
+        bullBarSlider.GetInverted() != robotData.configData.bullBarConfigData.invertSliderRelative || 
+        bullBarSlider.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake
+    )
+    {
+
+        bullBarSlider.RestoreFactoryDefaults();
+
+        bullBarSliderAbsoluteEncoder.SetInverted(robotData.configData.bullBarConfigData.invertSliderAbsolute);
+        bullBarSliderAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.bullBarConfigData.absoluteConversion);
+        bullBarSliderAbsoluteEncoder.SetZeroOffset(robotData.configData.bullBarConfigData.absoluteOffset);
+
+        bullBarSliderRelativeEncoder.SetPositionConversionFactor(robotData.configData.bullBarConfigData.relativeConversion);
+        bullBarSliderPIDController.SetP(robotData.configData.bullBarConfigData.pValue, 0);
+        bullBarSliderPIDController.SetI(0, 0);  
+        bullBarSliderPIDController.SetD(0, 0);
+        bullBarSliderPIDController.SetIZone(0, 0);
+        bullBarSliderPIDController.SetFF(0, 0);
+        bullBarSliderPIDController.SetOutputRange(-1, 1, 0);
+
+        bullBarSlider.EnableVoltageCompensation(robotData.configData.bullBarConfigData.voltageComp);
+        bullBarSlider.SetSmartCurrentLimit(robotData.configData.bullBarConfigData.currentLimit);
+        bullBarSlider.SetInverted(robotData.configData.bullBarConfigData.invertSliderRelative);
+        bullBarSlider.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        bullBarSlider.BurnFlash();
+    }
 
     bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
-
-    // BullBar 
-
-    // abs
-    bullBarSliderPIDController.SetP(robotData.configData.bullBarConfigData.pValue, 0);
-    bullBarSliderPIDController.SetI(0, 0);  
-    bullBarSliderPIDController.SetD(0, 0);
-    bullBarSliderPIDController.SetIZone(0, 0);
-    bullBarSliderPIDController.SetFF(0, 0);
-    bullBarSliderPIDController.SetOutputRange(-1, 1, 0);
-
-    bullBarSlider.EnableVoltageCompensation(robotData.configData.bullBarConfigData.voltageComp);
-    bullBarSlider.SetSmartCurrentLimit(robotData.configData.bullBarConfigData.currentLimit);
-    bullBarSlider.SetInverted(true);//robotData.configData.bullBarConfigData.invertSliderRelative);
-    bullBarSlider.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    bullBarSlider.BurnFlash();
-    
 
     ZeroRelativePosition(bullBarData);
     EnableSoftLimits(bullBarData);

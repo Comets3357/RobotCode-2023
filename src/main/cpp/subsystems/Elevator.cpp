@@ -2,37 +2,41 @@
 
 void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
 {
-    elevatorMotor.RestoreFactoryDefaults();
-    elevatorAbsoluteEncoder.SetInverted(true);//robotData.configData.elevatorConfigData.invertAbosolute);
-    elevatorAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.absoluteConversionFactor);
-    elevatorAbsoluteEncoder.SetZeroOffset(robotData.configData.elevatorConfigData.absoluteZeroOffset);
-    
-    elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    elevatorMotor.SetInverted(true);//robotData.configData.elevatorConfigData.invertRelative);
-    elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
-    elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
+
+    if (
+        elevatorAbsoluteEncoder.GetInverted() != robotData.configData.elevatorConfigData.invertAbosolute ||
+        elevatorAbsoluteEncoder.GetPositionConversionFactor() != robotData.configData.elevatorConfigData.absoluteConversionFactor ||
+        elevatorAbsoluteEncoder.GetZeroOffset() != robotData.configData.elevatorConfigData.absoluteZeroOffset ||
+        elevatorMotor.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake ||
+        elevatorMotor.GetInverted() != robotData.configData.elevatorConfigData.invertRelative ||
+        elevatorPIDController.GetP() != robotData.configData.elevatorConfigData.pValue ||
+        elevatorRelativeEncoder.GetPositionConversionFactor() != robotData.configData.elevatorConfigData.relativeConversionFactor
+
+    )
+    {
+        elevatorMotor.RestoreFactoryDefaults();
+        elevatorAbsoluteEncoder.SetInverted(robotData.configData.elevatorConfigData.invertAbosolute);
+        elevatorAbsoluteEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.absoluteConversionFactor);
+        elevatorAbsoluteEncoder.SetZeroOffset(robotData.configData.elevatorConfigData.absoluteZeroOffset);
+        
+        elevatorMotor.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        elevatorMotor.SetInverted(robotData.configData.elevatorConfigData.invertRelative);
+        elevatorMotor.EnableVoltageCompensation(robotData.configData.elevatorConfigData.voltageComp);
+        elevatorMotor.SetSmartCurrentLimit(robotData.configData.elevatorConfigData.currentLimit);
+
+        elevatorPIDController.SetP(robotData.configData.elevatorConfigData.pValue, 0); 
+         elevatorPIDController.SetOutputRange(-1,1);
+        elevatorRelativeEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.relativeConversionFactor);
+        
+
+        elevatorMotor.BurnFlash();
+       
+    }
+
+    elevatorRelativeEncoder.SetPosition(10);
 
     extendedLimitSwitch.EnableLimitSwitch(false);
     retractedLimitSwitch.EnableLimitSwitch(false);
-
-    elevatorPIDController.SetP(robotData.configData.elevatorConfigData.pValue, 0); 
-    elevatorRelativeEncoder.SetPositionConversionFactor(robotData.configData.elevatorConfigData.relativeConversionFactor);
-    elevatorRelativeEncoder.SetPosition(10);
-
-    elevatorMotor.BurnFlash();
-
-    // elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
-
-    elevatorPIDController.SetOutputRange(-1,1);
-
-    // elevatorRelativeEncoder.SetPositionConversionFactor(0.51);
-    // elevatorRelativeEncoder.SetPosition(10);
-
-
-
-    //FIND THESE VALUES THEN GOOD
-    
-    // elevatorRelativeEncoder.SetPositionConversionFactor(0.1);
     
 }
 

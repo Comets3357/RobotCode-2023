@@ -4,60 +4,69 @@
 
 void Drivebase::RobotInit(const RobotData &robotData)
 {
-    dbL.RestoreFactoryDefaults();
-    dbR.RestoreFactoryDefaults();
-    dbLF.RestoreFactoryDefaults();
-    dbRF.RestoreFactoryDefaults();
+    if (
+        dbL.GetInverted() != robotData.configData.drivebaseConfigData.leftInverted ||
+        dbLPIDController.GetP() != 0.077396 / mpsToRpm ||
+        dbLPIDController.GetFF() != 0.051094 / mpsToRpm ||
+        dbL.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake
+    )
+    {
+        dbL.RestoreFactoryDefaults();
+        dbL.SetInverted(robotData.configData.drivebaseConfigData.leftInverted);
+        dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        dbL.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-    
-    dbRF.Follow(dbR);
-    dbLF.Follow(dbL);
+        dbLPIDController.SetP(0.077396 / mpsToRpm);
+        dbLPIDController.SetFF(0.051094 / mpsToRpm);
+        dbLPIDController.SetD(0);
 
-    dbL.SetInverted(true);//robotData.configData.drivebaseConfigData.leftInverted);
-    dbLF.SetInverted(true);//robotData.configData.drivebaseConfigData.leftInverted);
-    dbR.SetInverted(false);//robotData.configData.drivebaseConfigData.rightInverted);
-    dbRF.SetInverted(false);//robotData.configData.drivebaseConfigData.rightInverted);
+        dbL.BurnFlash();
+    }
 
-    dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
-    dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+    if (
+        dbR.GetInverted() != robotData.configData.drivebaseConfigData.rightInverted ||
+        dbRPIDController.GetP() != 0.077396 / mpsToRpm ||
+        dbRPIDController.GetFF() != 0.051094 / mpsToRpm ||
+        dbR.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake
+    )
+    {
+        dbR.RestoreFactoryDefaults();
+        dbR.SetInverted(robotData.configData.drivebaseConfigData.rightInverted);
+        dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        dbR.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
+        dbRPIDController.SetP(0.077396 / mpsToRpm);
+        dbRPIDController.SetFF(0.051094 / mpsToRpm);
+        dbRPIDController.SetD(0);
 
-    // NEED TO SET CURRENT LIMIT
-    /**
-  * Configure the current limits that will be used
-  * Stator Current is the current that passes through the motor stators.
-  *  Use stator current limits to limit rotor acceleration/heat production
-  * Supply Current is the current that passes into the controller from the supply
-  *  Use supply current limits to prevent breakers from tripping
-  *
-  * enabled | Limit(amp) | Trigger Threshold(amp) | Trigger Threshold Time(s)  */
-    dbL.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
-    dbLF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
-    dbR.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
-    dbRF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
+        dbR.BurnFlash();
+    }
 
-    // dbLPIDController.SetP(robotData.configData.drivebaseConfigData.leftP);
-    // dbLPIDController.SetFF(robotData.configData.drivebaseConfigData.leftFF);
-    // dbLPIDController.SetD(0);
+    if (
+        dbRF.IsFollower() == false ||
+        dbRF.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake
+    )
+    {
+        dbRF.RestoreFactoryDefaults();
+        dbRF.Follow(dbR);
+        dbRF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        dbRF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-    // dbRPIDController.SetP(robotData.configData.drivebaseConfigData.rightP);
-    // dbRPIDController.SetFF(robotData.configData.drivebaseConfigData.rightFF);
-    // dbRPIDController.SetD(0);
+        dbRF.BurnFlash();
+    }
 
-      dbLPIDController.SetP(0.077396 / mpsToRpm);
-    dbLPIDController.SetFF(0.051094 / mpsToRpm);
-    dbLPIDController.SetD(0);
+    if (
+        dbLF.IsFollower() == false ||
+        dbLF.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake
+    )
+    {
+        dbLF.RestoreFactoryDefaults();
+        dbLF.Follow(dbR);
+        dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
+        dbLF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-    dbRPIDController.SetP(0.077396/mpsToRpm);
-    dbRPIDController.SetFF(0.051094/mpsToRpm);
-    dbRPIDController.SetD(0);
-    
-    dbL.BurnFlash();
-    dbLF.BurnFlash();
-    dbR.BurnFlash();
-    dbRF.BurnFlash();
+        dbLF.BurnFlash();
+    }
 
     setPercentOutput(0, 0);
 
