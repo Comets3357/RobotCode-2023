@@ -51,6 +51,24 @@ struct ConfigData
 
         bool pivotRelativeInverted;
         bool pivotAbsoluteInverted;
+
+        double wristHomePosition;
+        double wristConeMidPosition;
+        double wristConeHighPosition;
+        double wristCubeMidPosition;
+        double wristCubeHighPosition;
+        double wristConeIntakePosition;
+        double wristUprightConePosition;
+        double wristCubeIntakePosition;
+
+        double pivotHomePosition;
+        double pivotConeMidPosition;
+        double pivotConeHighPosition;
+        double pivotCubeMidPosition;
+        double pivotCubeHighPosition;
+        double pivotConeIntakePosition;
+        double pivotUprightConePosition;
+        double pivotCubeIntakePosition;
     };
 
     struct ElevatorConfigData
@@ -64,6 +82,13 @@ struct ConfigData
 
         bool invertAbosolute;
         bool invertRelative;
+
+        double elevatorHomePosition;
+        double elevatorConeMidPosition;
+        double elevatorConeHighPosition;
+        double elevatorCubeMidPosition;
+        double elevatorCubeHighPosition;
+        double elevatorSetupPosition;
     };
 
     struct EndEffectorConfigData
@@ -147,7 +172,32 @@ private:
         {"PivotAbsoluteInverted", 93},
         {"PivotAbsoluteConversion", 94},
         {"PivotAbsoluteZeroOffset", 95},
-        {"PivotRelativeConversion", 96}
+        {"PivotRelativeConversion", 96},
+
+        {"ElevatorHomePosition", 100},
+        {"ElevatorConeMidPosition", 101},
+        {"ElevatorConeHighPosition", 102},
+        {"ElevatorCubeMidPosition", 103},
+        {"ElevatorCubeHighPosition", 104},
+        {"ElevatorSetupPosition", 105},
+
+        {"WristHomePosition" ,110},
+        {"WristConeMidPosition", 111},
+        {"WristConeHighPosition", 112},
+        {"WristCubeMidPosition" ,113},
+        {"WristCubeHighPosition", 114},
+        {"WristUprightConePosition", 115},
+        {"WristCubeIntakePosition", 116},
+
+        {"PivotHomePosition" ,120},
+        {"PivotConeMidPosition", 121},
+        {"PivotConeHighPosition", 122},
+        {"PivotCubeMidPosition" ,123},
+        {"PivotCubeHighPosition", 124},
+        {"PivotUprightConePosition", 125},
+        {"PivotCubeIntakePosition", 126},
+        {"PivotConeIntakePosition", 127}
+    
     };
 
     int failedReadAttempts;

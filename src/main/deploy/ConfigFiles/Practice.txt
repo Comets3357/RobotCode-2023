@@ -24,6 +24,13 @@ ElevatorRelativeConversionFactor = 0.496060877648
 ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
+ElevatorHomePosition
+ElevatorConeMidPosition
+ElevatorConeHighPosition
+ElevatorCubeMidPosition
+ElevatorCubeHighPosition
+ElevatorSetupPosition
+
 # DRIVEBASE VALUES #
 DrivebaseRightInverted = false
 DrivebaseLeftInverted = true
@@ -42,6 +49,15 @@ WristAbsoluteConversion = 360
 WristAbsoluteZeroOffset = 9.299444
 WristRelativeConversion = 4.385430624923864151
 
+WristHomePosition
+WristConeMidPosition
+WristConeHighPosition
+WristCubeMidPosition
+WristCubeHighPosition
+WristConeIntakePosition
+WristUprightConePosition
+WristCubeIntakePosition
+
 PivotPValue = 0.08
 PivotCurrentLimit = 45
 PivotRelativeInverted = false
@@ -49,3 +65,12 @@ PivotAbsoluteInverted = false
 PivotAbsoluteConversion = 360
 PivotAbsoluteZeroOffset = 70.3962
 PivotRelativeConversion = 1.5428571428
+
+PivotHomePosition
+PivotConeMidPosition
+PivotConeHighPosition
+PivotCubeMidPosition
+PivotCubeHighPosition
+PivotConeIntakePosition
+PivotUprightConePosition
+PivotCubeIntakePosition

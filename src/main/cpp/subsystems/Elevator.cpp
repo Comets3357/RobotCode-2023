@@ -105,73 +105,73 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
             case CONE:
                 if (robotData.controlData.saHomePosition)
                 {
-                    MoveElevator(10, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(24, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(50, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
-                    MoveElevator(0, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
                 }
                 break;
             case CUBE:
                 if (robotData.controlData.saHomePosition)
                 {
-                    MoveElevator(10, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(24, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeMidPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(50, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeHighPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
-                    MoveElevator(0, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
                 }
                 break;
             case NONE:
                 if (robotData.controlData.saHomePosition)
                 {
-                    MoveElevator(10, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(24, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(50, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
-                    MoveElevator(0, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
                 }
                 break;
             default:
                 if (robotData.controlData.saHomePosition)
                 {
-                    MoveElevator(10, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(24, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(50, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
-                    MoveElevator(0, robotData, 0);
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
                 }
                 break;
         }

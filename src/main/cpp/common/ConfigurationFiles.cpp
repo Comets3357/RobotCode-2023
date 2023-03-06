@@ -302,6 +302,72 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
             case 96: // PivotRelativeConversion
                 configData.armConfigData.pivotRelativeConversion = std::stod(value);
                 break;
+            case 100:
+                configData.elevatorConfigData.elevatorHomePosition = std::stod(value);
+                break;
+            case 101:
+                configData.elevatorConfigData.elevatorConeMidPosition = std::stod(value);
+                break;
+            case 102:
+                configData.elevatorConfigData.elevatorConeHighPosition = std::stod(value);
+                break;
+            case 103:
+                configData.elevatorConfigData.elevatorCubeMidPosition = std::stod(value);
+                break;
+            case 104:
+                configData.elevatorConfigData.elevatorCubeHighPosition = std::stod(value);
+                break;
+            case 105:
+                configData.elevatorConfigData.elevatorSetupPosition = std::stod(value);
+                break;
+            case 110:
+                configData.armConfigData.wristHomePosition = std::stod(value);
+                break;
+            case 111:
+                configData.armConfigData.wristConeMidPosition = std::stod(value);
+                break;
+            case 112:
+                configData.armConfigData.wristConeHighPosition = std::stod(value);
+                break;
+            case 113:
+                configData.armConfigData.wristCubeMidPosition = std::stod(value);
+                break;
+            case 114:
+                configData.armConfigData.wristCubeHighPosition = std::stod(value);
+                break;
+            case 115:
+                configData.armConfigData.wristUprightConePosition = std::stod(value);
+                break;
+            case 116:
+                configData.armConfigData.wristCubeIntakePosition = std::stod(value);
+                break;
+            case 117:
+                configData.armConfigData.wristConeIntakePosition = std::stod(value);
+                break;
+            case 120:
+                configData.armConfigData.pivotHomePosition = std::stod(value);
+                break;
+            case 121:
+                configData.armConfigData.pivotConeMidPosition = std::stod(value);
+                break;
+            case 122:
+                configData.armConfigData.pivotConeHighPosition = std::stod(value);
+                break;
+            case 123:
+                configData.armConfigData.pivotCubeMidPosition = std::stod(value);
+                break;
+            case 124:
+                configData.armConfigData.pivotCubeHighPosition = std::stod(value);
+                break;
+            case 125:
+                configData.armConfigData.pivotUprightConePosition = std::stod(value);
+                break;
+            case 126:
+                configData.armConfigData.pivotCubeIntakePosition = std::stod(value);
+                break;
+            case 127:
+                configData.armConfigData.pivotConeIntakePosition = std::stod(value);
+                break;
             default:
                 break;
         }
