@@ -703,22 +703,32 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         if (sec > 8)step++;
         break;
     case(12):
-        controlData.saConeIntake = true;
+        controlData.saCubeIntake = true;
         if (sec > 11) step++;
         break;
     case(13):
-        controlData.saConeIntake = false;
+        controlData.saCubeIntake = false;
         if (sec > 13.6) step++;
         break;
     case 14:
-        controlData.saPositionHigh = true;
+        controlData.saPositionMid = true;
         step++;
         break;
     case 15:
-        controlData.saPositionHigh = false;
-        step++;
+        controlData.saPositionMid = false;
+        if (sec > 14.4) step++;
         break;
     case 16:
+        controlData.saIntakeBackwards = true;
+        if (sec > 14.7) step++;
+        break; 
+    case 17:
+        controlData.saIntakeBackwards = false;
+        controlData.saHomePosition = true;
+        step++;
+        break;
+    case 18:
+        controlData.saHomePosition = false;
         break;
     }
 }
