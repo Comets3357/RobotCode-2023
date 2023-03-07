@@ -3,7 +3,8 @@
 
 void ConfigurationFiles::ReadFile(const RobotData &robotData, ConfigData &configData, const std::string &fileName)
 {
-    frc::SmartDashboard::PutNumber("I AM HERE FOR VOLTAGE COMP", false);
+    // frc::SmartDashboard::PutNumber("I AM HERE FOR VOLTAGE COMP", false);
+    frc::SmartDashboard::PutNumber("Failed Config Read Attempts", failedReadAttempts);
     frc::SmartDashboard::PutBoolean("Has config been read?", false);
 
     // Accessing the deploy dir
@@ -35,7 +36,7 @@ void ConfigurationFiles::ReadFile(const RobotData &robotData, ConfigData &config
         frc::SmartDashboard::PutBoolean("Has config been read?", false);
     }
 
-    frc::SmartDashboard::PutNumber("test parsed line", configData.bullBarConfigData.absoluteConversion);
+    // frc::SmartDashboard::PutNumber("test parsed line", configData.bullBarConfigData.absoluteConversion);
     
 }
 
@@ -398,6 +399,7 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
     }
     catch(...)
     {
-
+        failedReadAttempts++;
+        frc::SmartDashboard::PutNumber("Failed Config Read Attempts", failedReadAttempts);
     }
 }

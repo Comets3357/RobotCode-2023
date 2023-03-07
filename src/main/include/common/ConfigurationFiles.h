@@ -218,7 +218,7 @@ private:
     
     };
 
-    int failedReadAttempts;
+    int failedReadAttempts = 0;
 
 
 };
