@@ -48,6 +48,7 @@ private:
 
     void BullBarRollers(double rollerSpeed);
     void BullBarSlider(double sliderPosition);
+    void AdvancedSemiAuto(const RobotData &robotData, BullBarData &bullBarData);
     void SemiAuto(const RobotData &robotData, BullBarData &bullBarData);
     void Manual(const RobotData &robotData, BullBarData &bullBarData);
     // void ToggleSoftLimits(BullBarData &bullBarData);

@@ -253,8 +253,18 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             }
         }
 
-        //set as percent vbus
-        setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
+        if ((robotData.controlData.mode == MODE_TELEOP_ADVANCED_SA) &&
+            (tempLDrive < 0.08 && tempLDrive > -0.08) &&
+            (tempRDrive < 0.08 && tempRDrive > -0.08) &&
+            (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid))
+        {
+            // turn
+            // once turn, then drive
+        }
+        else
+        {
+            setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
+        }
     }
     
     else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 

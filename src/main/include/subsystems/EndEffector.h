@@ -43,6 +43,7 @@ public:
 private:
 
     void SetEndEffectorRollerSpeed(double rollerSpeed);
+    void AdvancedSemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
     void SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
     void Manual(const RobotData &robotData, EndEffectorData &endEffectorData);
     void UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData);

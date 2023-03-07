@@ -46,6 +46,9 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
 {
     switch (robotData.controlData.mode) 
     {
+        case MODE_TELEOP_ADVANCED_SA:
+            AdvancedSemiAuto(robotData, elevatorData);
+            break;
         case MODE_TELEOP_MANUAL:
             Manual(robotData, elevatorData);
             break;
@@ -66,6 +69,144 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
 
     frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
+}
+
+void Elevator::AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
+{
+    if (!softLimitsEnabled) 
+    {
+        EnableSoftLimits();
+    }
+
+    if (elevatorRelativeEncoder.GetPosition() > 40)
+    {
+        elevatorData.drivebaseSlowMode = true;
+    }
+    else
+    {
+        elevatorData.drivebaseSlowMode = false;
+    }
+
+    if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
+    {
+        runMode = ELEVATOR_RELATIVE_RUN;
+        elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    }
+    
+    if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)
+    {
+        runMode = ELEVATOR_RELATIVE_RUN;
+        elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    }
+    // runMode = ELEVATOR_RELATIVE_RUN;
+    // elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+
+    if (runMode != ELEVATOR_NONE)
+    {
+        switch (robotData.endEffectorData.gamePieceType)
+        {
+            case CONE:
+                if (robotData.controlData.saHomePosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionMid)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saSetUpPosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
+                }
+                break;
+            case CUBE:
+                if (robotData.controlData.saHomePosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionMid)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeMidPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeHighPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saSetUpPosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
+                }
+                break;
+            case NONE:
+                if (robotData.controlData.saHomePosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionMid)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saSetUpPosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
+                }
+                break;
+            default:
+                if (robotData.controlData.saHomePosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionMid)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saSetUpPosition)
+                {
+                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
+                }
+                break;
+        }
+    }
+    else
+    {
+        elevatorMotor.Set(0);
+    }
+
+    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // {
+    //     MoveElevator(10, robotData, 0.25);
+    // }
+
+    if (elevatorProfileActive)
+    {
+        if (robotData.timerData.secSinceEnabled > elevatorProfileStartTime)
+        {
+            units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - elevatorProfileStartTime};
+            auto setpoint = elevatorProfile.Calculate(elapsedTime);
+
+            elevatorPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
+            frc::SmartDashboard::PutNumber("elevatorPos TRAP", setpoint.position.value());
+            if (elevatorProfile.IsFinished(elapsedTime))
+            {
+                elevatorProfileActive = false;
+                
+            }
+        }
+    }
+
+
 }
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)

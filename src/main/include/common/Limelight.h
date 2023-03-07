@@ -22,6 +22,9 @@ struct LimelightData
     double latency = 0;
     
     frc::Pose2d Odometry;
+
+    bool allowExtend = false;
+    bool pastExtendAllow = false;
 };
 
 class Limelight

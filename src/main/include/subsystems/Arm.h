@@ -70,6 +70,7 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
     void EnablePivotSoftLimits();
     void DisablePivotSoftLimits();
 
+    void AdvancedSemiAuto(const RobotData &robotData, ArmData &armData);
     void SemiAuto(const RobotData &robotData, ArmData &armData);
     void Manual(const RobotData &robotData, ArmData &armData);
 

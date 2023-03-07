@@ -6,7 +6,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     try 
     {
         llresults = LimelightHelpers::getLatestResults();
-        distanceToClosestTag = GetDistance();
+        // distanceToClosestTag = GetDistance();
         frc::SmartDashboard::PutBoolean("limelight active", true);
     }
     catch (...)
@@ -17,7 +17,9 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     if (robotData.controlData.saResetOdometry)
     {
         try
-        {
+        {   
+            LimelightHelpers::setPipelineIndex("pipeline", 0);
+
             limelightOdometry.clear();
 
             limelightOdometry = llresults.targetingResults.botPose_wpiblue;
@@ -99,6 +101,50 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         {
 
         }
+    }
+
+    limelightData.pastExtendAllow = robotData.limelightData.allowExtend;
+
+    try
+    {
+        if (robotData.controlData.saPositionHigh && robotData.endEffectorData.gamePieceType == CONE)
+        {
+            LimelightHelpers::setPipelineIndex("pipeline", 1);
+        }
+        else if (robotData.controlData.saPositionMid && robotData.endEffectorData.gamePieceType == CONE)
+        {
+            LimelightHelpers::setPipelineIndex("pipeline", 2);
+        }
+        else if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) && robotData.endEffectorData.gamePieceType == CUBE)
+        {
+            LimelightHelpers::setPipelineIndex("pipeline", 0);
+
+            if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
+            {
+                if (llresults.targetingResults.botPose_wpiblue.at(0) > 14.8)
+                {
+                    limelightData.allowExtend = true;
+                }
+                {
+                    limelightData.allowExtend = false;
+                }
+            }
+            else
+            {
+                if (llresults.targetingResults.botPose_wpiblue.at(0) < 1.7)
+                {
+                    limelightData.allowExtend = true;
+                }
+                else
+                {
+                    limelightData.allowExtend = false;
+                }
+            }
+        }
+    }
+    catch(...)
+    {
+        
     }
 }
 

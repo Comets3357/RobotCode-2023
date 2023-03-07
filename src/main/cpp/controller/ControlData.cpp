@@ -20,7 +20,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
             controlData.mode = MODE_AUTO_BALANCE;
             break;
         case 270:   // left
-            // controlData.mode = mode_climb_sa;
+            controlData.mode = MODE_TELEOP_ADVANCED_SA;
             break;
         default:
             controlData.mode = MODE_TELEOP_SA;

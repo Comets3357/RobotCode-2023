@@ -49,8 +49,9 @@ private:
     ElevatorRunMode runMode = ELEVATOR_ABSOLUTE_RUN;
 
     //void SetElevatorPosition(double elevatorAbsolutePosition);
-    void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
-    void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
+    void AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevatorData);
+    void SemiAuto(const RobotData &robotData, ElevatorData &elevatorData);
+    void Manual(const RobotData &robotData, ElevatorData &elevatorData);
     void DisableSoftLimits();
     void EnableSoftLimits();
     void ZeroRelativePosition(ElevatorData &elevatorData);
