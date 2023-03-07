@@ -34,7 +34,7 @@ public:
 
 private:
 
-    double GetDistance();
+    double GetDistance(double targetHeight);
 
     // std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
     LimelightHelpers::LimelightResultsClass llresults; //= LimelightHelpers::getLatestResults();

@@ -112,11 +112,19 @@ void Elevator::AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevat
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorConeMidPosition;
+                    }
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorConeMidPosition;
+                    }
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
@@ -130,11 +138,19 @@ void Elevator::AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevat
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeMidPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeMidPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorCubeMidPosition;
+                    }
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeHighPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorCubeHighPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorCubeHighPosition;
+                    }
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
@@ -148,11 +164,19 @@ void Elevator::AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevat
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorConeMidPosition;
+                    }
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorConeMidPosition;
+                    }
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
@@ -166,11 +190,19 @@ void Elevator::AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevat
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorConeMidPosition;
+                    }
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                    if ((robotData.limelightData.pastExtendAllow != robotData.limelightData.allowExtend) && (robotData.limelightData.allowExtend))
+                    {
+                        MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
+                        desiredElevatorPosition = robotData.configData.elevatorConfigData.elevatorConeMidPosition;
+                    }
                 }
                 else if (robotData.controlData.saSetUpPosition)
                 {
@@ -204,6 +236,15 @@ void Elevator::AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevat
                 
             }
         }
+    }
+
+    if ((std::abs(elevatorRelativeEncoder.GetPosition() - desiredElevatorPosition)) < 0.5)
+    {
+        elevatorData.elevatorInPosition = true;
+    }
+    else
+    {
+        elevatorData.elevatorInPosition = false;
     }
 
 

@@ -148,13 +148,13 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     }
 }
 
-double Limelight::GetDistance()
+double Limelight::GetDistance(double targetHeight)
 {
     double tempDist = 0;
     double verticalAngle = 0;
 
     verticalAngle = (LimelightHelpers::getTY("") + limelightAngle) * (pi / 180);
-    tempDist = (aprilTagHeight - limelightHeight) / (std::tan(verticalAngle));// * inchesToMeters;
+    tempDist = (targetHeight - limelightHeight) / (std::tan(verticalAngle));// * inchesToMeters;
 
     frc::SmartDashboard::PutNumber("ty", LimelightHelpers::getTY(""));
     return tempDist;

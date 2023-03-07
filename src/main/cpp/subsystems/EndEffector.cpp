@@ -146,6 +146,19 @@ void EndEffector::AdvancedSemiAuto(const RobotData &robotData, EndEffectorData &
     {
         SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
     }
+
+    if (robotData.armData.armInPosition && robotData.armData.wristInPosition && robotData.elevatorData.elevatorInPosition)
+    {
+        switch (robotData.endEffectorData.lastPieceType)
+        {
+            case CONE:
+                SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);  
+                break;
+            case CUBE:
+                SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
+                break;
+        }
+    }
     frc::SmartDashboard::PutNumber("BHASIUDGUISAD", endEffectorData.gamePieceType);  
 }
 

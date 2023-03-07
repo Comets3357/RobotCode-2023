@@ -25,6 +25,8 @@ struct ElevatorData
     bool elevatorRunning = false;
     bool elevatorAbsoluteEncoderInitialized = false;
     bool drivebaseSlowMode = false;
+
+    bool elevatorInPosition = false;
 };
 
 enum ElevatorRunMode
@@ -99,6 +101,8 @@ private:
     double midElevatorAbsolutePos = 0.0;
     double highElevatorAbsolutePos = 0.0;
     double humanPlayerElevatorAbsolutePos = 0.0;
+
+    double desiredElevatorPosition = 100;
 
     
 };
