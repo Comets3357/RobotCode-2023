@@ -441,7 +441,7 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     //     odometry.Update(currentRotation, leftDistance, rightDistance);
     // }
 
-    odometry.Update(currentRotation, leftDistance, rightDistance);
+    odometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
     
     field.SetRobotPose(odometry.GetEstimatedPosition());
     frc::SmartDashboard::PutData("Field", &field);
