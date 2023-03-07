@@ -267,8 +267,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saPositionLow)
                 {
-                    RotatePivot(16, robotData, 0);
-                    RotateWrist(130, robotData, 0);
+                    RotatePivot(robotData.configData.armConfigData.pivotLowPosition, robotData, 0);
+                    RotateWrist(robotData.configData.armConfigData.wristLowPosition, robotData, 0);
                 }
                 break;
 
@@ -293,8 +293,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saPositionLow)
                 {
-                    RotatePivot(16, robotData, 0);
-                    RotateWrist(130, robotData, 0);
+                    RotatePivot(robotData.configData.armConfigData.pivotLowPosition, robotData, 0);
+                    RotateWrist(robotData.configData.armConfigData.wristLowPosition, robotData, 0);
                 }
                 break;
 
@@ -317,8 +317,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saPositionLow)
                 {
-                    RotatePivot(16, robotData, 0);
-                    RotateWrist(130, robotData, 0);
+                    RotatePivot(robotData.configData.armConfigData.pivotLowPosition, robotData, 0);
+                    RotateWrist(robotData.configData.armConfigData.wristLowPosition, robotData, 0);
                 }
                 break;
 
@@ -341,8 +341,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saPositionLow)
                 {
-                    RotatePivot(16, robotData, 0);
-                    RotateWrist(130, robotData, 0);
+                    RotatePivot(robotData.configData.armConfigData.pivotLowPosition, robotData, 0);
+                    RotateWrist(robotData.configData.armConfigData.wristLowPosition, robotData, 0);
                 }
                 break;
         }

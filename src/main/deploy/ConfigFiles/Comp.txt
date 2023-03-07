@@ -11,6 +11,12 @@ BullBarSmartCurrentLimit = 20
 BullBarSliderInvertedRelative = true
 BullBarSliderInvertedAbsolute = true
 
+BullBarCubePosition = 12.5
+BullBarConePosition = 17.208
+BullBarFlipConePosition = 16
+BullBarMinPosition = 10
+BullBarMaxPosition = 28
+
 # END EFFECTOR VALUES #
 EndEffectorInvertRollers = true
 EndEffectorCurrentLimit = 45
@@ -25,6 +31,7 @@ ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
 ElevatorHomePosition = 10
+ElevaotrLowPosition = 10;
 ElevatorConeMidPosition = 24
 ElevatorConeHighPosition = 50
 ElevatorCubeMidPosition = 24
@@ -57,6 +64,7 @@ WristCubeHighPosition = 45
 WristConeIntakePosition = 120
 WristUprightConePosition = 130
 WristCubeIntakePosition = 202.5
+WristLowPosition = 130
 
 PivotPValue = 0.08
 PivotCurrentLimit = 45
@@ -74,3 +82,4 @@ PivotCubeHighPosition = 146
 PivotConeIntakePosition = 10
 PivotUprightConePosition = 16
 PivotCubeIntakePosition = 42
+PivotLowPosition = 16

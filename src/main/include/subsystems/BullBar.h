@@ -51,7 +51,7 @@ private:
     void SemiAuto(const RobotData &robotData, BullBarData &bullBarData);
     void Manual(const RobotData &robotData, BullBarData &bullBarData);
     // void ToggleSoftLimits(BullBarData &bullBarData);
-    void EnableSoftLimits(BullBarData &bullBarData);
+    void EnableSoftLimits(const RobotData &robotData, BullBarData &bullBarData);
     void DisableSoftLimits();
     void ZeroRelativePosition(BullBarData &bullBarData);
     void ForceZeroBullBar();
@@ -66,13 +66,13 @@ private:
     bool bullBarForcedZeroed = false;
 
     
-    // Encoder Min and Max Values 
-    double bullBarMaxPosition = 28;
-    double bullBarMinPosition = 10;
+    // // Encoder Min and Max Values 
+    // double bullBarMaxPosition = 28;
+    // double bullBarMinPosition = 10;
 
-    // Positions for intaking cone or cube
-    double bullBarConeIntakePosition = bullBarMinPosition + 17.208;
-    double bullBarCubeIntakePosition = bullBarMinPosition + 12.5;
+    // // Positions for intaking cone or cube
+    // double bullBarConeIntakePosition = bullBarMinPosition + 17.208;
+    // double bullBarCubeIntakePosition = bullBarMinPosition + 12.5;
 
     // intake speed
     double bullBarRollerExtendedSpeed = 0.9;

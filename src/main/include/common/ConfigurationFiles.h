@@ -28,6 +28,12 @@ struct ConfigData
         bool invertRollers;
         bool invertSliderRelative;
         bool invertSliderAbsolute;
+
+        double bullBarCubePosition;
+        double bullBarConePosition;
+        double bullBarFlipConePosition;
+        double bullBarMinPosition;
+        double bullBarMaxPosition;
     };
 
     struct ArmConfigData
@@ -60,6 +66,7 @@ struct ConfigData
         double wristConeIntakePosition;
         double wristUprightConePosition;
         double wristCubeIntakePosition;
+        double wristLowPosition;
 
         double pivotHomePosition;
         double pivotConeMidPosition;
@@ -69,6 +76,7 @@ struct ConfigData
         double pivotConeIntakePosition;
         double pivotUprightConePosition;
         double pivotCubeIntakePosition;
+        double pivotLowPosition;
     };
 
     struct ElevatorConfigData
@@ -89,6 +97,7 @@ struct ConfigData
         double elevatorCubeMidPosition;
         double elevatorCubeHighPosition;
         double elevatorSetupPosition;
+        double elevatorLowPosition;
     };
 
     struct EndEffectorConfigData
@@ -180,6 +189,7 @@ private:
         {"ElevatorCubeMidPosition", 103},
         {"ElevatorCubeHighPosition", 104},
         {"ElevatorSetupPosition", 105},
+        {"ElevatorLowPosition", 106},
 
         {"WristHomePosition" ,110},
         {"WristConeMidPosition", 111},
@@ -188,6 +198,7 @@ private:
         {"WristCubeHighPosition", 114},
         {"WristUprightConePosition", 115},
         {"WristCubeIntakePosition", 116},
+        {"WristLowPosition", 117},
 
         {"PivotHomePosition" ,120},
         {"PivotConeMidPosition", 121},
@@ -196,7 +207,14 @@ private:
         {"PivotCubeHighPosition", 124},
         {"PivotUprightConePosition", 125},
         {"PivotCubeIntakePosition", 126},
-        {"PivotConeIntakePosition", 127}
+        {"PivotConeIntakePosition", 127},
+        {"PivotLowPosition", 128},
+
+        {"BullBarCubePosition", 130},
+        {"BullBarConePosition", 131},
+        {"BullBarFlipConePosition", 132},
+        {"BullBarMinPosition", 133},
+        {"BullBarMaxPosition", 134}
     
     };
 

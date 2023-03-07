@@ -320,6 +320,9 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
             case 105:
                 configData.elevatorConfigData.elevatorSetupPosition = std::stod(value);
                 break;
+            case 106:
+                configData.elevatorConfigData.elevatorLowPosition = std::stod(value);
+                break;
             case 110:
                 configData.armConfigData.wristHomePosition = std::stod(value);
                 break;
@@ -344,6 +347,9 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
             case 117:
                 configData.armConfigData.wristConeIntakePosition = std::stod(value);
                 break;
+            case 118:
+                configData.armConfigData.wristLowPosition = std::stod(value);
+                break;
             case 120:
                 configData.armConfigData.pivotHomePosition = std::stod(value);
                 break;
@@ -367,6 +373,24 @@ void ConfigurationFiles::ParseLine(ConfigData &configData, const std::string &li
                 break;
             case 127:
                 configData.armConfigData.pivotConeIntakePosition = std::stod(value);
+                break;
+            case 128:
+                configData.armConfigData.pivotLowPosition = std::stod(value);
+                break;
+            case 130:
+                configData.bullBarConfigData.bullBarCubePosition = std::stod(value);
+                break;
+            case 131:
+                configData.bullBarConfigData.bullBarConePosition = std::stod(value);
+                break;
+            case 132:
+                configData.bullBarConfigData.bullBarFlipConePosition = std::stod(value);
+                break;
+            case 133:
+                configData.bullBarConfigData.bullBarMinPosition = std::stod(value);
+                break;
+            case 134:
+                configData.bullBarConfigData.bullBarMaxPosition = std::stod(value);
                 break;
             default:
                 break;
