@@ -258,6 +258,34 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             (tempRDrive < 0.08 && tempRDrive > -0.08) &&
             (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid))
         {
+
+            //temp
+            double angleOff;
+            double distanceOff;
+
+            if (!profileCreated)
+            {
+                startTime = robotData.timerData.secSinceEnabled;
+                leftStartPosition = 0.0;
+                rightEndPosition = 0.0;
+                leftEndPosition = leftStartPosition + (angleOff * degreesToMeters);
+                rightEndPosition = rightStartPosition - (angleOff * degreesToMeters);
+
+                leftProfile = frc::TrapezoidProfile<units::meters>
+                {
+                    frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{1}, units::acceleration::meters_per_second_squared_t{1}},
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{leftEndPosition}, units::meters_per_second_t{0}},
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{leftStartPosition}, units::meters_per_second_t{0}}
+                };
+
+                rightProfile = frc::TrapezoidProfile<units::meters>
+                {
+                    frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{1}, units::acceleration::meters_per_second_squared_t{1}},
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{rightEndPosition}, units::velocity::meters_per_second_t{0}},
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{rightStartPosition, units::velocity::meters_per_second_t{0}}
+                };
+            }
+            
             // turn
             // once turn, then drive
         }

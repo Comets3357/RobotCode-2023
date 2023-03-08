@@ -26,6 +26,17 @@
 #include <fstream>
 #include <deque>
 
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <frc/controller/ArmFeedforward.h>
+#include <frc2/command/ProfiledPIDSubsystem.h>
+#include <units/acceleration.h>
+#include <units/length.h>
+#include <units/time.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
+#include <units/angle.h>
+#include <math.h>
+
 #define M_PI 3.14159265358979323846
 
 struct RobotData;
@@ -142,6 +153,7 @@ private:
     // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
     const double mpsToRpm = 11.107086*60.0;// * 0.837*0.9375;//(1.0/((1.0/1.0)*(1.0/4.0)*((4*M_PI)/1)*(1.0/39.0)*(1.0/60.0)));
     const double rotationsToMeters = 1.0/(11.107086);//*0.837*0.9375);//(1.0/4.0)*((4.0*M_PI)/1.0)*(1.0/39.3701);
+    const double degreesToMeters = 1.0;
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};
@@ -153,6 +165,26 @@ private:
     rev::CANSparkMax dbRF{rightFollowDeviceID, rev::CANSparkMax::MotorType::kBrushless};
     rev::SparkMaxRelativeEncoder dbREncoder = dbR.GetEncoder();
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
+
+    frc::TrapezoidProfile<units::meters> rightProfile
+    {
+        frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{0}, units::acceleration::meters_per_second_squared_t{0}},
+        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}},
+        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}}
+    };
+
+    frc::TrapezoidProfile<units::meters> leftProfile
+    {
+        frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{0}, units::acceleration::meters_per_second_squared_t{0}},
+        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}},
+        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}}
+    };
+    bool profileCreated = false;
+    double startTime = 0.0;
+    double leftStartPosition = 0.0;
+    double rightStartPosition = 0.0;
+    double leftEndPosition = 0.0;
+    double rightEndPosition = 0.0;
 
     double drivebaseMultiplier = 1;
 
