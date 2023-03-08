@@ -29,6 +29,8 @@ struct EndEffectorData
     GamePiece pastReadOfGamePiece = NONE;
 
     bool armRetractRequest = false;
+
+    double gamePieceDistance = 0;
 };
 
 class EndEffector

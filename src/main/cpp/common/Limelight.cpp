@@ -110,10 +110,65 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         if (robotData.controlData.saPositionHigh && robotData.endEffectorData.gamePieceType == CONE)
         {
             LimelightHelpers::setPipelineIndex("pipeline", 1);
+
+            distanceFromTarget = GetDistance(higherPollHeight);
+            angleOff = LimelightHelpers::getTX("") * (pi / 180);
+
+            distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
+            angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
+
+            secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (highEndEffectorDistanceFromCenter));
+
+            if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
+            {
+                finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+            }
+            else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
+            {
+                finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
+            }
+            else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
+            {
+                finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
+            }
+            else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
+            {
+                finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+            }
+
+            limelightData.angleOffFromCenter = finalAngle;
+
         }
         else if (robotData.controlData.saPositionMid && robotData.endEffectorData.gamePieceType == CONE)
         {
             LimelightHelpers::setPipelineIndex("pipeline", 2);
+
+            distanceFromTarget = GetDistance(lowerPollHeight);
+            angleOff = LimelightHelpers::getTX("") * (pi / 180);
+
+            distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
+            angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
+
+            secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (midEndEffectorDistanceFromCenter));
+
+            if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
+            {
+                finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+            }
+            else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
+            {
+                finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
+            }
+            else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
+            {
+                finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
+            }
+            else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
+            {
+                finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+            }
+
+            limelightData.angleOffFromCenter = finalAngle;
         }
         else if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) && robotData.endEffectorData.gamePieceType == CUBE)
         {
