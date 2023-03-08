@@ -258,8 +258,92 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             (tempRDrive < 0.08 && tempRDrive > -0.08) &&
             (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid))
         {
-            // turn
-            // once turn, then drive
+            
+
+            //temp
+            double angleOff;
+            double distanceOff;
+
+            switch (allignState)
+            {
+            case 0:
+                profileCreated = false;
+                allignState++;
+                break;
+            case 1:
+
+                if (!profileCreated)
+                {
+                    startTime = robotData.timerData.secSinceEnabled;
+                    startPosition = getEncoderDistance(dbLEncoder.GetPosition());
+                    endPosition = startPosition + (angleOff * degreesToMeters);
+                    profileCreated = true;
+                    currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
+                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
+
+                    drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                    {
+                        constraints,
+                        endState,
+                        currentState
+                    };
+
+                }
+
+                
+
+                elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                //startTime = robotData.timerData.secSinceEnabled;
+                currentState = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = currentState.velocity();
+
+                setVelocity(currentVelocity, -currentVelocity);
+                if (drivebaseProfile.IsFinished(elapsedTime))
+                {
+                    allignState++;
+                }
+
+                break;
+            case 2:
+                profileCreated = false;
+                currentVelocity = 0;
+                allignState++;
+                break;
+            case 3:
+                if (!profileCreated)
+                {
+                    startTime = robotData.timerData.secSinceEnabled;
+                    startPosition = getEncoderDistance(dbLEncoder.GetPosition());
+                    endPosition = startPosition + distanceOff;
+                    profileCreated = true;
+                    currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
+                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
+
+                    drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                    {
+                        constraints,
+                        currentState,
+                        endState
+                    };
+                }
+
+                
+
+                elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                //startTime = robotData.timerData.secSinceEnabled;
+                currentState = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = currentState.velocity();
+
+                setVelocity(currentVelocity, currentVelocity);
+             
+                
+                break;
+            
+            }
+
+            
+
+
         }
         else
         {
