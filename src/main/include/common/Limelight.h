@@ -37,7 +37,7 @@ public:
 
 private:
 
-    double GetDistance(double targetHeight);
+    double GetDistance(double targetHeight, double vertAngleOffset);
 
     // std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
     LimelightHelpers::LimelightResultsClass llresults; //= LimelightHelpers::getLatestResults();
@@ -67,6 +67,10 @@ private:
     
     double limelightAngle = 25;
 
+    // 63.3 x 49.7
+    double upperAngleOffset = 12.66;
+    double lowerAngleOffset = 0;
+
     double inchesToMeters = 0.0254;
 
     double distanceFromCenterOfRobot = 0;
@@ -77,6 +81,8 @@ private:
 
     units::radian_t gyroRadians{0};
     frc::Rotation2d gyroRotation{gyroRadians};
+
+    double distanceBetweenMidAndTopPoll = 17;
 
 
 
