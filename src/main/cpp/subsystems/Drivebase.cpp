@@ -282,7 +282,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                 {
                     frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{1}, units::acceleration::meters_per_second_squared_t{1}},
                     frc::TrapezoidProfile<units::meters>::State{units::meter_t{rightEndPosition}, units::velocity::meters_per_second_t{0}},
-                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{rightStartPosition, units::velocity::meters_per_second_t{0}}
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{rightStartPosition}, units::velocity::meters_per_second_t{0}}
                 };
             }
             
