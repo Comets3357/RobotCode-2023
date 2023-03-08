@@ -281,17 +281,19 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
                     endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
 
+                    drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                    {
+                        constraints,
+                        endState,
+                        currentState
+                    };
+
                 }
 
-                drivebaseProfile = frc::TrapezoidProfile<units::meters>
-                {
-                    constraints,
-                    endState,
-                    currentState
-                };
+                
 
                 elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
-                startTime = robotData.timerData.secSinceEnabled;
+                //startTime = robotData.timerData.secSinceEnabled;
                 currentState = drivebaseProfile.Calculate(elapsedTime);
                 currentVelocity = currentState.velocity();
 
@@ -316,17 +318,19 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     profileCreated = true;
                     currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
                     endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
+
+                    drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                    {
+                        constraints,
+                        currentState,
+                        endState
+                    };
                 }
 
-                drivebaseProfile = frc::TrapezoidProfile<units::meters>
-                {
-                    constraints,
-                    currentState,
-                    endState
-                };
+                
 
                 elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
-                startTime = robotData.timerData.secSinceEnabled;
+                //startTime = robotData.timerData.secSinceEnabled;
                 currentState = drivebaseProfile.Calculate(elapsedTime);
                 currentVelocity = currentState.velocity();
 
