@@ -275,7 +275,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                 if (!profileCreated)
                 {
                     startTime = robotData.timerData.secSinceEnabled;
-                    startPosition = 0.0;
+                    startPosition = getEncoderDistance(dbLEncoder.GetPosition());
                     endPosition = startPosition + (angleOff * degreesToMeters);
                     profileCreated = true;
                     currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
@@ -310,7 +310,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                 if (!profileCreated)
                 {
                     startTime = robotData.timerData.secSinceEnabled;
-                    startPosition = 0.0;
+                    startPosition = getEncoderDistance(dbLEncoder.GetPosition());
                     endPosition = startPosition + distanceOff;
                     profileCreated = true;
                     currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
