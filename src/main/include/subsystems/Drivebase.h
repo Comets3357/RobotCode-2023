@@ -166,25 +166,21 @@ private:
     rev::SparkMaxRelativeEncoder dbREncoder = dbR.GetEncoder();
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
 
-    frc::TrapezoidProfile<units::meters> rightProfile
+    frc::TrapezoidProfile<units::meters>::Constraints constraints{units::velocity::meters_per_second_t{1}, units::acceleration::meters_per_second_squared_t{1}};
+    double currentVelocity = 0.0;
+    frc::TrapezoidProfile<units::meters> drivebaseProfile
     {
         frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{0}, units::acceleration::meters_per_second_squared_t{0}},
         frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}},
         frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}}
     };
+    int allignState = 0;
 
-    frc::TrapezoidProfile<units::meters> leftProfile
-    {
-        frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{0}, units::acceleration::meters_per_second_squared_t{0}},
-        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}},
-        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}}
-    };
+
     bool profileCreated = false;
     double startTime = 0.0;
-    double leftStartPosition = 0.0;
-    double rightStartPosition = 0.0;
-    double leftEndPosition = 0.0;
-    double rightEndPosition = 0.0;
+    double startPosition = 0.0;
+    double endPosition = 0.0;
 
     double drivebaseMultiplier = 1;
 

@@ -258,36 +258,77 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             (tempRDrive < 0.08 && tempRDrive > -0.08) &&
             (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid))
         {
+            
 
             //temp
             double angleOff;
             double distanceOff;
 
-            if (!profileCreated)
+            switch (allignState)
             {
-                startTime = robotData.timerData.secSinceEnabled;
-                leftStartPosition = 0.0;
-                rightEndPosition = 0.0;
-                leftEndPosition = leftStartPosition + (angleOff * degreesToMeters);
-                rightEndPosition = rightStartPosition - (angleOff * degreesToMeters);
+            case 0:
+                profileCreated = false;
+                allignState++;
+                break;
+            case 1:
 
-                leftProfile = frc::TrapezoidProfile<units::meters>
+                if (!profileCreated)
                 {
-                    frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{1}, units::acceleration::meters_per_second_squared_t{1}},
-                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{leftEndPosition}, units::meters_per_second_t{0}},
-                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{leftStartPosition}, units::meters_per_second_t{0}}
+                    startTime = robotData.timerData.secSinceEnabled;
+                    startPosition = 0.0;
+                    endPosition = startPosition + (angleOff * degreesToMeters);
+                    profileCreated = true;
+                }
+
+                drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                {
+                    constraints,
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}},
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meters_per_second_t{currentVelocity}}
                 };
 
-                rightProfile = frc::TrapezoidProfile<units::meters>
+                units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - startTime};
+                auto setpoint = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = setpoint.velocity();
+
+                setVelocity(currentVelocity, -currentVelocity);
+                if (drivebaseProfile.IsFinished(elapsedTime))
                 {
-                    frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{1}, units::acceleration::meters_per_second_squared_t{1}},
-                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{rightEndPosition}, units::velocity::meters_per_second_t{0}},
-                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{rightStartPosition}, units::velocity::meters_per_second_t{0}}
-                };
-            }
+                    allignState++;
+                }
+
+                break;
+            case 2:
+                profileCreated = false;
+                currentVelocity = 0;
+                allignState++;
+                break;
+            case 3:
+                if (!profileCreated)
+                {
+                    startTime = robotData.timerData.secSinceEnabled;
+                    startPosition = 0.0;
+                    endPosition = startPosition + distanceOff;
+                    profileCreated = true;
+                }
+
+                units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - startTime};
+                auto setpoint = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = setpoint.velocity();
+
+                setVelocity(currentVelocity, currentVelocity);
+                if (drivebaseProfile.IsFinished(elapsedTime))
+                {
+                    allignState++;
+                }
+                
+                break;
             
-            // turn
-            // once turn, then drive
+            }
+
+            
+
+
         }
         else
         {
