@@ -278,18 +278,21 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     startPosition = 0.0;
                     endPosition = startPosition + (angleOff * degreesToMeters);
                     profileCreated = true;
+                    currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
+                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
+
                 }
 
                 drivebaseProfile = frc::TrapezoidProfile<units::meters>
                 {
                     constraints,
-                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}},
-                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meters_per_second_t{currentVelocity}}
+                    endState,
+                    currentState
                 };
 
-                units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - startTime};
-                auto setpoint = drivebaseProfile.Calculate(elapsedTime);
-                currentVelocity = setpoint.velocity();
+                elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                currentState = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = currentState.velocity();
 
                 setVelocity(currentVelocity, -currentVelocity);
                 if (drivebaseProfile.IsFinished(elapsedTime))
@@ -310,11 +313,20 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     startPosition = 0.0;
                     endPosition = startPosition + distanceOff;
                     profileCreated = true;
+                    currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
+                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
                 }
 
-                units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - startTime};
-                auto setpoint = drivebaseProfile.Calculate(elapsedTime);
-                currentVelocity = setpoint.velocity();
+                drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                {
+                    constraints,
+                    currentState,
+                    endState
+                };
+
+                elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                currentState = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = currentState.velocity();
 
                 setVelocity(currentVelocity, currentVelocity);
                 if (drivebaseProfile.IsFinished(elapsedTime))

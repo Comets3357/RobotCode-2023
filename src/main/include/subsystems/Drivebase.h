@@ -175,6 +175,9 @@ private:
         frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}}
     };
     int allignState = 0;
+    units::time::second_t elapsedTime{0};
+    frc::TrapezoidProfile<units::meters>::State currentState{units::meter_t{0}, units::meters_per_second_t{0}};
+    frc::TrapezoidProfile<units::meters>::State endState{units::meter_t{0}, units::meters_per_second_t{0}};
 
 
     bool profileCreated = false;
