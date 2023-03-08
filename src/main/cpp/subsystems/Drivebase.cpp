@@ -291,6 +291,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                 };
 
                 elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                startTime = robotData.timerData.secSinceEnabled;
                 currentState = drivebaseProfile.Calculate(elapsedTime);
                 currentVelocity = currentState.velocity();
 
@@ -325,14 +326,12 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                 };
 
                 elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                startTime = robotData.timerData.secSinceEnabled;
                 currentState = drivebaseProfile.Calculate(elapsedTime);
                 currentVelocity = currentState.velocity();
 
                 setVelocity(currentVelocity, currentVelocity);
-                if (drivebaseProfile.IsFinished(elapsedTime))
-                {
-                    allignState++;
-                }
+             
                 
                 break;
             
