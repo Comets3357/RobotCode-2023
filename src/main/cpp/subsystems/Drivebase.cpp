@@ -61,7 +61,7 @@ void Drivebase::RobotInit(const RobotData &robotData)
     )
     {
         dbLF.RestoreFactoryDefaults();
-        dbLF.Follow(dbR);
+        dbLF.Follow(dbL);
         dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
         dbLF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
@@ -253,16 +253,16 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             }
         }
 
-        if ((robotData.controlData.mode == MODE_TELEOP_ADVANCED_SA) &&
-            (tempLDrive < 0.08 && tempLDrive > -0.08) &&
-            (tempRDrive < 0.08 && tempRDrive > -0.08) &&
-            (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid))
+        if ((robotData.controlData.mode == MODE_TELEOP_ADVANCED_SA))// &&
+            // (tempLDrive < 0.08 && tempLDrive > -0.08) &&
+            // (tempRDrive < 0.08 && tempRDrive > -0.08) &&
+            // (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid))
         {
             
-
+            frc::SmartDashboard::PutNumber("Step for advanced", allignState);
             //temp
-            double angleOff;
-            double distanceOff;
+            double angleOff = 360;
+            double distanceOff = 5;
 
             switch (allignState)
             {
@@ -279,21 +279,23 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     endPosition = startPosition + (angleOff * degreesToMeters);
                     profileCreated = true;
                     currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
-                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
+                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{1.75}};
 
-                    drivebaseProfile = frc::TrapezoidProfile<units::meters>
-                    {
-                        constraints,
-                        endState,
-                        currentState
-                    };
+                    
 
                 }
+
+                drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                    {
+                        frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{12}, units::acceleration::meters_per_second_squared_t{5}},
+                        endState,
+                        frc::TrapezoidProfile<units::meters>::State{units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meters_per_second_t{currentState.velocity()}}
+                    };
 
                 
 
                 elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
-                //startTime = robotData.timerData.secSinceEnabled;
+                startTime = robotData.timerData.secSinceEnabled;
                 currentState = drivebaseProfile.Calculate(elapsedTime);
                 currentVelocity = currentState.velocity();
 
@@ -319,18 +321,20 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
                     endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
 
-                    drivebaseProfile = frc::TrapezoidProfile<units::meters>
-                    {
-                        constraints,
-                        currentState,
-                        endState
-                    };
+                    
                 }
+
+                drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                {
+                    frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{5}, units::acceleration::meters_per_second_squared_t{5}},
+                    endState,
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meters_per_second_t{currentState.velocity()}}
+                };
 
                 
 
                 elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
-                //startTime = robotData.timerData.secSinceEnabled;
+                startTime = robotData.timerData.secSinceEnabled;
                 currentState = drivebaseProfile.Calculate(elapsedTime);
                 currentVelocity = currentState.velocity();
 
@@ -844,7 +848,7 @@ void Drivebase::sendStartPointChooser()
 
 void Drivebase::DisabledPeriodic(const RobotData &robotData)
 {
-    frc::SmartDashboard::PutNumber("LEFT DISTANCE", dbLEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("LEFT DISTANCE", getEncoderDistance(dbLEncoder.GetPosition()));
     // if (robotData.controllerData.sABtn)
     // {
     //         dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);

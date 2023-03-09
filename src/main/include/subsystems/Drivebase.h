@@ -153,7 +153,7 @@ private:
     // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
     const double mpsToRpm = 11.107086*60.0;// * 0.837*0.9375;//(1.0/((1.0/1.0)*(1.0/4.0)*((4*M_PI)/1)*(1.0/39.0)*(1.0/60.0)));
     const double rotationsToMeters = 1.0/(11.107086);//*0.837*0.9375);//(1.0/4.0)*((4.0*M_PI)/1.0)*(1.0/39.3701);
-    const double degreesToMeters = 1.0;
+    const double degreesToMeters = 1.95/360.0;
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};
@@ -166,7 +166,7 @@ private:
     rev::SparkMaxRelativeEncoder dbREncoder = dbR.GetEncoder();
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
 
-    frc::TrapezoidProfile<units::meters>::Constraints constraints{units::velocity::meters_per_second_t{1}, units::acceleration::meters_per_second_squared_t{1}};
+    frc::TrapezoidProfile<units::meters>::Constraints constraints{units::velocity::meters_per_second_t{5}, units::acceleration::meters_per_second_squared_t{5}};
     double currentVelocity = 0.0;
     frc::TrapezoidProfile<units::meters> drivebaseProfile
     {
