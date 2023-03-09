@@ -61,8 +61,8 @@ WristConeMidPosition = 40
 WristConeHighPosition = 28
 WristCubeMidPosition = 50
 WristCubeHighPosition = 45
-WristConeIntakePosition = 120
-WristUprightConePosition = 130
+WristConeIntakePosition = 115
+WristUprightConePosition = 125
 WristCubeIntakePosition = 202.5
 WristLowPosition = 130
 

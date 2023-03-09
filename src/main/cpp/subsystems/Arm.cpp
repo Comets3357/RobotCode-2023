@@ -650,7 +650,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     if (frc::DriverStation::IsTeleop())
     {
         inAuton = false;
-        if ((std::abs(armWristRelativeEncoder.GetPosition() - 202.5) < 15) && (std::abs(armPivotRelativeEncoder.GetPosition() - 42) < 7))
+        if ((std::abs(armWristRelativeEncoder.GetPosition() - 202.5) < 20) && (std::abs(armPivotRelativeEncoder.GetPosition() - 42) < 10))
         {
             armData.wristAndArmInPositionForBullBarIntake = true;
         }

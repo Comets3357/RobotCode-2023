@@ -4,7 +4,7 @@ VoltageCompensation = 10.5
 # BULL BAR VALUES #
 BullBarRollerInverted = false
 BullBarAbsoluteConversionFactor = 108.43
-BullBarAbsoluteZeroOffset = 53
+BullBarAbsoluteZeroOffset = 51.5
 BullBarRelativeConversionFactor = 0.1904800000000000104
 BullBarPValue = 0.5
 BullBarSmartCurrentLimit = 20
@@ -24,12 +24,13 @@ ElevatorRelativeConversionFactor = 0.496060877648
 ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
-ElevatorHomePosition
-ElevatorConeMidPosition
-ElevatorConeHighPosition
-ElevatorCubeMidPosition
-ElevatorCubeHighPosition
-ElevatorSetupPosition
+ElevatorHomePosition = 10
+ElevaotrLowPosition = 10;
+ElevatorConeMidPosition = 10
+ElevatorConeHighPosition = 50
+ElevatorCubeMidPosition = 24
+ElevatorCubeHighPosition = 50
+ElevatorSetupPosition = 10
 
 # DRIVEBASE VALUES #
 DrivebaseRightInverted = false
@@ -46,17 +47,18 @@ WristCurrentLimit = 20
 WristRelativeInverted = false
 WristAbsoluteInverted = false
 WristAbsoluteConversion = 360
-WristAbsoluteZeroOffset = 9.299444
+WristAbsoluteZeroOffset = 69.337677
 WristRelativeConversion = 4.385430624923864151
 
-WristHomePosition
-WristConeMidPosition
-WristConeHighPosition
-WristCubeMidPosition
-WristCubeHighPosition
-WristConeIntakePosition
-WristUprightConePosition
-WristCubeIntakePosition
+WristHomePosition = 30
+WristConeMidPosition = 40
+WristConeHighPosition = 28
+WristCubeMidPosition = 50
+WristCubeHighPosition = 45
+WristConeIntakePosition = 115
+WristUprightConePosition = 125
+WristCubeIntakePosition = 202.5
+WristLowPosition = 130
 
 PivotPValue = 0.08
 PivotCurrentLimit = 45
@@ -66,11 +68,12 @@ PivotAbsoluteConversion = 360
 PivotAbsoluteZeroOffset = 70.3962
 PivotRelativeConversion = 1.5428571428
 
-PivotHomePosition
-PivotConeMidPosition
-PivotConeHighPosition
-PivotCubeMidPosition
-PivotCubeHighPosition
-PivotConeIntakePosition
-PivotUprightConePosition
-PivotCubeIntakePosition
+PivotHomePosition = 11
+PivotConeMidPosition = 140
+PivotConeHighPosition = 157
+PivotCubeMidPosition = 146
+PivotCubeHighPosition = 146
+PivotConeIntakePosition = 10
+PivotUprightConePosition = 16
+PivotCubeIntakePosition = 42
+PivotLowPosition = 16
