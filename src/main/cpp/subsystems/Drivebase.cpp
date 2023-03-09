@@ -253,16 +253,17 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             }
         }
 
-        if ((robotData.controlData.mode == MODE_TELEOP_ADVANCED_SA))// &&
-            // (tempLDrive < 0.08 && tempLDrive > -0.08) &&
-            // (tempRDrive < 0.08 && tempRDrive > -0.08) &&
-            // (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid))
+        if ((robotData.controlData.mode == MODE_TELEOP_ADVANCED_SA) &&
+            (tempLDrive < 0.08 && tempLDrive > -0.08) &&
+            (tempRDrive < 0.08 && tempRDrive > -0.08) &&
+            (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) &&
+            (robotData.endEffectorData.gamePieceType == CONE))
         {
             
             frc::SmartDashboard::PutNumber("Step for advanced", allignState);
             //temp
-            double angleOff = 360;
-            double distanceOff = 5;
+            angleOff = robotData.limelightData.angleOffFromCenter;
+            distanceOff = robotData.limelightData.distanceFromCenter;
 
             switch (allignState)
             {
@@ -351,6 +352,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
         else
         {
+            allignState = 0;
             setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
         }
     }
