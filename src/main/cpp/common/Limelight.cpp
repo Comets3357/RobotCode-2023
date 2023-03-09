@@ -135,9 +135,13 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
                 {
                     finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+                }    else
+                {
+                    finalAngle = angleFromCenterOfRobot;
                 }
 
                 limelightData.angleOffFromCenter = finalAngle;
+                limelightData.distanceFromCenter = distanceFromCenterOfRobot - highEndEffectorDistanceFromCenter;
             }
             else
             {
@@ -167,8 +171,13 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 {
                     finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
                 }
+                else
+                {
+                    finalAngle = angleFromCenterOfRobot;
+                }
 
                 limelightData.angleOffFromCenter = finalAngle;
+                limelightData.distanceFromCenter = distanceFromCenterOfRobot - highEndEffectorDistanceFromCenter;
             }
 
 
@@ -201,8 +210,14 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
             {
                 finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
             }
+            else
+            {
+                finalAngle = angleFromCenterOfRobot;
+            }
 
             limelightData.angleOffFromCenter = finalAngle;
+            limelightData.distanceFromCenter = distanceFromCenterOfRobot - midEndEffectorDistanceFromCenter;
+            
         }
         else if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) && robotData.endEffectorData.gamePieceType == CUBE)
         {

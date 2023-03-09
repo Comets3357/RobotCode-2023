@@ -191,4 +191,7 @@ private:
 
     bool forward = true;
 
+    double angleOff = 0;
+    double distanceOff = 0;
+
 };
