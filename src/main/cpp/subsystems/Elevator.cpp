@@ -61,6 +61,7 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
     }
 
     frc::SmartDashboard::PutNumber("elevator output current", elevatorMotor.GetOutputCurrent());
+    // frc::SmartDashboard::PutBoolean("Elevator Inverted Relative", elevatorMotor.GetInverted());
 
     // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
     // {
@@ -491,7 +492,25 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
     return elevatorData.elevatorAbsoluteEncoderInitialized;
 }
 
-void Elevator::DisabledPeriodic()
+void Elevator::DisabledPeriodic(const RobotData &robotData, ElevatorData elevatorData)
 {
+    // UpdateData(robotData, elevatorData);
+
+    // frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
+    // forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true;
+    // frc::SmartDashboard::PutBoolean("Elevator Zeroed", elevatorForceZeroed);
+
+    //frc::SmartDashboard::PutBoolean("Elevator Relative Inverse", false);
+    //elevatorRelativeEncoder.SetInverted(frc::SmartDashboard::GetBoolean("Elevator Relative Inverse", false));
     frc::SmartDashboard::PutBoolean("Elevator Inverted Relative", elevatorMotor.GetInverted());
+}
+
+void Elevator::UpdateData(const RobotData &robotData, ElevatorData elevatorData)
+{
+    // frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
+    // forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true;
+    // frc::SmartDashboard::PutBoolean("Elevator Zeroed", elevatorForceZeroed);
+
+    //frc::SmartDashboard::PutBoolean("Elevator Relative Inverse", false);
+    //elevatorRelativeEncoder.SetInverted(frc::SmartDashboard::GetBoolean("Elevator Relative Inverse", false));
 }

@@ -15,7 +15,7 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  frc::DigitalInput robotIndicator{9};
+  // frc::DigitalInput robotIndicator{9};
 timer.RobotInit(robotData.timerData); 
 
   // if (robotIndicator.Get())
@@ -26,7 +26,7 @@ timer.RobotInit(robotData.timerData);
   // {
   //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
   // }
-    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt"); // Change back to comp
 
 
 
@@ -43,7 +43,7 @@ timer.RobotInit(robotData.timerData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  //arduino.RobotInit();
+  // arduino.RobotInit();
   
 
   auton.RobotInit(robotData.controlData, robotData.autonData);
@@ -64,7 +64,7 @@ timer.RobotInit(robotData.timerData);
 void Robot::RobotPeriodic() {
 
   
-  //arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  // arduino.RobotPeriodic(robotData, robotData.arduinoData);
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
@@ -82,7 +82,8 @@ void Robot::RobotPeriodic() {
   arm.RobotPeriodic(robotData, robotData.armData); //0.01
   elevator.RobotPeriodic(robotData, robotData.elevatorData);
   
-  
+  frc::SmartDashboard::PutNumber("Battery Voltage", frc::DriverStation::GetBatteryVoltage());
+
 }
 
 /**
@@ -100,14 +101,14 @@ void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
-  fmt::print("Auto selected: {}\n", m_autoSelected);
+  // fmt::print("Auto selected: {}\n", m_autoSelected);
 
-  gyro.AutonomousInit(robotData.gyroData);
-  auton.AutonomousInit(robotData.autonData);
-  driveBase.AutonomousInit(robotData, robotData.drivebaseData, robotData.autonData);
-  timer.RobotInit(robotData.timerData);
+  // gyro.AutonomousInit(robotData.gyroData);
+  // auton.AutonomousInit(robotData.autonData);
+  // driveBase.AutonomousInit(robotData, robotData.drivebaseData, robotData.autonData);
+  // timer.RobotInit(robotData.timerData);
   
-  timer.EnabledInit(robotData.timerData);
+  // timer.EnabledInit(robotData.timerData);
 
   if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
@@ -123,9 +124,9 @@ void Robot::AutonomousPeriodic() {
     // Default Auto goes here
   }
 
-  timer.EnabledPeriodic(robotData.timerData);
-  gyro.RobotPeriodic(robotData.gyroData);
-  auton.AutonomousPeriodic(robotData, robotData.autonData, robotData.controlData, robotData.controllerData);
+  // timer.EnabledPeriodic(robotData.timerData);
+  // gyro.RobotPeriodic(robotData.gyroData);
+  // auton.AutonomousPeriodic(robotData, robotData.autonData, robotData.controlData, robotData.controllerData);
   //driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
 
 
@@ -138,12 +139,12 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() 
 {
-  controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
+  // controller.TeleopPeriodic(robotData, robotData.controllerData, robotData.controlData);
 }
 
 void Robot::DisabledInit() {
-  driveBase.DisabledInit();
-  bullBar.DisabledInit();
+  // driveBase.DisabledInit();
+  // bullBar.DisabledInit();
 }
 
 void Robot::DisabledPeriodic() {
@@ -152,8 +153,8 @@ void Robot::DisabledPeriodic() {
   bullBar.DisabledPeriodic(robotData, robotData.bullBarData);
   arm.DisabledPeriodic(robotData, robotData.armData);
   driveBase.DisabledPeriodic(robotData);
-  elevator.DisabledPeriodic();
-  endEffector.DisabledPeriodic();
+  elevator.DisabledPeriodic(robotData, robotData.elevatorData);
+  endEffector.DisabledPeriodic(robotData, robotData.endEffectorData);
   
 }
 

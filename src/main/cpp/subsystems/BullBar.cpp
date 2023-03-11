@@ -87,7 +87,6 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
     //     ZeroRelativePosition(bullBarData);
     // }
 
-    // UpdateData(robotData, bullBarData);
     frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
 
     if (forceZero)
@@ -384,10 +383,14 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 
 void BullBar::UpdateData(const RobotData &robotData, BullBarData &bullBarData)
 {
-    // frc::SmartDashboard::PutNumber("bull bar abs position", bullBarSliderAbsoluteEncoder.GetPosition());
-    frc::SmartDashboard::PutBoolean("bull bar abs init successful", bullBarData.bullBarAbsoluteEncoderInitialized);
-    
-    forceZero = frc::SmartDashboard::GetBoolean("FORCE ZERO BULL BAR", 0);
+    // frc::SmartDashboard::PutBoolean("Bullbar Initialized", robotData.bullBarData.bullBarAbsoluteEncoderInitialized);
+    // forceZero = frc::SmartDashboard::GetBoolean("Bullbar Force Zero", false);
+    // frc::SmartDashboard::PutBoolean("Bull Bar Zeroed", bullBarForcedZeroed);
+
+    // frc::SmartDashboard::PutBoolean("Bull Bar Relative Inverse", false);
+    // bullBarSliderRelativeEncoder.SetInverted(frc::SmartDashboard::GetBoolean("Bull Bar Relative Inverse", false));
+    // frc::SmartDashboard::PutBoolean("Bull Bar Absolute Inverse", false);
+    // (frc::SmartDashboard::GetBoolean("Bull Bar Absolute Inverse", false));
 }
 
 /*
@@ -465,6 +468,7 @@ void BullBar::DisabledInit()
 
 void BullBar::DisabledPeriodic(const RobotData &robotData, BullBarData &bullBarData)
 {
+    // UpdateData(robotData, bullBarData);
     frc::SmartDashboard::PutBoolean("Bull Bar Relative Inverted", bullBarSlider.GetInverted());
     frc::SmartDashboard::PutBoolean("Bull Bar Absolute Inverted", bullBarSliderAbsoluteEncoder.GetInverted());
 }

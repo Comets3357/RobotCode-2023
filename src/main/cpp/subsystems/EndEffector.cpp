@@ -269,7 +269,18 @@ void EndEffector::SetEndEffectorRollerSpeed(double rollerSpeed)
     endEffectorRollers.Set(rollerSpeed);
 }
 
-void EndEffector::DisabledPeriodic()
+void EndEffector::DisabledPeriodic(const RobotData &robotData, EndEffectorData endEffectorData)
 {
     frc::SmartDashboard::PutBoolean("End Effector Inverted", endEffectorRollers.GetInverted());
+    if (endEffectorData.gamePieceType == CUBE)
+        endEffectorData.gamePieceShuffleboard = true;
+    else if (endEffectorData.gamePieceType == CONE)
+        endEffectorData.gamePieceShuffleboard = false;
+    frc::SmartDashboard::PutBoolean("Game Piece Type", endEffectorData.gamePieceShuffleboard);
+    frc::SmartDashboard::PutBoolean("Has Gamepiece", endEffectorData.gamePieceType == CONE || endEffectorData.gamePieceType == CUBE);
+    //frc::SmartDashboard::PutBoolean("End Effector Inverse", false);
+    //endEffectorRollers.SetInverted(frc::SmartDashboard::GetBoolean("End Effector Inverse", false));
+    // frc::SmartDashboard::PutBoolean("Cone Beam Break", endEffectorData.gamePieceType == CONE);
+    // frc::SmartDashboard::PutBoolean("Cube Beam Break", endEffectorData.gamePieceType == CUBE);
+
 }

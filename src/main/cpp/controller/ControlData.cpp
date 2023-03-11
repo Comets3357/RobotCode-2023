@@ -4,6 +4,7 @@
 // for updating states of control variables (to be accessed by other subsystems)
 void Controller::updateControlData(const RobotData &robotData, const ControllerData &controllerData, ControlData &controlData)
 {
+    frc::SmartDashboard::PutBoolean("Semi-Auto", controlData.mode == MODE_TELEOP_SA);
     // states:
     controlData.shift = controllerData.sLBumper;
     
