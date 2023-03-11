@@ -35,7 +35,7 @@ ElevatorLowPosition = 10;
 ElevatorConeMidPosition = 24
 ElevatorConeHighPosition = 50
 ElevatorCubeMidPosition = 24
-ElevatorCubeHighPosition = 31
+ElevatorCubeHighPosition = 35
 ElevatorSetupPosition = 10
 
 # DRIVEBASE VALUES #
