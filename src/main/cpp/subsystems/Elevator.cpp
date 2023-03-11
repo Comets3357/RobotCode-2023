@@ -248,7 +248,15 @@ bool Elevator::IsAbsoluteEncoderInitialized(ElevatorData &elevatorData)
 
 void Elevator::UpdateData(const RobotData &robotData, ElevatorData elevatorData)
 {
-    frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
-    forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true;
-    frc::SmartDashboard::PutBoolean("Elevator Zeroed", elevatorForceZeroed);
+    // frc::SmartDashboard::PutBoolean("Elevator Initialized", robotData.elevatorData.elevatorAbsoluteEncoderInitialized);
+    // forceZeroElevator = frc::SmartDashboard::GetBoolean("Elevator Force Zero", false) == true;
+    // frc::SmartDashboard::PutBoolean("Elevator Zeroed", elevatorForceZeroed);
+
+    frc::SmartDashboard::PutBoolean("Elevator Relative Inverse", false);
+    elevatorRelativeEncoder.SetInverted(frc::SmartDashboard::GetBoolean("Elevator Relative Inverse", false));
+}
+
+void Elevator::DisabledPeriodic(const RobotData &robotData, ElevatorData elevatorData)
+{
+    UpdateData(robotData, elevatorData);
 }
