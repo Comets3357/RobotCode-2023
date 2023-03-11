@@ -77,7 +77,7 @@ void Auton::sendAutonSelectionChooser() {
     autonChooser.AddOption("testplace", "testplace");
 
     //autonChooser.AddOption("TwoRedBumpClimb", "TwoRedBumpClimb"); // 10
-    //autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
+    autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
 
     autonChooser.AddOption("RedChargeStation", "RedChargeStation"); // 12
     autonChooser.AddOption("RedChargeStation1.5", "RedChargeStation1.5"); //13
@@ -124,7 +124,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     }
     else if (autonData.autonRoutineName == "TwoRedBumpNoClimb" || autonData.autonRoutineName == "TwoBlueBumpNoClimb") // 12 - TEST 
     {
-        BumpNoClimb(robotData, controlData, controllerData);
+        //BumpNoClimb(robotData, controlData, controllerData);
     }
     else if (autonData.autonRoutineName == "testplace")
     {

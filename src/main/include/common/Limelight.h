@@ -56,14 +56,14 @@ private:
     double angleOff = 0;
 
     double aprilTagHeight = 13.0;
-    double lowerPollHeight = 0; // need to tune
-    double higherPollHeight = 0; // need to tune
+    double lowerPollHeight = 22.125; // need to tune
+    double higherPollHeight = 41.875; // need to tune
 
     double limelightHeight = 11.03;
 
     double cameraDistanceFromCenter = 11.84;
-    double midEndEffectorDistanceFromCenter = 13 + 0; // need to tune
-    double highEndEffectorDistanceFromCenter = 13 + 0; // need to tune
+    double midEndEffectorDistanceFromCenter = 13 + 12; // need to tune
+    double highEndEffectorDistanceFromCenter = 13 + 38; // need to tune
     
     double limelightAngle = 25;
 
