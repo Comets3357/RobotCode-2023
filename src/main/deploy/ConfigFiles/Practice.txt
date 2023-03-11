@@ -4,12 +4,18 @@ VoltageCompensation = 10.5
 # BULL BAR VALUES #
 BullBarRollerInverted = false
 BullBarAbsoluteConversionFactor = 108.43
-BullBarAbsoluteZeroOffset = 51.5
+BullBarAbsoluteZeroOffset = 51.150761
 BullBarRelativeConversionFactor = 0.1904800000000000104
 BullBarPValue = 0.5
 BullBarSmartCurrentLimit = 20
 BullBarSliderInvertedRelative = true
 BullBarSliderInvertedAbsolute = true
+
+BullBarCubePosition = 12.5
+BullBarConePosition = 17.208
+BullBarFlipConePosition = 16
+BullBarMinPosition = 10
+BullBarMaxPosition = 28
 
 # END EFFECTOR VALUES #
 EndEffectorInvertRollers = true
@@ -19,14 +25,14 @@ EndEffectorCurrentLimit = 45
 ElevatorInvertedAbsolute = true
 ElevatorInvertedRelative = true
 ElevatorCurrentLimit = 50
-ElevatorPValue = 0.153
+ElevatorPValue = 0.5
 ElevatorRelativeConversionFactor = 0.496060877648
 ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
 ElevatorHomePosition = 10
-ElevaotrLowPosition = 10;
-ElevatorConeMidPosition = 10
+ElevatorLowPosition = 10;
+ElevatorConeMidPosition = 24
 ElevatorConeHighPosition = 50
 ElevatorCubeMidPosition = 24
 ElevatorCubeHighPosition = 50
@@ -47,12 +53,12 @@ WristCurrentLimit = 20
 WristRelativeInverted = false
 WristAbsoluteInverted = false
 WristAbsoluteConversion = 360
-WristAbsoluteZeroOffset = 69.337677
+WristAbsoluteZeroOffset = 72.337677
 WristRelativeConversion = 4.385430624923864151
 
 WristHomePosition = 30
-WristConeMidPosition = 40
-WristConeHighPosition = 28
+WristConeMidPosition = 10
+WristConeHighPosition = 35
 WristCubeMidPosition = 50
 WristCubeHighPosition = 45
 WristConeIntakePosition = 115
@@ -69,7 +75,7 @@ PivotAbsoluteZeroOffset = 70.3962
 PivotRelativeConversion = 1.5428571428
 
 PivotHomePosition = 11
-PivotConeMidPosition = 140
+PivotConeMidPosition = 145
 PivotConeHighPosition = 157
 PivotCubeMidPosition = 146
 PivotCubeHighPosition = 146

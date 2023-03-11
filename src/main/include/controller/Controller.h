@@ -73,6 +73,8 @@ struct ControlData
     bool mMovePivot;
     bool mMoveWrist;
 
+    bool saMoveBullBar;
+
     bool mForceZeroWrist;
     bool mForceZeroPivot;
 

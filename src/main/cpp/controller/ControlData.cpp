@@ -129,6 +129,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     //MANUAL:
     controlData.mMoveElevator = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && controlData.shift;
     controlData.mForceZeroElevator = (controllerData.sRStickBtn) && !controlData.shift;
+
+    controlData.saMoveBullBar = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && !controlData.shift;
 }
 
 

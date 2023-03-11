@@ -46,7 +46,12 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 
     endEffectorData.pastReadOfGamePiece = endEffectorData.gamePieceType;
 
-    if (cubeLimitSwitch.Get())
+    if (coneLimitSwitch.Get())
+    {
+        endEffectorData.lastPieceType = CONE;
+        endEffectorData.gamePieceType = CONE;
+    }
+    else if (cubeLimitSwitch.Get())
     {
         if (robotData.armData.wristSafeCubeDetectionPosition)
         {
@@ -63,11 +68,7 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             endEffectorData.gamePieceType = NONE;
         }
     }
-    else if (coneLimitSwitch.Get())
-    {
-        endEffectorData.lastPieceType = CONE;
-        endEffectorData.gamePieceType = CONE;
-    }
+    
     else if (!robotData.controlData.saConeIntake || !robotData.controlData.saCubeIntake || !robotData.controlData.saElevatorSetHumanPlayerPosition || !robotData.controlData.saUprightConeIntake)
     {
         
@@ -127,7 +128,7 @@ void EndEffector::AdvancedSemiAuto(const RobotData &robotData, EndEffectorData &
                 SetEndEffectorRollerSpeed(-0.05);
                 break;
             case CUBE:
-                SetEndEffectorRollerSpeed(0.08);
+                SetEndEffectorRollerSpeed(0.04);
                 break;
             case NONE:
                 SetEndEffectorRollerSpeed(0.0);

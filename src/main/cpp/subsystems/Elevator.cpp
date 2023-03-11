@@ -431,7 +431,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
 
     elevatorProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{240_deg_per_s, 80_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{260_deg_per_s, 120_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{elevatorProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };

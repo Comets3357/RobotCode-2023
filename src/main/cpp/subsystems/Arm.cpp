@@ -246,7 +246,7 @@ void Arm::AdvancedSemiAuto(const RobotData &robotData, ArmData &armData)
         if (robotData.controlData.saSetUpPosition)
         {
             RotateWrist(30, robotData, 0);
-            RotatePivot(80, robotData, 0);
+            RotatePivot(52, robotData, 0);
         }
         switch (robotData.endEffectorData.gamePieceType)
         {
@@ -700,7 +700,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         if (robotData.controlData.saSetUpPosition)
         {
             RotateWrist(30, robotData, 0);
-            RotatePivot(80, robotData, 0);
+            RotatePivot(52, robotData, 0);
         }
         switch (robotData.endEffectorData.gamePieceType)
         {

@@ -333,7 +333,11 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
     // {
     //     bullBarRollers.Set(bullBarRollerExtendedSpeed); 
     // }
-    
+
+    if (robotData.controlData.saMoveBullBar)
+    {
+        bullBarRollers.Set(robotData.controllerData.sRYStick);
+    }
 }
 
 void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)

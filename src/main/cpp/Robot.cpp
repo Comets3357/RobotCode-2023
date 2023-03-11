@@ -26,7 +26,7 @@ timer.RobotInit(robotData.timerData);
   // {
   //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
   // }
-    configurationFileReader.ReadFile(robotData, robotData.configData, "Practice.txt");
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
 
 
 
