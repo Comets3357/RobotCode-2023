@@ -489,8 +489,29 @@ double tempLDrive = 0;
         }
         
     }
-    
+    else if (drivebaseData.driveMode == DRIVEMODE_HIT_CHARGE_STATION)
+    {
+        if (forward)
+        {
+            setVelocity(4, 4);
 
+            if (std::abs(robotData.gyroData.rawRoll) > 5)
+            {
+                setVelocity(0, 0);
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+        }
+        else
+        {
+            setVelocity(-4, -4);
+
+            if (std::abs(robotData.gyroData.rawRoll) > 5)
+            {
+                setVelocity(0,0);
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+        }
+    }
     else if (drivebaseData.driveMode == DRIVEMODE_AUTO_BALANCE)
         {
             tempLDrive = gyroData.rawRoll*-0.008;
@@ -690,7 +711,16 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
         {
             drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
         }
-
+        else if (trajectoryName.substr(0,24) == "hitChargeStationForward")
+        {
+            forward = false;
+            drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+        }
+        else if(trajectoryName.substr(0,25) == "hitChargeStationBackward")
+        {
+            forward = false;
+            drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+        }
         else 
         {
             drivebaseData.driveMode = DRIVEMODE_TRAJECTORY; 
