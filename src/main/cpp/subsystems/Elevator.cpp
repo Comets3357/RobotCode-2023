@@ -470,10 +470,10 @@ void Elevator::ForceZeroElevator()
 
 void Elevator::ZeroRelativePosition(ElevatorData &elevatorData)
 {
-    if (IsAbsoluteEncoderInitialized(elevatorData))
-    {
-        elevatorRelativeEncoder.SetPosition(elevatorAbsoluteEncoder.GetPosition());
-    }
+    // if (IsAbsoluteEncoderInitialized(elevatorData))
+    // {
+    //     elevatorRelativeEncoder.SetPosition(elevatorAbsoluteEncoder.GetPosition());
+    // }
     
 }
 

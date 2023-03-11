@@ -17,11 +17,13 @@ void EndEffector::RobotInit(const RobotData &robotData)
         endEffectorRollers.SetSmartCurrentLimit(robotData.configData.endEffectorConfigData.currentLimit);
         endEffectorRollers.EnableVoltageCompensation(robotData.configData.endEffectorConfigData.voltageComp);
         
-        endEffectorRollers.BurnFlash();
+        
     // }
 
     coneLimitSwitch.EnableLimitSwitch(false);
     cubeLimitSwitch.EnableLimitSwitch(false);
+
+    endEffectorRollers.BurnFlash();
 
 }
 
