@@ -440,7 +440,7 @@ void Arm::AdvancedSemiAuto(const RobotData &robotData, ArmData &armData)
             }
             else if (!robotData.bullBarData.bullBarUprightConeSafePosition && (uprightConeIntakeToggle != armData.uprightConeIntakeRunning))
             {
-                RotateWrist(50, robotData, 0);
+                RotateWrist(30, robotData, 0);
             }
             bullBarIn = robotData.bullBarData.bullBarUprightConeSafePosition;
         }

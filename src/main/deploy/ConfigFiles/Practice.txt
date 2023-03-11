@@ -35,7 +35,7 @@ ElevatorLowPosition = 10;
 ElevatorConeMidPosition = 24
 ElevatorConeHighPosition = 50
 ElevatorCubeMidPosition = 24
-ElevatorCubeHighPosition = 50
+ElevatorCubeHighPosition = 31
 ElevatorSetupPosition = 10
 
 # DRIVEBASE VALUES #
@@ -58,9 +58,9 @@ WristRelativeConversion = 4.385430624923864151
 
 WristHomePosition = 30
 WristConeMidPosition = 10
-WristConeHighPosition = 35
+WristConeHighPosition = 28
 WristCubeMidPosition = 50
-WristCubeHighPosition = 45
+WristCubeHighPosition = 50
 WristConeIntakePosition = 115
 WristUprightConePosition = 125
 WristCubeIntakePosition = 202.5
@@ -75,10 +75,10 @@ PivotAbsoluteZeroOffset = 70.3962
 PivotRelativeConversion = 1.5428571428
 
 PivotHomePosition = 11
-PivotConeMidPosition = 145
-PivotConeHighPosition = 157
+PivotConeMidPosition = 150
+PivotConeHighPosition = 154j
 PivotCubeMidPosition = 146
-PivotCubeHighPosition = 146
+PivotCubeHighPosition = 125
 PivotConeIntakePosition = 10
 PivotUprightConePosition = 16
 PivotCubeIntakePosition = 42

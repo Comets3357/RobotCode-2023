@@ -228,11 +228,11 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
         }
     }
 
-    if (robotData.controllerData.sLYStick > 0.9)
+    if (robotData.controllerData.sLYStick > 0.5)
     {
         SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
     }
-    else if (robotData.controllerData.sLYStick < -0.9)
+    else if (robotData.controllerData.sLYStick < -0.5)
     {
         SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
     }
