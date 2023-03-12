@@ -493,19 +493,19 @@ double tempLDrive = 0;
     {
         if (forward)
         {
-            setVelocity(4, 4);
+            setVelocity(4+(gyroData.rawYaw*0.05), 4-(gyroData.rawYaw*0.05));
 
-            if (std::abs(robotData.gyroData.rawRoll) > 5)
+            if (robotData.gyroData.rawRoll < -5)
             {
                 setVelocity(0, 0);
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
         }
-        else
+        if (!forward)
         {
-            setVelocity(-4, -4);
+            setVelocity(-4+(gyroData.rawYaw*0.05), -4-(gyroData.rawYaw*0.05));
 
-            if (std::abs(robotData.gyroData.rawRoll) > 5)
+            if (robotData.gyroData.rawRoll > 17.5)
             {
                 setVelocity(0,0);
                 getNextAutonStep(robotData, drivebaseData, autonData);
@@ -670,8 +670,9 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
     if (autonData.autonStep < autonData.pathGroup.size()) 
     {
         // frc::SmartDashboard::PutString("getNextAutonStep()", "b");
-        // frc::SmartDashboard::PutNumber("autonStep", autonData.autonStep);
+         frc::SmartDashboard::PutNumber("autonStep", autonData.autonStep);
         // frc::SmartDashboard::PutString("robotData.autonData.pathGroup[robotData.autonData.autonStep", autonData.pathGroup[autonData.autonStep]);
+
 
         std::string trajectoryName = autonData.pathGroup.at(autonData.autonStep);
         frc::SmartDashboard::PutString("K", trajectoryName);
@@ -707,19 +708,29 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
             drivebaseData.driveMode = DRIVEMODE_CHARGE_STATION_TRAVERSE;
             return;
         }
+        else if (trajectoryName.substr(0,13) == "turnToHeading")
+        {
+            drivebaseData.driveMode = DRIVEMODE_TURNINPLACE;
+            turnInPlaceDegrees = std::stod(trajectoryName.substr(14, trajectoryName.length()));
+
+            return;
+        }
         else if (trajectoryName.substr(0,7) == "balance")
         {
             drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
+            return;
         }
-        else if (trajectoryName.substr(0,24) == "hitChargeStationForward")
+        else if (trajectoryName.substr(0,23) == "hitChargeStationForward")
+        {
+            forward = true;
+            drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+            return;
+        }
+        else if (trajectoryName.substr(0,24) == "hitChargeStationBackward")
         {
             forward = false;
             drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
-        }
-        else if(trajectoryName.substr(0,25) == "hitChargeStationBackward")
-        {
-            forward = false;
-            drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+            return;
         }
         else 
         {

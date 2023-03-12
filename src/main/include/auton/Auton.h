@@ -62,6 +62,7 @@ private:
     void Bump(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     void LoadingNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
     void BumpNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
+    void Traverse(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 
     // void sixBallC(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData);
 };
