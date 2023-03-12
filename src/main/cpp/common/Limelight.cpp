@@ -108,13 +108,18 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     try
     {
 
-        if (robotData.endEffectorData.gamePieceType != NONE)
+        //if (robotData.endEffectorData.gamePieceType != NONE)
+        // {
+        //     LimelightHelpers::setPipelineIndex("", 1);
+        // }
+        // else
+        // {
+        //     LimelightHelpers::setPipelineIndex("", 0);
+        // }
+
+        if (frc::DriverStation::IsTeleop())
         {
-            LimelightHelpers::setPipelineIndex("", 1);
-        }
-        else
-        {
-            LimelightHelpers::setPipelineIndex("", 0);
+            LimelightHelpers::setPipelineIndex("", 3);
         }
 
 
