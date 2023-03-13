@@ -6,7 +6,7 @@ void Drivebase::RobotInit(const RobotData &robotData)
 {
     if (
         dbL.GetInverted() != robotData.configData.drivebaseConfigData.leftInverted ||
-        dbLPIDController.GetP() != 0.195 / mpsToRpm ||
+        dbLPIDController.GetP() != 0.077396 / mpsToRpm ||
         dbLPIDController.GetFF() != 0.051094 / mpsToRpm ||
         dbL.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake
     )
@@ -16,7 +16,7 @@ void Drivebase::RobotInit(const RobotData &robotData)
         dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
         dbL.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-        dbLPIDController.SetP(0.195 / mpsToRpm);
+        dbLPIDController.SetP(0.077396 / mpsToRpm);
         dbLPIDController.SetFF(0.051094 / mpsToRpm);
         dbLPIDController.SetD(0);
 
@@ -25,7 +25,7 @@ void Drivebase::RobotInit(const RobotData &robotData)
 
     if (
         dbR.GetInverted() != robotData.configData.drivebaseConfigData.rightInverted ||
-        dbRPIDController.GetP() != 0.195 / mpsToRpm ||
+        dbRPIDController.GetP() != 0.077396 / mpsToRpm ||
         dbRPIDController.GetFF() != 0.051094 / mpsToRpm ||
         dbR.GetIdleMode() != rev::CANSparkMax::IdleMode::kBrake
     )
@@ -35,7 +35,7 @@ void Drivebase::RobotInit(const RobotData &robotData)
         dbR.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
         dbR.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
-        dbRPIDController.SetP(0.195 / mpsToRpm);
+        dbRPIDController.SetP(0.077396 / mpsToRpm);
         dbRPIDController.SetFF(0.051094 / mpsToRpm);
         dbRPIDController.SetD(0);
 
