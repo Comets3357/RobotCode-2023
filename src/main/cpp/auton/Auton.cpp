@@ -67,7 +67,7 @@ void Auton::sendAutonSelectionChooser() {
     autonChooser.AddOption("TwoBlueLoadingNoClimb", "TwoBlueLoadingNoClimb"); // 4
 
     //autonChooser.AddOption("TwoBlueBumpClimb", "TwoBlueBumpClimb"); // 5
-    //autonChooser.AddOption("TwoBlueBumpNoClimb", "TwoBlueBumpNoClimb"); // 6
+    autonChooser.AddOption("TwoBlueBumpNoClimb", "TwoBlueBumpNoClimb"); // 6
 
     // autonChooser.AddOption("BlueChargeStation", "BlueChargeStation"); // 7
 
@@ -77,7 +77,7 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("testplace", "testplace");
 
     //autonChooser.AddOption("TwoRedBumpClimb", "TwoRedBumpClimb"); // 10
-    // autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
+    autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
 
     // autonChooser.AddOption("RedChargeStation", "RedChargeStation"); // 12
     autonChooser.AddOption("PlaceAndBalance", "PlaceAndBalance"); //13
@@ -731,11 +731,11 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7) step++;
+        if (sec > 7.1) step++;
         break;
     case(9):
         controlData.saIntakeBackwards = true;
-        if (sec > 7.25) step++;
+        if (sec > 7.35) step++;
         break;
     case(10):
         controlData.saIntakeBackwards = false;
@@ -744,7 +744,7 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(11):
         controlData.saHomePosition = false;
-        if (sec > 8.3)step++;
+        if (sec > 8.7)step++;
         break;
     case(12):
         controlData.saCubeIntake = true;
