@@ -752,7 +752,7 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(13):
         controlData.saCubeIntake = false;
-        if (sec > 13.8) step++;
+        if (sec > 14.1) step++;
         break;
     case 14:
         controlData.saPositionMid = true;
@@ -760,7 +760,7 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case 15:
         controlData.saPositionMid = false;
-        if (sec > 14.2) step++;
+        if (sec > 14.4) step++;
         break;
     case 16:
         controlData.saIntakeBackwards = true;
