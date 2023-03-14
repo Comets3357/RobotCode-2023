@@ -84,6 +84,9 @@ void Auton::sendAutonSelectionChooser() {
 
     autonChooser.AddOption("TraverseChargeStation", "TraverseChargeStation");
 
+    autonChooser.AddOption("ThreeRedLoading", "ThreeRedLoading");
+    autonChooser.AddOption("ThreeBlueLoading", "ThreeBlueLoading");
+
     frc::SmartDashboard::PutData("Select Auton:", &autonChooser);
 }
 
@@ -136,6 +139,10 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     {
         Traverse(robotData, controlData, controllerData);
     }
+    else if (autonData.autonRoutineName == "ThreeRedLoading" || autonData.autonRoutineName == "ThreeBlueLoading")
+    {
+        ThreeLoading(robotData, controlData, controllerData);
+    }
 
 
     if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
@@ -145,6 +152,92 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
         controlData.saUprightConeIntake = false;
     }
 
+}
+
+void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
+{
+    double sec = robotData.timerData.secSinceEnabled - 0.4;
+
+    switch(step)
+    {
+    case (0):   
+        controlData.saPositionHigh = true;
+        step++;
+        break;
+    case(1):
+        controlData.saPositionHigh = false;
+        if (sec > 1.0) step++;
+        break;
+    case(2):
+        controlData.saIntakeBackwards = true;
+        if (sec > 1.4) step++;
+        break;
+    case(3): 
+        controlData.saHomePosition = true;
+        step++;
+        break;
+    case(4):
+        controlData.saHomePosition = false;
+        break;
+        if (sec > 1.5) controlData.saIntakeBackwards = false;
+        if (sec > 2) step++;
+        break;
+    case(5):
+        controlData.saCubeIntake = true;
+        if (sec > 5.2) step++;
+        break;
+        case(6):
+        controlData.saCubeIntake = false;
+        if (sec > 7.1) step++;
+        break;
+    case (7):
+        controlData.saPositionHigh = true;
+        step++;
+        break;
+    case(8):
+        controlData.saPositionHigh = false;
+        if (sec > 7.75) step++;
+        break;
+    case(9):
+        controlData.saIntakeBackwards = true;
+        if (sec > 8.0) step++;
+        break;
+    case(10):
+        controlData.saHomePosition = true;
+        step++;
+        break;
+    case(11):
+        if (sec > 8.2)
+        {
+            controlData.saIntakeBackwards = false;
+        }
+        controlData.saHomePosition = false;
+        if (sec > 8.5)step++;
+        break;
+    case(12):
+        controlData.saCubeIntake = true;
+        if (sec > 11.5) step++;
+        break;
+    case(13):
+        controlData.saCubeIntake = false;
+        if (sec > 13.45) step++;
+        break;
+    case 14:
+        controlData.saPositionMid = true;
+        step++;
+        break;
+    case 15:
+        controlData.saPositionMid = false;
+        if (sec > 14.1) step++;
+        break;
+    case 16:
+        controlData.saIntakeBackwards = true;
+        if (sec > 14.5) step++;
+        break;
+    case 17:
+        controlData.saIntakeBackwards = false;
+        break;
+    }
 }
 
 void Auton::Traverse(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
