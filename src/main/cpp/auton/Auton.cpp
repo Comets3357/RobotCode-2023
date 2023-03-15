@@ -178,7 +178,7 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         break;
     case(4):
         controlData.saHomePosition = false;
-        break;
+        
         if (sec > 1.5) controlData.saIntakeBackwards = false;
         if (sec > 2) step++;
         break;
