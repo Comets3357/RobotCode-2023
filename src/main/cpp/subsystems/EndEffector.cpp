@@ -194,7 +194,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
         switch (robotData.endEffectorData.lastPieceType)
         {
             case CONE:
-                SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);  
+                SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed * 0.8);  
                 break;
             case CUBE:
                 SetEndEffectorRollerSpeed(-0.4);

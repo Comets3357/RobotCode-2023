@@ -31,9 +31,9 @@ ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
 ElevatorHomePosition = 10
-ElevatorLowPosition = 10;
+ElevatorLowPosition = 10
 ElevatorConeMidPosition = 24
-ElevatorConeHighPosition = 48
+ElevatorConeHighPosition = 46
 ElevatorCubeMidPosition = 10
 ElevatorCubeHighPosition = 43
 ElevatorSetupPosition = 10
