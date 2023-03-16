@@ -62,7 +62,7 @@ WristConeHighPosition = 23
 WristCubeMidPosition = 60
 WristCubeHighPosition = 57
 WristConeIntakePosition = 115
-WristUprightConePosition = 125
+WristUprightConePosition = 123
 WristCubeIntakePosition = 202.5
 WristLowPosition = 130
 
@@ -80,6 +80,6 @@ PivotConeHighPosition = 150
 PivotCubeMidPosition = 146
 PivotCubeHighPosition = 135
 PivotConeIntakePosition = 10
-PivotUprightConePosition = 16
+PivotUprightConePosition = 20
 PivotCubeIntakePosition = 42
 PivotLowPosition = 16
