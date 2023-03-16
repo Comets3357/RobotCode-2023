@@ -197,7 +197,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed * 0.8);  
                 break;
             case CUBE:
-                SetEndEffectorRollerSpeed(-0.4);
+                SetEndEffectorRollerSpeed(-0.6);
                 break;
         }
         // if (endEffectorData.gamePieceType == NONE)
