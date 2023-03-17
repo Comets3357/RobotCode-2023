@@ -742,7 +742,7 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         break;
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7.2) step++;
+        if (sec > 7.05) step++;
         break;
     case(9):
         controlData.saIntakeBackwards = true;

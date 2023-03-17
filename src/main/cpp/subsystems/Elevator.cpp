@@ -452,12 +452,15 @@ void Elevator::EnableSoftLimits()
 
     elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, elevatorMinPosition + 0.05);
     elevatorMotor.SetSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, elevatorMaxPosition - 0.1);
+    softLimitsEnabled  = true;
 }
 
 void Elevator::DisableSoftLimits() 
 {
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kReverse, false);
     elevatorMotor.EnableSoftLimit(rev::CANSparkMax::SoftLimitDirection::kForward, false);
+
+    softLimitsEnabled  = false;
 }
 
 void Elevator::ForceZeroElevator()
