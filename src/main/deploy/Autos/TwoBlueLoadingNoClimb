@@ -1,7 +1,7 @@
-break 1.5
-TwoBlueBumpOne
-TwoBlueBumpTwo
-break 0.75
-TwoBlueBumpThree
-TwoBlueBumpFive
-TwoBlueBumpSix
+break 2.5
+TwoBlueLoadingOne
+TwoBlueLoadingTwo
+break 0.9
+TwoBlueloadingThree
+turnInPlace 20
+TwoBlueLoadingFive

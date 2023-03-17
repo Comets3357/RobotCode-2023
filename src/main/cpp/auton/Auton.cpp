@@ -67,7 +67,7 @@ void Auton::sendAutonSelectionChooser() {
     autonChooser.AddOption("TwoBlueLoadingNoClimb", "TwoBlueLoadingNoClimb"); // 4
 
     //autonChooser.AddOption("TwoBlueBumpClimb", "TwoBlueBumpClimb"); // 5
-    autonChooser.AddOption("TwoBlueBumpNoClimb", "TwoBlueBumpNoClimb"); // 6
+    // autonChooser.AddOption("TwoBlueBumpNoClimb", "TwoBlueBumpNoClimb"); // 6
 
     // autonChooser.AddOption("BlueChargeStation", "BlueChargeStation"); // 7
 
@@ -77,15 +77,15 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("testplace", "testplace");
 
     //autonChooser.AddOption("TwoRedBumpClimb", "TwoRedBumpClimb"); // 10
-    autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
+    // autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
 
     // autonChooser.AddOption("RedChargeStation", "RedChargeStation"); // 12
     autonChooser.AddOption("PlaceAndBalance", "PlaceAndBalance"); //13
 
     autonChooser.AddOption("TraverseChargeStation", "TraverseChargeStation");
 
-    autonChooser.AddOption("ThreeRedLoading", "ThreeRedLoading");
-    autonChooser.AddOption("ThreeBlueLoading", "ThreeBlueLoading");
+    // autonChooser.AddOption("ThreeRedLoading", "ThreeRedLoading");
+    // autonChooser.AddOption("ThreeBlueLoading", "ThreeBlueLoading");
 
     frc::SmartDashboard::PutData("Select Auton:", &autonChooser);
 }
