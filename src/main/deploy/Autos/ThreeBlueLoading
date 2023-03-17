@@ -1,7 +1,7 @@
-break 1.6
+break 2.15
 TwoBlueLoadingOne
 TwoBlueLoadingTwo
-break 0.9
+break 1.05
 TwoBlueLoadingThree
-turnInPlace -20
+turnInPlace 20
 ThreeBlueLoadingOne

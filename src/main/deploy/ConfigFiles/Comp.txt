@@ -32,7 +32,7 @@ ElevatorAbsoluteZeroOffset = 23.29
 
 ElevatorHomePosition = 10
 ElevatorLowPosition = 10
-ElevatorConeMidPosition = 24
+ElevatorConeMidPosition = 22
 ElevatorConeHighPosition = 46
 ElevatorCubeMidPosition = 10
 ElevatorCubeHighPosition = 43
@@ -75,11 +75,11 @@ PivotAbsoluteZeroOffset = 339.156818
 PivotRelativeConversion = 1.5428571428
 
 PivotHomePosition = 11
-PivotConeMidPosition = 150
+PivotConeMidPosition = 154
 PivotConeHighPosition = 150
 PivotCubeMidPosition = 146
 PivotCubeHighPosition = 135
 PivotConeIntakePosition = 10
-PivotUprightConePosition = 20
+PivotUprightConePosition = 22
 PivotCubeIntakePosition = 42
 PivotLowPosition = 16

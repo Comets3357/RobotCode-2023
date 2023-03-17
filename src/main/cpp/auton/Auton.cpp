@@ -156,9 +156,9 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 
 void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled - 0.4;
+     double sec = robotData.timerData.secSinceEnabled-0.8;
 
-    switch(step)
+    switch (step)
     {
     case (0):   
         controlData.saPositionHigh = true;
@@ -166,11 +166,11 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         break;
     case(1):
         controlData.saPositionHigh = false;
-        if (sec > 1.0) step++;
+        if (sec > 0.6) step++;
         break;
     case(2):
         controlData.saIntakeBackwards = true;
-        if (sec > 1.4) step++;
+        if (sec > 1.15) step++;
         break;
     case(3): 
         controlData.saHomePosition = true;
@@ -178,17 +178,16 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         break;
     case(4):
         controlData.saHomePosition = false;
-        
-        if (sec > 1.5) controlData.saIntakeBackwards = false;
-        if (sec > 2) step++;
+        if (sec > 1.35) controlData.saIntakeBackwards = false;
+        if (sec > 1.85)step++;
         break;
     case(5):
         controlData.saCubeIntake = true;
-        if (sec > 5.2) step++;
+        if (sec > 4.35) step++;
         break;
         case(6):
         controlData.saCubeIntake = false;
-        if (sec > 7.1) step++;
+        if (sec > 5.85) step++;
         break;
     case (7):
         controlData.saPositionHigh = true;
@@ -196,31 +195,33 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         break;
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7.75) step++;
+        if (sec > 7.05) step++;
         break;
     case(9):
         controlData.saIntakeBackwards = true;
-        if (sec > 8.0) step++;
+        if (sec > 7.4) step++;
         break;
     case(10):
+
+        
         controlData.saHomePosition = true;
         step++;
         break;
     case(11):
-        if (sec > 8.2)
+        if (sec > 7.65)
         {
             controlData.saIntakeBackwards = false;
         }
         controlData.saHomePosition = false;
-        if (sec > 8.5)step++;
+        if (sec > 8.15)step++;
         break;
     case(12):
         controlData.saCubeIntake = true;
-        if (sec > 11.5) step++;
+        if (sec > 11.15) step++;
         break;
     case(13):
         controlData.saCubeIntake = false;
-        if (sec > 13.45) step++;
+        if (sec > 13.0) step++;
         break;
     case 14:
         controlData.saPositionMid = true;
@@ -228,11 +229,12 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         break;
     case 15:
         controlData.saPositionMid = false;
-        if (sec > 14.1) step++;
+        if (sec > 13.7) step++;
+        // step++;
         break;
     case 16:
         controlData.saIntakeBackwards = true;
-        if (sec > 14.5) step++;
+        if (sec > 14.18) step++;
         break;
     case 17:
         controlData.saIntakeBackwards = false;
