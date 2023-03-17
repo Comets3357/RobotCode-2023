@@ -119,7 +119,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mBullBarExtension = (controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08) && !controlData.shift;
     controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
-    controlData.mForceZeroBullBar = (controllerData.sLStickBtn) && !controlData.shift;
+    controlData.mForceZeroBullBar = (controllerData.sRStickBtn) && !controlData.shift;
     controlData.mForceZeroPivot = (controllerData.sRStickBtn) && controlData.shift;
 
     controlData.saConeCall = (controllerData.sRCenterBtn) && !controlData.shift;
@@ -129,7 +129,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 // ELEVATOR:
     //MANUAL:
     controlData.mMoveElevator = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && controlData.shift;
-    controlData.mForceZeroElevator = (controllerData.sRStickBtn) && !controlData.shift;
+    controlData.mForceZeroElevator = (controllerData.sLStickBtn) && !controlData.shift;
 
     controlData.saMoveBullBar = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && !controlData.shift;
 }
