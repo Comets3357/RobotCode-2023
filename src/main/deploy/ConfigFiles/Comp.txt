@@ -33,9 +33,9 @@ ElevatorAbsoluteZeroOffset = 23.29
 ElevatorHomePosition = 10
 ElevatorLowPosition = 10
 ElevatorConeMidPosition = 22
-ElevatorConeHighPosition = 44
+ElevatorConeHighPosition = 46
 ElevatorCubeMidPosition = 10
-ElevatorCubeHighPosition = 43
+ElevatorCubeHighPosition = 44
 ElevatorSetupPosition = 10
 
 # DRIVEBASE VALUES #
@@ -61,7 +61,7 @@ WristConeMidPosition = 10
 WristConeHighPosition = 23
 WristCubeMidPosition = 60
 WristCubeHighPosition = 57
-WristConeIntakePosition = 115
+WristConeIntakePosition = 111
 WristUprightConePosition = 123
 WristCubeIntakePosition = 202.5
 WristLowPosition = 130
