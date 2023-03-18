@@ -82,7 +82,7 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("RedChargeStation", "RedChargeStation"); // 12
     autonChooser.AddOption("PlaceAndBalance", "PlaceAndBalance"); //13
 
-    autonChooser.AddOption("TraverseChargeStation", "TraverseChargeStation");
+    // autonChooser.AddOption("TraverseChargeStation", "TraverseChargeStation");
 
     // autonChooser.AddOption("ThreeRedLoading", "ThreeRedLoading");
     // autonChooser.AddOption("ThreeBlueLoading", "ThreeBlueLoading");

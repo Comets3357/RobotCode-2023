@@ -514,8 +514,8 @@ double tempLDrive = 0;
     }
     else if (drivebaseData.driveMode == DRIVEMODE_AUTO_BALANCE)
         {
-            tempLDrive = gyroData.rawRoll*-0.008;
-            tempRDrive = gyroData.rawRoll*-0.008;
+            tempLDrive = gyroData.rawRoll*-0.009;
+            tempRDrive = gyroData.rawRoll*-0.009;
             setPercentOutput(tempLDrive, tempRDrive);
 
         }
