@@ -283,7 +283,7 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 
     if (runMode != ELEVATOR_NONE)
     {
-        switch (robotData.endEffectorData.gamePieceType)
+        switch (robotData.endEffectorData.lastPieceType)
         {
             case CONE:
                 if (robotData.controlData.saHomePosition)

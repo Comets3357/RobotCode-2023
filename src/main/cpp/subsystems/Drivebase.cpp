@@ -403,49 +403,57 @@ double tempLDrive = 0;
     }
     else if (drivebaseData.driveMode == DRIVEMODE_TRAJECTORY)
     {
-        frc::SmartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
-
-        units::second_t sampleSec{robotData.timerData.secSinceEnabled - trajectorySecOffset};
-
-        frc::SmartDashboard::PutNumber("sampleSec", sampleSec.to<double>());
-
-        double totalTime = trajectory.TotalTime().to<double>();
-        // frc::SmartDashboard::PutNumber("trajTotalTime", totalTime);
-
-        if ((sampleSec.to<double>() > totalTime)) 
+        try
         {
-            getNextAutonStep(robotData, drivebaseData, autonData);
+            frc::SmartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
+
+            units::second_t sampleSec{robotData.timerData.secSinceEnabled - trajectorySecOffset};
+
+            frc::SmartDashboard::PutNumber("sampleSec", sampleSec.to<double>());
+
+            double totalTime = trajectory.TotalTime().to<double>();
+            // frc::SmartDashboard::PutNumber("trajTotalTime", totalTime);
+
+            if ((sampleSec.to<double>() > totalTime)) 
+            {
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+
+            frc::SmartDashboard::PutNumber("CURRENT TIME", sampleSec.to<double>());
+            frc::SmartDashboard::PutNumber("TARGET TIEM", 6);
+            
+            frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
+
+            // trajectoryState.pose.Y() = units::meter_t(trajectoryState.pose.Y().to<double>() + 2);
+
+            frc::Pose2d desiredPose = trajectoryState.pose;
+
+            // trajectoryState.pose.Y() = units::meter(desiredPose.Y().to<double>() + 1);
+
+            double trajX = desiredPose.X().to<double>();
+            double trajY = desiredPose.Y().to<double>();
+            frc::SmartDashboard::PutNumber("trajX", trajX);
+            frc::SmartDashboard::PutNumber("trajY", trajY);
+
+            frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetEstimatedPosition(), trajectoryState);
+
+            frc::DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.ToWheelSpeeds(chassisSpeeds);
+
+            double leftWheelSpeed = wheelSpeeds.left.to<double>();
+            double rightWheelSpeed = wheelSpeeds.right.to<double>();
+            frc::SmartDashboard::PutNumber("leftWheelSpeed", leftWheelSpeed);
+            frc::SmartDashboard::PutNumber("rightWheelSpeed", rightWheelSpeed);
+
+            temporaryX = trajX;
+            temporaryY = trajX;
+
+            setVelocity(leftWheelSpeed, rightWheelSpeed);
         }
+        catch (...)
+        {
 
-        frc::SmartDashboard::PutNumber("CURRENT TIME", sampleSec.to<double>());
-        frc::SmartDashboard::PutNumber("TARGET TIEM", 6);
+        }
         
-        frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
-
-        // trajectoryState.pose.Y() = units::meter_t(trajectoryState.pose.Y().to<double>() + 2);
-
-        frc::Pose2d desiredPose = trajectoryState.pose;
-
-        // trajectoryState.pose.Y() = units::meter(desiredPose.Y().to<double>() + 1);
-
-        double trajX = desiredPose.X().to<double>();
-        double trajY = desiredPose.Y().to<double>();
-        frc::SmartDashboard::PutNumber("trajX", trajX);
-        frc::SmartDashboard::PutNumber("trajY", trajY);
-
-        frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetEstimatedPosition(), trajectoryState);
-
-        frc::DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.ToWheelSpeeds(chassisSpeeds);
-
-        double leftWheelSpeed = wheelSpeeds.left.to<double>();
-        double rightWheelSpeed = wheelSpeeds.right.to<double>();
-        frc::SmartDashboard::PutNumber("leftWheelSpeed", leftWheelSpeed);
-        frc::SmartDashboard::PutNumber("rightWheelSpeed", rightWheelSpeed);
-
-        temporaryX = trajX;
-        temporaryY = trajX;
-
-        setVelocity(leftWheelSpeed, rightWheelSpeed);
     }
     else if (drivebaseData.driveMode == DRIVEMODE_CHARGE_STATION_TRAVERSE)
     {
@@ -493,7 +501,7 @@ double tempLDrive = 0;
     {
         if (forward)
         {
-            setVelocity(4+(gyroData.rawYaw*0.05), 4-(gyroData.rawYaw*0.05));
+            setVelocity(3.15+(gyroData.rawYaw*0.05), 3.15-(gyroData.rawYaw*0.05));
 
             if (robotData.gyroData.rawRoll < -5)
             {
@@ -503,7 +511,7 @@ double tempLDrive = 0;
         }
         if (!forward)
         {
-            setVelocity(-4+(gyroData.rawYaw*0.05), -4-(gyroData.rawYaw*0.05));
+            setVelocity(-3.15+(gyroData.rawYaw*0.05), -3.15-(gyroData.rawYaw*0.05));
 
             if (robotData.gyroData.rawRoll > 17.5)
             {
@@ -734,17 +742,24 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
         }
         else 
         {
-            drivebaseData.driveMode = DRIVEMODE_TRAJECTORY; 
+            try
+            {
+                drivebaseData.driveMode = DRIVEMODE_TRAJECTORY; 
 
-            fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
+                fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
 
-            fs::path pathDirectory = deployDirectory / "output" / (trajectoryName + ".wpilib.json");
+                fs::path pathDirectory = deployDirectory / "output" / (trajectoryName + ".wpilib.json");
 
-            frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
+                frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
 
-            trajectory = frc::TrajectoryUtil::FromPathweaverJson(pathDirectory.string());
-            frc::SmartDashboard::PutNumber("original seconds since enabled", robotData.timerData.secSinceEnabled);
-            trajectorySecOffset = robotData.timerData.secSinceEnabled;
+                trajectory = frc::TrajectoryUtil::FromPathweaverJson(pathDirectory.string());
+                frc::SmartDashboard::PutNumber("original seconds since enabled", robotData.timerData.secSinceEnabled);
+                trajectorySecOffset = robotData.timerData.secSinceEnabled;
+            }
+            catch (...)
+            {
+
+            }
 
             
             if (!odometryInitialized) 

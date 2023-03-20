@@ -702,7 +702,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             RotateWrist(30, robotData, 0);
             RotatePivot(52, robotData, 0);
         }
-        switch (robotData.endEffectorData.gamePieceType)
+        switch (robotData.endEffectorData.lastPieceType)
         {
 
             case CONE:

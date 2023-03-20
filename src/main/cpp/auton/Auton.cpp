@@ -732,7 +732,7 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         controlData.saCubeIntake = true;
         if (sec > 4.5) step++;
         break;
-        case(6):
+    case(6):
         controlData.saCubeIntake = false;
         if (sec > 6) step++;
         break;
@@ -745,7 +745,8 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
         if (sec > 7.05) step++;
         break;
     case(9):
-        controlData.saIntakeBackwards = true;
+        // controlData.saIntakeBackwards = true;
+        controllerData.sLYStick = -0.7;
         if (sec > 7.4) step++;
         break;
     case(10):
@@ -757,7 +758,8 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
     case(11):
         if (sec > 7.65)
         {
-            controlData.saIntakeBackwards = false;
+            // controlData.saIntakeBackwards = false;
+            controllerData.sLYStick = 0.0;
         }
         controlData.saHomePosition = false;
         if (sec > 8.15)step++;

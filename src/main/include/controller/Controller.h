@@ -93,6 +93,8 @@ struct ControlData
     bool saConeCall;
     bool saFastConeCall;
 
+    bool toggleOutake;
+
     
 
 

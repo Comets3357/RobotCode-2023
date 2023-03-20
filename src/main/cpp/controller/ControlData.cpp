@@ -86,7 +86,16 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     // }
 
-    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // {
+    //     controlData.saHomePosition = true;
+    // }
+    // else
+    // {
+    //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    // }
+
+    if ((controlData.saIntakeBackwards != controlData.toggleOutake) && !controlData.saIntakeBackwards)
     {
         controlData.saHomePosition = true;
     }
@@ -95,6 +104,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
         controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     }
 
+    controlData.toggleOutake = controlData.saIntakeBackwards;
     controlData.saIntakeBackwards = (controllerData.sRBumper) && controlData.shift;
     // MANUAL:
     controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;

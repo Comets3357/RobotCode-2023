@@ -214,7 +214,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else
     {
-        switch (robotData.endEffectorData.gamePieceType)
+        switch (robotData.endEffectorData.lastPieceType)
         {
             case CONE:
                 SetEndEffectorRollerSpeed(-0.05);
