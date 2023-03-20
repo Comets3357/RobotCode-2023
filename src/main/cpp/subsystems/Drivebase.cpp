@@ -522,9 +522,33 @@ double tempLDrive = 0;
     }
     else if (drivebaseData.driveMode == DRIVEMODE_AUTO_BALANCE)
         {
-            tempLDrive = gyroData.rawRoll*-0.009;
-            tempRDrive = gyroData.rawRoll*-0.009;
-            setPercentOutput(tempLDrive, tempRDrive);
+            // tempLDrive = gyroData.rawRoll*-0.009;
+            // tempRDrive = gyroData.rawRoll*-0.009;
+            // setPercentOutput(tempLDrive, tempRDrive);
+
+            switch (ChargeStationTraverseStep)
+            {
+            case -1:
+                setPercentOutput(-1, -1);
+                if (robotData.gyroData.rawRoll < 2) ChargeStationTraverseStep++;
+                break;
+            
+            case 0:
+                setPercentOutput(1, 1);
+                if (robotData.gyroData.angularMomentum < -5) ChargeStationTraverseStep++;
+                break;
+            case 1:
+                setPercentOutput(0,0);
+                if (robotData.gyroData.rawRoll < 0) ChargeStationTraverseStep++;
+                break;
+            case 2:
+                tempLDrive = gyroData.rawRoll*-0.009;
+                tempRDrive = gyroData.rawRoll*-0.009;
+                setPercentOutput(tempLDrive, tempRDrive);
+                break;
+            default:
+                break;
+            }
 
         }
 
