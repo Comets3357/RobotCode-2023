@@ -25,6 +25,8 @@ struct ElevatorData
     bool elevatorRunning = false;
     bool elevatorAbsoluteEncoderInitialized = false;
     bool drivebaseSlowMode = false;
+
+    bool elevatorInPosition = false;
 };
 
 enum ElevatorRunMode
@@ -41,7 +43,7 @@ public:
     void RobotInit(const RobotData &robotData, ElevatorData &elevatorData);
     void RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorData);
     void DisabledInit();
-    void DisabledPeriodic();
+    void DisabledPeriodic(const RobotData &robotData, ElevatorData elevatorData);
     void UpdateData(const RobotData &robotData, ElevatorData elevatorData);
 
 private:
@@ -49,8 +51,9 @@ private:
     ElevatorRunMode runMode = ELEVATOR_ABSOLUTE_RUN;
 
     //void SetElevatorPosition(double elevatorAbsolutePosition);
-    void SemiAuto(const RobotData &robotData, ElevatorData &ElevatorData);
-    void Manual(const RobotData &robotData, ElevatorData &ElevatorData);
+    void AdvancedSemiAuto(const RobotData &robotData, ElevatorData &elevatorData);
+    void SemiAuto(const RobotData &robotData, ElevatorData &elevatorData);
+    void Manual(const RobotData &robotData, ElevatorData &elevatorData);
     void DisableSoftLimits();
     void EnableSoftLimits();
     void ZeroRelativePosition(ElevatorData &elevatorData);
@@ -98,6 +101,8 @@ private:
     double midElevatorAbsolutePos = 0.0;
     double highElevatorAbsolutePos = 0.0;
     double humanPlayerElevatorAbsolutePos = 0.0;
+
+    double desiredElevatorPosition = 100;
 
     
 };

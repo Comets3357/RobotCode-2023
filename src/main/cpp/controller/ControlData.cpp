@@ -4,6 +4,7 @@
 // for updating states of control variables (to be accessed by other subsystems)
 void Controller::updateControlData(const RobotData &robotData, const ControllerData &controllerData, ControlData &controlData)
 {
+    frc::SmartDashboard::PutBoolean("Semi-Auto", controlData.mode == MODE_TELEOP_SA);
     // states:
     controlData.shift = controllerData.sLBumper;
     
@@ -20,7 +21,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
             controlData.mode = MODE_AUTO_BALANCE;
             break;
         case 270:   // left
-            // controlData.mode = mode_climb_sa;
+            //controlData.mode = MODE_TELEOP_ADVANCED_SA;
             break;
         default:
             controlData.mode = MODE_TELEOP_SA;
@@ -85,7 +86,16 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     // }
 
-    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    // {
+    //     controlData.saHomePosition = true;
+    // }
+    // else
+    // {
+    //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    // }
+
+    if ((controlData.saIntakeBackwards != controlData.toggleOutake) && !controlData.saIntakeBackwards)
     {
         controlData.saHomePosition = true;
     }
@@ -94,6 +104,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
         controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     }
 
+    controlData.toggleOutake = controlData.saIntakeBackwards;
     controlData.saIntakeBackwards = (controllerData.sRBumper) && controlData.shift;
     // MANUAL:
     controlData.mEndEffectorRollersIn = controllerData.sBBtn && !controlData.shift;
@@ -118,7 +129,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.mBullBarExtension = (controllerData.sLYStick > 0.08 || robotData.controllerData.sLYStick < -0.08) && !controlData.shift;
     controlData.mBullBarRollerForward = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     controlData.mBullBarRollerBackward = (controllerData.sRTrigger > 0.5) && controlData.shift;
-    controlData.mForceZeroBullBar = (controllerData.sLStickBtn) && !controlData.shift;
+    controlData.mForceZeroBullBar = (controllerData.sRStickBtn) && !controlData.shift;
     controlData.mForceZeroPivot = (controllerData.sRStickBtn) && controlData.shift;
 
     controlData.saConeCall = (controllerData.sRCenterBtn) && !controlData.shift;
@@ -128,7 +139,9 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 // ELEVATOR:
     //MANUAL:
     controlData.mMoveElevator = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && controlData.shift;
-    controlData.mForceZeroElevator = (controllerData.sRStickBtn) && !controlData.shift;
+    controlData.mForceZeroElevator = (controllerData.sLStickBtn) && !controlData.shift;
+
+    controlData.saMoveBullBar = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && !controlData.shift;
 }
 
 

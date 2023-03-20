@@ -40,6 +40,9 @@ struct ArmData
 
     bool wristAndArmInPositionForBullBarIntake = false;
 
+    bool wristInPosition = false;
+    bool armInPosition = false;
+
 };
 
 enum ArmRunMode
@@ -70,6 +73,7 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
     void EnablePivotSoftLimits();
     void DisablePivotSoftLimits();
 
+    void AdvancedSemiAuto(const RobotData &robotData, ArmData &armData);
     void SemiAuto(const RobotData &robotData, ArmData &armData);
     void Manual(const RobotData &robotData, ArmData &armData);
 
@@ -159,4 +163,7 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
     bool wristInPositionForArmPastRead = false;
 
     bool inAuton = false;
+
+    double desiredArmPosition = 1000;
+    double desiredWristPosition = 1000;
 };

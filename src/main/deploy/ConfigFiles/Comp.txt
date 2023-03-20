@@ -25,17 +25,17 @@ EndEffectorCurrentLimit = 45
 ElevatorInvertedAbsolute = true
 ElevatorInvertedRelative = true
 ElevatorCurrentLimit = 50
-ElevatorPValue = 0.153
+ElevatorPValue = 0.5
 ElevatorRelativeConversionFactor = 0.496060877648
 ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
 ElevatorHomePosition = 10
-ElevaotrLowPosition = 10;
-ElevatorConeMidPosition = 24
-ElevatorConeHighPosition = 50
-ElevatorCubeMidPosition = 24
-ElevatorCubeHighPosition = 50
+ElevatorLowPosition = 10
+ElevatorConeMidPosition = 22
+ElevatorConeHighPosition = 46
+ElevatorCubeMidPosition = 10
+ElevatorCubeHighPosition = 44
 ElevatorSetupPosition = 10
 
 # DRIVEBASE VALUES #
@@ -58,11 +58,11 @@ WristRelativeConversion = 4.385430624923864151
 
 WristHomePosition = 30
 WristConeMidPosition = 10
-WristConeHighPosition = 18
-WristCubeMidPosition = 50
-WristCubeHighPosition = 45
-WristConeIntakePosition = 120
-WristUprightConePosition = 130
+WristConeHighPosition = 23
+WristCubeMidPosition = 60
+WristCubeHighPosition = 57
+WristConeIntakePosition = 111
+WristUprightConePosition = 123
 WristCubeIntakePosition = 202.5
 WristLowPosition = 130
 
@@ -71,15 +71,15 @@ PivotCurrentLimit = 45
 PivotRelativeInverted = false
 PivotAbsoluteInverted = true
 PivotAbsoluteConversion = 360
-PivotAbsoluteZeroOffset = 157.5
+PivotAbsoluteZeroOffset = 339.156818
 PivotRelativeConversion = 1.5428571428
 
 PivotHomePosition = 11
-PivotConeMidPosition = 145
-PivotConeHighPosition = 147
+PivotConeMidPosition = 154
+PivotConeHighPosition = 150
 PivotCubeMidPosition = 146
-PivotCubeHighPosition = 146
+PivotCubeHighPosition = 135
 PivotConeIntakePosition = 10
-PivotUprightConePosition = 16
+PivotUprightConePosition = 22
 PivotCubeIntakePosition = 42
 PivotLowPosition = 16

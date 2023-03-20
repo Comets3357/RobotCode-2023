@@ -29,6 +29,11 @@ struct EndEffectorData
     GamePiece pastReadOfGamePiece = NONE;
 
     bool armRetractRequest = false;
+
+    double gamePieceDistance = 0;
+
+    bool gamePieceShuffleboard = NONE;
+
 };
 
 class EndEffector
@@ -38,11 +43,12 @@ public:
     void RobotInit(const RobotData &robotData);
     void RobotPeriodic(const RobotData &robotData, EndEffectorData &endEffectorData);
     void DisabledInit();
-    void DisabledPeriodic();
+    void DisabledPeriodic(const RobotData &robotData, EndEffectorData endEffectorData);
 
 private:
 
     void SetEndEffectorRollerSpeed(double rollerSpeed);
+    void AdvancedSemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
     void SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData);
     void Manual(const RobotData &robotData, EndEffectorData &endEffectorData);
     void UpdateData(const RobotData &robotData, EndEffectorData &endEffectorData);

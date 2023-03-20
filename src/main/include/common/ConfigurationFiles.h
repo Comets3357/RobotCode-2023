@@ -198,7 +198,8 @@ private:
         {"WristCubeHighPosition", 114},
         {"WristUprightConePosition", 115},
         {"WristCubeIntakePosition", 116},
-        {"WristLowPosition", 117},
+        {"WristLowPosition", 118},
+        {"WristConeIntakePosition", 117},
 
         {"PivotHomePosition" ,120},
         {"PivotConeMidPosition", 121},
@@ -218,7 +219,7 @@ private:
     
     };
 
-    int failedReadAttempts;
+    int failedReadAttempts = 0;
 
 
 };

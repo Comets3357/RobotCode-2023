@@ -11,6 +11,7 @@ enum Mode
 {
     MODE_TELEOP_SA,
     MODE_TELEOP_MANUAL,
+    MODE_TELEOP_ADVANCED_SA,
     MODE_AUTO_BALANCE
     
 };
@@ -72,6 +73,8 @@ struct ControlData
     bool mMovePivot;
     bool mMoveWrist;
 
+    bool saMoveBullBar;
+
     bool mForceZeroWrist;
     bool mForceZeroPivot;
 
@@ -89,6 +92,8 @@ struct ControlData
     bool saFastCubeCall;
     bool saConeCall;
     bool saFastConeCall;
+
+    bool toggleOutake;
 
     
 

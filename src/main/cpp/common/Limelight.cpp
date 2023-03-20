@@ -6,7 +6,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     try 
     {
         llresults = LimelightHelpers::getLatestResults();
-        distanceToClosestTag = GetDistance();
+        // distanceToClosestTag = GetDistance();
         frc::SmartDashboard::PutBoolean("limelight active", true);
     }
     catch (...)
@@ -17,7 +17,9 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     if (robotData.controlData.saResetOdometry)
     {
         try
-        {
+        {   
+            LimelightHelpers::setPipelineIndex("pipeline", 0);
+
             limelightOdometry.clear();
 
             limelightOdometry = llresults.targetingResults.botPose_wpiblue;
@@ -100,15 +102,183 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
         }
     }
+
+    limelightData.pastExtendAllow = robotData.limelightData.allowExtend;
+
+    try
+    {
+
+        //if (robotData.endEffectorData.gamePieceType != NONE)
+        // {
+        //     LimelightHelpers::setPipelineIndex("", 1);
+        // }
+        // else
+        // {
+        //     LimelightHelpers::setPipelineIndex("", 0);
+        // }
+
+        if (frc::DriverStation::IsTeleop())
+        {
+            LimelightHelpers::setPipelineIndex("", 3);
+        }
+
+
+        // if (robotData.controlData.saPositionHigh && robotData.endEffectorData.gamePieceType == CONE)
+        // {
+        //     LimelightHelpers::setPipelineIndex("pipeline", 1);
+        //     distanceFromTarget = GetDistance(higherPollHeight, upperAngleOffset);
+        //     angleOff = LimelightHelpers::getTX("") * (pi / 180);
+
+        //     if (std::abs(angleOff) < 10)
+        //     {
+        //         distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
+        //         angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
+
+        //         secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (highEndEffectorDistanceFromCenter));
+
+        //         if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
+        //         {
+        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+        //         }
+        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
+        //         {
+        //             finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
+        //         }
+        //         else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
+        //         {
+        //             finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
+        //         }
+        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
+        //         {
+        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+        //         }    else
+        //         {
+        //             finalAngle = angleFromCenterOfRobot;
+        //         }
+
+        //         limelightData.angleOffFromCenter = finalAngle;
+        //         limelightData.distanceFromCenter = distanceFromCenterOfRobot - highEndEffectorDistanceFromCenter;
+        //     }
+        //     else
+        //     {
+        //         LimelightHelpers::setPipelineIndex("pipeline", 2);
+
+        //         distanceFromTarget = GetDistance(lowerPollHeight, lowerAngleOffset) + distanceBetweenMidAndTopPoll;
+        //         angleOff = LimelightHelpers::getTX("") * (pi / 180);
+
+        //         distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
+        //         angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
+
+        //         secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (highEndEffectorDistanceFromCenter));
+
+        //         if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
+        //         {
+        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+        //         }
+        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
+        //         {
+        //             finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
+        //         }
+        //         else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
+        //         {
+        //             finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
+        //         }
+        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
+        //         {
+        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+        //         }
+        //         else
+        //         {
+        //             finalAngle = angleFromCenterOfRobot;
+        //         }
+
+        //         limelightData.angleOffFromCenter = finalAngle;
+        //         limelightData.distanceFromCenter = distanceFromCenterOfRobot - highEndEffectorDistanceFromCenter;
+        //     }
+
+
+        // }
+        // else if (robotData.controlData.saPositionMid && robotData.endEffectorData.gamePieceType == CONE)
+        // {
+        //     LimelightHelpers::setPipelineIndex("pipeline", 2);
+
+        //     distanceFromTarget = GetDistance(lowerPollHeight, lowerAngleOffset);
+        //     angleOff = LimelightHelpers::getTX("") * (pi / 180);
+
+        //     distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
+        //     angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
+
+        //     secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (midEndEffectorDistanceFromCenter));
+
+        //     if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
+        //     {
+        //         finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+        //     }
+        //     else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
+        //     {
+        //         finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
+        //     }
+        //     else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
+        //     {
+        //         finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
+        //     }
+        //     else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
+        //     {
+        //         finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
+        //     }
+        //     else
+        //     {
+        //         finalAngle = angleFromCenterOfRobot;
+        //     }
+
+        //     limelightData.angleOffFromCenter = finalAngle;
+        //     limelightData.distanceFromCenter = distanceFromCenterOfRobot - midEndEffectorDistanceFromCenter;
+            
+        // }
+        // else if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) && robotData.endEffectorData.gamePieceType == CUBE)
+        // {
+        //     LimelightHelpers::setPipelineIndex("pipeline", 0);
+
+        //     distanceFromTarget = 1000;
+
+        //     if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
+        //     {
+        //         if (llresults.targetingResults.botPose_wpiblue.at(0) > 14.8)
+        //         {
+        //             limelightData.allowExtend = true;
+        //         }
+        //         {
+        //             limelightData.allowExtend = false;
+        //         }
+        //     }
+        //     else
+        //     {
+        //         if (llresults.targetingResults.botPose_wpiblue.at(0) < 1.7)
+        //         {
+        //             limelightData.allowExtend = true;
+        //         }
+        //         else
+        //         {
+        //             limelightData.allowExtend = false;
+        //         }
+        //     }
+        // }
+    }
+    catch(...)
+    {
+        
+    }
+
+
 }
 
-double Limelight::GetDistance()
+double Limelight::GetDistance(double targetHeight, double vertAngleOffset)
 {
     double tempDist = 0;
     double verticalAngle = 0;
 
-    verticalAngle = (LimelightHelpers::getTY("") + limelightAngle) * (pi / 180);
-    tempDist = (aprilTagHeight - limelightHeight) / (std::tan(verticalAngle));// * inchesToMeters;
+    verticalAngle = (LimelightHelpers::getTY("") + (limelightAngle + vertAngleOffset)) * (pi / 180);
+    tempDist = (targetHeight - limelightHeight) / (std::tan(verticalAngle));// * inchesToMeters;
 
     frc::SmartDashboard::PutNumber("ty", LimelightHelpers::getTY(""));
     return tempDist;

@@ -26,6 +26,17 @@
 #include <fstream>
 #include <deque>
 
+#include <frc/trajectory/TrapezoidProfile.h>
+#include <frc/controller/ArmFeedforward.h>
+#include <frc2/command/ProfiledPIDSubsystem.h>
+#include <units/acceleration.h>
+#include <units/length.h>
+#include <units/time.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
+#include <units/angle.h>
+#include <math.h>
+
 #define M_PI 3.14159265358979323846
 
 struct RobotData;
@@ -37,7 +48,9 @@ enum DriveMode {
     DRIVEMODE_TRAJECTORY,
     DRIVEMODE_VECTOR,
     DRIVEMODE_CHARGE_STATION_TRAVERSE,
-    DRIVEMODE_AUTO_BALANCE
+    DRIVEMODE_AUTO_BALANCE,
+    DRIVEMODE_HIT_CHARGE_STATION,
+    DRIVEMODE_TURN_TO_HEADING
 };
 
 struct DrivebaseData
@@ -142,6 +155,7 @@ private:
     // const double mpsToTpds = (4.0 / 0.1016) * (1 / (4.0 * M_PI)) * (44.0 / 9.0) * (2048.0) * (0.1);
     const double mpsToRpm = 11.107086*60.0;// * 0.837*0.9375;//(1.0/((1.0/1.0)*(1.0/4.0)*((4*M_PI)/1)*(1.0/39.0)*(1.0/60.0)));
     const double rotationsToMeters = 1.0/(11.107086);//*0.837*0.9375);//(1.0/4.0)*((4.0*M_PI)/1.0)*(1.0/39.3701);
+    const double degreesToMeters = 2.05/360.0;
 
     // forwards are leads
     rev::CANSparkMax dbL{leftLeadDeviceID, rev::CANSparkMax::MotorType::kBrushless};
@@ -154,10 +168,32 @@ private:
     rev::SparkMaxRelativeEncoder dbREncoder = dbR.GetEncoder();
     rev::SparkMaxPIDController dbRPIDController = dbR.GetPIDController();
 
+    frc::TrapezoidProfile<units::meters>::Constraints constraints{units::velocity::meters_per_second_t{5}, units::acceleration::meters_per_second_squared_t{7}};
+    double currentVelocity = 0.0;
+    frc::TrapezoidProfile<units::meters> drivebaseProfile
+    {
+        frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{0}, units::acceleration::meters_per_second_squared_t{0}},
+        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}},
+        frc::TrapezoidProfile<units::meters>::State{units::meter_t{0}, units::meters_per_second_t{0}}
+    };
+    int allignState = 0;
+    units::time::second_t elapsedTime{0};
+    frc::TrapezoidProfile<units::meters>::State currentState{units::meter_t{0}, units::meters_per_second_t{0}};
+    frc::TrapezoidProfile<units::meters>::State endState{units::meter_t{0}, units::meters_per_second_t{0}};
+
+
+    bool profileCreated = false;
+    double startTime = 0.0;
+    double startPosition = 0.0;
+    double endPosition = 0.0;
+
     double drivebaseMultiplier = 1;
 
     int ChargeStationTraverseStep = 0;
 
     bool forward = true;
+
+    double angleOff = 0;
+    double distanceOff = 0;
 
 };

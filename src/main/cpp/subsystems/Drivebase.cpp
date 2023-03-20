@@ -61,7 +61,7 @@ void Drivebase::RobotInit(const RobotData &robotData)
     )
     {
         dbLF.RestoreFactoryDefaults();
-        dbLF.Follow(dbR);
+        dbLF.Follow(dbL);
         dbLF.SetIdleMode(rev::CANSparkMax::IdleMode::kBrake);
         dbLF.SetSmartCurrentLimit(robotData.configData.drivebaseConfigData.currentLimit);
 
@@ -253,8 +253,108 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             }
         }
 
-        //set as percent vbus
-        setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
+        if ((robotData.controlData.mode == MODE_TELEOP_ADVANCED_SA) &&
+            (tempLDrive < 0.08 && tempLDrive > -0.08) &&
+            (tempRDrive < 0.08 && tempRDrive > -0.08) &&
+            (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) &&
+            (robotData.endEffectorData.gamePieceType == CONE))
+        {
+            
+            frc::SmartDashboard::PutNumber("Step for advanced", allignState);
+            //temp
+            angleOff = robotData.limelightData.angleOffFromCenter;
+            distanceOff = robotData.limelightData.distanceFromCenter;
+
+            switch (allignState)
+            {
+            case 0:
+                profileCreated = false;
+                allignState++;
+                break;
+            case 1:
+
+                if (!profileCreated)
+                {
+                    startTime = robotData.timerData.secSinceEnabled;
+                    startPosition = getEncoderDistance(dbLEncoder.GetPosition());
+                    endPosition = startPosition + (angleOff * degreesToMeters);
+                    profileCreated = true;
+                    currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
+                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{1.75}};
+
+                    
+
+                }
+
+                drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                    {
+                        frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{12}, units::acceleration::meters_per_second_squared_t{5}},
+                        endState,
+                        frc::TrapezoidProfile<units::meters>::State{units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meters_per_second_t{currentState.velocity()}}
+                    };
+
+                
+
+                elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                startTime = robotData.timerData.secSinceEnabled;
+                currentState = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = currentState.velocity();
+
+                setVelocity(currentVelocity, -currentVelocity);
+                if (drivebaseProfile.IsFinished(elapsedTime))
+                {
+                    allignState++;
+                }
+
+                break;
+            case 2:
+                profileCreated = false;
+                currentVelocity = 0;
+                allignState++;
+                break;
+            case 3:
+                if (!profileCreated)
+                {
+                    startTime = robotData.timerData.secSinceEnabled;
+                    startPosition = getEncoderDistance(dbLEncoder.GetPosition());
+                    endPosition = startPosition + distanceOff;
+                    profileCreated = true;
+                    currentState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{startPosition}, units::meters_per_second_t{0}};
+                    endState = frc::TrapezoidProfile<units::meters>::State{units::meter_t{endPosition}, units::meters_per_second_t{0}};
+
+                    
+                }
+
+                drivebaseProfile = frc::TrapezoidProfile<units::meters>
+                {
+                    frc::TrapezoidProfile<units::meters>::Constraints{units::velocity::meters_per_second_t{5}, units::acceleration::meters_per_second_squared_t{5}},
+                    endState,
+                    frc::TrapezoidProfile<units::meters>::State{units::meter_t{getEncoderDistance(dbLEncoder.GetPosition())}, units::meters_per_second_t{currentState.velocity()}}
+                };
+
+                
+
+                elapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - startTime};
+                startTime = robotData.timerData.secSinceEnabled;
+                currentState = drivebaseProfile.Calculate(elapsedTime);
+                currentVelocity = currentState.velocity();
+
+                setVelocity(currentVelocity, currentVelocity);
+             
+                
+                break;
+            
+            }
+
+            
+
+
+        }
+        else
+        {
+            allignState = 0;
+            setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
+        }
     }
     
     else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
@@ -303,49 +403,57 @@ double tempLDrive = 0;
     }
     else if (drivebaseData.driveMode == DRIVEMODE_TRAJECTORY)
     {
-        frc::SmartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
-
-        units::second_t sampleSec{robotData.timerData.secSinceEnabled - trajectorySecOffset};
-
-        frc::SmartDashboard::PutNumber("sampleSec", sampleSec.to<double>());
-
-        double totalTime = trajectory.TotalTime().to<double>();
-        // frc::SmartDashboard::PutNumber("trajTotalTime", totalTime);
-
-        if ((sampleSec.to<double>() > totalTime)) 
+        try
         {
-            getNextAutonStep(robotData, drivebaseData, autonData);
+            frc::SmartDashboard::PutNumber("secSinceEnabled", robotData.timerData.secSinceEnabled);
+
+            units::second_t sampleSec{robotData.timerData.secSinceEnabled - trajectorySecOffset};
+
+            frc::SmartDashboard::PutNumber("sampleSec", sampleSec.to<double>());
+
+            double totalTime = trajectory.TotalTime().to<double>();
+            // frc::SmartDashboard::PutNumber("trajTotalTime", totalTime);
+
+            if ((sampleSec.to<double>() > totalTime)) 
+            {
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+
+            frc::SmartDashboard::PutNumber("CURRENT TIME", sampleSec.to<double>());
+            frc::SmartDashboard::PutNumber("TARGET TIEM", 6);
+            
+            frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
+
+            // trajectoryState.pose.Y() = units::meter_t(trajectoryState.pose.Y().to<double>() + 2);
+
+            frc::Pose2d desiredPose = trajectoryState.pose;
+
+            // trajectoryState.pose.Y() = units::meter(desiredPose.Y().to<double>() + 1);
+
+            double trajX = desiredPose.X().to<double>();
+            double trajY = desiredPose.Y().to<double>();
+            frc::SmartDashboard::PutNumber("trajX", trajX);
+            frc::SmartDashboard::PutNumber("trajY", trajY);
+
+            frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetEstimatedPosition(), trajectoryState);
+
+            frc::DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.ToWheelSpeeds(chassisSpeeds);
+
+            double leftWheelSpeed = wheelSpeeds.left.to<double>();
+            double rightWheelSpeed = wheelSpeeds.right.to<double>();
+            frc::SmartDashboard::PutNumber("leftWheelSpeed", leftWheelSpeed);
+            frc::SmartDashboard::PutNumber("rightWheelSpeed", rightWheelSpeed);
+
+            temporaryX = trajX;
+            temporaryY = trajX;
+
+            setVelocity(leftWheelSpeed, rightWheelSpeed);
         }
+        catch (...)
+        {
 
-        frc::SmartDashboard::PutNumber("CURRENT TIME", sampleSec.to<double>());
-        frc::SmartDashboard::PutNumber("TARGET TIEM", 6);
+        }
         
-        frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
-
-        // trajectoryState.pose.Y() = units::meter_t(trajectoryState.pose.Y().to<double>() + 2);
-
-        frc::Pose2d desiredPose = trajectoryState.pose;
-
-        // trajectoryState.pose.Y() = units::meter(desiredPose.Y().to<double>() + 1);
-
-        double trajX = desiredPose.X().to<double>();
-        double trajY = desiredPose.Y().to<double>();
-        frc::SmartDashboard::PutNumber("trajX", trajX);
-        frc::SmartDashboard::PutNumber("trajY", trajY);
-
-        frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetEstimatedPosition(), trajectoryState);
-
-        frc::DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.ToWheelSpeeds(chassisSpeeds);
-
-        double leftWheelSpeed = wheelSpeeds.left.to<double>();
-        double rightWheelSpeed = wheelSpeeds.right.to<double>();
-        frc::SmartDashboard::PutNumber("leftWheelSpeed", leftWheelSpeed);
-        frc::SmartDashboard::PutNumber("rightWheelSpeed", rightWheelSpeed);
-
-        temporaryX = trajX;
-        temporaryY = trajX;
-
-        setVelocity(leftWheelSpeed, rightWheelSpeed);
     }
     else if (drivebaseData.driveMode == DRIVEMODE_CHARGE_STATION_TRAVERSE)
     {
@@ -389,12 +497,33 @@ double tempLDrive = 0;
         }
         
     }
-    
+    else if (drivebaseData.driveMode == DRIVEMODE_HIT_CHARGE_STATION)
+    {
+        if (forward)
+        {
+            setVelocity(3.15+(gyroData.rawYaw*0.05), 3.15-(gyroData.rawYaw*0.05));
 
+            if (robotData.gyroData.rawRoll < -5)
+            {
+                setVelocity(0, 0);
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+        }
+        if (!forward)
+        {
+            setVelocity(-3.15+(gyroData.rawYaw*0.05), -3.15-(gyroData.rawYaw*0.05));
+
+            if (robotData.gyroData.rawRoll > 17.5)
+            {
+                setVelocity(0,0);
+                getNextAutonStep(robotData, drivebaseData, autonData);
+            }
+        }
+    }
     else if (drivebaseData.driveMode == DRIVEMODE_AUTO_BALANCE)
         {
-            tempLDrive = gyroData.rawRoll*-0.008;
-            tempRDrive = gyroData.rawRoll*-0.008;
+            tempLDrive = gyroData.rawRoll*-0.009;
+            tempRDrive = gyroData.rawRoll*-0.009;
             setPercentOutput(tempLDrive, tempRDrive);
 
         }
@@ -549,8 +678,9 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
     if (autonData.autonStep < autonData.pathGroup.size()) 
     {
         // frc::SmartDashboard::PutString("getNextAutonStep()", "b");
-        // frc::SmartDashboard::PutNumber("autonStep", autonData.autonStep);
+         frc::SmartDashboard::PutNumber("autonStep", autonData.autonStep);
         // frc::SmartDashboard::PutString("robotData.autonData.pathGroup[robotData.autonData.autonStep", autonData.pathGroup[autonData.autonStep]);
+
 
         std::string trajectoryName = autonData.pathGroup.at(autonData.autonStep);
         frc::SmartDashboard::PutString("K", trajectoryName);
@@ -586,24 +716,50 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
             drivebaseData.driveMode = DRIVEMODE_CHARGE_STATION_TRAVERSE;
             return;
         }
+        else if (trajectoryName.substr(0,13) == "turnToHeading")
+        {
+            drivebaseData.driveMode = DRIVEMODE_TURNINPLACE;
+            turnInPlaceDegrees = std::stod(trajectoryName.substr(14, trajectoryName.length()));
+
+            return;
+        }
         else if (trajectoryName.substr(0,7) == "balance")
         {
             drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
+            return;
         }
-
+        else if (trajectoryName.substr(0,23) == "hitChargeStationForward")
+        {
+            forward = true;
+            drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+            return;
+        }
+        else if (trajectoryName.substr(0,24) == "hitChargeStationBackward")
+        {
+            forward = false;
+            drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+            return;
+        }
         else 
         {
-            drivebaseData.driveMode = DRIVEMODE_TRAJECTORY; 
+            try
+            {
+                drivebaseData.driveMode = DRIVEMODE_TRAJECTORY; 
 
-            fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
+                fs::path deployDirectory = frc::filesystem::GetDeployDirectory();
 
-            fs::path pathDirectory = deployDirectory / "output" / (trajectoryName + ".wpilib.json");
+                fs::path pathDirectory = deployDirectory / "output" / (trajectoryName + ".wpilib.json");
 
-            frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
+                frc::SmartDashboard::PutString("pathDirectory", pathDirectory.string());
 
-            trajectory = frc::TrajectoryUtil::FromPathweaverJson(pathDirectory.string());
-            frc::SmartDashboard::PutNumber("original seconds since enabled", robotData.timerData.secSinceEnabled);
-            trajectorySecOffset = robotData.timerData.secSinceEnabled;
+                trajectory = frc::TrajectoryUtil::FromPathweaverJson(pathDirectory.string());
+                frc::SmartDashboard::PutNumber("original seconds since enabled", robotData.timerData.secSinceEnabled);
+                trajectorySecOffset = robotData.timerData.secSinceEnabled;
+            }
+            catch (...)
+            {
+
+            }
 
             
             if (!odometryInitialized) 
@@ -750,7 +906,7 @@ void Drivebase::sendStartPointChooser()
 
 void Drivebase::DisabledPeriodic(const RobotData &robotData)
 {
-    frc::SmartDashboard::PutNumber("LEFT DISTANCE", dbLEncoder.GetPosition());
+    frc::SmartDashboard::PutNumber("LEFT DISTANCE", getEncoderDistance(dbLEncoder.GetPosition()));
     // if (robotData.controllerData.sABtn)
     // {
     //         dbL.SetIdleMode(rev::CANSparkMax::IdleMode::kCoast);

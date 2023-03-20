@@ -1,0 +1,7 @@
+break 2.15
+TwoRedLoadingOne
+TwoRedLoadingTwo
+break 1.05
+TwoRedLoadingThree
+turnInPlace -20
+ThreeRedLoadingOne

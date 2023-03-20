@@ -4,12 +4,18 @@ VoltageCompensation = 10.5
 # BULL BAR VALUES #
 BullBarRollerInverted = false
 BullBarAbsoluteConversionFactor = 108.43
-BullBarAbsoluteZeroOffset = 53
+BullBarAbsoluteZeroOffset = 51.150761
 BullBarRelativeConversionFactor = 0.1904800000000000104
 BullBarPValue = 0.5
 BullBarSmartCurrentLimit = 20
 BullBarSliderInvertedRelative = true
 BullBarSliderInvertedAbsolute = true
+
+BullBarCubePosition = 12.5
+BullBarConePosition = 17.208
+BullBarFlipConePosition = 16
+BullBarMinPosition = 10
+BullBarMaxPosition = 28
 
 # END EFFECTOR VALUES #
 EndEffectorInvertRollers = true
@@ -19,17 +25,18 @@ EndEffectorCurrentLimit = 45
 ElevatorInvertedAbsolute = true
 ElevatorInvertedRelative = true
 ElevatorCurrentLimit = 50
-ElevatorPValue = 0.153
+ElevatorPValue = 0.5
 ElevatorRelativeConversionFactor = 0.496060877648
 ElevatorAbsoluteConversionFactor = 72.75406740074442
 ElevatorAbsoluteZeroOffset = 23.29
 
-ElevatorHomePosition
-ElevatorConeMidPosition
-ElevatorConeHighPosition
-ElevatorCubeMidPosition
-ElevatorCubeHighPosition
-ElevatorSetupPosition
+ElevatorHomePosition = 10
+ElevatorLowPosition = 10;
+ElevatorConeMidPosition = 24
+ElevatorConeHighPosition = 48
+ElevatorCubeMidPosition = 10
+ElevatorCubeHighPosition = 43
+ElevatorSetupPosition = 10
 
 # DRIVEBASE VALUES #
 DrivebaseRightInverted = false
@@ -46,17 +53,18 @@ WristCurrentLimit = 20
 WristRelativeInverted = false
 WristAbsoluteInverted = false
 WristAbsoluteConversion = 360
-WristAbsoluteZeroOffset = 9.299444
+WristAbsoluteZeroOffset = 72.337677
 WristRelativeConversion = 4.385430624923864151
 
-WristHomePosition
-WristConeMidPosition
-WristConeHighPosition
-WristCubeMidPosition
-WristCubeHighPosition
-WristConeIntakePosition
-WristUprightConePosition
-WristCubeIntakePosition
+WristHomePosition = 30
+WristConeMidPosition = 10
+WristConeHighPosition = 23
+WristCubeMidPosition = 60
+WristCubeHighPosition = 57
+WristConeIntakePosition = 115
+WristUprightConePosition = 125
+WristCubeIntakePosition = 202.5
+WristLowPosition = 130
 
 PivotPValue = 0.08
 PivotCurrentLimit = 45
@@ -66,11 +74,12 @@ PivotAbsoluteConversion = 360
 PivotAbsoluteZeroOffset = 70.3962
 PivotRelativeConversion = 1.5428571428
 
-PivotHomePosition
-PivotConeMidPosition
-PivotConeHighPosition
-PivotCubeMidPosition
-PivotCubeHighPosition
-PivotConeIntakePosition
-PivotUprightConePosition
-PivotCubeIntakePosition
+PivotHomePosition = 11
+PivotConeMidPosition = 150
+PivotConeHighPosition = 150
+PivotCubeMidPosition = 146
+PivotCubeHighPosition = 135
+PivotConeIntakePosition = 10
+PivotUprightConePosition = 16
+PivotCubeIntakePosition = 42
+PivotLowPosition = 16

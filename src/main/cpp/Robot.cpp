@@ -15,7 +15,7 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
-  frc::DigitalInput robotIndicator{9};
+  // frc::DigitalInput robotIndicator{9};
 timer.RobotInit(robotData.timerData); 
 
   // if (robotIndicator.Get())
@@ -26,7 +26,7 @@ timer.RobotInit(robotData.timerData);
   // {
   //   configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); 
   // }
-    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt");
+    configurationFileReader.ReadFile(robotData, robotData.configData, "Comp.txt"); // Change back to comp
 
 
 
@@ -82,7 +82,8 @@ void Robot::RobotPeriodic() {
   arm.RobotPeriodic(robotData, robotData.armData); //0.01
   elevator.RobotPeriodic(robotData, robotData.elevatorData);
   
-  
+  frc::SmartDashboard::PutNumber("Battery Voltage", frc::DriverStation::GetBatteryVoltage());
+
 }
 
 /**
@@ -100,7 +101,7 @@ void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
-  fmt::print("Auto selected: {}\n", m_autoSelected);
+  // fmt::print("Auto selected: {}\n", m_autoSelected);
 
   gyro.AutonomousInit(robotData.gyroData);
   auton.AutonomousInit(robotData.autonData);
@@ -126,7 +127,7 @@ void Robot::AutonomousPeriodic() {
   timer.EnabledPeriodic(robotData.timerData);
   gyro.RobotPeriodic(robotData.gyroData);
   auton.AutonomousPeriodic(robotData, robotData.autonData, robotData.controlData, robotData.controllerData);
-  //driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
+  driveBase.RobotPeriodic(robotData, robotData.drivebaseData, robotData.autonData, robotData.gyroData, robotData.controlData);
 
 
   
@@ -152,8 +153,8 @@ void Robot::DisabledPeriodic() {
   bullBar.DisabledPeriodic(robotData, robotData.bullBarData);
   arm.DisabledPeriodic(robotData, robotData.armData);
   driveBase.DisabledPeriodic(robotData);
-  elevator.DisabledPeriodic();
-  endEffector.DisabledPeriodic();
+  elevator.DisabledPeriodic(robotData, robotData.elevatorData);
+  endEffector.DisabledPeriodic(robotData, robotData.endEffectorData);
   
 }
 
