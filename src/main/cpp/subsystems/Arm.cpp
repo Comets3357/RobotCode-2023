@@ -692,7 +692,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (humanPlayerIntakeToggle != armData.humanPlayerConeIntakeRunning)
             {
-                RotateWrist(29, robotData, 0);
+                RotateWrist(28, robotData, 0);
                 RotatePivot(10, robotData, 0);
             }
             
