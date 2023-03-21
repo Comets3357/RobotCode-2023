@@ -56,7 +56,7 @@ WristAbsoluteConversion = 360
 WristAbsoluteZeroOffset = 196.6
 WristRelativeConversion = 4.385430624923864151
 
-WristHomePosition = 30
+WristHomePosition = 35
 WristConeMidPosition = 10
 WristConeHighPosition = 23
 WristCubeMidPosition = 60

@@ -872,7 +872,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (coneIntakeToggle != armData.coneIntakeRunning)
             {
-                RotateWrist(30, robotData, 0);
+                RotateWrist(40, robotData, 0);
                 RotatePivot(55, robotData, 0);
             }
 

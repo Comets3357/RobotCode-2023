@@ -2,9 +2,9 @@ break 3
 hitChargeStationForward
 chargeStationTraverseForward
 turnToHeading 0
-break 0.7
+break 0.6
 MiddleOne
-break 0.2
+break 0.1
 hitChargeStationBackward
 MiddleTwo
-balance
+balanceBackward

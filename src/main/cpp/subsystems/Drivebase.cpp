@@ -477,10 +477,10 @@ double tempLDrive = 0;
         }
         else
         {
-            setVelocity(5+(gyroData.rawYaw*0.05), 5-(gyroData.rawYaw*0.05));
+            setVelocity(4+(gyroData.rawYaw*0.05), 4-(gyroData.rawYaw*0.05));
 
             
-            if (robotData.gyroData.rawRoll < -5)
+            if (robotData.gyroData.rawRoll < 5)
             {
                 ChargeStationTraverseStep = 1;
             }
@@ -503,7 +503,7 @@ double tempLDrive = 0;
         {
             setVelocity(3.15+(gyroData.rawYaw*0.05), 3.15-(gyroData.rawYaw*0.05));
 
-            if (robotData.gyroData.rawRoll < -5)
+            if (robotData.gyroData.rawRoll < -15)
             {
                 setVelocity(0, 0);
                 getNextAutonStep(robotData, drivebaseData, autonData);
@@ -526,29 +526,93 @@ double tempLDrive = 0;
             // tempRDrive = gyroData.rawRoll*-0.009;
             // setPercentOutput(tempLDrive, tempRDrive);
 
-            switch (ChargeStationTraverseStep)
+            if (forward)
+            {
+                switch (ChargeStationTraverseStep)
             {
             case -1:
-                setPercentOutput(-1, -1);
+                setVelocity(-1, -1);
                 if (robotData.gyroData.rawRoll < 2) ChargeStationTraverseStep++;
                 break;
             
             case 0:
-                setPercentOutput(1, 1);
-                if (robotData.gyroData.angularMomentum < -5) ChargeStationTraverseStep++;
+                setVelocity(1.25, 1.25);
+                if (robotData.gyroData.angularMomentum < -30) ChargeStationTraverseStep++;
                 break;
             case 1:
-                setPercentOutput(0,0);
-                if (robotData.gyroData.rawRoll < 0) ChargeStationTraverseStep++;
+                setVelocity(0,0);
+                if (robotData.gyroData.rawRoll > 0) ChargeStationTraverseStep++;
                 break;
             case 2:
-                tempLDrive = gyroData.rawRoll*-0.009;
-                tempRDrive = gyroData.rawRoll*-0.009;
-                setPercentOutput(tempLDrive, tempRDrive);
+
+                if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
+                {
+                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.007;
+                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.007;
+                    setPercentOutput(tempLDrive, tempRDrive); 
+                }
+                else
+                {
+                    setPercentOutput(0,0);
+                }
+                
                 break;
             default:
                 break;
             }
+            }
+            else if (!forward)
+            {
+                switch (ChargeStationTraverseStep)
+            {
+            case -1:
+                setVelocity(-1, -1);
+                if (robotData.gyroData.rawRoll < 2) ChargeStationTraverseStep++;
+                break;
+            
+            case 0:
+                setVelocity(-1.25, -1.25);
+                if (robotData.gyroData.angularMomentum > 30) ChargeStationTraverseStep++;
+                break;
+            case 1:
+                setVelocity(0,0);
+                if (robotData.gyroData.rawRoll < 0) ChargeStationTraverseStep++;
+                break;
+            case 2:
+
+                if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
+                {
+                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.008;
+                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.008;
+                    setPercentOutput(tempLDrive, tempRDrive); 
+                }
+                else
+                {
+                    setPercentOutput(0,0);
+                }
+                
+                break;
+            default:
+                break;
+            }
+            }
+
+            
+
+            // if (robotData.gyroData.rawRoll < -4)
+            // {
+            //     setVelocity(1.0,1.0);
+            // }
+            // else if (robotData.gyroData.rawRoll > 4)
+            // {
+            //     setVelocity(-1.0,-1.0);
+            // }
+            // else
+            // {
+            //     tempLDrive = gyroData.rawRoll*-0.009;
+            //     tempRDrive = gyroData.rawRoll*-0.009;
+            //     setPercentOutput(tempLDrive, tempRDrive);
+            // }
 
         }
 
@@ -743,13 +807,22 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
         else if (trajectoryName.substr(0,13) == "turnToHeading")
         {
             drivebaseData.driveMode = DRIVEMODE_TURNINPLACE;
-            turnInPlaceDegrees = std::stod(trajectoryName.substr(14, trajectoryName.length()));
+            turnInPlaceDegrees = std::stod(trajectoryName.substr(14, trajectoryName.length())) - robotData.gyroData.rawYaw;
 
             return;
         }
-        else if (trajectoryName.substr(0,7) == "balance")
+        else if (trajectoryName.substr(0,14) == "balanceForward")
         {
             drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
+            ChargeStationTraverseStep = 0;
+            forward = true;
+            return;
+        }
+        else if (trajectoryName.substr(0,15) == "balanceBackward")
+        {
+            drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
+            forward = false;
+            ChargeStationTraverseStep = 0;
             return;
         }
         else if (trajectoryName.substr(0,23) == "hitChargeStationForward")

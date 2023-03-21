@@ -82,9 +82,9 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("RedChargeStation", "RedChargeStation"); // 12
     autonChooser.AddOption("PlaceAndBalance", "PlaceAndBalance"); //13
 
-    // autonChooser.AddOption("TraverseChargeStation", "TraverseChargeStation");
+    autonChooser.AddOption("TraverseChargeStation", "TraverseChargeStation");
 
-    // autonChooser.AddOption("ThreeRedLoading", "ThreeRedLoading");
+    autonChooser.AddOption("ThreeRedLoading", "ThreeRedLoading");
     // autonChooser.AddOption("ThreeBlueLoading", "ThreeBlueLoading");
 
     frc::SmartDashboard::PutData("Select Auton:", &autonChooser);
@@ -186,6 +186,14 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         if (sec > 4.35) step++;
         break;
         case(6):
+        if (sec > 4.6 && sec < 4.74)
+        {
+            controllerData.sLYStick = -0.6;
+        }
+        else
+        {
+            controllerData.sLYStick = 0.0;
+        }
         controlData.saCubeIntake = false;
         if (sec > 5.85) step++;
         break;
@@ -198,7 +206,7 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         if (sec > 7.05) step++;
         break;
     case(9):
-        controlData.saIntakeBackwards = true;
+        controllerData.sLYStick = 0.6;
         if (sec > 7.4) step++;
         break;
     case(10):
@@ -210,7 +218,7 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
     case(11):
         if (sec > 7.65)
         {
-            controlData.saIntakeBackwards = false;
+            controllerData.sLYStick = 0.0;
         }
         controlData.saHomePosition = false;
         if (sec > 8.15)step++;
@@ -221,6 +229,15 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         break;
     case(13):
         controlData.saCubeIntake = false;
+        if (sec > 11.5 && sec < 11.6)
+        {
+            controllerData.sLYStick = -0.6;
+        }
+        else
+        {
+            controllerData.sLYStick = 0.0;
+        }
+
         if (sec > 13.0) step++;
         break;
     case 14:
@@ -229,15 +246,20 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
         break;
     case 15:
         controlData.saPositionMid = false;
-        if (sec > 13.7) step++;
+        if (sec > 14.0) step++;
         // step++;
         break;
     case 16:
-        controlData.saIntakeBackwards = true;
+        controllerData.sLYStick = 0.6;
         if (sec > 14.18) step++;
         break;
     case 17:
-        controlData.saIntakeBackwards = false;
+        controlData.saHomePosition = true;
+        controllerData.sLYStick = 0.0;
+        step++;
+        break;
+    case 18:
+        controlData.saHomePosition = false;
         break;
     }
 }
@@ -267,14 +289,19 @@ void Auton::Traverse(const RobotData &robotData, ControlData &controlData, Contr
             break;
         case(4):
             controlData.saHomePosition = false;
-            if (sec > 5.4) step++;
+            if (sec > 5.6) step++;
             break;
         case 5:
             controlData.saCubeIntake = true;
-            if (sec > 7.9) step++;
+            if (sec > 8.3) step++;
             break;
         case 6:
             controlData.saCubeIntake = false;
+            // controlData.saHomePosition = true;
+            step++;
+            break;
+        case 7:
+            // controlData.saHomePosition = false;
             break;
     }    
 }

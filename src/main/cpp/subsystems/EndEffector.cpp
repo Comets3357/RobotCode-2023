@@ -134,10 +134,24 @@ void EndEffector::AdvancedSemiAuto(const RobotData &robotData, EndEffectorData &
                 SetEndEffectorRollerSpeed(0.04);
                 break;
             case NONE:
-                SetEndEffectorRollerSpeed(0.0);
+                if (robotData.endEffectorData.lastPieceType == CUBE)
+                {
+                    SetEndEffectorRollerSpeed(0.04);
+                }
+                else
+                {
+                    SetEndEffectorRollerSpeed(-0.05);
+                }
                 break;
             default:
-                SetEndEffectorRollerSpeed(0.0);
+                if (robotData.endEffectorData.lastPieceType == CUBE)
+                {
+                    SetEndEffectorRollerSpeed(0.04);
+                }
+                else
+                {
+                    SetEndEffectorRollerSpeed(-0.05);
+                }
                 break;
         }
     }
@@ -214,7 +228,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else
     {
-        switch (robotData.endEffectorData.lastPieceType)
+        switch (robotData.endEffectorData.gamePieceType)
         {
             case CONE:
                 SetEndEffectorRollerSpeed(-0.05);
