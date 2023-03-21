@@ -196,4 +196,5 @@ private:
     double angleOff = 0;
     double distanceOff = 0;
 
+    double chargeStationBackoffBeginTime = 0;
 };

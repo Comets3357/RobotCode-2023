@@ -13,6 +13,8 @@ struct GyroData
     double angularMomentum;
     double rotationalRate;
 
+    double velocity = 0;
+
     frc::Rotation2d gyroRot2d;
 };
 
