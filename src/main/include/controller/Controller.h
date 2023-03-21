@@ -95,6 +95,8 @@ struct ControlData
 
     bool toggleOutake;
 
+    double pastStickRead;
+    double currentStickRead;
     
 
 
