@@ -63,16 +63,16 @@ void Auton::sendAutonSelectionChooser() {
 
     autonChooser.AddOption("SinglePlace", "SinglePlace"); // 2
 
-    autonChooser.AddOption("TwoBlueLoadingClimb", "TwoBlueLoadingClimb"); // 3
-    autonChooser.AddOption("TwoBlueLoadingNoClimb", "TwoBlueLoadingNoClimb"); // 4
+    // autonChooser.AddOption("TwoBlueLoadingClimb", "TwoBlueLoadingClimb"); // 3
+    // autonChooser.AddOption("TwoBlueLoadingNoClimb", "TwoBlueLoadingNoClimb"); // 4
 
     //autonChooser.AddOption("TwoBlueBumpClimb", "TwoBlueBumpClimb"); // 5
     // autonChooser.AddOption("TwoBlueBumpNoClimb", "TwoBlueBumpNoClimb"); // 6
 
     // autonChooser.AddOption("BlueChargeStation", "BlueChargeStation"); // 7
 
-    autonChooser.AddOption("TwoRedLoadingClimb", "TwoRedLoadingClimb"); // 8
-    autonChooser.AddOption("TwoRedLoadingNoClimb", "TwoRedLoadingNoClimb"); // 9
+    // autonChooser.AddOption("TwoRedLoadingClimb", "TwoRedLoadingClimb"); // 8
+    // autonChooser.AddOption("TwoRedLoadingNoClimb", "TwoRedLoadingNoClimb"); // 9
 
     // autonChooser.AddOption("testplace", "testplace");
 
@@ -85,7 +85,7 @@ void Auton::sendAutonSelectionChooser() {
     autonChooser.AddOption("TraverseChargeStation", "TraverseChargeStation");
 
     autonChooser.AddOption("ThreeRedLoading", "ThreeRedLoading");
-    // autonChooser.AddOption("ThreeBlueLoading", "ThreeBlueLoading");
+    autonChooser.AddOption("ThreeBlueLoading", "ThreeBlueLoading");
 
     frc::SmartDashboard::PutData("Select Auton:", &autonChooser);
 }
@@ -296,6 +296,14 @@ void Auton::Traverse(const RobotData &robotData, ControlData &controlData, Contr
             if (sec > 8.3) step++;
             break;
         case 6:
+            if (sec > 8.45 && sec < 8.59)
+            {
+                controllerData.sLYStick = -0.6;
+            }
+            else
+            {
+                controllerData.sLYStick = 0.0;
+            }
             controlData.saCubeIntake = false;
             // controlData.saHomePosition = true;
             step++;
