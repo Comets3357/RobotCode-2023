@@ -67,7 +67,7 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("TwoBlueLoadingNoClimb", "TwoBlueLoadingNoClimb"); // 4
 
     //autonChooser.AddOption("TwoBlueBumpClimb", "TwoBlueBumpClimb"); // 5
-    // autonChooser.AddOption("TwoBlueBumpNoClimb", "TwoBlueBumpNoClimb"); // 6
+    autonChooser.AddOption("TwoBlueBumpNoClimb", "TwoBlueBumpNoClimb"); // 6
 
     // autonChooser.AddOption("BlueChargeStation", "BlueChargeStation"); // 7
 
@@ -77,7 +77,7 @@ void Auton::sendAutonSelectionChooser() {
     // autonChooser.AddOption("testplace", "testplace");
 
     //autonChooser.AddOption("TwoRedBumpClimb", "TwoRedBumpClimb"); // 10
-    // autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
+    autonChooser.AddOption("TwoRedBumpNoClimb", "TwoRedBumpNoClimb"); // 11
 
     // autonChooser.AddOption("RedChargeStation", "RedChargeStation"); // 12
     autonChooser.AddOption("PlaceAndBalance", "PlaceAndBalance"); //13
@@ -156,7 +156,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
 
 void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-     double sec = robotData.timerData.secSinceEnabled-0.8;
+    double sec = robotData.timerData.secSinceEnabled-0.8;
 
     switch (step)
     {
@@ -822,11 +822,9 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
 
 void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled-0.1;
+    double sec = robotData.timerData.secSinceEnabled;
 
-    controlData.saResetOdometry = true;
-
-    switch(step)
+    switch (step)
     {
     case (0):   
         controlData.saPositionHigh = true;
@@ -834,11 +832,11 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(1):
         controlData.saPositionHigh = false;
-        if (sec > 1.1) step++;
+        if (sec > 1.4) step++;
         break;
     case(2):
         controlData.saIntakeBackwards = true;
-        if (sec > 1.3) step++;
+        if (sec > 1.95) step++;
         break;
     case(3): 
         controlData.saHomePosition = true;
@@ -846,16 +844,24 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(4):
         controlData.saHomePosition = false;
-        if (sec > 1.5) controlData.saIntakeBackwards = false;
-        if (sec > 2.6)step++;
+        if (sec > 2.15) controlData.saIntakeBackwards = false;
+        if (sec > 4.0)step++;
         break;
     case(5):
         controlData.saCubeIntake = true;
-        if (sec > 4.9) step++;
+        if (sec > 6.5) step++;
         break;
         case(6):
+        if (sec > 6.5 && sec < 6.64)
+        {
+            controllerData.sLYStick = -0.6;
+        }
+        else
+        {
+            controllerData.sLYStick = 0.0;
+        }
         controlData.saCubeIntake = false;
-        if (sec > 6) step++;
+        if (sec > 8.5) step++;
         break;
     case (7):
         controlData.saPositionHigh = true;
@@ -863,43 +869,43 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 7.1) step++;
+        if (sec > 9.7) step++;
         break;
     case(9):
-        controlData.saIntakeBackwards = true;
-        if (sec > 7.35) step++;
+        controllerData.sLYStick = 0.6;
+        if (sec > 10.1) step++;
         break;
     case(10):
-        controlData.saIntakeBackwards = false;
+        controllerData.sLYStick = 0.0;
         controlData.saHomePosition = true;
         step++;
         break;
     case(11):
         controlData.saHomePosition = false;
-        if (sec > 8.7)step++;
+        if (sec > 13.8)step++;
         break;
     case(12):
-        controlData.saCubeIntake = true;
-        if (sec > 11.4) step++;
+        controlData.saConeIntake = true;
+        if (sec > 14.8) step++;
         break;
     case(13):
         controlData.saCubeIntake = false;
-        if (sec > 14.1) step++;
+        // if (sec > 14.1) step++;
         break;
-    case 14:
-        controlData.saPositionMid = true;
-        step++;
-        break;
-    case 15:
-        controlData.saPositionMid = false;
-        if (sec > 14.4) step++;
-        break;
-    case 16:
-        controlData.saIntakeBackwards = true;
-        if (sec > 14.8) step++;
-        break;
-    case 17:
-        controlData.saIntakeBackwards = false;
-        break;
+    // case 14:
+    //     controlData.saPositionMid = true;
+    //     step++;
+    //     break;
+    // case 15:
+    //     controlData.saPositionMid = false;
+    //     if (sec > 14.4) step++;
+    //     break;
+    // case 16:
+    //     controlData.saIntakeBackwards = true;
+    //     if (sec > 14.8) step++;
+    //     break;
+    // case 17:
+    //     controlData.saIntakeBackwards = false;
+    //     break;
     }
 }

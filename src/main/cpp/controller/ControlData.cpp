@@ -95,7 +95,11 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     // }
 
-    if ((controlData.saIntakeBackwards != controlData.toggleOutake) && !controlData.saIntakeBackwards)
+    controlData.pastStickRead = controlData.currentStickRead;
+    controlData.currentStickRead = controllerData.sLYStick;
+
+    if (((controlData.saIntakeBackwards != controlData.toggleOutake) && !controlData.saIntakeBackwards) || 
+    ((robotData.controlData.mode == MODE_TELEOP_SA) && (controlData.pastStickRead != controlData.currentStickRead) && (std::abs(controlData.currentStickRead) < 0.5)))
     {
         controlData.saHomePosition = true;
     }
