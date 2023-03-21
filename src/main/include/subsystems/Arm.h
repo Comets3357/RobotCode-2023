@@ -166,4 +166,7 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
 
     double desiredArmPosition = 1000;
     double desiredWristPosition = 1000;
+
+    double zeroStartTime = 0;
+    bool zeroing = false;
 };

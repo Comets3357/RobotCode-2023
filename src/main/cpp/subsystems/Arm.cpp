@@ -599,10 +599,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     wristRunMode = ARM_RELATIVE_RUN;
     armWristPIDController.SetFeedbackDevice(armWristRelativeEncoder);
 
-    if (robotData.controllerData.sLStickBtn)
-    {
-        ZeroRelativePositionPivot(armData);
-    }
+    
 
 /* -----------------------------------------------------------------------------------------------------------------------------
 *                                   PIVOT SEMI AUTO FEEDBACK DEVICES
@@ -951,6 +948,24 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             pivotProfileActive = false;
         }
+    }
+
+    if (robotData.controllerData.sLStickBtn)
+    {
+        zeroing = true;
+        armPivot.Set(0);
+        zeroStartTime = robotData.timerData.secSinceEnabled;
+    }
+
+    if (zeroing)
+    {
+        armPivot.Set(0);
+    }
+
+    if (zeroing && robotData.timerData.secSinceEnabled-1.0 > zeroStartTime)
+    {
+        ZeroRelativePositionPivot(armData);
+        zeroing = false;
     }
 }
 
