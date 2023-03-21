@@ -955,6 +955,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         zeroing = true;
         armPivot.Set(0);
         zeroStartTime = robotData.timerData.secSinceEnabled;
+        ZeroRelativePositionPivot(armData);
     }
 
     if (zeroing)
@@ -964,7 +965,6 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
     if (zeroing && robotData.timerData.secSinceEnabled-1.0 > zeroStartTime)
     {
-        ZeroRelativePositionPivot(armData);
         zeroing = false;
     }
 }
