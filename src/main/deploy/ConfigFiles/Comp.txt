@@ -51,9 +51,9 @@ DrivebaseRightFFValue = 0.095273596176822
 WristPValue = 0.1
 WristCurrentLimit = 20
 WristRelativeInverted = false
-WristAbsoluteInverted = false
+WristAbsoluteInverted = true
 WristAbsoluteConversion = 360
-WristAbsoluteZeroOffset = 196.6
+WristAbsoluteZeroOffset = 207.75
 WristRelativeConversion = 4.385430624923864151
 
 WristHomePosition = 35

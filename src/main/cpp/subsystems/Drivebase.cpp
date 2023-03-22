@@ -540,7 +540,7 @@ double tempLDrive = 0;
                 setVelocity(1.25, 1.25);
                 if (robotData.gyroData.angularMomentum < -30) ChargeStationTraverseStep++;
                 if (robotData.gyroData.velocity < 2 && robotData.gyroData.angularMomentum < 5) 
-            {ChargeStationTraverseStep = -1; chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled}
+            {ChargeStationTraverseStep = -1; chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;}
 
                 break;
             case 1:
