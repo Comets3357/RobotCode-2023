@@ -197,4 +197,5 @@ private:
     double distanceOff = 0;
 
     double chargeStationBackoffBeginTime = 0;
+    double chargeStationBeginFailSafe = 0;
 };

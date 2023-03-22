@@ -32,7 +32,7 @@ ElevatorAbsoluteZeroOffset = 23.29
 
 ElevatorHomePosition = 10
 ElevatorLowPosition = 10
-ElevatorConeMidPosition = 22
+ElevatorConeMidPosition = 23
 ElevatorConeHighPosition = 46
 ElevatorCubeMidPosition = 10
 ElevatorCubeHighPosition = 46

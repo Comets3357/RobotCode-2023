@@ -105,6 +105,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     }
     if (autonData.autonRoutineName == "PlaceAndBalance" || autonData.autonRoutineName == "BlueChargeStation1.5") // 2 - TEST BLUE
     {
+        autonData.autonToggle = true;
         OneMiddleClimb(robotData, controlData, controllerData);
     }
     else if (autonData.autonRoutineName == "SinglePlace") // 3 - TEST
@@ -137,6 +138,7 @@ void Auton::AutonomousPeriodic(const RobotData &robotData, AutonData &autonData,
     }
     else if (autonData.autonRoutineName == "TraverseChargeStation")
     {
+        autonData.autonToggle = false;
         Traverse(robotData, controlData, controllerData);
     }
     else if (autonData.autonRoutineName == "ThreeRedLoading" || autonData.autonRoutineName == "ThreeBlueLoading")
@@ -515,6 +517,7 @@ void Auton::TwoMiddleClimb(const RobotData &robotData, ControlData &controlData,
 void Auton::OneMiddleClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
     double sec = robotData.timerData.secSinceEnabled - 0.1;
+
 
  
 

@@ -21,6 +21,8 @@ struct AutonData
     frc::Trajectory trajectory;
     int autonStep = -1; // starts at -1 because getNextAutonStep() increments
     std::vector<std::string> pathGroup;
+
+    bool autonToggle = false;
 };
 
 class Auton

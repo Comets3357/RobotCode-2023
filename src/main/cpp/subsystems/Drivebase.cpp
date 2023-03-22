@@ -508,6 +508,47 @@ double tempLDrive = 0;
                 setVelocity(0, 0);
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
+
+            switch (ChargeStationTraverseStep)
+                {
+                case -1:
+                    setVelocity(-2, -2);
+                    if (robotData.timerData.secSinceEnabled - 2 > chargeStationBackoffBeginTime) 
+                    {
+                        if (robotData.autonData.autonToggle)
+                        {
+                            autonData.autonStep -= 1;
+                            ChargeStationTraverseStep = 0;
+                            getNextAutonStep(robotData, drivebaseData, autonData);
+                        }
+                        else if (!robotData.autonData.autonToggle)
+                        {
+                            autonData.autonStep = 9;
+                            ChargeStationTraverseStep = 0;
+                            getNextAutonStep(robotData, drivebaseData, autonData);
+                        }
+                    }
+                    
+                    
+                    break;
+                
+                case 0:
+                    setVelocity(3.15+(gyroData.rawYaw*0.05), 3.15-(gyroData.rawYaw*0.05));
+
+                    if (robotData.gyroData.rawRoll < -12.5)
+                    {
+                        setVelocity(0, 0);
+                        getNextAutonStep(robotData, drivebaseData, autonData);
+                    }
+
+                    if (robotData.gyroData.velocity < 0.25 && std::abs(robotData.gyroData.angularMomentum) < 5 && robotData.timerData.secSinceEnabled - 1.0 > chargeStationBeginFailSafe) 
+                    {
+                        chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
+                        ChargeStationTraverseStep = -1; 
+                    }
+
+                    break;
+                }
         }
         if (!forward)
         {
@@ -526,44 +567,55 @@ double tempLDrive = 0;
             // tempRDrive = gyroData.rawRoll*-0.009;
             // setPercentOutput(tempLDrive, tempRDrive);
 
+            frc::SmartDashboard::PutNumber("balance step", ChargeStationTraverseStep);
+
             if (forward)
             {
                 switch (ChargeStationTraverseStep)
-            {
-            case -1:
-                setVelocity(-2, -2);
-                if (robotData.timerData.secSinceEnabled - 2 > chargeStationBackoffBeginTime) autonData.autonStep -= 2;
-                
-                break;
-            
-            case 0:
-                setVelocity(1.25, 1.25);
-                if (robotData.gyroData.angularMomentum < -30) ChargeStationTraverseStep++;
-                if (robotData.gyroData.velocity < 2 && robotData.gyroData.angularMomentum < 5) 
-            {ChargeStationTraverseStep = -1; chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;}
-
-                break;
-            case 1:
-                setVelocity(0,0);
-                if (robotData.gyroData.rawRoll > 0) ChargeStationTraverseStep++;
-                break;
-            case 2:
-
-                if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
                 {
-                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.007;
-                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.007;
-                    setPercentOutput(tempLDrive, tempRDrive); 
-                }
-                else
-                {
-                    setPercentOutput(0,0);
-                }
+                case -1:
+                    setVelocity(-2, -2);
+                    if (robotData.timerData.secSinceEnabled - 2 > chargeStationBackoffBeginTime) 
+                    {
+                        autonData.autonStep -= 3;
+                        getNextAutonStep(robotData, drivebaseData, autonData);
+                    }
+                    
+                    
+                    break;
                 
-                break;
-            default:
-                break;
-            }
+                case 0:
+                    setVelocity(1.25, 1.25);
+                    
+                    // if (robotData.gyroData.velocity < 0.25 && std::abs(robotData.gyroData.angularMomentum) < 5) 
+                    // {
+                    //     chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
+                    //     ChargeStationTraverseStep = -1; 
+                    // }
+                    if (robotData.gyroData.angularMomentum < -30) ChargeStationTraverseStep++;
+
+                    break;
+                case 1:
+                    setVelocity(0,0);
+                    if (robotData.gyroData.rawRoll > 0) ChargeStationTraverseStep++;
+                    break;
+                case 2:
+
+                    if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
+                    {
+                        tempLDrive = (gyroData.rawRoll - 3.0)*-0.0075;
+                        tempRDrive = (gyroData.rawRoll - 3.0)*-0.0075;
+                        setPercentOutput(tempLDrive, tempRDrive); 
+                    }
+                    else
+                    {
+                        setPercentOutput(0,0);
+                    }
+                    
+                    break;
+                default:
+                    break;
+                }
             }
             else if (!forward)
             {
@@ -819,12 +871,14 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
         {
             drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
             ChargeStationTraverseStep = 0;
+            
             forward = true;
             return;
         }
         else if (trajectoryName.substr(0,15) == "balanceBackward")
         {
             drivebaseData.driveMode = DRIVEMODE_AUTO_BALANCE;
+            // chargeStationBeginFailSafe = robotData.timerData.secSinceEnabled;
             forward = false;
             ChargeStationTraverseStep = 0;
             return;
@@ -833,12 +887,16 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
         {
             forward = true;
             drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+            chargeStationBeginFailSafe = robotData.timerData.secSinceEnabled;
+            ChargeStationTraverseStep = 0;
             return;
         }
         else if (trajectoryName.substr(0,24) == "hitChargeStationBackward")
         {
             forward = false;
             drivebaseData.driveMode = DRIVEMODE_HIT_CHARGE_STATION;
+            chargeStationBeginFailSafe = robotData.timerData.secSinceEnabled;
+            ChargeStationTraverseStep = 0;
             return;
         }
         else 

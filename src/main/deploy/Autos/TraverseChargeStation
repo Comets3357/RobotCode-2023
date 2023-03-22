@@ -8,3 +8,5 @@ break 0.1
 hitChargeStationBackward
 MiddleTwo
 balanceBackward
+hitChargeStationForward
+balanceForward
