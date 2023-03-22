@@ -86,20 +86,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     // }
 
-    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
-    // {
-    //     controlData.saHomePosition = true;
-    // }
-    // else
-    // {
-    //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
-    // }
-
-    controlData.pastStickRead = controlData.currentStickRead;
-    controlData.currentStickRead = controllerData.sLYStick;
-
-    if (((controlData.saIntakeBackwards != controlData.toggleOutake) && !controlData.saIntakeBackwards) || 
-    ((robotData.controlData.mode == MODE_TELEOP_SA) && (controlData.pastStickRead != controlData.currentStickRead) && (std::abs(controlData.currentStickRead) < 0.5)))
+    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
     {
         controlData.saHomePosition = true;
     }
@@ -107,6 +94,19 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     {
         controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     }
+
+    controlData.pastStickRead = controlData.currentStickRead;
+    controlData.currentStickRead = controllerData.sLYStick;
+
+    // if (((controlData.saIntakeBackwards != controlData.toggleOutake) && !controlData.saIntakeBackwards) || 
+    // ((robotData.controlData.mode == MODE_TELEOP_SA) && (controlData.pastStickRead != controlData.currentStickRead) && (std::abs(controlData.currentStickRead) < 0.5)))
+    // {
+    //     controlData.saHomePosition = true;
+    // }
+    // else
+    // {
+    //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
+    // }
 
     controlData.toggleOutake = controlData.saIntakeBackwards;
     controlData.saIntakeBackwards = (controllerData.sRBumper) && controlData.shift;

@@ -1124,8 +1124,8 @@ void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 
     frc::SmartDashboard::PutBoolean("Pivot Relative Inverted", !armPivot.GetInverted());
     frc::SmartDashboard::PutBoolean("Pivot Absolute Inverted", armPivotAbsoluteEncoder.GetInverted());
-    frc::SmartDashboard::PutBoolean("Wrist Relative Inverted", !armWrist.GetInverted());
-    frc::SmartDashboard::PutBoolean("Wrist Absolute Inverted", !armWristAbsoluteEncoder.GetInverted());
+    frc::SmartDashboard::PutBoolean("Wrist Relative Inverted", armWrist.GetInverted());
+    frc::SmartDashboard::PutBoolean("Wrist Absolute Inverted", armWristAbsoluteEncoder.GetInverted());
     
 }
 void Arm::UpdateData(const RobotData &robotData, ArmData &armData)
