@@ -525,6 +525,7 @@ double tempLDrive = 0;
                         {
                             autonData.autonStep = 9;
                             ChargeStationTraverseStep = 0;
+                            drivebaseData.allowBullBarExtend = false;
                             getNextAutonStep(robotData, drivebaseData, autonData);
                         }
                     }

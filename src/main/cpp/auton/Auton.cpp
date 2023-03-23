@@ -293,26 +293,30 @@ void Auton::Traverse(const RobotData &robotData, ControlData &controlData, Contr
             controlData.saHomePosition = false;
             if (sec > 5.6) step++;
             break;
-        case 5:
-            controlData.saCubeIntake = true;
-            if (sec > 8.3) step++;
-            break;
-        case 6:
-            if (sec > 8.45 && sec < 8.59)
-            {
-                controllerData.sLYStick = -0.6;
-            }
-            else
-            {
-                controllerData.sLYStick = 0.0;
-            }
-            controlData.saCubeIntake = false;
-            // controlData.saHomePosition = true;
-            step++;
-            break;
-        case 7:
-            // controlData.saHomePosition = false;
-            break;
+        if (robotData.drivebaseData.allowBullBarExtend)
+        {
+            case 5:
+                controlData.saCubeIntake = true;
+                if (sec > 8.3) step++;
+                break;
+            case 6:
+                if (sec > 8.45 && sec < 8.59)
+                {
+                    controllerData.sLYStick = -0.6;
+                }
+                else
+                {
+                    controllerData.sLYStick = 0.0;
+                }
+                controlData.saCubeIntake = false;
+                // controlData.saHomePosition = true;
+                step++;
+                break;
+            case 7:
+                // controlData.saHomePosition = false;
+                break;
+        }
+        
     }    
 }
 

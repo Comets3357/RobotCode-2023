@@ -73,7 +73,7 @@ struct DrivebaseData
     double odometryY;
     double odometryYaw;
 
-    double turretEjectAngle;
+    bool allowBullBarExtend = true;
 };
 
 class Drivebase
