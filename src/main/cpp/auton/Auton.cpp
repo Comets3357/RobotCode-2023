@@ -297,17 +297,19 @@ void Auton::Traverse(const RobotData &robotData, ControlData &controlData, Contr
         {
             case 5:
                 controlData.saCubeIntake = true;
-                if (sec > 8.3) step++;
-                break;
-            case 6:
-                if (sec > 8.45 && sec < 8.59)
+                if (sec > 7.4 && sec < 7.55)
                 {
                     controllerData.sLYStick = -0.6;
                 }
                 else
                 {
                     controllerData.sLYStick = 0.0;
+                    controlData.saCubeIntake = true;
                 }
+                if (sec > 8.3) step++;
+                break;
+            case 6:
+                
                 controlData.saCubeIntake = false;
                 // controlData.saHomePosition = true;
                 step++;
