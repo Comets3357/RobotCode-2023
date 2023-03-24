@@ -639,8 +639,8 @@ double tempLDrive = 0;
 
                 if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
                 {
-                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.0083;
-                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.0083;
+                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.0082;
+                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.0082;
                     setPercentOutput(tempLDrive, tempRDrive); 
                 }
                 else
