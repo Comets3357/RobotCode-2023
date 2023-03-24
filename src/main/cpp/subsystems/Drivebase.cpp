@@ -542,7 +542,7 @@ double tempLDrive = 0;
                         getNextAutonStep(robotData, drivebaseData, autonData);
                     }
 
-                    if (robotData.gyroData.velocity < 0.15 && std::abs(robotData.gyroData.angularMomentum) < 5 && robotData.timerData.secSinceEnabled - 1.0 > chargeStationBeginFailSafe) 
+                    if (robotData.gyroData.velocity < 0.025 && std::abs(robotData.gyroData.angularMomentum) < 2.5 && robotData.timerData.secSinceEnabled - 3.0 > chargeStationBeginFailSafe) 
                     {
                         chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
                         ChargeStationTraverseStep = -1; 
