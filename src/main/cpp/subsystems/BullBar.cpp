@@ -55,6 +55,8 @@ void BullBar::RobotInit(const RobotData &robotData, BullBarData &bullBarData)
 void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData)
 {
 
+    frc::SmartDashboard::PutNumber("bb run mode", runMode);
+
     
     if (absoluteWasInitialized && !IsAbsoluteEncoderInitialized(bullBarData));
     {
@@ -229,7 +231,7 @@ void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 
     frc::SmartDashboard::PutNumber("run mode bull bar", runMode);
 
-    if (bullBarData.bullBarAbsoluteEncoderInitialized && runMode != BULLBAR_ABSOLUTE_RUN)
+    if (bullBarData.bullBarAbsoluteEncoderInitialized && runMode != BULLBAR_ABSOLUTE_RUN && runMode != BULLBAR_RELATIVE_RUN)
     {
         runMode = BULLBAR_ABSOLUTE_RUN;
         bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
@@ -351,11 +353,11 @@ void BullBar::Manual(const RobotData &robotData, BullBarData &bullBarData)
 
     
 
-    if (robotData.controlData.mBullBarExtension)
-    { 
+    if ((robotData.controllerData.sRYStick > 0.08 || robotData.controllerData.sRYStick < -0.08) && !robotData.controlData.shift)
+    {
         bullBarSlider.Set(robotData.controllerData.sRYStick * 0.25);
     }
-    else 
+    else
     {
         bullBarSlider.Set(0);
     }
@@ -457,6 +459,8 @@ bool BullBar::IsAbsoluteEncoderInitialized(BullBarData &bullBarData)
 void BullBar::ForceZeroBullBar()
 {
     bullBarSliderRelativeEncoder.SetPosition(10);
+    runMode = BULLBAR_RELATIVE_RUN;
+    bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
     bullBarForcedZeroed = true;
 }
 
