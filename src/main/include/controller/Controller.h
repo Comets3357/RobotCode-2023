@@ -11,7 +11,6 @@ enum Mode
 {
     MODE_TELEOP_SA,
     MODE_TELEOP_MANUAL,
-    MODE_TELEOP_ADVANCED_SA,
     MODE_AUTO_BALANCE
     
 };

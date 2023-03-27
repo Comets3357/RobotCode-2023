@@ -68,9 +68,6 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
     // changing controls based off the mode robot is in
     switch (robotData.controlData.mode) 
     {
-        case MODE_TELEOP_ADVANCED_SA:
-            AdvancedSemiAuto(robotData, bullBarData);
-            break;
         case MODE_TELEOP_MANUAL:
             Manual(robotData, bullBarData);
             break;
@@ -102,123 +99,6 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
 
     frc::SmartDashboard::PutBoolean("RBUMPER", robotData.controllerData.sRBumper);
 }
-
-void BullBar::AdvancedSemiAuto(const RobotData &robotData, BullBarData &bullBarData)
-{
-    if (!softLimitsToggled)
-    {
-        EnableSoftLimits(robotData, bullBarData);
-    }
-
-    // EnableSoftLimits(bullBarData);
-
-    frc::SmartDashboard::PutNumber("run mode bull bar", runMode);
-
-    if (bullBarData.bullBarAbsoluteEncoderInitialized && runMode != BULLBAR_ABSOLUTE_RUN)
-    {
-        runMode = BULLBAR_ABSOLUTE_RUN;
-        bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderAbsoluteEncoder);
-    }
-    else if ((bullBarForcedZeroed && runMode != BULLBAR_RELATIVE_RUN))
-    {
-        runMode = BULLBAR_RELATIVE_RUN;
-        bullBarSliderPIDController.SetFeedbackDevice(bullBarSliderRelativeEncoder);
-    }
-
-    if ((bullBarSliderAbsoluteEncoder.GetPosition() > robotData.configData.bullBarConfigData.bullBarMinPosition + robotData.configData.bullBarConfigData.bullBarCubePosition - 0.5) 
-    || (bullBarSliderRelativeEncoder.GetPosition() > robotData.configData.bullBarConfigData.bullBarMinPosition + robotData.configData.bullBarConfigData.bullBarCubePosition - 0.5))
-    {
-        bullBarData.bullBarSafePosition = true;
-    }
-    else
-    {
-        bullBarData.bullBarSafePosition = false;
-    }
-
-    if ((bullBarSliderAbsoluteEncoder.GetPosition() < 12 && bullBarData.bullBarAbsoluteEncoderInitialized) || bullBarSliderRelativeEncoder.GetPosition() < 12)
-    {
-        bullBarData.bullBarUprightConeSafePosition = true;
-    }
-    else
-    {
-        bullBarData.bullBarUprightConeSafePosition = false;
-    }
-    frc::SmartDashboard::PutBoolean("Bull Bar Safe", bullBarData.bullBarSafePosition);
-
-    if (runMode != BULLBAR_NONE)
-    {
-        if (robotData.controlData.saConeIntake)
-        {
-            if (robotData.armData.wristSafePosition)
-            {
-                bullBarSliderPIDController.SetReference(robotData.configData.bullBarConfigData.bullBarMinPosition + robotData.configData.bullBarConfigData.bullBarConePosition, rev::CANSparkMax::ControlType::kPosition, 0);
-            }
-            if (robotData.controlData.shift)
-            {
-                bullBarRollers.Set(-bullBarRollerExtendedSpeed);
-            }
-            else
-            {
-                bullBarRollers.Set(bullBarRollerRetractedSpeed);
-            }
-
-            
-        }
-        else if (robotData.controlData.saConeFlipPosition)
-        {
-            if (robotData.armData.wristSafePosition)
-            {
-                bullBarSliderPIDController.SetReference(robotData.configData.bullBarConfigData.bullBarFlipConePosition, rev::CANSparkMax::ControlType::kPosition, 0);
-            }
-            bullBarRollers.Set(bullBarRollerExtendedSpeed);  
-        }
-        else if (robotData.controlData.saCubeIntake)
-        {
-            if (robotData.armData.wristSafePosition)
-            {
-                bullBarSliderPIDController.SetReference(robotData.configData.bullBarConfigData.bullBarMinPosition + robotData.configData.bullBarConfigData.bullBarCubePosition, rev::CANSparkMax::ControlType::kPosition, 0);
-            }
-            if (robotData.controlData.shift)
-            {
-                bullBarRollers.Set(-bullBarRollerExtendedSpeed); 
-            }
-            else
-            {
-                if (robotData.armData.wristAndArmInPositionForBullBarIntake)
-                {
-                    bullBarRollers.Set(bullBarRollerExtendedSpeed); 
-                }
-            }  
-        }
-        else
-        {
-            if (robotData.armData.wristSafePosition)
-            {
-                bullBarSliderPIDController.SetReference(robotData.configData.bullBarConfigData.bullBarMinPosition, rev::CANSparkMax::ControlType::kPosition, 0);
-                
-            }
-            if(!bullBarData.bullBarUprightConeSafePosition)
-            {
-                bullBarRollers.Set(-bullBarRollerExtendedSpeed); 
-            }
-            else
-            {
-                bullBarRollers.Set(0); 
-            }
-        }
-    }
-    else
-    {
-        bullBarSlider.Set(0);
-        bullBarRollers.Set(0);
-    }
-
-    // if (robotData.controlData.saForceRunBullBar && robotData.endEffectorData.gamePieceType != NONE)
-    // {
-    //     bullBarRollers.Set(bullBarRollerExtendedSpeed); 
-    // } 
-}
-
 
 void BullBar::SemiAuto(const RobotData &robotData, BullBarData &bullBarData)
 {
