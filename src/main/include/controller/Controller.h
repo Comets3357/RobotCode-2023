@@ -39,6 +39,8 @@ struct ControlData
     double maxTurn = 0.55;
     bool vectorDrive;
 
+    bool substationLineUp;
+
     //intake:
 
     bool mBullBarExtension;

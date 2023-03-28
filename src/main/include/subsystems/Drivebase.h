@@ -26,6 +26,10 @@
 #include <fstream>
 #include <deque>
 
+#include <frc/trajectory/TrajectoryGenerator.h> 
+#include <frc/trajectory/TrajectoryConfig.h> 
+// #include <frc/geometry/Translation2d.h>
+
 #include <frc/trajectory/TrapezoidProfile.h>
 #include <frc/controller/ArmFeedforward.h>
 #include <frc2/command/ProfiledPIDSubsystem.h>
@@ -198,4 +202,10 @@ private:
 
     double chargeStationBackoffBeginTime = 0;
     double chargeStationBeginFailSafe = 0;
+
+    int substationStep = 0;
+
+    std::vector<frc::Translation2d> interiorWaypoints;
+    frc::Pose2d endPoint;
+    frc::TrajectoryConfig config{7_mps, 2.8_mps_sq};
 };

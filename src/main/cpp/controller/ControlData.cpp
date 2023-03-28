@@ -33,7 +33,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 //-----------------------------------------------------------------------------------------------------------------------------------
 
     // note: when pRShoulderSwitch is held, driving is sensitive to turning, while not held (default driving mode) driving is less sensitive to turning and good for quick staright movements and steady arcs (won't turn super easily)
-    controlData.turnResponsive = controllerData.pRShoulderSwitch;
+    // controlData.turnResponsive = controllerData.pRShoulderSwitch;
+    controlData.substationLineUp = controllerData.pRShoulderSwitch;
     if (controlData.turnResponsive)
     {
         controlData.maxStraight = 1;

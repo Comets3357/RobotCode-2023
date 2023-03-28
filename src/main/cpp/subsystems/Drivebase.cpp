@@ -253,6 +253,72 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             }
         }
 
+        if (robotData.controlData.substationLineUp &&
+            (tempLDrive <= 0.08 && tempLDrive >= -0.08) &&
+            (tempRDrive <= 0.08 && tempRDrive >= -0.08)) 
+        {
+            switch (substationStep)
+            {
+                case 0:
+                    {
+                    frc::Pose2d startPosition{units::meter_t{robotData.drivebaseData.odometryX}, 
+                                                units::meter_t{robotData.drivebaseData.odometryY}, 
+                                                units::degree_t(robotData.gyroData.rawYaw)};
+                     
+                    interiorWaypoints.clear();
+
+                    config.SetStartVelocity(units::meters_per_second_t{((dbLEncoder.GetVelocity() / mpsToRpm) + (dbREncoder.GetVelocity() / mpsToRpm)) / 2});
+                    config.SetEndVelocity(0.75_mps);
+
+                    if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
+                    {
+                        endPoint = frc::Pose2d{14.32_m, 8_m, units::degree_t(90_deg)};
+                        interiorWaypoints.emplace_back(frc::Translation2d{14.32_m, 7.75_m});
+                        interiorWaypoints.emplace_back(frc::Translation2d{13.6_m, 7.5_m});
+                    }
+                    else
+                    {
+                        endPoint = frc::Pose2d{2.36_m, 8_m, units::degree_t(-90_deg)};
+                        interiorWaypoints.emplace_back(frc::Translation2d{2.36_m, 7.75_m});
+                        interiorWaypoints.emplace_back(frc::Translation2d{3.0_m, 7.5_m});
+                    }
+
+                    // frc::TrajectoryConfig config{7_mps, 2.8_mps_sq};
+
+                    trajectory = frc::TrajectoryGenerator::GenerateTrajectory(
+                    startPosition, interiorWaypoints, endPoint, config);
+
+                    trajectorySecOffset = robotData.timerData.secSinceEnabled;
+
+                    substationStep++;
+                    }
+                    break;
+                case 1:
+                   {
+                    units::second_t sampleSec{robotData.timerData.secSinceEnabled - trajectorySecOffset};
+
+                    double totalTime = trajectory.TotalTime().to<double>();
+
+                    frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
+                    frc::Pose2d desiredPose = trajectoryState.pose;
+
+                    frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetEstimatedPosition(), trajectoryState);
+                    frc::DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.ToWheelSpeeds(chassisSpeeds);
+                    double leftWheelSpeed = wheelSpeeds.left.to<double>();
+                    double rightWheelSpeed = wheelSpeeds.right.to<double>();
+
+                    setVelocity(leftWheelSpeed, rightWheelSpeed);
+                   }
+                    break;
+            }
+
+        }
+        else
+        {
+            substationStep = 0;
+            setPercentOutput(tempLDrive * drivebaseMultiplier, tempRDrive * drivebaseMultiplier);
+        }
+
     }
     else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
     {
