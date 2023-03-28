@@ -253,9 +253,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             }
         }
 
-        if (robotData.controlData.substationLineUp &&
-            (tempLDrive <= 0.08 && tempLDrive >= -0.08) &&
-            (tempRDrive <= 0.08 && tempRDrive >= -0.08)) 
+        if (robotData.controlData.substationLineUp) 
         {
             switch (substationStep)
             {
@@ -274,13 +272,11 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     {
                         endPoint = frc::Pose2d{14.32_m, 8_m, units::degree_t(90_deg)};
                         interiorWaypoints.emplace_back(frc::Translation2d{14.32_m, 7.75_m});
-                        interiorWaypoints.emplace_back(frc::Translation2d{13.6_m, 7.5_m});
                     }
                     else
                     {
                         endPoint = frc::Pose2d{2.36_m, 8_m, units::degree_t(-90_deg)};
                         interiorWaypoints.emplace_back(frc::Translation2d{2.36_m, 7.75_m});
-                        interiorWaypoints.emplace_back(frc::Translation2d{3.0_m, 7.5_m});
                     }
 
                     // frc::TrajectoryConfig config{7_mps, 2.8_mps_sq};
@@ -299,16 +295,26 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
                     double totalTime = trajectory.TotalTime().to<double>();
 
+                    if ((sampleSec.to<double>() > totalTime)) 
+                    {   
+                        substationStep++;
+                    }   
+
                     frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
                     frc::Pose2d desiredPose = trajectoryState.pose;
 
                     frc::ChassisSpeeds chassisSpeeds = ramseteController.Calculate(odometry.GetEstimatedPosition(), trajectoryState);
+
                     frc::DifferentialDriveWheelSpeeds wheelSpeeds = kinematics.ToWheelSpeeds(chassisSpeeds);
+                    
                     double leftWheelSpeed = wheelSpeeds.left.to<double>();
                     double rightWheelSpeed = wheelSpeeds.right.to<double>();
 
                     setVelocity(leftWheelSpeed, rightWheelSpeed);
                    }
+                    break;
+                case 2:
+                    setVelocity(0, 0);
                     break;
             }
 
