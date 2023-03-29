@@ -253,7 +253,11 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
             }
         }
 
-        if (robotData.controlData.substationLineUp) 
+   
+
+        if (robotData.controlData.substationLineUp &&
+            (tempLDrive <= 0.08 && tempLDrive >= -0.08) &&
+            (tempRDrive <= 0.08 && tempRDrive >= -0.08)) 
         {
             switch (substationStep)
             {
@@ -266,7 +270,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     interiorWaypoints.clear();
 
                     config.SetStartVelocity(units::meters_per_second_t{((dbLEncoder.GetVelocity() / mpsToRpm) + (dbREncoder.GetVelocity() / mpsToRpm)) / 2});
-                    config.SetEndVelocity(0.75_mps);
+                    config.SetEndVelocity(0.0_mps);
 
                     if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
                     {
@@ -278,6 +282,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                         endPoint = frc::Pose2d{2.36_m, 8_m, units::degree_t(-90_deg)};
                         interiorWaypoints.emplace_back(frc::Translation2d{2.36_m, 7.75_m});
                     }
+
 
                     // frc::TrajectoryConfig config{7_mps, 2.8_mps_sq};
 
