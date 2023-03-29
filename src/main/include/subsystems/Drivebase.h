@@ -225,5 +225,8 @@ private:
     double midToHighPoleLength = 16.16;
     double distanceToMidPole = 29.16;
 
+    int autoAllignStep = 0;
+    double autoAllignGyroAngle = 0;
+
     // bool autoAllign = false;
 };
