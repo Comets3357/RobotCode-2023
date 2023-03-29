@@ -332,54 +332,35 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
     }
 
-    if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true; autoAllignStep = 0;
+    if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true;
     if (robotData.controlData.saHomePosition) drivebaseData.autoAllign = false;
     if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.gamePieceType == CONE)
     {
-        switch (autoAllignStep)
+        double distance = robotData.endEffectorData.distanceReading;
+        double limelightValue = robotData.limelightData.x;
+
+        if (drivebaseData.cantSeeTop)
         {
-            case 0:
+            double angle = gyroData.rawYaw + robotData.limelightData.x;
+            double midPoleAngle = 180 - abs(angle);
+            double distanceToTop = sqrt(pow(midToHighPoleLength, 2) + pow(distanceToMidPole, 2) - (2 * midToHighPoleLength * distanceToMidPole * cos(midPoleAngle / 180 * 3.1415926)));
+            double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
+            limelightValue = interiorAngle + robotData.limelightData.x;
+        }
 
-                double distance = robotData.endEffectorData.distanceReading;
-                double limelightValue = robotData.limelightData.x;
+        double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
 
-                if (drivebaseData.cantSeeTop)
-                {
-                    double angle = gyroData.rawYaw + robotData.limelightData.x;
-                    double midPoleAngle = 180 - abs(angle);
-                    double distanceToTop = sqrt(pow(midToHighPoleLength, 2) + pow(distanceToMidPole, 2) - (2 * midToHighPoleLength * distanceToMidPole * cos(midPoleAngle / 180 * 3.1415926)));
-                    double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
-                    limelightValue = interiorAngle + robotData.limelightData.x;
-                }
+        frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
 
-                double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
+        setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
 
-                frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
-
-                setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
-
-                if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5)
-                {
-                    autoAllignStep++;
-                    autoAllignGyroAngle = robotData.gyroData.rawYaw;
-                }
-
-                break;
-
-            case 1:
-
-                if (autoAllignGyroAngle > gyroData.rawYaw - 0.5 && autoAllignGyroAngle < gyroData.rawYaw + 0.5 && robotData.armData.armInPosition)
-                {
-                    drivebaseData.allowEject = true;
-                }
-                else
-                {
-                    drivebaseData.allowEject = false;
-                }
-
-                setVelocity((gyroData.rawYaw - autoAllignGyroAngle) * 0.2, -(gyroData.rawYaw - autoAllignGyroAngle) * 0.2);
-
-                break;
+        if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5 && robotData.armData.armInPosition)
+        {
+            drivebaseData.allowEject = true;
+        }
+        else
+        {
+            drivebaseData.allowEject = false;
         }
     }
     else
