@@ -343,7 +343,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         double limelightValue = robotData.limelightData.x;
         
 
-        if (drivebaseData.cantSeeTop)
+        if (robotData.limelightData.cantSeeTop)
         {
             double angle = gyroData.rawYaw + robotData.limelightData.x;
             double midPoleAngle = 180 - abs(angle);
