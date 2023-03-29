@@ -93,6 +93,8 @@ void Arm::RobotPeriodic(const RobotData &robotData, ArmData &armData)
             SemiAuto(robotData, armData);
             break;
     }
+
+    frc::SmartDashboard::PutBoolean("INPOS", armData.armInPosition);
     
     frc::SmartDashboard::PutNumber("current rev for wrist", armWristRelativeEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("current run mode", wristRunMode);
@@ -278,7 +280,6 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
-
                     RotateWrist(robotData.configData.armConfigData.wristCubeHighPosition, robotData, 0);
                     RotatePivot(robotData.configData.armConfigData.pivotCubeHighPosition, robotData, 0);
 
@@ -464,34 +465,39 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
     if (wristProfileActive && robotData.timerData.secSinceEnabled > wristProfileStartTime)
     {
 
-        units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - wristProfileStartTime};
-        auto setPoint = wristProfile.Calculate(elapsedTime);
+        wristElapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - wristProfileStartTime};
+        auto setPoint = wristProfile.Calculate(wristElapsedTime);
 
         armWristPIDController.SetReference(setPoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
         frc::SmartDashboard::PutNumber("TRAP Wrist", setPoint.position.value());
         frc::SmartDashboard::PutNumber("TRAP Active", wristProfileActive);
-        frc::SmartDashboard::PutNumber("TRAP Wrist Elapsed Time", (double)elapsedTime);
+        frc::SmartDashboard::PutNumber("TRAP Wrist Elapsed Time", (double)wristElapsedTime);
 
-        if (wristProfile.IsFinished(elapsedTime))
+        if (wristProfile.IsFinished(wristElapsedTime))
         {
             wristProfileActive = false;
+            wristElapsedTime = units::time::second_t{0};
         }
         
     }
 
     if (pivotProfileActive && robotData.timerData.secSinceEnabled > pivotProfileStartTime)
     {
-        units::time::second_t elapsedTime{robotData.timerData.secSinceEnabled - pivotProfileStartTime};
-        auto setpoint = pivotProfile.Calculate(elapsedTime);
+        pivotElapsedTime = units::time::second_t{robotData.timerData.secSinceEnabled - pivotProfileStartTime};
+        auto setpoint = pivotProfile.Calculate(pivotElapsedTime);
 
         armPivotPIDController.SetReference(setpoint.position.value(), rev::CANSparkMax::ControlType::kPosition);
         frc::SmartDashboard::PutNumber("TRAP Arm", setpoint.position.value());
 
-        if (pivotProfile.IsFinished(elapsedTime))
+        if (pivotProfile.IsFinished(pivotElapsedTime))
         {
             pivotProfileActive = false;
+            pivotElapsedTime = units::time::second_t{0};
         }
     }
+
+    if (!pivotProfileActive && !wristProfileActive) armData.armInPosition = true;
+    else armData.armInPosition = false;
 
     if (robotData.controllerData.sLStickBtn)
     {

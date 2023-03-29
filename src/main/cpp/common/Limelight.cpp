@@ -13,6 +13,14 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     {
         frc::SmartDashboard::PutBoolean("limelight active", false);
     }
+
+    limelightOdometry = llresults.targetingResults.botPose_wpiblue;
+    numberOfTagsInView = llresults.targetingResults.FiducialResults.size();
+    limelightData.latency = LimelightHelpers::getLatency_Pipeline() + LimelightHelpers::getLatency_Capture();
+
+    limelightData.x = LimelightHelpers::getTX("");
+    frc::SmartDashboard::PutNumber("Limelight x", limelightData.x );
+    LimelightHelpers::setPipelineIndex("", 2);
     
     if (robotData.controlData.saResetOdometry)
     {

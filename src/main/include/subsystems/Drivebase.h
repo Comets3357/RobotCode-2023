@@ -54,7 +54,8 @@ enum DriveMode {
     DRIVEMODE_CHARGE_STATION_TRAVERSE,
     DRIVEMODE_AUTO_BALANCE,
     DRIVEMODE_HIT_CHARGE_STATION,
-    DRIVEMODE_TURN_TO_HEADING
+    DRIVEMODE_TURN_TO_HEADING,
+    DRIVEMODE_AUTOALLIGN
 };
 
 struct DrivebaseData
@@ -128,8 +129,8 @@ private:
     frc::SendableChooser<frc::Pose2d> startPointChooser;
 
     const units::radian_t kZeroAngle{0.0};
-    units::meter_t meterX{12.429};
-    units::meter_t meterY{5.243};
+    units::meter_t meterX{0};
+    units::meter_t meterY{0};
     const frc::Translation2d testTrans{meterX, meterY};
     units::radian_t zeroRadians{0};
     const frc::Rotation2d testRot{zeroRadians};
@@ -208,4 +209,13 @@ private:
     std::vector<frc::Translation2d> interiorWaypoints;
     frc::Pose2d endPoint;
     frc::TrajectoryConfig config{7_mps, 2.8_mps_sq};
+
+
+
+    double minLimelightAutoAllign = -4;
+    double maxLimelightAutoAllign = 4;
+    double minConeDistanceAutoAllign = 0;
+    double maxConeDistanceAutoAllign = 10;
+
+    bool autoAllign = false;
 };

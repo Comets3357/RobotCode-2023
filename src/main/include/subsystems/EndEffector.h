@@ -32,7 +32,7 @@ struct EndEffectorData
 
     double gamePieceDistance = 0;
 
-    bool gamePieceShuffleboard = NONE;
+    bool gamePieceShuffleboard = false;
 
 };
 

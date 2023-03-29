@@ -43,6 +43,9 @@ struct ArmData
     bool wristInPosition = false;
     bool armInPosition = false;
 
+
+    bool inPosition = false;
+
 };
 
 enum ArmRunMode
@@ -169,4 +172,7 @@ units::angle::degree_t pivotMaxAcceleration{700_deg};
 
     double zeroStartTime = 0;
     bool zeroing = false;
+
+    units::time::second_t pivotElapsedTime{0};
+    units::time::second_t wristElapsedTime{0};
 };
