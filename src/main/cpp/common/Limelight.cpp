@@ -32,9 +32,6 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
             limelightOdometry.clear();
 
-            gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
-            gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
-
             limelightOneID = LimelightHelpers::getFiducialID("limelight-1");
             limelightTwoID = LimelightHelpers::getFiducialID("limelight-2");
 
@@ -44,6 +41,9 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
             // red alliance
             if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed)
             {
+
+                gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
+                gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
 
                 // robot facing with elevator limelight towards polls
                 if (limelightOneID == 1 || limelightOneID == 2 || limelightOneID == 3 || limelightOneID == 4 ||
@@ -142,6 +142,10 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
             }
             else // blue alliance
             {
+                
+                gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
+                gyroRotation = frc::Rotation2d{gyroRadians};
+
                 // robot facing with elevator limelight towards polls
                 if (limelightOneID == 5 || limelightOneID == 6 || limelightOneID == 7 || limelightOneID == 8 ||
                     limelightTwoID == 1 || limelightTwoID == 2 || limelightTwoID == 3 || limelightTwoID == 4)
