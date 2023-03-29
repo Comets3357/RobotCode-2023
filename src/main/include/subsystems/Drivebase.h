@@ -81,7 +81,6 @@ struct DrivebaseData
     bool allowBullBarExtend = true;
 
     bool autoAllign = false;
-    bool cantSeeTop = false;
 
     bool allowEject = false;
 };

@@ -250,10 +250,24 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     
     try
     {
-        if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid)
+        if (robotData.drivebaseData.autoAllign)
         {
-            LimelightHelpers::setPipelineIndex("limelight-two", 2);
+            if (!limelightData.cantSeeTop)
+            {
+                LimelightHelpers::setPipelineIndex("limelight-two", 2);
+            }
+            
             limelightData.x = LimelightHelpers::getTX("limelight-two");
+
+            if (!LimelightHelpers::getLimelightNTTableEntry("limelight-two", "tv"))
+            {
+                LimelightHelpers::setPipelineIndex("limelight-two", 1);
+                limelightData.cantSeeTop = true;
+            }
+        }
+        else
+        {
+            limelightData.cantSeeTop = false;
         }
     }
     catch(...)

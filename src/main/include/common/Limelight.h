@@ -31,6 +31,9 @@ struct LimelightData
 
     double x;
     double y;
+
+    
+    bool cantSeeTop = false;
 };
 
 class Limelight
