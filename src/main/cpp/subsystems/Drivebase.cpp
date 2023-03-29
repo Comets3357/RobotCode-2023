@@ -113,6 +113,7 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
 
     if (frc::DriverStation::IsTeleop()) 
     {
+        controlData.saResetOdometry = true;
         teleopControl(robotData, drivebaseData, gyroData, controlData);
     }
     else if (frc::DriverStation::IsAutonomous())
