@@ -34,6 +34,8 @@ struct EndEffectorData
 
     bool gamePieceShuffleboard = false;
 
+    double distanceReading = 0;
+
 };
 
 class EndEffector
@@ -58,6 +60,7 @@ private:
 
     rev::SparkMaxLimitSwitch coneLimitSwitch = endEffectorRollers.GetReverseLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
     rev::SparkMaxLimitSwitch cubeLimitSwitch = endEffectorRollers.GetForwardLimitSwitch(rev::CANDigitalInput::LimitSwitchPolarity::kNormallyClosed);
+    rev::SparkMaxAbsoluteEncoder distanceSensor = endEffectorRollers.GetAbsoluteEncoder(rev::SparkMaxAbsoluteEncoder::Type::kDutyCycle);
 
     double EndEffectorRollerOutwardSpeed = 0.8;
     double EndEffectorRollerInwardSpeed = -0.8;

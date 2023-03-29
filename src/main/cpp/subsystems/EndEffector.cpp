@@ -43,6 +43,8 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             break;
     }
 
+    endEffectorData.distanceReading = distanceSensor.GetPosition();
+
     endEffectorData.pastReadOfGamePiece = endEffectorData.gamePieceType;
 
     

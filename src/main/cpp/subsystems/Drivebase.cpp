@@ -336,9 +336,9 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
     if (robotData.controlData.saHomePosition) drivebaseData.autoAllign = false;
     if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.gamePieceType == CONE)
     {
-        double distance = 5;
-        double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) - minLimelightAutoAllign;
-        targetLimelightValue = 0;
+        double distance = robotData.endEffectorData.distanceReading;
+        double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
+
         frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
 
         setVelocity((robotData.limelightData.x - targetLimelightValue) * 0.2, -(robotData.limelightData.x - targetLimelightValue) * 0.2);
