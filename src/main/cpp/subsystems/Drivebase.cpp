@@ -687,24 +687,8 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
     if (robotData.limelightData.limelightAllowedToReset && robotData.controlData.saResetOdometry)
     {
-        if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
-        {
-            // resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>(), robotData);
-            // odometry.AddVisionMeasurement(robotData.limelightData.Odometry, )
-
-            odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
-        }
-        else
-        {
-            // zeroEncoders();
-            // resetOdometry(robotData.limelightData.limelightOdometryX, robotData.limelightData.limelightOdometryY, currentRadians.to<double>() + M_PI, robotData);
-            odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
-        }
+        odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
     }
-    // else
-    // {
-    //     odometry.Update(currentRotation, leftDistance, rightDistance);
-    // }
 
     odometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
     
