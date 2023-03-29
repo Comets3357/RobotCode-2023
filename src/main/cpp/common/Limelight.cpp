@@ -5,272 +5,252 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
     try 
     {
-        llresults = LimelightHelpers::getLatestResults();
-        // distanceToClosestTag = GetDistance();
-        frc::SmartDashboard::PutBoolean("limelight active", true);
+        llresultsOne = LimelightHelpers::getLatestResults("limelight-1");
+        frc::SmartDashboard::PutBoolean("limelight one active", true);
     }
     catch (...)
     {
-        frc::SmartDashboard::PutBoolean("limelight active", false);
+        frc::SmartDashboard::PutBoolean("limelight one active", false);
     }
 
-    limelightOdometry = llresults.targetingResults.botPose_wpiblue;
-    numberOfTagsInView = llresults.targetingResults.FiducialResults.size();
-    limelightData.latency = LimelightHelpers::getLatency_Pipeline() + LimelightHelpers::getLatency_Capture();
-
-    limelightData.x = LimelightHelpers::getTX("");
-    frc::SmartDashboard::PutNumber("Limelight x", limelightData.x );
-    LimelightHelpers::setPipelineIndex("", 2);
-    
-    if (robotData.controlData.saResetOdometry)
+    try 
     {
-        try
-        {   
-            LimelightHelpers::setPipelineIndex("pipeline", 0);
+        llresultsTwo = LimelightHelpers::getLatestResults("limelight-2");
+        frc::SmartDashboard::PutBoolean("limelight two active", true);
+    }
+    catch (...)
+    {
+        frc::SmartDashboard::PutBoolean("limelight two active", false);
+    }
+
+    try
+    {
+        if (robotData.controlData.saResetOdometry)
+        {
+            LimelightHelpers::setPipelineIndex("limelight-1", 0);
+            LimelightHelpers::setPipelineIndex("limelight-2", 0);
 
             limelightOdometry.clear();
 
-            limelightOdometry = llresults.targetingResults.botPose_wpiblue;
-            numberOfTagsInView = llresults.targetingResults.FiducialResults.size();
-            limelightData.latency = LimelightHelpers::getLatency_Pipeline() + LimelightHelpers::getLatency_Capture();
+            gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
+            gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
+
+            limelightOneID = LimelightHelpers::getFiducialID("limelight-1");
+            limelightTwoID = LimelightHelpers::getFiducialID("limelight-2");
 
             pastX = tempX;
             pastY = tempY;
 
-            tempX = limelightOdometry.at(0);
-            tempY = limelightOdometry.at(1);
-
-            frc::SmartDashboard::PutNumber("ll x", tempX);
-            frc::SmartDashboard::PutNumber("ll y", tempY);
-
-            if ((fabs(tempX - robotData.drivebaseData.odometryX) < 1) && (fabs(tempY - robotData.drivebaseData.odometryY) < 1) 
-            && (pastX != tempX) && (pastY != tempY))
+            // red alliance
+            if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed)
             {
-                if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kRed)
+
+                // robot facing with elevator limelight towards polls
+                if (limelightOneID == 1 || limelightOneID == 2 || limelightOneID == 3 || limelightOneID == 4 ||
+                    limelightTwoID == 5 || limelightTwoID == 6 || limelightTwoID == 7 || limelightTwoID == 8)
                 {
+                    // red side of field using elevator limelight
+                    if (robotData.drivebaseData.odometryX > 8.3)
+                    {
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
 
-                    gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
-                    gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);
 
+                        if ((((numberOfTagsInView == 1) && (tempX > 13.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX > 9.5)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
+                    }
+                    else // blue side of field using bull bar limelight
+                    {
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
 
-                    if ((numberOfTagsInView == 1) && (tempX > 13.3))
-                    {
-                        limelightData.limelightAllowedToReset = true;
-                        limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
-                    }
-                    else if ((numberOfTagsInView == 2) && (tempX > 9.5)) 
-                    {
-                        limelightData.limelightAllowedToReset = true;
-                        limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation };
-                    }
-                    else if (numberOfTagsInView == 3)
-                    {
-                        limelightData.limelightAllowedToReset = true;
-                        limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
-                    }
-                    else
-                    {
-                        limelightData.limelightAllowedToReset = false;
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);    
+
+                        if ((((numberOfTagsInView == 1) && (tempX < 3.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX < 7.3)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
                     }
                 }
-                else
+                else // robot facing with elevator limelight away from polls
                 {
+                    // blue side of field elevator limelight
+                    if (robotData.drivebaseData.odometryX < 8.3)
+                    {
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
 
-                    gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
-                    gyroRotation = frc::Rotation2d{gyroRadians};
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);    
 
-                    if ((numberOfTagsInView == 1) && (tempX < 3.2))
-                    {
-                        limelightData.limelightAllowedToReset = true;
-                        limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        if ((((numberOfTagsInView == 1) && (tempX < 3.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX < 7.3)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
                     }
-                    else if ((numberOfTagsInView == 2) && (tempX < 7.1)) 
+                    else // red side of field using bull bar limelight
                     {
-                        limelightData.limelightAllowedToReset = true;
-                        limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
-                    }
-                    else if (numberOfTagsInView == 3)
-                    {
-                        limelightData.limelightAllowedToReset = true;
-                        limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
-                    }
-                    else
-                    {
-                        limelightData.limelightAllowedToReset = false;
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
+
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);    
+
+                        if ((((numberOfTagsInView == 1) && (tempX > 13.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX > 9.5)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
                     }
                 }
             }
-            else 
+            else // blue alliance
             {
-                limelightData.limelightAllowedToReset = false;
-            }
-        }
-        catch (...)
-        {
+                // robot facing with elevator limelight towards polls
+                if (limelightOneID == 5 || limelightOneID == 6 || limelightOneID == 7 || limelightOneID == 8 ||
+                    limelightTwoID == 1 || limelightTwoID == 2 || limelightTwoID == 3 || limelightTwoID == 4)
+                {
+                    // red side of field using bull bar limelight
+                    if (robotData.drivebaseData.odometryX > 8.3)
+                    {
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
 
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);
+
+                        if ((((numberOfTagsInView == 1) && (tempX > 13.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX > 9.5)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
+                    }
+                    else // blue side of field using elevator limelight
+                    {
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
+
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);    
+
+                        if ((((numberOfTagsInView == 1) && (tempX < 3.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX < 7.3)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
+                    }
+                }
+                else // robot facing with elevator limelight away from polls
+                {
+                    // blue side of field using bull bar limelight
+                    if (robotData.drivebaseData.odometryX < 8.3)
+                    {
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
+
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);    
+
+                        if ((((numberOfTagsInView == 1) && (tempX < 3.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX < 7.3)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
+                    }
+                    else // red side of field using elevator limelight
+                    {
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
+
+                        tempX = limelightOdometry.at(0);
+                        tempY = limelightOdometry.at(1);    
+
+                        if ((((numberOfTagsInView == 1) && (tempX > 13.3)) ||
+                            ((numberOfTagsInView == 2) && (tempX > 9.5)) ||
+                            (numberOfTagsInView == 3)) && (pastX != tempX))
+                        {
+                            limelightData.limelightAllowedToReset = true;
+                            limelightData.Odometry = frc::Pose2d{units::meter_t{tempX}, units::meter_t{tempY}, gyroRotation};
+                        }
+                        else
+                        {
+                            limelightData.limelightAllowedToReset = false;
+                        }
+                    }
+                }
+            }
         }
     }
-
-    limelightData.pastExtendAllow = robotData.limelightData.allowExtend;
-
-    try
+    catch(...)
     {
 
-        //if (robotData.endEffectorData.gamePieceType != NONE)
-        // {
-        //     LimelightHelpers::setPipelineIndex("", 1);
-        // }
-        // else
-        // {
-        //     LimelightHelpers::setPipelineIndex("", 0);
-        // }
-
-        if (frc::DriverStation::IsTeleop())
+    }
+    
+    try
+    {
+        if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid)
         {
-            LimelightHelpers::setPipelineIndex("", 3);
+            LimelightHelpers::setPipelineIndex("limelight-1", 2);
+            limelightData.x = LimelightHelpers::getTX("limelight-1");
         }
-
-
-        // if (robotData.controlData.saPositionHigh && robotData.endEffectorData.gamePieceType == CONE)
-        // {
-        //     LimelightHelpers::setPipelineIndex("pipeline", 1);
-        //     distanceFromTarget = GetDistance(higherPollHeight, upperAngleOffset);
-        //     angleOff = LimelightHelpers::getTX("") * (pi / 180);
-
-        //     if (std::abs(angleOff) < 10)
-        //     {
-        //         distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
-        //         angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
-
-        //         secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (highEndEffectorDistanceFromCenter));
-
-        //         if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
-        //         {
-        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
-        //         }
-        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
-        //         {
-        //             finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
-        //         }
-        //         else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
-        //         {
-        //             finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
-        //         }
-        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
-        //         {
-        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
-        //         }    else
-        //         {
-        //             finalAngle = angleFromCenterOfRobot;
-        //         }
-
-        //         limelightData.angleOffFromCenter = finalAngle;
-        //         limelightData.distanceFromCenter = distanceFromCenterOfRobot - highEndEffectorDistanceFromCenter;
-        //     }
-        //     else
-        //     {
-        //         LimelightHelpers::setPipelineIndex("pipeline", 2);
-
-        //         distanceFromTarget = GetDistance(lowerPollHeight, lowerAngleOffset) + distanceBetweenMidAndTopPoll;
-        //         angleOff = LimelightHelpers::getTX("") * (pi / 180);
-
-        //         distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
-        //         angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
-
-        //         secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (highEndEffectorDistanceFromCenter));
-
-        //         if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
-        //         {
-        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
-        //         }
-        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
-        //         {
-        //             finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
-        //         }
-        //         else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
-        //         {
-        //             finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
-        //         }
-        //         else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
-        //         {
-        //             finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
-        //         }
-        //         else
-        //         {
-        //             finalAngle = angleFromCenterOfRobot;
-        //         }
-
-        //         limelightData.angleOffFromCenter = finalAngle;
-        //         limelightData.distanceFromCenter = distanceFromCenterOfRobot - highEndEffectorDistanceFromCenter;
-        //     }
-
-
-        // }
-        // else if (robotData.controlData.saPositionMid && robotData.endEffectorData.gamePieceType == CONE)
-        // {
-        //     LimelightHelpers::setPipelineIndex("pipeline", 2);
-
-        //     distanceFromTarget = GetDistance(lowerPollHeight, lowerAngleOffset);
-        //     angleOff = LimelightHelpers::getTX("") * (pi / 180);
-
-        //     distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
-        //     angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));
-
-        //     secondAngleFromCenter = std::atan((robotData.endEffectorData.gamePieceDistance) / (midEndEffectorDistanceFromCenter));
-
-        //     if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance > 0)
-        //     {
-        //         finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
-        //     }
-        //     else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance > 0)
-        //     {
-        //         finalAngle = -(std::abs(angleFromCenterOfRobot) + secondAngleFromCenter);
-        //     }
-        //     else if (angleOff > 0 && robotData.endEffectorData.gamePieceDistance < 0) 
-        //     {
-        //         finalAngle = angleFromCenterOfRobot + std::abs(secondAngleFromCenter);
-        //     }
-        //     else if (angleOff < 0 && robotData.endEffectorData.gamePieceDistance < 0)
-        //     {
-        //         finalAngle = angleFromCenterOfRobot - secondAngleFromCenter;
-        //     }
-        //     else
-        //     {
-        //         finalAngle = angleFromCenterOfRobot;
-        //     }
-
-        //     limelightData.angleOffFromCenter = finalAngle;
-        //     limelightData.distanceFromCenter = distanceFromCenterOfRobot - midEndEffectorDistanceFromCenter;
-            
-        // }
-        // else if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) && robotData.endEffectorData.gamePieceType == CUBE)
-        // {
-        //     LimelightHelpers::setPipelineIndex("pipeline", 0);
-
-        //     distanceFromTarget = 1000;
-
-        //     if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
-        //     {
-        //         if (llresults.targetingResults.botPose_wpiblue.at(0) > 14.8)
-        //         {
-        //             limelightData.allowExtend = true;
-        //         }
-        //         {
-        //             limelightData.allowExtend = false;
-        //         }
-        //     }
-        //     else
-        //     {
-        //         if (llresults.targetingResults.botPose_wpiblue.at(0) < 1.7)
-        //         {
-        //             limelightData.allowExtend = true;
-        //         }
-        //         else
-        //         {
-        //             limelightData.allowExtend = false;
-        //         }
-        //     }
-        // }
     }
     catch(...)
     {
@@ -278,16 +258,4 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     }
 
 
-}
-
-double Limelight::GetDistance(double targetHeight, double vertAngleOffset)
-{
-    double tempDist = 0;
-    double verticalAngle = 0;
-
-    verticalAngle = (LimelightHelpers::getTY("") + (limelightAngle + vertAngleOffset)) * (pi / 180);
-    tempDist = (targetHeight - limelightHeight) / (std::tan(verticalAngle));// * inchesToMeters;
-
-    frc::SmartDashboard::PutNumber("ty", LimelightHelpers::getTY(""));
-    return tempDist;
 }

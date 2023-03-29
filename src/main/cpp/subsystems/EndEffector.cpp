@@ -101,7 +101,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
         }
 
     }
-    else if (robotData.controlData.saIntakeBackwards) 
+    else if (robotData.controlData.saIntakeBackwards || robotData.drivebaseData.allowEject) 
     {
         switch (robotData.endEffectorData.lastPieceType)
         {

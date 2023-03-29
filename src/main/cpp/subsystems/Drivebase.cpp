@@ -331,41 +331,30 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
 
     }
-    else if (drivebaseData.driveMode == DRIVEMODE_TURNINPLACE) 
-    {
-        //turnInPlaceTeleop(-robotData.limelightData.angleOffset, robotData);
-    }
-    else if (drivebaseData.driveMode == DRIVEMODE_VECTOR)
-    {
-        //setPercentOutput(robotData.jetsonData.leftSkew, robotData.jetsonData.rightSkew);
-    }
-    if (robotData.controlData.saPositionHigh) autoAllign = true;
-    if (robotData.controlData.saHomePosition) autoAllign = false;
-    if (autoAllign)
+
+    if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true;
+    if (robotData.controlData.saHomePosition) drivebaseData.autoAllign = false;
+    if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.gamePieceType == CONE)
     {
         double distance = 5;
         double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) - minLimelightAutoAllign;
         targetLimelightValue = 0;
         frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
-        // if (robotData.limelightData.x > targetLimelightValue)
-        // {
-        //     setVelocity(-(robotData.limelightData.x - targetLimelightValue) * 0.05, 0);
-        // }
-        // else if (robotData.limelightData.x < targetLimelightValue)
-        // {
-        //     setVelocity(0, -(robotData.limelightData.x - targetLimelightValue) * 0.05);
-        // }
-        // else
-        // {
-        //     setVelocity(0,0);
-        // }
 
         setVelocity((robotData.limelightData.x - targetLimelightValue) * 0.2, -(robotData.limelightData.x - targetLimelightValue) * 0.2);
 
         if (robotData.limelightData.x > targetLimelightValue - 0.5 && robotData.limelightData.x < targetLimelightValue + 0.5 && robotData.armData.armInPosition)
         {
-            controlData.saIntakeBackwards = true;
+            drivebaseData.allowEject = true;
         }
+        else
+        {
+            drivebaseData.allowEject = false;
+        }
+    }
+    else
+    {
+        drivebaseData.allowEject = false;
     }
    
 

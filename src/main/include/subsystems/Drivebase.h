@@ -79,6 +79,10 @@ struct DrivebaseData
     double odometryYaw;
 
     bool allowBullBarExtend = true;
+
+    bool autoAllign = false;
+
+    bool allowEject = false;
 };
 
 class Drivebase
@@ -217,5 +221,5 @@ private:
     double minConeDistanceAutoAllign = 0;
     double maxConeDistanceAutoAllign = 10;
 
-    bool autoAllign = false;
+    // bool autoAllign = false;
 };
