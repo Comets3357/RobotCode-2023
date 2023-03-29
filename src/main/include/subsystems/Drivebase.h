@@ -81,6 +81,7 @@ struct DrivebaseData
     bool allowBullBarExtend = true;
 
     bool autoAllign = false;
+    bool cantSeeTop = false;
 
     bool allowEject = false;
 };
@@ -220,6 +221,9 @@ private:
     double maxLimelightAutoAllign = 4;
     double minConeDistanceAutoAllign = 0;
     double maxConeDistanceAutoAllign = 10;
+
+    double midToHighPoleLength = 16.16;
+    double distanceToMidPole = 29.16;
 
     // bool autoAllign = false;
 };
