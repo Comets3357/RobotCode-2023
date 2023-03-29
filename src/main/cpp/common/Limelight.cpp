@@ -5,7 +5,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
     try 
     {
-        llresultsOne = LimelightHelpers::getLatestResults("limelight-1");
+        llresultsOne = LimelightHelpers::getLatestResults("limelight-two");
         frc::SmartDashboard::PutBoolean("limelight one active", true);
     }
     catch (...)
@@ -15,7 +15,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
     try 
     {
-        llresultsTwo = LimelightHelpers::getLatestResults("limelight-2");
+        llresultsTwo = LimelightHelpers::getLatestResults("limelight");
         frc::SmartDashboard::PutBoolean("limelight two active", true);
     }
     catch (...)
@@ -27,13 +27,13 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     {
         if (robotData.controlData.saResetOdometry)
         {
-            LimelightHelpers::setPipelineIndex("limelight-1", 0);
-            LimelightHelpers::setPipelineIndex("limelight-2", 0);
+            LimelightHelpers::setPipelineIndex("limelight-two", 0);
+            LimelightHelpers::setPipelineIndex("limelight", 0);
 
             limelightOdometry.clear();
 
-            limelightOneID = LimelightHelpers::getFiducialID("limelight-1");
-            limelightTwoID = LimelightHelpers::getFiducialID("limelight-2");
+            limelightOneID = LimelightHelpers::getFiducialID("limelight-two");
+            limelightTwoID = LimelightHelpers::getFiducialID("limelight");
 
             pastX = tempX;
             pastY = tempY;
@@ -54,7 +54,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);
@@ -75,7 +75,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);    
@@ -100,7 +100,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);    
@@ -121,7 +121,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);    
@@ -155,7 +155,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);
@@ -176,7 +176,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);    
@@ -201,7 +201,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-2") + LimelightHelpers::getLatency_Pipeline("limelight-2");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);    
@@ -222,7 +222,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     {
                         limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
                         numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
-                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-1") + LimelightHelpers::getLatency_Pipeline("limelight-1");
+                        limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);
                         tempY = limelightOdometry.at(1);    
@@ -252,8 +252,8 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     {
         if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid)
         {
-            LimelightHelpers::setPipelineIndex("limelight-1", 2);
-            limelightData.x = LimelightHelpers::getTX("limelight-1");
+            LimelightHelpers::setPipelineIndex("limelight-two", 2);
+            limelightData.x = LimelightHelpers::getTX("limelight-two");
         }
     }
     catch(...)
