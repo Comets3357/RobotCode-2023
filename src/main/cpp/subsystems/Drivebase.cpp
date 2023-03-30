@@ -332,7 +332,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
 
     }
-
+    frc::SmartDashboard::PutNumber("Limelight X", robotData.limelightData.x);
     frc::SmartDashboard::PutNumber("DISTANCE", robotData.endEffectorData.distanceReading);
         
     if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true;
@@ -352,10 +352,15 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         //     limelightValue = interiorAngle + robotData.limelightData.x;
         // }
 
+        std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
+
         double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
 
-        frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
+       
 
+        std::clamp(targetLimelightValue, minLimelightAutoAllign, maxLimelightAutoAllign);
+
+         frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
 
         // if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5)
         // {
@@ -366,6 +371,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         //     setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
         // }
         setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
+        frc::SmartDashboard::PutNumber("LIM LEFT", (limelightValue - targetLimelightValue) * 0.2);
 
         if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5 && robotData.armData.armInPosition)
         {
