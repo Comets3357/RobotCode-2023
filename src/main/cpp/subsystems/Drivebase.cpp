@@ -113,7 +113,7 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
 
     if (frc::DriverStation::IsTeleop()) 
     {
-        //controlData.saResetOdometry = true;
+        controlData.saResetOdometry = true;
         teleopControl(robotData, drivebaseData, gyroData, controlData);
     }
     else if (frc::DriverStation::IsAutonomous())
@@ -335,8 +335,8 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
     frc::SmartDashboard::PutNumber("Limelight X", robotData.limelightData.x);
     frc::SmartDashboard::PutNumber("DISTANCE", robotData.endEffectorData.distanceReading);
         
-    if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true;
-    if (robotData.controlData.saHomePosition) drivebaseData.autoAllign = false;
+    // if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true;
+    // if (robotData.controlData.saHomePosition) drivebaseData.autoAllign = false;
     if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.gamePieceType == CONE)
     {
         double distance = robotData.endEffectorData.distanceReading;
@@ -351,6 +351,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         //     double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
         //     limelightValue = interiorAngle + robotData.limelightData.x;
         // }
+        
 
         std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
 
@@ -717,7 +718,7 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
     if (robotData.limelightData.limelightAllowedToReset && robotData.controlData.saResetOdometry)
     {
-        odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
+        odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency}, wpi::array<double, 3>{0.00001, 0.00001, 0.00001});
     }
 
     odometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);

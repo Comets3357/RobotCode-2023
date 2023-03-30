@@ -23,6 +23,10 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         frc::SmartDashboard::PutBoolean("limelight two active", false);
     }
 
+    frc::SmartDashboard::PutBoolean("allowed to reset obamatree", limelightData.limelightAllowedToReset);
+    frc::SmartDashboard::PutNumber("limelight x", limelightOdometry.at(0));
+    frc::SmartDashboard::PutNumber("limelight id", limelightTwoID);
+
     try
     {
         if (robotData.controlData.saResetOdometry)
@@ -250,28 +254,28 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     
     try
     {
-                        LimelightHelpers::setPipelineIndex("limelight-two", 2);
+        //LimelightHelpers::setPipelineIndex("limelight-two", 2);
 
-        limelightData.x = LimelightHelpers::getTX("limelight-two");
-        if (robotData.drivebaseData.autoAllign)
-        {
-            if (!limelightData.cantSeeTop)
-            {
-                LimelightHelpers::setPipelineIndex("limelight-two", 2);
-            }
+        // limelightData.x = LimelightHelpers::getTX("limelight-two");
+        // if (robotData.drivebaseData.autoAllign)
+        // {
+        //     if (!limelightData.cantSeeTop)
+        //     {
+        //         LimelightHelpers::setPipelineIndex("limelight-two", 2);
+        //     }
             
-            limelightData.x = LimelightHelpers::getTX("limelight-two");
+        //     limelightData.x = LimelightHelpers::getTX("limelight-two");
 
-            if (!LimelightHelpers::getLimelightNTTableEntry("limelight-two", "tv"))
-            {
-                LimelightHelpers::setPipelineIndex("limelight-two", 1);
-                limelightData.cantSeeTop = true;
-            }
-        }
-        else
-        {
-            limelightData.cantSeeTop = false;
-        }
+        //     if (!LimelightHelpers::getLimelightNTTableEntry("limelight-two", "tv"))
+        //     {
+        //         LimelightHelpers::setPipelineIndex("limelight-two", 1);
+        //         limelightData.cantSeeTop = true;
+        //     }
+        // }
+        // else
+        // {
+        //     limelightData.cantSeeTop = false;
+        // }
     }
     catch(...)
     {
