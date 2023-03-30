@@ -218,8 +218,8 @@ private:
 
     double minLimelightAutoAllign = -4;
     double maxLimelightAutoAllign = 4;
-    double minConeDistanceAutoAllign = 0;
-    double maxConeDistanceAutoAllign = 10;
+    double minConeDistanceAutoAllign = 0.08;
+    double maxConeDistanceAutoAllign = 0.353;
 
     double midToHighPoleLength = 16.16;
     double distanceToMidPole = 29.16;

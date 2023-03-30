@@ -113,7 +113,7 @@ void Drivebase::RobotPeriodic(const RobotData &robotData, DrivebaseData &driveba
 
     if (frc::DriverStation::IsTeleop()) 
     {
-        controlData.saResetOdometry = true;
+        //controlData.saResetOdometry = true;
         teleopControl(robotData, drivebaseData, gyroData, controlData);
     }
     else if (frc::DriverStation::IsAutonomous())
@@ -333,8 +333,8 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
     }
 
-
-
+    frc::SmartDashboard::PutNumber("DISTANCE", robotData.endEffectorData.distanceReading);
+        
     if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true;
     if (robotData.controlData.saHomePosition) drivebaseData.autoAllign = false;
     if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.gamePieceType == CONE)
@@ -343,28 +343,29 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         double limelightValue = robotData.limelightData.x;
         
 
-        if (robotData.limelightData.cantSeeTop)
-        {
-            double angle = gyroData.rawYaw + robotData.limelightData.x;
-            double midPoleAngle = 180 - abs(angle);
-            double distanceToTop = sqrt(pow(midToHighPoleLength, 2) + pow(distanceToMidPole, 2) - (2 * midToHighPoleLength * distanceToMidPole * cos(midPoleAngle / 180 * 3.1415926)));
-            double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
-            limelightValue = interiorAngle + robotData.limelightData.x;
-        }
+        // if (robotData.limelightData.cantSeeTop)
+        // {
+        //     double angle = gyroData.rawYaw + robotData.limelightData.x;
+        //     double midPoleAngle = 180 - abs(angle);
+        //     double distanceToTop = sqrt(pow(midToHighPoleLength, 2) + pow(distanceToMidPole, 2) - (2 * midToHighPoleLength * distanceToMidPole * cos(midPoleAngle / 180 * 3.1415926)));
+        //     double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
+        //     limelightValue = interiorAngle + robotData.limelightData.x;
+        // }
 
         double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
 
         frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
 
 
-        if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5)
-        {
-            setVelocity(-0.1, -0.1);
-        }
-        else
-        {
-            setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
-        }
+        // if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5)
+        // {
+        //     setVelocity(-0.1, -0.1);
+        // }
+        // else
+        // {
+        //     setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
+        // }
+        setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
 
         if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5 && robotData.armData.armInPosition)
         {

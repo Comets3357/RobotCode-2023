@@ -250,6 +250,9 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     
     try
     {
+                        LimelightHelpers::setPipelineIndex("limelight-two", 2);
+
+        limelightData.x = LimelightHelpers::getTX("limelight-two");
         if (robotData.drivebaseData.autoAllign)
         {
             if (!limelightData.cantSeeTop)
