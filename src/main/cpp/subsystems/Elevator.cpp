@@ -58,12 +58,6 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
     }
 
     frc::SmartDashboard::PutNumber("elevator output current", elevatorMotor.GetOutputCurrent());
-    // frc::SmartDashboard::PutBoolean("Elevator Inverted Relative", elevatorMotor.GetInverted());
-
-    // if (elevatorRelativeEncoder.GetVelocity() <= 1 && runMode != ELEVATOR_RELATIVE_RUN)
-    // {
-    //     ZeroRelativePosition(elevatorData);
-    // }
 
     frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
     frc::SmartDashboard::PutNumber("elevator absolute position", elevatorAbsoluteEncoder.GetPosition());
@@ -96,8 +90,6 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
         runMode = ELEVATOR_RELATIVE_RUN;
         elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
     }
-    // runMode = ELEVATOR_RELATIVE_RUN;
-    // elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
 
     if (runMode != ELEVATOR_NONE)
     {
@@ -139,24 +131,6 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
                     MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
                 }
                 break;
-            case NONE:
-                if (robotData.controlData.saHomePosition)
-                {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorHomePosition, robotData, 0);
-                }
-                else if (robotData.controlData.saPositionMid)
-                {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeMidPosition, robotData, 0);
-                }
-                else if (robotData.controlData.saPositionHigh)
-                {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorConeHighPosition, robotData, 0);
-                }
-                else if (robotData.controlData.saSetUpPosition)
-                {
-                    MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
-                }
-                break;
             default:
                 if (robotData.controlData.saHomePosition)
                 {
@@ -181,11 +155,6 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
     {
         elevatorMotor.Set(0);
     }
-
-    // if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
-    // {
-    //     MoveElevator(10, robotData, 0.25);
-    // }
 
     if (elevatorProfileActive)
     {

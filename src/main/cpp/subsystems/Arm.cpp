@@ -296,30 +296,6 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 }
                 break;
 
-            case NONE:
-
-                if (robotData.controlData.saPositionMid)
-                {
-                    RotateWrist(robotData.configData.armConfigData.wristConeMidPosition, robotData, 0);
-                    RotatePivot(robotData.configData.armConfigData.pivotConeMidPosition, robotData, 0);
-                }
-                else if (robotData.controlData.saPositionHigh)
-                {
-                    RotateWrist(robotData.configData.armConfigData.wristConeHighPosition, robotData, 0);
-                    RotatePivot(robotData.configData.armConfigData.pivotConeHighPosition, robotData, 0);
-                }
-                else if (robotData.controlData.saHomePosition)
-                {
-                    RotateWrist(robotData.configData.armConfigData.wristHomePosition, robotData, 0);
-                    RotatePivot(robotData.configData.armConfigData.pivotHomePosition, robotData, 0);
-                }
-                else if (robotData.controlData.saPositionLow)
-                {
-                    RotatePivot(robotData.configData.armConfigData.pivotLowPosition, robotData, 0);
-                    RotateWrist(robotData.configData.armConfigData.wristLowPosition, robotData, 0);
-                }
-                break;
-
             default:
 
                 if (robotData.controlData.saPositionMid)
@@ -365,12 +341,15 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (cubeIntakeToggle != armData.cubeIntakeRunning)
             {
-                RotateWrist(20, robotData, 0);
+                RotateWrist(25, robotData, 0.1);
+                RotatePivot(60, robotData, 0);
             }
 
-            if (wristInPositionForArmPastRead != wristInPositionForArm && armWristRelativeEncoder.GetPosition() < 100)
+            if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
             {
-                RotatePivot(20, robotData, 0);
+                pivotMaxAcceleration = 100_deg;
+                RotatePivot(11, robotData, 0);
+                pivotMaxAcceleration = 700_deg;
             }
         }
 

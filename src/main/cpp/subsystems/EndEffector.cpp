@@ -114,10 +114,6 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
                 SetEndEffectorRollerSpeed(-0.6);
                 break;
         }
-        // if (endEffectorData.gamePieceType == NONE)
-        // {
-        //     eject = true;
-        // }
     }
     else if (robotData.controlData.saCubeIntake)
     {
@@ -153,12 +149,8 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     {
         SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
     }
-    // if (eject == true)
-    // {
-    //     endEffectorData.armRetractRequest = true;
-    //     eject = false;
-    // }
-    frc::SmartDashboard::PutNumber("BHASIUDGUISAD", endEffectorData.gamePieceType);
+
+    frc::SmartDashboard::PutNumber("End effector game piece", endEffectorData.gamePieceType);
 }
 
 void EndEffector::Manual(const RobotData &robotData, EndEffectorData &endEffectorData)
