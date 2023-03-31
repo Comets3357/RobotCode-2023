@@ -53,9 +53,6 @@ void CustomDifferentialDriveOdometry::SeedWithVisionMeasurement(const frc::Pose2
         frc::Pose2d seededPose(xPos, yPos, visionPose.Rotation());
 
         newPose = seededPose;
-
-        // clear the history in effort to keep the memory usage down
-        history.clear();
     }
     else
     {
@@ -69,6 +66,11 @@ void CustomDifferentialDriveOdometry::SeedWithVisionMeasurement(const frc::Pose2
 
 void CustomDifferentialDriveOdometry::AddToHistory(frc::Pose2d& pose, units::second_t timestamp)
 {
-    CustomDifferentialDriveOdometry::HistoricalPose historicalPose{pose, timestamp};
+    CustomDifferentialDriveOdometry::HistoricalPose historicalPose{pose, timestamp};   
     history.emplace_back(historicalPose);
+
+    if (history.size() > MAX_HISTORY_SIZE)
+    {
+        history.pop_front();
+    }
 }

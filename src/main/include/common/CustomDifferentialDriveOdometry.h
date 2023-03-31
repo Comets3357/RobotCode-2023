@@ -1,7 +1,7 @@
 #pragma once
 
 #include <frc/estimator/DifferentialDrivePoseEstimator.h>
-#include <vector>
+#include <deque>
 #include <cmath>
 
 // This class utilizes the differential drive pose estimator to implement functionality
@@ -27,18 +27,20 @@ public:
 
 private:
 
+    const int MAX_HISTORY_SIZE = 50;
+
     struct HistoricalPose
     {
         frc::Pose2d pose;
         units::second_t timestamp;
     };
 
-    std::vector<HistoricalPose> history;
+    std::deque<HistoricalPose> history;
 
     units::meter_t lastRightDistance;
     units::meter_t lastLeftDistance;
 
-    frc::DifferentialDrivePoseEstimator* poseEstimator;
+    frc::DifferentialDrivePoseEstimator *poseEstimator;
 
     void AddToHistory(frc::Pose2d& pose, units::second_t timestamp);
 
