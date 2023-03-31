@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "auton/Auton.h"
 #include "common/Gyro.h"
+#include "common/CustomDifferentialDriveOdometry.h"
 
 #include <frc/TimedRobot.h>
 #include <frc/Joystick.h>
@@ -145,6 +146,8 @@ private:
     frc::DifferentialDrivePoseEstimator odometry{kinematics, testRot, units::meter_t{0.0}, units::meter_t{0.0}, kZeroPose};    
     frc::Trajectory trajectory{};
     frc::RamseteController ramseteController{};
+
+    CustomDifferentialDriveOdometry customOdometry;
 
     frc::Field2d field;
 

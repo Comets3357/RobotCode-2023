@@ -5,7 +5,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
     try 
     {
-        llresultsOne = LimelightHelpers::getLatestResults("limelight-two");
+        llresultsTwo = LimelightHelpers::getLatestResults("limelight-two");
         frc::SmartDashboard::PutBoolean("limelight one active", true);
     }
     catch (...)
@@ -15,7 +15,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
     try 
     {
-        llresultsTwo = LimelightHelpers::getLatestResults("limelight");
+        llresultsOne = LimelightHelpers::getLatestResults("limelight");
         frc::SmartDashboard::PutBoolean("limelight two active", true);
     }
     catch (...)
@@ -23,8 +23,13 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         frc::SmartDashboard::PutBoolean("limelight two active", false);
     }
 
-    frc::SmartDashboard::PutBoolean("allowed to reset obamatree", limelightData.limelightAllowedToReset);
-    frc::SmartDashboard::PutNumber("limelight x", limelightOdometry.at(0));
+    frc::SmartDashboard::PutBoolean("allowed to reset odom", limelightData.limelightAllowedToReset);
+    frc::SmartDashboard::PutNumber("limelight x 1", llresultsOne.targetingResults.botPose_wpiblue.at(0));
+    frc::SmartDashboard::PutNumber("limelight x 2", llresultsTwo.targetingResults.botPose_wpiblue.at(0));
+
+    frc::SmartDashboard::PutNumber("FINAL LIMELIGHT X ODOM", tempX);
+    frc::SmartDashboard::PutNumber("FINAL LIMELIGHT Y ODOM", tempY);
+
     frc::SmartDashboard::PutNumber("limelight id", limelightTwoID);
 
     try
@@ -36,8 +41,8 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
 
             limelightOdometry.clear();
 
-            limelightOneID = LimelightHelpers::getFiducialID("limelight-two");
-            limelightTwoID = LimelightHelpers::getFiducialID("limelight");
+            limelightTwoID = LimelightHelpers::getFiducialID("limelight-two");
+            limelightOneID = LimelightHelpers::getFiducialID("limelight");
 
             pastX = tempX;
             pastY = tempY;
@@ -50,14 +55,14 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
 
                 // robot facing with elevator limelight towards polls
-                if (limelightOneID == 1 || limelightOneID == 2 || limelightOneID == 3 || limelightOneID == 4 ||
-                    limelightTwoID == 5 || limelightTwoID == 6 || limelightTwoID == 7 || limelightTwoID == 8)
+                if (limelightOneID == 5 || limelightOneID == 6 || limelightOneID == 7 || limelightOneID == 8 ||
+                    limelightTwoID == 1 || limelightTwoID == 2 || limelightTwoID == 3 || limelightTwoID == 4)
                 {
                     // red side of field using elevator limelight
-                    if (robotData.drivebaseData.odometryX > 8.3)
+                    if (llresultsTwo.targetingResults.botPose_wpiblue.at(0) > 8.3)
                     {
-                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);
@@ -77,8 +82,8 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     }
                     else // blue side of field using bull bar limelight
                     {
-                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
@@ -100,10 +105,10 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 else // robot facing with elevator limelight away from polls
                 {
                     // blue side of field elevator limelight
-                    if (robotData.drivebaseData.odometryX < 8.3)
+                    if (llresultsTwo.targetingResults.botPose_wpiblue.at(0) < 8.3)
                     {
-                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);
@@ -123,8 +128,8 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     }
                     else // red side of field using bull bar limelight
                     {
-                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
@@ -151,14 +156,14 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 gyroRotation = frc::Rotation2d{gyroRadians};
 
                 // robot facing with elevator limelight towards polls
-                if (limelightOneID == 5 || limelightOneID == 6 || limelightOneID == 7 || limelightOneID == 8 ||
-                    limelightTwoID == 1 || limelightTwoID == 2 || limelightTwoID == 3 || limelightTwoID == 4)
+                if (limelightOneID == 1 || limelightOneID == 2 || limelightOneID == 3 || limelightOneID == 4 ||
+                    limelightTwoID == 5 || limelightTwoID == 6 || limelightTwoID == 7 || limelightTwoID == 8)
                 {
                     // red side of field using bull bar limelight
-                    if (robotData.drivebaseData.odometryX > 8.3)
+                    if (llresultsOne.targetingResults.botPose_wpiblue.at(0) > 8.3)
                     {
-                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
@@ -178,8 +183,8 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     }
                     else // blue side of field using elevator limelight
                     {
-                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);
@@ -201,10 +206,10 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 else // robot facing with elevator limelight away from polls
                 {
                     // blue side of field using bull bar limelight
-                    if (robotData.drivebaseData.odometryX < 8.3)
+                    if (llresultsOne.targetingResults.botPose_wpiblue.at(0) < 8.3)
                     {
-                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight") + LimelightHelpers::getLatency_Pipeline("limelight");
 
                         tempX = limelightOdometry.at(0);
@@ -224,8 +229,8 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                     }
                     else // red side of field using elevator limelight
                     {
-                        limelightOdometry = llresultsOne.targetingResults.botPose_wpiblue;
-                        numberOfTagsInView = llresultsOne.targetingResults.FiducialResults.size();
+                        limelightOdometry = llresultsTwo.targetingResults.botPose_wpiblue;
+                        numberOfTagsInView = llresultsTwo.targetingResults.FiducialResults.size();
                         limelightData.latency = LimelightHelpers::getLatency_Capture("limelight-two") + LimelightHelpers::getLatency_Pipeline("limelight-two");
 
                         tempX = limelightOdometry.at(0);

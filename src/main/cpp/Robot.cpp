@@ -43,7 +43,16 @@ timer.RobotInit(robotData.timerData);
   elevator.RobotInit(robotData, robotData.elevatorData);
   gyro.RobotInit();
 
-  arduino.RobotInit();
+  try
+  {
+    arduino.RobotInit();
+  }
+  catch(...)
+  {
+    // std::cerr << e.what() << '\n';
+  }
+  
+  
   
 
   auton.RobotInit(robotData.controlData, robotData.autonData);
@@ -64,13 +73,14 @@ timer.RobotInit(robotData.timerData);
 void Robot::RobotPeriodic() {
 
   
-  arduino.RobotPeriodic(robotData, robotData.arduinoData);
+  
 
   gyro.RobotPeriodic(robotData.gyroData);
   timer.EnabledPeriodic(robotData.timerData);
   try 
   {
     limelight.RobotPeriodic(robotData, robotData.limelightData);
+    arduino.RobotPeriodic(robotData, robotData.arduinoData);
   }
   catch (...)
   {

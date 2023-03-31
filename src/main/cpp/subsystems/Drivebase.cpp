@@ -68,6 +68,8 @@ void Drivebase::RobotInit(const RobotData &robotData)
         dbLF.BurnFlash();
     }
 
+    customOdometry.SetPoseEstimator(odometry);
+
     setPercentOutput(0, 0);
 
     zeroEncoders();
@@ -85,6 +87,8 @@ void Drivebase::TeleopInit(const RobotData &robotData)
         zeroEncoders();
         odometryInitialized = true;
     }
+
+    resetOdometry(robotData.limelightData.Odometry, robotData.gyroData.rawYaw);
     
 }
 
@@ -269,7 +273,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                     interiorWaypoints.clear();
 
                     config.SetStartVelocity(units::meters_per_second_t{((dbLEncoder.GetVelocity() / mpsToRpm) + (dbREncoder.GetVelocity() / mpsToRpm)) / 2});
-                    config.SetEndVelocity(0.0_mps);
+                    config.SetEndVelocity(0.5_mps);
 
                     if (frc::DriverStation::GetAlliance() == frc::DriverStation::Alliance::kBlue)
                     {
@@ -713,15 +717,40 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
 
     if (robotData.limelightData.limelightAllowedToReset && robotData.controlData.saResetOdometry)
     {
-        odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency}, wpi::array<double, 3>{0.00001, 0.00001, 0.00001});
+        if (robotData.limelightData.Odometry.X().to<double>() > 0.001 && robotData.limelightData.Odometry.Y().to<double>() > 0.001)
+        {
+            if (frc::DriverStation::IsAutonomous())
+            {
+                odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});   
+            }
+            else
+            {
+                customOdometry.SeedWithVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
+            }
+        }
     }
 
-    odometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
-    
-    field.SetRobotPose(odometry.GetEstimatedPosition());
-    frc::SmartDashboard::PutData("Field", &field);
+    if (frc::DriverStation::IsAutonomous())
+    {
+        odometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
 
-    drivebaseData.currentPose = odometry.GetEstimatedPosition();
+        field.SetRobotPose(odometry.GetEstimatedPosition());
+        frc::SmartDashboard::PutData("Field", &field);
+
+        drivebaseData.currentPose = odometry.GetEstimatedPosition();
+    }
+    else
+    {
+        customOdometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
+
+        field.SetRobotPose(customOdometry.GetEstimatedPosition());
+        frc::SmartDashboard::PutData("Field", &field);
+
+        drivebaseData.currentPose = customOdometry.GetEstimatedPosition();
+    }
+    
+    
+
 
     drivebaseData.odometryX = drivebaseData.currentPose.X().to<double>();
     drivebaseData.odometryY = drivebaseData.currentPose.Y().to<double>();
