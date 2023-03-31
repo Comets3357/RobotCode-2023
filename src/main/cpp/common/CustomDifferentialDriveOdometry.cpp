@@ -30,29 +30,14 @@ void CustomDifferentialDriveOdometry::SeedWithVisionMeasurement(const frc::Pose2
     if (history.size() > 0)
     {
         // find the historical pose with closest timestamp
-        double minDeltaAbs = 3357;
-        int closestIndex = 0;
-        for (int i = 0; i < history.size(); i++)
-        {
-            auto deltaAbs = std::abs((double)(history[i].timestamp - timestamp));
-            if (deltaAbs < minDeltaAbs)
-            {
-                closestIndex = i;
-                minDeltaAbs = deltaAbs;
-            }
-        }
+        int closestIndex = FindClosestIndex(timestamp);
 
-        // find the relative transform between this pose and latest pose
-        auto xTransform = history.back().pose.X() - history[closestIndex].pose.X();
-        auto yTransform = history.back().pose.Y() - history[closestIndex].pose.Y();
+        auto xError = visionPose.X() - history[closestIndex].pose.X();
+        auto yError = visionPose.Y() - history[closestIndex].pose.Y();
 
-        // Apply transform to vision pose
-        auto xPos = visionPose.X() + xTransform;
-        auto yPos = visionPose.Y() + yTransform;
+        CorrectHistoryForError(xError, yError, closestIndex);
 
-        frc::Pose2d seededPose(xPos, yPos, visionPose.Rotation());
-
-        newPose = seededPose;
+        newPose = history.back().pose;
     }
     else
     {
@@ -64,7 +49,8 @@ void CustomDifferentialDriveOdometry::SeedWithVisionMeasurement(const frc::Pose2
     poseEstimator->ResetPosition(newPose.Rotation(), lastLeftDistance, lastRightDistance, newPose);
 }
 
-void CustomDifferentialDriveOdometry::AddToHistory(frc::Pose2d& pose, units::second_t timestamp)
+void CustomDifferentialDriveOdometry::AddToHistory(frc::Pose2d& pose, 
+                                                   units::second_t timestamp)
 {
     CustomDifferentialDriveOdometry::HistoricalPose historicalPose{pose, timestamp};   
     history.emplace_back(historicalPose);
@@ -72,5 +58,37 @@ void CustomDifferentialDriveOdometry::AddToHistory(frc::Pose2d& pose, units::sec
     if (history.size() > MAX_HISTORY_SIZE)
     {
         history.pop_front();
+    }
+}
+
+int CustomDifferentialDriveOdometry::FindClosestIndex(units::second_t timestamp)
+{
+    double minDeltaAbs = 3357;
+    int closestIndex = 0;
+
+    for (int i = history.size() - 1; i >= 0; i--)
+    {
+        auto deltaAbs = std::abs((double)(history[i].timestamp - timestamp));
+        if (deltaAbs < minDeltaAbs)
+        {
+            closestIndex = i;
+            minDeltaAbs = deltaAbs;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return closestIndex;
+}
+
+void CustomDifferentialDriveOdometry::CorrectHistoryForError(units::meter_t xErr, 
+                                                             units::meter_t yErr, 
+                                                             int indexStart)
+{
+    for (int i = indexStart; i < history.size(); i++)
+    {
+        history[i].pose = frc::Pose2d{history[i].pose.X() + xErr, history[i].pose.Y() + yErr, history[i].pose.Rotation()};
     }
 }

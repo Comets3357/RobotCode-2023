@@ -42,6 +42,13 @@ private:
 
     frc::DifferentialDrivePoseEstimator *poseEstimator;
 
-    void AddToHistory(frc::Pose2d& pose, units::second_t timestamp);
+    void AddToHistory(frc::Pose2d& pose, 
+                      units::second_t timestamp);
+
+    int FindClosestIndex(units::second_t timestamp);
+
+    void CorrectHistoryForError(units::meter_t xErr, 
+                                units::meter_t yErr, 
+                                int indexStart);
 
 };
