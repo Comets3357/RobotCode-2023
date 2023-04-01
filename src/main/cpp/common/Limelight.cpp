@@ -52,7 +52,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
             {
 
                 gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
-                gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
+                gyroRotation = frc::Rotation2d{gyroRadians};
 
                 // robot facing with elevator limelight towards polls
                 if (limelightOneID == 5 || limelightOneID == 6 || limelightOneID == 7 || limelightOneID == 8 ||

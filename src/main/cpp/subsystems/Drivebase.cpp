@@ -259,6 +259,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
 
    
+   frc::SmartDashboard::PutNumber("substation line up step", substationStep);
 
         if (robotData.controlData.substationLineUp) 
         {
@@ -286,6 +287,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
                         interiorWaypoints.emplace_back(frc::Translation2d{2.36_m, 7.75_m});
                     }
 
+
                     trajectory = frc::TrajectoryGenerator::GenerateTrajectory(
                     startPosition, interiorWaypoints, endPoint, config);
 
@@ -302,7 +304,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
                     if ((sampleSec.to<double>() > totalTime)) 
                     {   
-                        substationStep++;
+                        // substationStep++;
                     }   
 
                     frc::Trajectory::State trajectoryState = trajectory.Sample(sampleSec);
@@ -719,35 +721,46 @@ void Drivebase::updateOdometry(const RobotData &robotData, DrivebaseData &driveb
     {
         if (robotData.limelightData.Odometry.X().to<double>() > 0.001 && robotData.limelightData.Odometry.Y().to<double>() > 0.001)
         {
-            if (frc::DriverStation::IsAutonomous())
-            {
-                odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});   
-            }
-            else
-            {
-                customOdometry.SeedWithVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
-            }
+    //         if (frc::DriverStation::IsAutonomous())
+    //         {
+    //         }
+    //         else
+    //         {
+                // customOdometry.SeedWithVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});
+            // }
         }
     }
 
-    if (frc::DriverStation::IsAutonomous())
-    {
+                    odometry.AddVisionMeasurement(robotData.limelightData.Odometry, frc::Timer::GetFPGATimestamp() - units::time::second_t{robotData.limelightData.latency});   
+
+
+    // if (frc::DriverStation::IsAutonomous())
+    // {
         odometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
 
         field.SetRobotPose(odometry.GetEstimatedPosition());
         frc::SmartDashboard::PutData("Field", &field);
 
         drivebaseData.currentPose = odometry.GetEstimatedPosition();
-    }
-    else
-    {
-        customOdometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
+    // }
+    // else
+    // {
+        // customOdometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
 
-        field.SetRobotPose(customOdometry.GetEstimatedPosition());
-        frc::SmartDashboard::PutData("Field", &field);
+        // field.SetRobotPose(customOdometry.GetEstimatedPosition());
+        // frc::SmartDashboard::PutData("Field", &field);
 
-        drivebaseData.currentPose = customOdometry.GetEstimatedPosition();
-    }
+        // drivebaseData.currentPose = customOdometry.GetEstimatedPosition();
+    // }
+
+    // odometry.UpdateWithTime(frc::Timer::GetFPGATimestamp(), currentRotation, leftDistance, rightDistance);
+
+    //     field.SetRobotPose(odometry.GetEstimatedPosition());
+    //     frc::SmartDashboard::PutData("Field", &field);
+
+    //     drivebaseData.currentPose = odometry.GetEstimatedPosition();
+
+    
     
     
 
