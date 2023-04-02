@@ -81,5 +81,5 @@ PivotCubeMidPosition = 146
 PivotCubeHighPosition = 135
 PivotConeIntakePosition = 10
 PivotUprightConePosition = 22
-PivotCubeIntakePosition = 42
+PivotCubeIntakePosition = 39
 PivotLowPosition = 16
