@@ -1,5 +1,7 @@
-break 3
+break 0.5
 TwoRedBumpOne
+break 0.1
 TwoRedBumpTwo
-break 3
+break 1.85
 TwoRedBumpThree
+TwoRedBumpFive

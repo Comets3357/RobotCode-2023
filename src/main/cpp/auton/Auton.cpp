@@ -833,19 +833,21 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
 {
     double sec = robotData.timerData.secSinceEnabled;
 
+    controlData.saResetOdometry = true;
+
     switch (step)
     {
     case (0):   
-        controlData.saPositionHigh = true;
+        controlData.saPositionMid = true;
         step++;
         break;
     case(1):
-        controlData.saPositionHigh = false;
-        if (sec > 1.4) step++;
+        controlData.saPositionMid = false;
+        if (sec > 0.5) step++;
         break;
     case(2):
         controlData.saIntakeBackwards = true;
-        if (sec > 1.95) step++;
+        if (sec > 0.7) step++;
         break;
     case(3): 
         controlData.saHomePosition = true;
@@ -853,15 +855,12 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(4):
         controlData.saHomePosition = false;
-        if (sec > 2.15) controlData.saIntakeBackwards = false;
-        if (sec > 4.0)step++;
+        if (sec > 1.0) controlData.saIntakeBackwards = false;
+        if (sec > 1.6)step++;
         break;
     case(5):
         controlData.saCubeIntake = true;
-        if (sec > 6.5) step++;
-        break;
-        case(6):
-        if (sec > 6.5 && sec < 6.64)
+        if (sec > 4.0 && sec < 4.15)
         {
             controllerData.sLYStick = -0.6;
         }
@@ -869,8 +868,12 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         {
             controllerData.sLYStick = 0.0;
         }
+        if (sec > 4.6) step++;
+        break;
+        case(6):
+        
         controlData.saCubeIntake = false;
-        if (sec > 8.5) step++;
+        if (sec > 5.85) step++;
         break;
     case (7):
         controlData.saPositionHigh = true;
@@ -878,11 +881,11 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(8):
         controlData.saPositionHigh = false;
-        if (sec > 9.7) step++;
+        if (sec > 7.0) step++;
         break;
     case(9):
         controllerData.sLYStick = 0.6;
-        if (sec > 10.1) step++;
+        if (sec > 7.4) step++;
         break;
     case(10):
         controllerData.sLYStick = 0.0;
@@ -891,15 +894,43 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(11):
         controlData.saHomePosition = false;
-        if (sec > 13.8)step++;
+        if (sec > 8.7)step++;
         break;
     case(12):
-        controlData.saConeIntake = true;
-        if (sec > 14.8) step++;
+        controlData.saCubeIntake = true;
+
+        if (sec > 11.1 && sec < 11.2)
+        {
+            controllerData.sLYStick = -0.6;
+        }
+        else
+        {
+            controllerData.sLYStick = 0.0;
+        }
+
+        if (sec > 11.8) step++;
         break;
     case(13):
         controlData.saCubeIntake = false;
+        if (sec > 13.05) 
+        {
+            controlData.saPositionMid = true;
+            step++;
+        }
         // if (sec > 14.1) step++;
+        break;
+    case 14:
+        controlData.saPositionMid = false;
+        if (sec > 14.5) step++;
+        // if (sec > 14.1) step++;
+        break;
+    case 15:
+        controllerData.sLYStick = 0.6;
+        if (sec > 14.8) step++;
+        break;
+    case(16):
+        controllerData.sLYStick = 0.0;
+        controlData.saHomePosition = true;
         break;
     // case 14:
     //     controlData.saPositionMid = true;

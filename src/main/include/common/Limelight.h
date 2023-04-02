@@ -28,12 +28,6 @@ struct LimelightData
 
     double angleOffFromCenter = 0;
     double distanceFromCenter = 0;
-
-    double x;
-    double y;
-
-    
-    bool cantSeeTop = false;
 };
 
 class Limelight
@@ -43,8 +37,10 @@ public:
 
 private:
 
-    LimelightHelpers::LimelightResultsClass llresultsOne; 
-    LimelightHelpers::LimelightResultsClass llresultsTwo; 
+    double GetDistance(double targetHeight, double vertAngleOffset);
+
+    // std::shared_ptr<nt::NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight"); 
+    LimelightHelpers::LimelightResultsClass llresults; //= LimelightHelpers::getLatestResults();
     std::vector<double> limelightOdometry = {0,0,0,0,0,0};
 
 
@@ -56,13 +52,37 @@ private:
 
     int numberOfTagsInView = 0;
 
+    double distanceFromTarget = 0;
+    double angleOff = 0;
+
+    double aprilTagHeight = 13.0;
+    double lowerPollHeight = 22.125; // need to tune
+    double higherPollHeight = 41.875; // need to tune
+
+    double limelightHeight = 11.03;
+
+    double cameraDistanceFromCenter = 11.84;
+    double midEndEffectorDistanceFromCenter = 13 + 12; // need to tune
+    double highEndEffectorDistanceFromCenter = 13 + 38; // need to tune
+    
+    double limelightAngle = 25;
+
     // 63.3 x 49.7
+    double upperAngleOffset = 12.66;
+    double lowerAngleOffset = 0;
+
+    double inchesToMeters = 0.0254;
+
+    double distanceFromCenterOfRobot = 0;
+    double angleFromCenterOfRobot = 0;
+
+    double secondAngleFromCenter = 0;;
+    double finalAngle;
 
     units::radian_t gyroRadians{0};
     frc::Rotation2d gyroRotation{gyroRadians};
 
-    int limelightOneID = 0;
-    int limelightTwoID = 0;
+    double distanceBetweenMidAndTopPoll = 17;
 
 
 
