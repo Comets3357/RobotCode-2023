@@ -536,7 +536,7 @@ double tempLDrive = 0;
                 {
                 case -1:
                     setVelocity(-2, -2);
-                    if (robotData.timerData.secSinceEnabled - 2 > chargeStationBackoffBeginTime) 
+                    if (robotData.timerData.secSinceEnabled - 1 > chargeStationBackoffBeginTime) 
                     {
                         if (robotData.autonData.autonToggle)
                         {

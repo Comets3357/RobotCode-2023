@@ -34,7 +34,7 @@ ElevatorHomePosition = 10
 ElevatorLowPosition = 10
 ElevatorConeMidPosition = 23
 ElevatorConeHighPosition = 46
-ElevatorCubeMidPosition = 10
+ElevatorCubeMidPosition = 13
 ElevatorCubeHighPosition = 46
 ElevatorSetupPosition = 10
 
@@ -53,14 +53,14 @@ WristCurrentLimit = 20
 WristRelativeInverted = true
 WristAbsoluteInverted = true
 WristAbsoluteConversion = 360
-WristAbsoluteZeroOffset = 207.75
+WristAbsoluteZeroOffset = 339.5
 WristRelativeConversion = 4.385430624923864151
 
 WristHomePosition = 30
 WristConeMidPosition = 10
 WristConeHighPosition = 23
-WristCubeMidPosition = 60
-WristCubeHighPosition = 57
+WristCubeMidPosition = 23
+WristCubeHighPosition = 23
 WristConeIntakePosition = 111
 WristUprightConePosition = 132
 WristCubeIntakePosition = 202.5
