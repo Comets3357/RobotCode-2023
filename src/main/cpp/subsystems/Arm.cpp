@@ -275,11 +275,12 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 
                 if (robotData.controlData.saPositionMid)
                 {
-                    RotateWrist(robotData.configData.armConfigData.pivotCubeMidPosition, robotData, 0);
+                    RotateWrist(robotData.configData.armConfigData.wristCubeMidPosition, robotData, 0);
                     RotatePivot(robotData.configData.armConfigData.pivotCubeMidPosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionHigh)
                 {
+
                     RotateWrist(robotData.configData.armConfigData.wristCubeHighPosition, robotData, 0);
                     RotatePivot(robotData.configData.armConfigData.pivotCubeHighPosition, robotData, 0);
 
@@ -288,6 +289,30 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
                 {
                     RotateWrist(robotData.configData.armConfigData.wristHomePosition, robotData, 0);
                     RotatePivot(robotData.configData.armConfigData.pivotHomePosition, robotData, 0);  
+                }
+                else if (robotData.controlData.saPositionLow)
+                {
+                    RotatePivot(robotData.configData.armConfigData.pivotLowPosition, robotData, 0);
+                    RotateWrist(robotData.configData.armConfigData.wristLowPosition, robotData, 0);
+                }
+                break;
+
+            case NONE:
+
+                if (robotData.controlData.saPositionMid)
+                {
+                    RotateWrist(robotData.configData.armConfigData.wristConeMidPosition, robotData, 0);
+                    RotatePivot(robotData.configData.armConfigData.pivotConeMidPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saPositionHigh)
+                {
+                    RotateWrist(robotData.configData.armConfigData.wristConeHighPosition, robotData, 0);
+                    RotatePivot(robotData.configData.armConfigData.pivotConeHighPosition, robotData, 0);
+                }
+                else if (robotData.controlData.saHomePosition)
+                {
+                    RotateWrist(robotData.configData.armConfigData.wristHomePosition, robotData, 0);
+                    RotatePivot(robotData.configData.armConfigData.pivotHomePosition, robotData, 0);
                 }
                 else if (robotData.controlData.saPositionLow)
                 {
