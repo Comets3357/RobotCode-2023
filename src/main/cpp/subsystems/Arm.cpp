@@ -669,7 +669,7 @@ void Arm::DisabledInit()
 
 void Arm::DisabledPeriodic(const RobotData &robotData, ArmData &armData)
 {
-    if (!inAuton)
+    if (!inAuton && (armPivotRelativeEncoder.GetPosition() < 120))
     {
         ZeroRelativePositionPivot(armData);
         ZeroRelativePositionWrist(armData);
