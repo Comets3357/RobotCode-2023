@@ -51,7 +51,7 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
     endEffectorData.pastReadOfGamePiece = endEffectorData.gamePieceType;
 
     
-        if (cubeLimitSwitch.Get())
+    if (cubeLimitSwitch.Get())
     {
         if (robotData.armData.wristSafeCubeDetectionPosition)
         {
@@ -81,11 +81,9 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 
     if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
     {
+        endEffectorData.gamePieceType = CONE;
         endEffectorData.lastPieceType = CONE;
     }
-
-
-
 }
 
 void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData)
