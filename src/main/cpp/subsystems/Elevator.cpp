@@ -38,7 +38,7 @@ void Elevator::RobotInit(const RobotData &robotData, ElevatorData &elevatorData)
     extendedLimitSwitch.EnableLimitSwitch(false);
     retractedLimitSwitch.EnableLimitSwitch(false);
 
-    elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     
 }
 
@@ -57,6 +57,8 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
             break;
     }
 
+    IsAbsoluteEncoderInitialized(elevatorData);
+
     frc::SmartDashboard::PutNumber("elevator output current", elevatorMotor.GetOutputCurrent());
 
     frc::SmartDashboard::PutNumber("elevator relative pos", elevatorRelativeEncoder.GetPosition());
@@ -65,12 +67,16 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
 
 void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 {
+
+
     if (!softLimitsEnabled) 
     {
         EnableSoftLimits();
     }
 
-    if (elevatorRelativeEncoder.GetPosition() > 40)
+    
+    if ((elevatorRelativeEncoder.GetPosition() > 40 && runMode == ELEVATOR_RELATIVE_RUN) || 
+        (elevatorAbsoluteEncoder.GetPosition() > 40 && runMode == ELEVATOR_ABSOLUTE_RUN))
     {
         elevatorData.drivebaseSlowMode = true;
     }
@@ -81,17 +87,17 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
 
     if (elevatorData.elevatorAbsoluteEncoderInitialized && runMode != ELEVATOR_ABSOLUTE_RUN)
     {
-        runMode = ELEVATOR_RELATIVE_RUN;
-        elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+        runMode = ELEVATOR_ABSOLUTE_RUN;
+        elevatorPIDController.SetFeedbackDevice(elevatorAbsoluteEncoder);
     }
     
-    if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)
-    {
-        runMode = ELEVATOR_RELATIVE_RUN;
-        elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
-    }
+    // if (elevatorForceZeroed && runMode != ELEVATOR_RELATIVE_RUN)
+    // {
+    //     runMode = ELEVATOR_RELATIVE_RUN;
+    //     elevatorPIDController.SetFeedbackDevice(elevatorRelativeEncoder);
+    // }
 
-    if (runMode != ELEVATOR_NONE)
+    if ((runMode == ELEVATOR_ABSOLUTE_RUN && robotData.elevatorData.elevatorAbsoluteEncoderInitialized) || (runMode == ELEVATOR_RELATIVE_RUN))
     {
         switch (robotData.endEffectorData.lastPieceType)
         {
@@ -208,7 +214,7 @@ void Elevator::MoveElevator(double targetPos, const RobotData& robotData, double
 
     if (runMode == ELEVATOR_ABSOLUTE_RUN)
     {
-        elevatorProfileStartPos = elevatorRelativeEncoder.GetPosition();
+        elevatorProfileStartPos = elevatorAbsoluteEncoder.GetPosition();
         elevatorProfileEndPos = targetPos;
     }
     else

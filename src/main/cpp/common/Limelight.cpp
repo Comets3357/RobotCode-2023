@@ -42,7 +42,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 {
 
                     gyroRadians = units::radian_t{robotData.gyroData.rawYaw / 180 * M_PI};
-                    gyroRotation = frc::Rotation2d{gyroRadians + units::radian_t{M_PI}};
+                    gyroRotation = frc::Rotation2d{gyroRadians};
 
 
                     if ((numberOfTagsInView == 1) && (tempX > 13.3))
