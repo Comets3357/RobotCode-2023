@@ -74,6 +74,9 @@ void BullBar::RobotPeriodic(const RobotData &robotData, BullBarData &bullBarData
         case MODE_TELEOP_SA:
             SemiAuto(robotData, bullBarData);
             break;
+        case MODE_TELEOP_DISABLE_BEAMS:
+            SemiAuto(robotData, bullBarData);
+            break;
         default:
             SemiAuto(robotData, bullBarData);
             break;

@@ -52,6 +52,9 @@ void Elevator::RobotPeriodic(const RobotData &robotData, ElevatorData &elevatorD
         case MODE_TELEOP_SA:
             SemiAuto(robotData, elevatorData);
             break;
+        case MODE_TELEOP_DISABLE_BEAMS:
+            SemiAuto(robotData, elevatorData);
+            break;
         default:
             SemiAuto(robotData, elevatorData);
             break;

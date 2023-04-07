@@ -89,6 +89,9 @@ void Arm::RobotPeriodic(const RobotData &robotData, ArmData &armData)
         case MODE_TELEOP_SA:
             SemiAuto(robotData, armData);
             break;
+        case MODE_TELEOP_DISABLE_BEAMS:
+            SemiAuto(robotData, armData);
+            break;
         default:
             SemiAuto(robotData, armData);
             break;

@@ -38,6 +38,9 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
         case MODE_TELEOP_SA:
             SemiAuto(robotData, endEffectorData);
             break;
+        case MODE_TELEOP_DISABLE_BEAMS:
+            SemiAuto(robotData, endEffectorData);
+            break;
         default:
             SemiAuto(robotData, endEffectorData);
             break;
@@ -74,6 +77,11 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
     {
         
         endEffectorData.gamePieceType = NONE;
+    }
+
+    if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
+    {
+        endEffectorData.lastPieceType = CONE;
     }
 
 

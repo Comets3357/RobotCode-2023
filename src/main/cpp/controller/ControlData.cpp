@@ -18,7 +18,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
             controlData.mode = MODE_TELEOP_SA;
             break;
         case 180:   // down
-            controlData.mode = MODE_AUTO_BALANCE;
+            controlData.mode = MODE_TELEOP_DISABLE_BEAMS;
             break;
         case 270:   // left
             //controlData.mode = MODE_TELEOP_ADVANCED_SA;
@@ -87,7 +87,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     //     controlData.saHomePosition = (controllerData.sABtn) && !controlData.shift;
     // }
 
-    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE))
+    if ((robotData.endEffectorData.pastReadOfGamePiece != NONE) && (robotData.endEffectorData.gamePieceType == NONE) && (robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS))
     {
         controlData.saHomePosition = true;
     }
