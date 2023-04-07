@@ -369,8 +369,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (cubeIntakeToggle != armData.cubeIntakeRunning)
             {
-                RotateWrist(25, robotData, 0.1);
-                RotatePivot(60, robotData, 0);
+                RotateWrist(25, robotData, 0);
+                RotatePivot(60, robotData, 0.1);
             }
 
             if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)

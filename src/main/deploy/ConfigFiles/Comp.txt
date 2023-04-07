@@ -28,12 +28,12 @@ ElevatorCurrentLimit = 50
 ElevatorPValue = 0.5
 ElevatorRelativeConversionFactor = 0.496060877648
 ElevatorAbsoluteConversionFactor = 71.9717656007
-ElevatorAbsoluteZeroOffset = 21.53
+ElevatorAbsoluteZeroOffset = 17.18
 
 ElevatorHomePosition = 10
 ElevatorLowPosition = 10
 ElevatorConeMidPosition = 23
-ElevatorConeHighPosition = 45
+ElevatorConeHighPosition = 45.25
 ElevatorCubeMidPosition = 13
 ElevatorCubeHighPosition = 46
 ElevatorSetupPosition = 10

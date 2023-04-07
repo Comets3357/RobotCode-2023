@@ -65,7 +65,7 @@ private:
     double EndEffectorRollerOutwardSpeed = 0.8;
     double EndEffectorRollerInwardSpeed = -0.8;
 
-    double EndEffectorRollerCubeInwardSpeed = 0.3;
+    double EndEffectorRollerCubeInwardSpeed = 0.4;
 
     bool eject = false;
 
