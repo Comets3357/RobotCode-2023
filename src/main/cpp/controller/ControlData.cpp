@@ -65,7 +65,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
 
     // SEMI AUTO:
 
-    if (robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE)
+    if ((robotData.endEffectorData.gamePieceType == CONE || robotData.endEffectorData.gamePieceType == CUBE) && (robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS))
     {
         controlData.saConeIntake = false;
         controlData.saCubeIntake = false;
