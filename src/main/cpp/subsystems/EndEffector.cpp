@@ -91,7 +91,11 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     endEffectorData.armRetractRequest = false;
     if (robotData.controlData.saPositionHumanPlayer)
     {
-        if (endEffectorData.gamePieceType != CONE)
+        if (endEffectorData.gamePieceType != CONE && robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS)
+        {
+            SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
+        }
+        else if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
         {
             SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
         }
@@ -103,9 +107,17 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
     }
     else if (robotData.controlData.saConeIntake || robotData.controlData.saUprightConeIntake) 
     {
-        if (endEffectorData.gamePieceType != CONE)
+        if (endEffectorData.gamePieceType != CONE && robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS)
         {
             SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);    
+        }
+        else if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
+        {
+            SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
+        }
+        else
+        {
+            SetEndEffectorRollerSpeed(-0.05);
         }
 
     }
