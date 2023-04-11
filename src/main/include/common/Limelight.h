@@ -28,6 +28,8 @@ struct LimelightData
 
     double angleOffFromCenter = 0;
     double distanceFromCenter = 0;
+
+    double x;
 };
 
 class Limelight

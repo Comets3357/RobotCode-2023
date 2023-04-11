@@ -141,6 +141,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saCubeCall = (controllerData.sLCenterBtn) && !controlData.shift;
     controlData.saFastConeCall = (controllerData.sRCenterBtn) && controlData.shift;
     controlData.saFastCubeCall = (controllerData.sLCenterBtn) && controlData.shift;
+
+    controlData.saChangeAutoAllign = controllerData.sRXStick;
 // ELEVATOR:
     //MANUAL:
     controlData.mMoveElevator = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && controlData.shift;

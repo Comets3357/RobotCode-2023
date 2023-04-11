@@ -103,6 +103,8 @@ struct ControlData
 
 
     bool forceZeroElevator;
+
+    double saChangeAutoAllign;
 };
 
 struct ControllerData

@@ -334,60 +334,93 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
     }
     // frc::SmartDashboard::PutNumber("Limelight X", robotData.limelightData.x);
-    // frc::SmartDashboard::PutNumber("DISTANCE", robotData.endEffectorData.distanceReading);
+    frc::SmartDashboard::PutNumber("DISTANCE", robotData.endEffectorData.distanceReading);
+
+    if (robotData.controlData.saChangeAutoAllign > 0.08 || robotData.controlData.saChangeAutoAllign < -0.08)
+    {
+        overrideAutoAllign = true;
+    }
+
+
+    if (!overrideAutoAllign)
+    {
+        double distance = robotData.endEffectorData.distanceReading;
+
+        std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
+
+        targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
         
-    // if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) drivebaseData.autoAllign = true;
-    // if (robotData.controlData.saHomePosition) drivebaseData.autoAllign = false;
-    // if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.gamePieceType == CONE)
-    // {
-    //     double distance = robotData.endEffectorData.distanceReading;
-    //     double limelightValue = robotData.limelightData.x;
+    }
+    else
+    {
+        if (robotData.timerData.secSinceEnabled - deltaTime > 1.0/6.0)
+        {
+            if (robotData.controlData.saChangeAutoAllign > 0.08 || robotData.controlData.saChangeAutoAllign < -0.08)
+            {
+                targetLimelightValue += robotData.controlData.saChangeAutoAllign;
+            }
+            deltaTime = robotData.timerData.secSinceEnabled;
+        }
+    }
+
+    std::clamp(targetLimelightValue, minLimelightAutoAllign, maxLimelightAutoAllign);
+
+    
+        
+    if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) {drivebaseData.autoAllign = true;}
+    if (robotData.controlData.saHomePosition) {drivebaseData.autoAllign = false; overrideAutoAllign = false;}
+    if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.lastPieceType == CONE)
+    {
+        // double distance = robotData.endEffectorData.distanceReading;
+        double limelightValue = robotData.limelightData.x;
         
 
-    //     // if (robotData.limelightData.cantSeeTop)
-    //     // {
-    //     //     double angle = gyroData.rawYaw + robotData.limelightData.x;
-    //     //     double midPoleAngle = 180 - abs(angle);
-    //     //     double distanceToTop = sqrt(pow(midToHighPoleLength, 2) + pow(distanceToMidPole, 2) - (2 * midToHighPoleLength * distanceToMidPole * cos(midPoleAngle / 180 * 3.1415926)));
-    //     //     double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
-    //     //     limelightValue = interiorAngle + robotData.limelightData.x;
-    //     // }
+        // // if (robotData.limelightData.cantSeeTop)
+        // // {
+        // //     double angle = gyroData.rawYaw + robotData.limelightData.x;
+        // //     double midPoleAngle = 180 - abs(angle);
+        // //     double distanceToTop = sqrt(pow(midToHighPoleLength, 2) + pow(distanceToMidPole, 2) - (2 * midToHighPoleLength * distanceToMidPole * cos(midPoleAngle / 180 * 3.1415926)));
+        // //     double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
+        // //     limelightValue = interiorAngle + robotData.limelightData.x;
+        // // }
         
 
-    //     std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
+        // std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
 
-    //     double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
+        // double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
 
        
 
-    //     std::clamp(targetLimelightValue, minLimelightAutoAllign, maxLimelightAutoAllign);
 
-    //      frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
+         frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
 
-    //     // if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5)
-    //     // {
-    //     //     setVelocity(-0.1, -0.1);
-    //     // }
-    //     // else
-    //     // {
-    //     //     setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
-    //     // }
-    //     setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
-    //     frc::SmartDashboard::PutNumber("LIM LEFT", (limelightValue - targetLimelightValue) * 0.2);
+        // if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5)
+        // {
+        //     setVelocity(-0.1, -0.1);
+        // }
+        // else
+        // {
+        //     setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
+        // }
+        //targetLimelightValue = -4;
+        setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
+        frc::SmartDashboard::PutNumber("LIM LEFT", (limelightValue - targetLimelightValue) * 0.2);
 
-    //     if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5 && robotData.armData.armInPosition)
-    //     {
-    //         drivebaseData.allowEject = true;
-    //     }
-    //     else
-    //     {
-    //         drivebaseData.allowEject = false;
-    //     }
-    // }
-    // else
-    // {
-    //     drivebaseData.allowEject = false;
-    // }
+        // if (robotData.armData.armInPosition)
+        // {
+        //     drivebaseData.allowEject = true;
+        // }
+        // else
+        // {
+        //     drivebaseData.allowEject = false;
+        // }
+
+        frc::SmartDashboard::PutBoolean("eject autpo", drivebaseData.allowEject);
+    }
+    else
+    {
+        drivebaseData.allowEject = false;
+    }
    
 
 

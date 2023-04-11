@@ -122,6 +122,15 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         //     LimelightHelpers::setPipelineIndex("", 3);
         // }
 
+        // if (robotData.controlData.saPositionHigh && robotData.endEffectorData.lastPieceType == CONE)
+        // {
+        //     LimelightHelpers::setPipelineIndex("pipeline", 2);
+        //     limelightData.x = LimelightHelpers::getTX("");
+        // }
+
+        LimelightHelpers::setPipelineIndex("pipeline", 2);
+            limelightData.x = LimelightHelpers::getTX("") +4.0;
+
 
         // if (robotData.controlData.saPositionHigh && robotData.endEffectorData.gamePieceType == CONE)
         // {
@@ -129,7 +138,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         //     distanceFromTarget = GetDistance(higherPollHeight, upperAngleOffset);
         //     angleOff = LimelightHelpers::getTX("") * (pi / 180);
 
-        //     if (std::abs(angleOff) < 10)
+        //     if (false)//std::abs(angleOff) < 10)
         //     {
         //         distanceFromCenterOfRobot = std::sqrt((std::pow((distanceFromTarget * std::sin(angleOff)), 2)) + (std::pow(((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter), 2)));
         //         angleFromCenterOfRobot = std::atan((distanceFromTarget * std::sin(angleOff)) / ((distanceFromTarget * std::cos(angleOff)) + cameraDistanceFromCenter));

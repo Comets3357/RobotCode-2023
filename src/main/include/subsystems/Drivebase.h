@@ -221,11 +221,15 @@ private:
 
     double minLimelightAutoAllign = -4;
     double maxLimelightAutoAllign = 4;
-    double minConeDistanceAutoAllign = 0.08;
-    double maxConeDistanceAutoAllign = 0.353;
+    double minConeDistanceAutoAllign = 0.103;
+    double maxConeDistanceAutoAllign = 0.36;
 
     double midToHighPoleLength = 16.16;
     double distanceToMidPole = 29.16;
+
+    double targetLimelightValue = 0;
+    bool overrideAutoAllign = false;
+    double deltaTime = 0;
 
     // bool autoAllign = false;
 };
