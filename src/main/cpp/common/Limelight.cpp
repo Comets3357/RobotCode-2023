@@ -104,7 +104,8 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     }
 
     limelightData.pastExtendAllow = robotData.limelightData.allowExtend;
-
+    if (!robotData.controlData.saResetOdometry)
+    {
     try
     {
 
@@ -127,9 +128,22 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
         //     LimelightHelpers::setPipelineIndex("pipeline", 2);
         //     limelightData.x = LimelightHelpers::getTX("");
         // }
-
-        LimelightHelpers::setPipelineIndex("pipeline", 2);
+            
             limelightData.x = LimelightHelpers::getTX("") +4.0;
+            limelightData.hasTarget = LimelightHelpers::getTA("") > 0.0;
+
+            if (robotData.controlData.saPositionHigh)
+            {
+                LimelightHelpers::setPipelineIndex("", 2);
+            }
+            else if (robotData.controlData.saPositionMid)
+            {
+                LimelightHelpers::setPipelineIndex("", 1);
+            }
+            else if (!robotData.drivebaseData.autoAllign)
+            {
+                LimelightHelpers::setPipelineIndex("", 0);
+            }
 
 
         // if (robotData.controlData.saPositionHigh && robotData.endEffectorData.gamePieceType == CONE)
@@ -277,6 +291,7 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
     {
         
     }
+}
 
 
 }

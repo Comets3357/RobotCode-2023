@@ -341,6 +341,8 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         overrideAutoAllign = true;
     }
 
+    frc::SmartDashboard::PutNumber("Override", overrideAutoAllign);
+
 
     if (!overrideAutoAllign)
     {
@@ -348,28 +350,30 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
         std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
 
-        targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
-        
+        targetLimelightValue = -(((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign);
+
     }
     else
     {
-        if (robotData.timerData.secSinceEnabled - deltaTime > 1.0/6.0)
+        if (robotData.timerData.secSinceEnabled - deltaTime > 1.0/60.0)
         {
             if (robotData.controlData.saChangeAutoAllign > 0.08 || robotData.controlData.saChangeAutoAllign < -0.08)
             {
-                targetLimelightValue += robotData.controlData.saChangeAutoAllign;
+                targetLimelightValue += (robotData.controlData.saChangeAutoAllign/10.0)*1.5;
             }
             deltaTime = robotData.timerData.secSinceEnabled;
         }
     }
+    if (targetLimelightValue > 5) targetLimelightValue = 5;
+    if (targetLimelightValue < -5) targetLimelightValue = -5;
+            frc::SmartDashboard::PutNumber("limelight targetpos", -targetLimelightValue);
 
-    std::clamp(targetLimelightValue, minLimelightAutoAllign, maxLimelightAutoAllign);
 
     
         
-    if (robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) {drivebaseData.autoAllign = true;}
+    if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) && robotData.controllerData.pLShoulderSwitch) {drivebaseData.autoAllign = true;}
     if (robotData.controlData.saHomePosition) {drivebaseData.autoAllign = false; overrideAutoAllign = false;}
-    if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.lastPieceType == CONE)
+    if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.lastPieceType == CONE && robotData.limelightData.hasTarget && !(robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) && !(robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08))
     {
         // double distance = robotData.endEffectorData.distanceReading;
         double limelightValue = robotData.limelightData.x;

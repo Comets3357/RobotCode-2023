@@ -30,6 +30,7 @@ struct LimelightData
     double distanceFromCenter = 0;
 
     double x;
+    bool hasTarget = false;;
 };
 
 class Limelight

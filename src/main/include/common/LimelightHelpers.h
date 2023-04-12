@@ -147,6 +147,7 @@ namespace LimelightHelpers
 
     inline void setPipelineIndex(const std::string &limelightName, int index)
     {
+        
         setLimelightNTDouble(limelightName, "pipeline", index);
     }
 

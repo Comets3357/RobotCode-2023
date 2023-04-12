@@ -46,7 +46,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
         controlData.maxTurn = 0.3;
     }
 
-    controlData.dbInverted = controllerData.pLShoulderSwitch;
+    controlData.dbInverted = controllerData.pLPalmSwitch;
     // if you're inverted then you swtich sides for driving so it's intuitive
     if (controlData.dbInverted)
     {
