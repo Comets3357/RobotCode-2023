@@ -186,7 +186,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
     if (robotData.elevatorData.drivebaseSlowMode)
     {
-        drivebaseMultiplier = 0.45;
+        drivebaseMultiplier = 0.7;
     }
     else
     {
@@ -336,44 +336,33 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
     // frc::SmartDashboard::PutNumber("Limelight X", robotData.limelightData.x);
     frc::SmartDashboard::PutNumber("DISTANCE", robotData.endEffectorData.distanceReading);
 
-    if (robotData.controlData.saChangeAutoAllign > 0.08 || robotData.controlData.saChangeAutoAllign < -0.08)
-    {
-        overrideAutoAllign = true;
-    }
+
 
     frc::SmartDashboard::PutNumber("Override", overrideAutoAllign);
 
 
-    if (!overrideAutoAllign)
-    {
-        double distance = robotData.endEffectorData.distanceReading;
-
-        std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
-
-        targetLimelightValue = -(((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign);
-
-    }
-    else
-    {
-        if (robotData.timerData.secSinceEnabled - deltaTime > 1.0/60.0)
+    if (robotData.timerData.secSinceInit - deltaTime > 1.0/60.0)
         {
             if (robotData.controlData.saChangeAutoAllign > 0.08 || robotData.controlData.saChangeAutoAllign < -0.08)
             {
-                targetLimelightValue += (robotData.controlData.saChangeAutoAllign/10.0)*1.5;
+                targetLimelightValue += (robotData.controlData.saChangeAutoAllign/10.0)*3.5;
             }
             deltaTime = robotData.timerData.secSinceEnabled;
         }
-    }
-    if (targetLimelightValue > 5) targetLimelightValue = 5;
-    if (targetLimelightValue < -5) targetLimelightValue = -5;
+    if (targetLimelightValue > 7) targetLimelightValue = 7;
+    if (targetLimelightValue < -7) targetLimelightValue = -7;
             frc::SmartDashboard::PutNumber("limelight targetpos", -targetLimelightValue);
 
 
     
         
-    if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid) && robotData.controllerData.pLShoulderSwitch) {drivebaseData.autoAllign = true;}
+    if ((robotData.controlData.saPositionHigh || robotData.controlData.saPositionMid)) {drivebaseData.autoAllign = true;}
     if (robotData.controlData.saHomePosition) {drivebaseData.autoAllign = false; overrideAutoAllign = false;}
-    if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.lastPieceType == CONE && robotData.limelightData.hasTarget && !(robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) && !(robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08))
+    if (robotData.controlData.saPositionHigh) {lastMid = false; lastHigh = true;}
+    if (robotData.controlData.saPositionMid) {lastMid = true; lastHigh = false;}
+    if (!frc::DriverStation::IsAutonomous())
+    {
+    if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.lastPieceType == CONE && robotData.limelightData.hasTarget && !(robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) && !(robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08) && robotData.controllerData.pLShoulderSwitch)
     {
         // double distance = robotData.endEffectorData.distanceReading;
         double limelightValue = robotData.limelightData.x;
@@ -407,8 +396,16 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         //     setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
         // }
         //targetLimelightValue = -4;
-        setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
-        frc::SmartDashboard::PutNumber("LIM LEFT", (limelightValue - targetLimelightValue) * 0.2);
+        if (lastHigh)
+        {
+        setVelocity((limelightValue - targetLimelightValue) * 0.225, -(limelightValue - targetLimelightValue) * 0.225);
+
+        }
+        else{
+                    setVelocity((limelightValue - (targetLimelightValue * 1.1)) * 0.225, -(limelightValue - (targetLimelightValue * 1.1)) * 0.225);
+
+        }
+        frc::SmartDashboard::PutNumber("LIM LEFT", (limelightValue - targetLimelightValue) * 0.3);
 
         // if (robotData.armData.armInPosition)
         // {
@@ -424,6 +421,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
     else
     {
         drivebaseData.allowEject = false;
+    }
     }
    
 
@@ -664,8 +662,8 @@ double tempLDrive = 0;
 
                     if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
                     {
-                        tempLDrive = (gyroData.rawRoll - 3.0)*-0.0075;
-                        tempRDrive = (gyroData.rawRoll - 3.0)*-0.0075;
+                        tempLDrive = (gyroData.rawRoll - 3.0)*-0.0065;
+                        tempRDrive = (gyroData.rawRoll - 3.0)*-0.0065;
                         setPercentOutput(tempLDrive, tempRDrive); 
                     }
                     else
@@ -699,8 +697,8 @@ double tempLDrive = 0;
 
                 if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
                 {
-                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.0082;
-                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.0082;
+                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.0065;
+                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.0065;
                     setPercentOutput(tempLDrive, tempRDrive); 
                 }
                 else

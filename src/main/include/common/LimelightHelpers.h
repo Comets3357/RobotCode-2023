@@ -171,6 +171,11 @@ namespace LimelightHelpers
         setLimelightNTDouble(limelightName, "ledMode", 3);
     }
 
+    inline void setBrightness(const std::string &limelightName, int brightness)
+    {
+        setLimelightNTDouble(limelightName, "brightness", brightness);
+    }
+
     inline void setStreamMode_Standard(const std::string &limelightName)
     {
         setLimelightNTDouble(limelightName, "stream", 0);

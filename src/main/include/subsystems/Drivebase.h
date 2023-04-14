@@ -231,5 +231,8 @@ private:
     bool overrideAutoAllign = false;
     double deltaTime = 0;
 
+    bool lastMid = false;
+    bool lastHigh = false;
+
     // bool autoAllign = false;
 };

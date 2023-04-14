@@ -18,6 +18,7 @@ void Timer::EnabledInit(TimerData &timerData) {
 void Timer::EnabledPeriodic(TimerData &timerData)
 {
     timerData.secSinceEnabled = timer.Get().to<double>();
+    timerData.secSinceInit = initTimer.Get().to<double>();
     frc::SmartDashboard::PutNumber("timerData.secSinceEnabled", timerData.secSinceEnabled);
     frc::SmartDashboard::PutNumber("Match Timer", frc::DriverStation::GetMatchTime());
 }

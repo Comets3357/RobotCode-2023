@@ -611,7 +611,7 @@ void Arm::RotateWrist(double targetDegree, const RobotData& robotData, double ti
 
     wristProfile = frc::TrapezoidProfile<units::degrees>
     {
-        frc::TrapezoidProfile<units::degrees>::Constraints{400_deg_per_s, 350_deg/(1_s * 1_s)},
+        frc::TrapezoidProfile<units::degrees>::Constraints{600_deg_per_s, 550_deg/(1_s * 1_s)},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{wristProfileEndPos}, units::angular_velocity::degrees_per_second_t{0}},
         frc::TrapezoidProfile<units::degrees>::State{units::angle::degree_t{wristProfileStartPos}, units::angular_velocity::degrees_per_second_t{0}}
     };
