@@ -530,6 +530,7 @@ double tempLDrive = 0;
             switch (ChargeStationTraverseStep)
                 {
                 case -1:
+                    drivebaseData.dontRunAnything = true;
                     setVelocity(-2, -2);
                     if (robotData.timerData.secSinceEnabled - 1 > chargeStationBackoffBeginTime) 
                     {
@@ -542,8 +543,8 @@ double tempLDrive = 0;
                         else if (!robotData.autonData.autonToggle)
                         {
                             autonData.autonStep = 9;
-                            ChargeStationTraverseStep = 0;
                             drivebaseData.allowBullBarExtend = false;
+                            ChargeStationTraverseStep = 0;
                             getNextAutonStep(robotData, drivebaseData, autonData);
                         }
                     }
@@ -560,7 +561,7 @@ double tempLDrive = 0;
                         getNextAutonStep(robotData, drivebaseData, autonData);
                     }
 
-                    if (robotData.gyroData.velocity < 0.025 && std::abs(robotData.gyroData.angularMomentum) < 2.5 && robotData.timerData.secSinceEnabled - 3.0 > chargeStationBeginFailSafe) 
+                    if (robotData.gyroData.velocity < 0.025 && std::abs(robotData.gyroData.angularMomentum) < 2.5 && robotData.timerData.secSinceEnabled - 2.0 > chargeStationBeginFailSafe) 
                     {
                         chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
                         ChargeStationTraverseStep = -1; 
@@ -622,8 +623,8 @@ double tempLDrive = 0;
 
                     if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
                     {
-                        tempLDrive = (gyroData.rawRoll - 3.0)*-0.0065;
-                        tempRDrive = (gyroData.rawRoll - 3.0)*-0.0065;
+                        tempLDrive = (gyroData.rawRoll + 0.8)*-0.006;
+                        tempRDrive = (gyroData.rawRoll + 0.8)*-0.006;
                         setPercentOutput(tempLDrive, tempRDrive); 
                     }
                     else
@@ -657,8 +658,8 @@ double tempLDrive = 0;
 
                 if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
                 {
-                    tempLDrive = (gyroData.rawRoll - 3.0)*-0.0065;
-                    tempRDrive = (gyroData.rawRoll - 3.0)*-0.0065;
+                    tempLDrive = (gyroData.rawRoll)*-0.006;
+                    tempRDrive = (gyroData.rawRoll)*-0.006;
                     setPercentOutput(tempLDrive, tempRDrive); 
                 }
                 else

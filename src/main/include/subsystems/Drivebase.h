@@ -84,6 +84,9 @@ struct DrivebaseData
     bool autoAllign = false;
 
     bool allowEject = false;
+
+    bool dontRunAnything = false;
+
 };
 
 class Drivebase
@@ -233,6 +236,7 @@ private:
 
     bool lastMid = false;
     bool lastHigh = false;
+
 
     // bool autoAllign = false;
 };

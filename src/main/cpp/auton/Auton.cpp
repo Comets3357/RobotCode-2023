@@ -291,11 +291,10 @@ void Auton::Traverse(const RobotData &robotData, ControlData &controlData, Contr
             break;
         case(4):
             controlData.saHomePosition = false;
+           
             if (sec > 5.6) step++;
             break;
-        if (robotData.drivebaseData.allowBullBarExtend)
-        {
-            case 5:
+        case 5:
                 controlData.saCubeIntake = true;
                 if (sec > 7.4 && sec < 7.55)
                 {
@@ -308,18 +307,22 @@ void Auton::Traverse(const RobotData &robotData, ControlData &controlData, Contr
                 }
                 if (sec > 8.3) step++;
                 break;
-            case 6:
+        case 6:
                 
                 controlData.saCubeIntake = false;
                 // controlData.saHomePosition = true;
-                step++;
+                // step++;
                 break;
-            case 7:
-                // controlData.saHomePosition = false;
-                break;
-        }
+        case 7:
+            break;
+        
         
     }    
+
+    if (robotData.drivebaseData.dontRunAnything)
+    {
+        step = 7;
+    }
 }
 
 
@@ -831,9 +834,12 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
 
 void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled - 1;
 
-    controlData.saResetOdometry = true;
+    if (sec > 6.9 && sec < 7.2)
+    {
+        controlData.saResetOdometry = true;
+    }
 
     switch (step)
     {
@@ -895,58 +901,59 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
     case(11):
         controlData.saHomePosition = false;
         break;
-        if (sec > 8.7)step++;
-        break;
-    case(12):
-        controlData.saCubeIntake = true;
+    //     if (sec > 8.7)step++;
+    //     break;
+    // case(12):
+    //     controlData.saCubeIntake = true;
 
-        if (sec > 11.1 && sec < 11.2)
-        {
-            controllerData.sLYStick = -0.6;
-        }
-        else
-        {
-            controllerData.sLYStick = 0.0;
-        }
+    //     if (sec > 11.1 && sec < 11.2)
+    //     {
+    //         controllerData.sLYStick = -0.6;
+    //     }
+    //     else
+    //     {
+    //         controllerData.sLYStick = 0.0;
+    //     }
 
-        if (sec > 11.8) step++;
-        break;
-    case(13):
-        controlData.saCubeIntake = false;
-        if (sec > 13.05) 
-        {
-            controlData.saPositionMid = true;
-            step++;
-        }
-        // if (sec > 14.1) step++;
-        break;
-    case 14:
-        controlData.saPositionMid = false;
-        if (sec > 14.5) step++;
-        // if (sec > 14.1) step++;
-        break;
-    case 15:
-        controllerData.sLYStick = 0.6;
-        if (sec > 14.8) step++;
-        break;
-    case(16):
-        controllerData.sLYStick = 0.0;
-        controlData.saHomePosition = true;
-        break;
+    //     if (sec > 11.8) step++;
+    //     break;
+    // case(13):
+    //     controlData.saCubeIntake = false;
+    //     break;
+    //     if (sec > 13.05) 
+    //     {
+    //         controlData.saPositionMid = true;
+    //         step++;
+    //     }
+    //     // if (sec > 14.1) step++;
+    //     break;
     // case 14:
-    //     controlData.saPositionMid = true;
-    //     step++;
+    //     controlData.saPositionMid = false;
+    //     if (sec > 14.5) step++;
+    //     // if (sec > 14.1) step++;
     //     break;
     // case 15:
-    //     controlData.saPositionMid = false;
-    //     if (sec > 14.4) step++;
-    //     break;
-    // case 16:
-    //     controlData.saIntakeBackwards = true;
+    //     controllerData.sLYStick = 0.6;
     //     if (sec > 14.8) step++;
     //     break;
-    case 17:
-        controlData.saIntakeBackwards = false;
-        break;
+    // case(16):
+    //     controllerData.sLYStick = 0.0;
+    //     controlData.saHomePosition = true;
+    //     break;
+    // // case 14:
+    // //     controlData.saPositionMid = true;
+    // //     step++;
+    // //     break;
+    // // case 15:
+    // //     controlData.saPositionMid = false;
+    // //     if (sec > 14.4) step++;
+    // //     break;
+    // // case 16:
+    // //     controlData.saIntakeBackwards = true;
+    // //     if (sec > 14.8) step++;
+    // //     break;
+    // case 17:
+    //     controlData.saIntakeBackwards = false;
+    //     break;
     }
 }
