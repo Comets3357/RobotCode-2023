@@ -834,9 +834,9 @@ void Auton::LoadingNoClimb(const RobotData &robotData, ControlData &controlData,
 
 void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled - 1;
+    double sec = robotData.timerData.secSinceEnabled - 1.2;
 
-    if (sec > 6.9 && sec < 7.2)
+    if ((sec > 6.9 && sec < 7.2))
     {
         controlData.saResetOdometry = true;
     }
@@ -844,11 +844,11 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
     switch (step)
     {
     case (0):   
-        controlData.saPositionMid = true;
+        controlData.saPositionHigh = true;
         step++;
         break;
     case(1):
-        controlData.saPositionMid = false;
+        controlData.saPositionHigh = false;
         if (sec > 0.5) step++;
         break;
     case(2):
@@ -900,26 +900,26 @@ void Auton::BumpNoClimb(const RobotData &robotData, ControlData &controlData, Co
         break;
     case(11):
         controlData.saHomePosition = false;
+        // break;
+        if (sec > 9.5)step++;
         break;
-    //     if (sec > 8.7)step++;
-    //     break;
-    // case(12):
-    //     controlData.saCubeIntake = true;
+    case(12):
+        controlData.saCubeIntake = true;
 
-    //     if (sec > 11.1 && sec < 11.2)
-    //     {
-    //         controllerData.sLYStick = -0.6;
-    //     }
-    //     else
-    //     {
-    //         controllerData.sLYStick = 0.0;
-    //     }
+        if (sec > 11.1 && sec < 11.2)
+        {
+            controllerData.sLYStick = -0.6;
+        }
+        else
+        {
+            controllerData.sLYStick = 0.0;
+        }
 
-    //     if (sec > 11.8) step++;
-    //     break;
-    // case(13):
-    //     controlData.saCubeIntake = false;
-    //     break;
+        if (sec > 11.8) step++;
+        break;
+    case(13):
+        controlData.saCubeIntake = false;
+        break;
     //     if (sec > 13.05) 
     //     {
     //         controlData.saPositionMid = true;
