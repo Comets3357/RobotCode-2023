@@ -4,7 +4,7 @@ VoltageCompensation = 10.5
 # BULL BAR VALUES #
 BullBarRollerInverted = true
 BullBarAbsoluteConversionFactor = 102.9166
-BullBarAbsoluteZeroOffset = 87.4
+BullBarAbsoluteZeroOffset = 87.5
 BullBarRelativeConversionFactor = 0.25288
 BullBarPValue = 0.5
 BullBarSmartCurrentLimit = 20
@@ -28,7 +28,7 @@ ElevatorCurrentLimit = 50
 ElevatorPValue = 0.5
 ElevatorRelativeConversionFactor = 0.496060877648
 ElevatorAbsoluteConversionFactor = 71.9717656007
-ElevatorAbsoluteZeroOffset = 42.67
+ElevatorAbsoluteZeroOffset = 44.7
 
 ElevatorHomePosition = 10
 ElevatorLowPosition = 10

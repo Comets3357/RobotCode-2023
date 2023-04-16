@@ -351,7 +351,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
         }
     if (targetLimelightValue > 7) targetLimelightValue = 7;
     if (targetLimelightValue < -7) targetLimelightValue = -7;
-            frc::SmartDashboard::PutNumber("limelight targetpos", -targetLimelightValue);
+    frc::SmartDashboard::PutNumber("limelight targetpos", -targetLimelightValue);
 
 
     
@@ -362,66 +362,26 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
     if (robotData.controlData.saPositionMid) {lastMid = true; lastHigh = false;}
     if (!frc::DriverStation::IsAutonomous())
     {
-    if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.lastPieceType == CONE && robotData.limelightData.hasTarget && !(robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) && !(robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08) && robotData.controllerData.pLShoulderSwitch)
-    {
-        // double distance = robotData.endEffectorData.distanceReading;
-        double limelightValue = robotData.limelightData.x;
-        
-
-        // // if (robotData.limelightData.cantSeeTop)
-        // // {
-        // //     double angle = gyroData.rawYaw + robotData.limelightData.x;
-        // //     double midPoleAngle = 180 - abs(angle);
-        // //     double distanceToTop = sqrt(pow(midToHighPoleLength, 2) + pow(distanceToMidPole, 2) - (2 * midToHighPoleLength * distanceToMidPole * cos(midPoleAngle / 180 * 3.1415926)));
-        // //     double interiorAngle = asin((midToHighPoleLength * sin(midPoleAngle / 180 * 3.14159)) / distanceToTop) * 180 / 3.1415926;
-        // //     limelightValue = interiorAngle + robotData.limelightData.x;
-        // // }
-        
-
-        // std::clamp(distance, minConeDistanceAutoAllign, maxConeDistanceAutoAllign);
-
-        // double targetLimelightValue = ((distance - minConeDistanceAutoAllign) / (maxConeDistanceAutoAllign - minConeDistanceAutoAllign)) * (maxLimelightAutoAllign - minLimelightAutoAllign) + minLimelightAutoAllign;
-
-       
-
-
-         frc::SmartDashboard::PutNumber("TargetLime", targetLimelightValue);
-
-        // if (limelightValue > targetLimelightValue - 0.5 && limelightValue < targetLimelightValue + 0.5)
-        // {
-        //     setVelocity(-0.1, -0.1);
-        // }
-        // else
-        // {
-        //     setVelocity((limelightValue - targetLimelightValue) * 0.2, -(limelightValue - targetLimelightValue) * 0.2);
-        // }
-        //targetLimelightValue = -4;
-        if (lastHigh)
+        if (robotData.drivebaseData.autoAllign && robotData.endEffectorData.lastPieceType == CONE && robotData.limelightData.hasTarget && !(robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) && !(robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08) && robotData.controllerData.pLShoulderSwitch)
         {
-        setVelocity((limelightValue - targetLimelightValue) * 0.225, -(limelightValue - targetLimelightValue) * 0.225);
+            // double distance = robotData.endEffectorData.distanceReading;
+            double limelightValue = robotData.limelightData.x;
+        
 
+            if (lastHigh)
+            {
+                setVelocity((limelightValue - targetLimelightValue) * 0.225, -(limelightValue - targetLimelightValue) * 0.225);
+
+            }
+            else{
+                setVelocity((limelightValue - (targetLimelightValue * 1.1)) * 0.225, -(limelightValue - (targetLimelightValue * 1.1)) * 0.225);
+
+            }
         }
-        else{
-                    setVelocity((limelightValue - (targetLimelightValue * 1.1)) * 0.225, -(limelightValue - (targetLimelightValue * 1.1)) * 0.225);
-
+        else if (robotData.drivebaseData.autoAllign && ((robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) || (robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08)))
+        {
+            drivebaseData.autoAllign = false;
         }
-        frc::SmartDashboard::PutNumber("LIM LEFT", (limelightValue - targetLimelightValue) * 0.3);
-
-        // if (robotData.armData.armInPosition)
-        // {
-        //     drivebaseData.allowEject = true;
-        // }
-        // else
-        // {
-        //     drivebaseData.allowEject = false;
-        // }
-
-        frc::SmartDashboard::PutBoolean("eject autpo", drivebaseData.allowEject);
-    }
-    else
-    {
-        drivebaseData.allowEject = false;
-    }
     }
    
 

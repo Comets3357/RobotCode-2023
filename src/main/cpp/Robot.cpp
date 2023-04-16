@@ -16,7 +16,7 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
 
   // frc::DigitalInput robotIndicator{9};
-timer.RobotInit(robotData.timerData); 
+  timer.RobotInit(robotData.timerData); 
 
   // if (robotIndicator.Get())
   // {
