@@ -378,7 +378,7 @@ void Drivebase::teleopControl(const RobotData &robotData, DrivebaseData &driveba
 
             }
         }
-        else if (robotData.drivebaseData.autoAllign && ((robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) || (robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08)))
+        else if (robotData.armData.armInPosition && robotData.drivebaseData.autoAllign && ((robotData.controlData.lDrive <= -0.08 || robotData.controlData.lDrive >= 0.08) || (robotData.controlData.rDrive <= -0.08 || robotData.controlData.rDrive >= 0.08)))
         {
             drivebaseData.autoAllign = false;
         }
