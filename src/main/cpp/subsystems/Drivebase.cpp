@@ -621,10 +621,10 @@ double tempLDrive = 0;
                     break;
                 case 2:
 
-                    if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
+                    if (robotData.gyroData.rawRoll > 2.0 || robotData.gyroData.rawRoll < -2.0)
                     {
-                        tempLDrive = (gyroData.rawRoll + 0.8)*-0.006;
-                        tempRDrive = (gyroData.rawRoll + 0.8)*-0.006;
+                        tempLDrive = (gyroData.rawRoll + 0.8)*-0.0065;
+                        tempRDrive = (gyroData.rawRoll + 0.8)*-0.0065;
                         setPercentOutput(tempLDrive, tempRDrive); 
                     }
                     else
@@ -656,10 +656,10 @@ double tempLDrive = 0;
                 break;
             case 2:
 
-                if (robotData.gyroData.rawRoll > 4.0 || robotData.gyroData.rawRoll < -4.0)
+                if (robotData.gyroData.rawRoll > 2.0 || robotData.gyroData.rawRoll < -2.0)
                 {
-                    tempLDrive = (gyroData.rawRoll)*-0.006;
-                    tempRDrive = (gyroData.rawRoll)*-0.006;
+                    tempLDrive = (gyroData.rawRoll)*-0.0065;
+                    tempRDrive = (gyroData.rawRoll)*-0.0065;
                     setPercentOutput(tempLDrive, tempRDrive); 
                 }
                 else
