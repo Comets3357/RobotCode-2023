@@ -105,7 +105,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
         }
         
     }
-    else if (robotData.controlData.saConeIntake || robotData.controlData.saUprightConeIntake) 
+    else if (robotData.controlData.saConeIntake || robotData.controlData.saUprightConeIntake || robotData.controlData.saDoubleSubCone) 
     {
         if (endEffectorData.gamePieceType != CONE && robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS)
         {

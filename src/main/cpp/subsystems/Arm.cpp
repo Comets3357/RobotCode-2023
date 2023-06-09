@@ -180,11 +180,13 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
 */
     coneIntakeToggle = armData.coneIntakeRunning;
     cubeIntakeToggle = armData.cubeIntakeRunning;
+    armData.pastDoubleSub = armData.currentDoubleSub;
     uprightConeIntakeToggle = armData.uprightConeIntakeRunning;
     humanPlayerIntakeToggle = armData.humanPlayerConeIntakeRunning;
 
     armData.coneIntakeRunning = robotData.controlData.saConeIntake;
     armData.cubeIntakeRunning = robotData.controlData.saCubeIntake;
+    armData.currentDoubleSub = robotData.controlData.saDoubleSubCone;
     armData.uprightConeIntakeRunning = robotData.controlData.saUprightConeIntake;
     armData.humanPlayerConeIntakeRunning = robotData.controlData.saPositionHumanPlayer;
 
@@ -427,6 +429,30 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
             {
                 pivotMaxAcceleration = 100_deg;
+                RotatePivot(11, robotData, 0);
+                pivotMaxAcceleration = 700_deg;
+            }
+        }
+
+        if (robotData.controlData.saDoubleSubCone)
+        {
+            if (robotData.armData.currentDoubleSub != robotData.armData.pastDoubleSub)
+            {
+                RotateWrist(175, robotData, 0);
+                RotatePivot(83, robotData, 0);
+            }
+        }
+        else if (!robotData.controlData.saDoubleSubCone)
+        {
+            if (robotData.armData.pastDoubleSub != armData.currentDoubleSub)
+            {
+                RotateWrist(25, robotData, 0);
+                RotatePivot(90, robotData, 0.1);
+            }
+
+            if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
+            {
+                pivotMaxAcceleration = 200_deg;
                 RotatePivot(11, robotData, 0);
                 pivotMaxAcceleration = 700_deg;
             }

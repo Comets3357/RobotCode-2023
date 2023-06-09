@@ -75,7 +75,7 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     {
         controlData.saUprightConeIntake = (controllerData.sXBtn) && controlData.shift;
         controlData.saCubeIntake = (controllerData.sLTrigger > 0.5);
-        controlData.saConeIntake = (controllerData.sRTrigger > 0.5);
+        controlData.saConeIntake = (controllerData.sRTrigger > 0.5) && !controlData.shift;
     }
 
     // if (robotData.endEffectorData.armRetractRequest)
@@ -127,6 +127,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saSetUpPosition = (controllerData.sBBtn) && controlData.shift;
     controlData.saConeFlipPosition = (controllerData.sYBtn) && controlData.shift;
 
+    controlData.saDoubleSubCone = (controllerData.sRTrigger > 0.5) && controlData.shift;
+
     // MANUAL:
     controlData.mMovePivot = (controllerData.sRYStick > 0.08 || controllerData.sRYStick < -0.08) && controlData.shift;
     controlData.mMoveWrist = (controllerData.sLYStick > 0.08 || controllerData.sLYStick < -0.08) && controlData.shift;
@@ -141,6 +143,8 @@ void Controller::updateControlData(const RobotData &robotData, const ControllerD
     controlData.saCubeCall = (controllerData.sLCenterBtn) && !controlData.shift;
     controlData.saFastConeCall = (controllerData.sRCenterBtn) && controlData.shift;
     controlData.saFastCubeCall = (controllerData.sLCenterBtn) && controlData.shift;
+
+    // controlData.saDoubleSubCone
 
     controlData.saChangeAutoAllign = controllerData.sRXStick;
 // ELEVATOR:

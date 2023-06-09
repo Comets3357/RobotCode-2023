@@ -38,6 +38,9 @@ struct ArmData
     bool humanPlayerConeIntakeRunning = false;
     bool uprightConeIntakeRunning = false;
 
+    bool pastDoubleSub = false;
+    bool currentDoubleSub = false;
+
     bool wristAndArmInPositionForBullBarIntake = false;
 
     bool wristInPosition = false;

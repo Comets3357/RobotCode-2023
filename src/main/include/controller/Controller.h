@@ -94,6 +94,8 @@ struct ControlData
     bool saConeCall;
     bool saFastConeCall;
 
+    bool saDoubleSubCone;
+
     bool toggleOutake;
 
     double pastStickRead;
