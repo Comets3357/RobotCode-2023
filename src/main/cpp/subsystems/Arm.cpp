@@ -447,7 +447,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             if (robotData.armData.pastDoubleSub != armData.currentDoubleSub)
             {
                 RotateWrist(25, robotData, 0);
-                RotatePivot(90, robotData, 0.1);
+                RotatePivot(90, robotData, 0);
             }
 
             if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
