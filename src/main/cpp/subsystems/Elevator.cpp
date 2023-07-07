@@ -121,6 +121,22 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
                 {
                     MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
                 }
+
+                if (robotData.controlData.saDoubleSubCone)
+                {
+                    if (robotData.armData.currentDoubleSub != robotData.armData.pastDoubleSub)
+                    {
+                        MoveElevator(22.9, robotData, 0);
+                    }
+                }
+                else if (!robotData.controlData.saDoubleSubCone)
+                {
+                    if (robotData.armData.pastDoubleSub != robotData.armData.currentDoubleSub)
+                    {
+                        MoveElevator(0, robotData, 0);
+                    }
+
+                }
                 break;
             case CUBE:
                 if (robotData.controlData.saHomePosition)
@@ -139,6 +155,23 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
                 {
                     MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
                 }
+                
+
+                if (robotData.controlData.saDoubleSubCone)
+                {
+                    if (robotData.armData.currentDoubleSub != robotData.armData.pastDoubleSub)
+                    {
+                        MoveElevator(22.9, robotData, 0);
+                    }
+                }
+                else if (!robotData.controlData.saDoubleSubCone)
+                {
+                    if (robotData.armData.pastDoubleSub != robotData.armData.currentDoubleSub)
+                    {
+                        MoveElevator(0, robotData, 0);
+                    }
+
+                }
                 break;
             default:
                 if (robotData.controlData.saHomePosition)
@@ -156,6 +189,22 @@ void Elevator::SemiAuto(const RobotData &robotData, ElevatorData &elevatorData)
                 else if (robotData.controlData.saSetUpPosition)
                 {
                     MoveElevator(robotData.configData.elevatorConfigData.elevatorSetupPosition, robotData, 0);
+                }
+
+                if (robotData.controlData.saDoubleSubCone)
+                {
+                    if (robotData.armData.currentDoubleSub != robotData.armData.pastDoubleSub)
+                    {
+                        MoveElevator(22.9, robotData, 0);
+                    }
+                }
+                else if (!robotData.controlData.saDoubleSubCone)
+                {
+                    if (robotData.armData.pastDoubleSub != robotData.armData.currentDoubleSub)
+                    {
+                        MoveElevator(10, robotData, 0);
+                    }
+
                 }
                 break;
         }

@@ -120,6 +120,7 @@ void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffec
             SetEndEffectorRollerSpeed(-0.05);
         }
 
+
     }
     else if (robotData.controlData.saIntakeBackwards || robotData.drivebaseData.allowEject) 
     {

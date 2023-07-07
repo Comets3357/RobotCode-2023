@@ -138,21 +138,22 @@ void Limelight::RobotPeriodic(const RobotData &robotData, LimelightData &limelig
                 if (robotData.controlData.saPositionHigh)
                 {
                     LimelightHelpers::setPipelineIndex("", 2);
-                    LimelightHelpers::setLEDMode_ForceOn("");
+                    //LimelightHelpers::setLEDMode_ForceOn("");
                     //LimelightHelpers::setBrightness("", 100);
                 }
                 else if (robotData.controlData.saPositionMid)
                 {
                     LimelightHelpers::setPipelineIndex("", 1);
-                    LimelightHelpers::setLEDMode_ForceOn("");
+                    //LimelightHelpers::setLEDMode_ForceOn("");
                     LimelightHelpers::setBrightness("", 20);
                 }
                 else if (!robotData.drivebaseData.autoAllign)
                 {
                     //LimelightHelpers::setPipelineIndex("", 0);
-                    LimelightHelpers::setLEDMode_ForceOff("");
+                    //LimelightHelpers::setLEDMode_ForceOff("");
                     LimelightHelpers::setBrightness("", 0);
                 }
+                LimelightHelpers::setLEDMode_PipelineControl("");
 
             }
             else

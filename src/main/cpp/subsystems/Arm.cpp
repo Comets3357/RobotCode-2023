@@ -438,8 +438,8 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (robotData.armData.currentDoubleSub != robotData.armData.pastDoubleSub)
             {
-                RotateWrist(175, robotData, 0);
-                RotatePivot(83, robotData, 0);
+                RotateWrist(118.5, robotData, 0); //175
+                RotatePivot(56.5, robotData, 0); //83
             }
         }
         else if (!robotData.controlData.saDoubleSubCone)
@@ -447,7 +447,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
             if (robotData.armData.pastDoubleSub != armData.currentDoubleSub)
             {
                 RotateWrist(25, robotData, 0);
-                RotatePivot(90, robotData, 0);
+                RotatePivot(15, robotData, 0);
             }
 
             if ((wristInPositionForArmPastRead != wristInPositionForArm) && armWristRelativeEncoder.GetPosition() < 100)
