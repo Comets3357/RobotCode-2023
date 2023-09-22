@@ -11,7 +11,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DutyCycle.h>
 #include <frc/DigitalInput.h>
-#include <ctre/Phoenix.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
 
 struct RobotData;

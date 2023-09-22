@@ -9,14 +9,14 @@ static const int
 
 //end effector:
 static const int
-    endEffectorRollerID = 33; // NOT REAL VALUE.
+    endEffectorRollerID = 6; // NOT REAL VALUE.
 
 //arm:
 static const int
-    bullBarRollerID = 11, // 
-    bullBarSliderID = 12, // 
-    armWristID = 32, // Not actual value.
-    armPivotID = 31;
+    bullBarRollerID = 7, // 
+    bullBarSliderID = 8, // 
+    armWristID = 20, // Not actual value.
+    armPivotID = 22;
 
 // elevator
 static const int

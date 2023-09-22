@@ -14,9 +14,8 @@ void Arm::RobotInit(const RobotData &robotData, ArmData &armData)
     )
     {
         // Wrist Initialization
-
         armWrist.RestoreFactoryDefaults();
-
+        
         armWristPIDController.SetP(robotData.configData.armConfigData.wristP, 0); // 0.35
         armWristPIDController.SetI(0, 0);
         armWristPIDController.SetD(0, 0);
@@ -239,7 +238,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         {
             if (humanPlayerIntakeToggle != armData.humanPlayerConeIntakeRunning)
             {
-                RotateWrist(28, robotData, 0);
+                RotateWrist(26, robotData, 0);
                 RotatePivot(10, robotData, 0);
             }
             
@@ -538,6 +537,7 @@ void Arm::SemiAuto(const RobotData &robotData, ArmData &armData)
         armPivot.Set(0);
         zeroStartTime = robotData.timerData.secSinceEnabled;
         ZeroRelativePositionPivot(armData);
+        ZeroRelativePositionWrist(armData);
     }
 
     if (zeroing)

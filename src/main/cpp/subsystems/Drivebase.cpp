@@ -478,31 +478,62 @@ double tempLDrive = 0;
         if (!forward)
         {
             
-            setVelocity(-5+(gyroData.rawYaw*0.05), -5-(gyroData.rawYaw*0.05));
+            
 
-            if (robotData.gyroData.rawRoll > 5)
+            switch (ChargeStationTraverseStep)
             {
-                ChargeStationTraverseStep = 1;
-            }
-            if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll < 3)
-            {
-                setVelocity(0,0);
-                odometryInitialized = false;
-                // controlData.saResetOdometry = true;
-                getNextAutonStep(robotData, drivebaseData, autonData);
+            case 0:
+
+                setVelocity(-3+(gyroData.rawYaw*0.05), -3-(gyroData.rawYaw*0.05));
+                if (robotData.gyroData.rawRoll < 5 && robotData.gyroData.rawRoll > -5)
+                {
+                ChargeStationTraverseStep++;
+                    
+                    
+                }
+                chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
+                setPercentOutput(1,1);
+                break;
+
+            case 1:
+                if (robotData.timerData.secSinceEnabled - 0.1 < chargeStationBackoffBeginTime)
+                {
+                    setPercentOutput(0,0);
+                }
+            
+
+                break;
             }
             
         }
         else
         {
-            setVelocity(4+(gyroData.rawYaw*0.05), 4-(gyroData.rawYaw*0.05));
+            setVelocity(3+(gyroData.rawYaw*0.05), 3-(gyroData.rawYaw*0.05));
 
-            
-            if (robotData.gyroData.rawRoll < 5)
+            switch (ChargeStationTraverseStep)
             {
-                ChargeStationTraverseStep = 1;
+            case 0:
+
+                if (robotData.gyroData.rawRoll < 5 && robotData.gyroData.rawRoll > -5)
+                {
+                ChargeStationTraverseStep++;
+                    
+                    
+                }
+                chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
+                setPercentOutput(1,1);
+                break;
+
+            case 1:
+                if (robotData.timerData.secSinceEnabled - 0.1 < chargeStationBackoffBeginTime)
+                {
+                    setPercentOutput(0,0);
+                }
+            
+
+                break;
             }
-            if (ChargeStationTraverseStep == 1 && robotData.gyroData.rawRoll > -3)
+            if (robotData.gyroData.rawRoll < 5 && robotData.gyroData.rawRoll > -5)
             {
                setVelocity(0,0);
                     //zeroEncoders();
@@ -558,6 +589,8 @@ double tempLDrive = 0;
                     if (robotData.gyroData.rawRoll < -12.5)
                     {
                         setVelocity(0, 0);
+                        odometryInitialized = false;
+                        zeroEncoders(); 
                         getNextAutonStep(robotData, drivebaseData, autonData);
                     }
 
@@ -571,14 +604,60 @@ double tempLDrive = 0;
                 }
         }
         if (!forward)
+        
         {
             setVelocity(-3.15+(gyroData.rawYaw*0.05), -3.15-(gyroData.rawYaw*0.05));
 
-            if (robotData.gyroData.rawRoll > 17.5)
+            if (robotData.gyroData.rawRoll > 16.6)
             {
-                setVelocity(0,0);
+                setVelocity(0, 0);
                 getNextAutonStep(robotData, drivebaseData, autonData);
             }
+
+            switch (ChargeStationTraverseStep)
+                {
+                case -1:
+                    drivebaseData.dontRunAnything = true;
+                    setVelocity(2, 2);
+                    if (robotData.timerData.secSinceEnabled - 0.5 > chargeStationBackoffBeginTime) 
+                    {
+                        if (robotData.autonData.autonToggle)
+                        {
+                            autonData.autonStep -= 1;
+                            ChargeStationTraverseStep = 0;
+                            getNextAutonStep(robotData, drivebaseData, autonData);
+                        }
+                        else if (!robotData.autonData.autonToggle)
+                        {
+                            autonData.autonStep = 9;
+                            drivebaseData.allowBullBarExtend = false;
+                            ChargeStationTraverseStep = 0;
+                            getNextAutonStep(robotData, drivebaseData, autonData);
+                        }
+                    }
+                    
+                    
+                    break;
+                
+                case 0:
+                    setVelocity(-3.15+(gyroData.rawYaw*0.05), -3.15-(gyroData.rawYaw*0.05));
+
+                    if (robotData.gyroData.rawRoll > 14.1)
+                    {
+                        setVelocity(0, 0);
+                        odometryInitialized = false;
+                        zeroEncoders(); 
+                        getNextAutonStep(robotData, drivebaseData, autonData);
+                    }
+
+                    if (robotData.gyroData.velocity > -0.025 && std::abs(robotData.gyroData.angularMomentum) > -2.5 && robotData.timerData.secSinceEnabled - 2.0 > chargeStationBeginFailSafe) 
+                    {
+                        chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
+                        ChargeStationTraverseStep = -1; 
+                    }
+
+                    break;
+                }
         }
     }
     else if (drivebaseData.driveMode == DRIVEMODE_AUTO_BALANCE)
@@ -640,37 +719,51 @@ double tempLDrive = 0;
             else if (!forward)
             {
                 switch (ChargeStationTraverseStep)
-            {
-            case -1:
-                setVelocity(-1, -1);
-                if (robotData.gyroData.rawRoll < 2) ChargeStationTraverseStep++;
-                break;
-            
-            case 0:
-                setVelocity(-1.25, -1.25);
-                if (robotData.gyroData.angularMomentum > 30) ChargeStationTraverseStep++;
-                break;
-            case 1:
-                setVelocity(0,0);
-                if (robotData.gyroData.rawRoll < 0) ChargeStationTraverseStep++;
-                break;
-            case 2:
+                {
+                case -1:
+                    setVelocity(2, 2);
+                    if (robotData.timerData.secSinceEnabled - 0.5 > chargeStationBackoffBeginTime) 
+                    {
+                        autonData.autonStep -= 3;
+                        getNextAutonStep(robotData, drivebaseData, autonData);
+                    }
+                    
+                    
+                    break;
 
-                if (robotData.gyroData.rawRoll > 2.0 || robotData.gyroData.rawRoll < -2.0)
-                {
-                    tempLDrive = (gyroData.rawRoll)*-0.0065;
-                    tempRDrive = (gyroData.rawRoll)*-0.0065;
-                    setPercentOutput(tempLDrive, tempRDrive); 
+                case 0:
+
+                    chargeStationBackoffBeginTime = robotData.timerData.secSinceEnabled;
+                    ChargeStationTraverseStep++;
+                    break;
+                case 1:
+
+                    setPercentOutput(-1, -1);
+                    if (robotData.timerData.secSinceEnabled-0.6 > chargeStationBackoffBeginTime)
+                    {
+                        setPercentOutput(0,0);
+                        ChargeStationTraverseStep++;
+                    }
+
+                    break;
+      
+                case 2:
+
+                    if (robotData.gyroData.rawRoll > 2.0 || robotData.gyroData.rawRoll < -2.0)
+                    {
+                        tempLDrive = ((gyroData.rawRoll + 0.8)*-0.0065) - (0.025 * (gyroData.rawRoll / abs(gyroData.rawRoll)));
+                        tempRDrive = ((gyroData.rawRoll + 0.8)*-0.0065) - (0.025 * (gyroData.rawRoll / abs(gyroData.rawRoll)));
+                        setPercentOutput(tempLDrive, tempRDrive); 
+                    }
+                    else
+                    {
+                        setPercentOutput(0,0);
+                    }
+                    
+                    break;
+                default:
+                    break;
                 }
-                else
-                {
-                    setPercentOutput(0,0);
-                }
-                
-                break;
-            default:
-                break;
-            }
             }
 
             
@@ -862,6 +955,8 @@ void Drivebase::getNextAutonStep(const RobotData &robotData, DrivebaseData &driv
             ChargeStationTraverseStep = 0;
             forward = false;
             drivebaseData.driveMode = DRIVEMODE_CHARGE_STATION_TRAVERSE;
+            odometryInitialized = false;
+            zeroEncoders();
             return;
         }
         else if (trajectoryName.substr(0,13) == "turnToHeading")

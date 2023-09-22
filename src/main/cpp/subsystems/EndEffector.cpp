@@ -46,7 +46,7 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
             break;
     }
 
-    endEffectorData.distanceReading = distanceSensor.GetPosition() + 0.03;
+   // endEffectorData.distanceReading = distanceSensor.GetPosition() + 0.03;
 
     endEffectorData.pastReadOfGamePiece = endEffectorData.gamePieceType;
 
@@ -89,85 +89,93 @@ void EndEffector::RobotPeriodic(const RobotData &robotData, EndEffectorData &end
 void EndEffector::SemiAuto(const RobotData &robotData, EndEffectorData &endEffectorData)
 {
     endEffectorData.armRetractRequest = false;
-    if (robotData.controlData.saPositionHumanPlayer)
-    {
-        if (endEffectorData.gamePieceType != CONE && robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS)
+    // if (robotData.controllerData.sLYStick < 0.5 && robotData.controllerData.sLYStick > -0.5)
+    // {
+    
+        if (robotData.controlData.saPositionHumanPlayer)
         {
-            SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
-        }
-        else if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
-        {
-            SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
-        }
-        else
-        {
-            SetEndEffectorRollerSpeed(-0.05);
-        }
-        
-    }
-    else if (robotData.controlData.saConeIntake || robotData.controlData.saUprightConeIntake || robotData.controlData.saDoubleSubCone) 
-    {
-        if (endEffectorData.gamePieceType != CONE && robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS)
-        {
-            SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);    
-        }
-        else if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
-        {
-            SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
-        }
-        else
-        {
-            SetEndEffectorRollerSpeed(-0.05);
-        }
-
-
-    }
-    else if (robotData.controlData.saIntakeBackwards || robotData.drivebaseData.allowEject) 
-    {
-        switch (robotData.endEffectorData.lastPieceType)
-        {
-            case CONE:
-                SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed * 0.8);  
-                break;
-            case CUBE:
-                SetEndEffectorRollerSpeed(-0.6);
-                break;
-        }
-    }
-    else if (robotData.controlData.saCubeIntake)
-    {
-        if (endEffectorData.gamePieceType != CUBE)
-        {
-            SetEndEffectorRollerSpeed(EndEffectorRollerCubeInwardSpeed);
-        }
-    }
-    else
-    {
-        switch (robotData.endEffectorData.gamePieceType)
-        {
-            case CONE:
+            if (endEffectorData.gamePieceType != CONE && robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS)
+            {
+                SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
+            }
+            else if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
+            {
+                SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
+            }
+            else
+            {
                 SetEndEffectorRollerSpeed(-0.05);
-                break;
-            case CUBE:
-                SetEndEffectorRollerSpeed(0.08);
-                break;
-            case NONE:
-                SetEndEffectorRollerSpeed(0.0);
-                break;
-            default:
-                SetEndEffectorRollerSpeed(0.0);
-                break;
+            }
+            
         }
-    }
+        else if (robotData.controlData.saConeIntake || robotData.controlData.saUprightConeIntake || robotData.controlData.saDoubleSubCone) 
+        {
+            if (endEffectorData.gamePieceType != CONE && robotData.controlData.mode != MODE_TELEOP_DISABLE_BEAMS)
+            {
+                SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);    
+            }
+            else if (robotData.controlData.mode == MODE_TELEOP_DISABLE_BEAMS)
+            {
+                SetEndEffectorRollerSpeed(EndEffectorRollerInwardSpeed);
+            }
+            else
+            {
+                SetEndEffectorRollerSpeed(-0.05);
+            }
 
-    if (robotData.controllerData.sLYStick > 0.5)
-    {
-        SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
-    }
-    else if (robotData.controllerData.sLYStick < -0.5)
-    {
-        SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
-    }
+
+        }
+        else if (robotData.controlData.saIntakeBackwards || robotData.drivebaseData.allowEject) 
+        {
+            switch (robotData.endEffectorData.lastPieceType)
+            {
+                case CONE:
+                    SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed * 0.8);  
+                    break;
+                case CUBE:
+                    SetEndEffectorRollerSpeed(-0.6);
+                    break;
+            }
+        }
+        else if (robotData.controlData.saCubeIntake)
+        {
+            if (endEffectorData.gamePieceType != CUBE)
+            {
+                SetEndEffectorRollerSpeed(EndEffectorRollerCubeInwardSpeed);
+            }
+        }
+        else
+        {
+            switch (robotData.endEffectorData.gamePieceType)
+            {
+                case CONE:
+                    SetEndEffectorRollerSpeed(-0.05);
+                    break;
+                case CUBE:
+                    SetEndEffectorRollerSpeed(0.08);
+                    break;
+                case NONE:
+                    SetEndEffectorRollerSpeed(0.0);
+                    break;
+                default:
+                    SetEndEffectorRollerSpeed(0.0);
+                    break;
+            }
+        }
+    // }
+    // else
+    // {
+        if (robotData.controllerData.sLYStick > 0.5)
+        {
+            SetEndEffectorRollerSpeed(-EndEffectorRollerOutwardSpeed);
+        }
+        else if (robotData.controllerData.sLYStick < -0.5)
+        {
+            SetEndEffectorRollerSpeed(EndEffectorRollerOutwardSpeed);
+        }
+    // }
+
+    
 
     frc::SmartDashboard::PutNumber("End effector game piece", endEffectorData.gamePieceType);
 }

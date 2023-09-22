@@ -1,13 +1,7 @@
 break 3
 hitChargeStationForward
+ChargeStationPath2
 chargeStationTraverseForward
-turnToHeading 0
-break 0.6
-MiddleOne
-break 0.1
+break 1
 hitChargeStationBackward
-MiddleTwo
 balanceBackward
-hitChargeStationForward
-ChargeStationPath
-balanceForward

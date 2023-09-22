@@ -268,55 +268,32 @@ void Auton::ThreeLoading(const RobotData &robotData, ControlData &controlData, C
 
 void Auton::Traverse(const RobotData &robotData, ControlData &controlData, ControllerData &controllerData)
 {
-    double sec = robotData.timerData.secSinceEnabled;
+    double sec = robotData.timerData.secSinceEnabled-0.8;
 
     switch (step)
     {
-        case 0:
-            controlData.saPositionHigh = true;
-            step++;
-            break;
-        case(1):
-            controlData.saPositionHigh = false;
-            if (sec > 1.75) step++;
-            break;
-        case(2):
-            controlData.saIntakeBackwards = true;
-            if (sec > 2.3) step++;
-            break;
-        case(3): 
-            controlData.saHomePosition = true;
-            controlData.saIntakeBackwards = false;
-            step++;
-            break;
-        case(4):
-            controlData.saHomePosition = false;
-           
-            if (sec > 5.6) step++;
-            break;
-        case 5:
-                controlData.saCubeIntake = true;
-                if (sec > 7.4 && sec < 7.55)
-                {
-                    controllerData.sLYStick = -0.6;
-                }
-                else
-                {
-                    controllerData.sLYStick = 0.0;
-                    controlData.saCubeIntake = true;
-                }
-                if (sec > 8.3) step++;
-                break;
-        case 6:
-                
-                controlData.saCubeIntake = false;
-                // controlData.saHomePosition = true;
-                // step++;
-                break;
-        case 7:
-            break;
-        
-        
+    case (0):   
+        controlData.saPositionHigh = true;
+        step++;
+        break;
+    case(1):
+        controlData.saPositionHigh = false;
+        if (sec > 0.6) step++;
+        break;
+    case(2):
+        controlData.saIntakeBackwards = true;
+        if (sec > 1.15) step++;
+        break;
+    case(3): 
+        controlData.saHomePosition = true;
+        step++;
+        break;
+    case(4):
+        controlData.saHomePosition = false;
+        step++;
+        break;
+    case(5):
+        break;
     }    
 
     if (robotData.drivebaseData.dontRunAnything)
